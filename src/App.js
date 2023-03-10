@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import { Outlet } from 'react-router-dom';
+import GlobalStyle from './styles/globalStyle';
+import styled, { ThemeProvider } from 'styled-components';
+import theme from './styles/theme';
+import QUERY from './constants/query';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Wrapper>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <Outlet />
+      </ThemeProvider>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.main`
+  width: 100%;
+  height: 100%;
+`;
 
 export default App;
