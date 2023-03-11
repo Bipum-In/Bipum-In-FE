@@ -1,7 +1,6 @@
 import axios from 'axios';
 import QUERY from '../constants/query';
 import { getCookie, setCookie } from '../utils/cookie';
-import Storage from '../utils/localStorage';
 
 export default class Axios {
   constructor(url) {
@@ -16,8 +15,6 @@ export default class Axios {
         if (token) {
           const [, parseToken] = token.split(' ');
           setCookie(QUERY.COOKIE.COOKIE_NAME, parseToken);
-
-          // Storage.setUserName(userName.sub);
         }
         return response;
       },

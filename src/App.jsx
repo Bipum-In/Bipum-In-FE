@@ -2,7 +2,6 @@ import { Outlet } from 'react-router-dom';
 import GlobalStyle from './styles/globalStyle';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from './styles/theme';
-import QUERY from './constants/query';
 
 function App() {
   return (

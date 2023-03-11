@@ -1,6 +1,5 @@
 import Axios from '../../api/axios';
-
-const { createSlice, createAsyncThunk } = require('@reduxjs/toolkit');
+import Redux from '../redux';
 
 const initialState = {
   getMain: [],
@@ -9,34 +8,14 @@ const initialState = {
   error: null,
 };
 
-const axios = new Axios(process.env.REACT_APP_URL);
+const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export const __main = createAsyncThunk('MAIN', async (payload, thunkAPI) => {
-  return await axios
-    .get(``)
-    .then(response => thunkAPI.fulfillWithValue(response.data))
-    .catch(() => thunkAPI.rejectWithValue());
-});
+export const __main = Redux.asyncThunk('MAIN', payload => axios.get('/board'));
 
-const getMainSlice = createSlice({
-  name: 'getMain',
-  initialState,
-  reducers: {},
-  extraReducers: bulider => {
-    bulider.addCase(__main.pending, (state, _) => {
-      state.isLoading = true;
-      state.isError = false;
-    });
-    bulider.addCase(__main.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isError = false;
-      state.getMain = action.payload;
-    });
-    bulider.addCase(__main.rejected, (state, _) => {
-      state.isLoading = false;
-      state.isError = true;
-    });
-  },
+const getMainSlice = Redux.slice('getMain', initialState, {}, bulider => {
+  Redux.extraReducer(bulider, __main, (state, action) => {
+    state.getMain = action.payload;
+  });
 });
 
 export default getMainSlice.reducer;
