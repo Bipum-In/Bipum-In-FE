@@ -38,10 +38,6 @@ const router = createBrowserRouter([
           },
         ],
       },
-      {
-        path: ROUTER.PATH.RENDING,
-        element: <Rending />,
-      },
     ],
   },
   {
