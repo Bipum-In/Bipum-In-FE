@@ -1,5 +1,6 @@
 const PATH = {
   MAIN: '/',
+  SIGNUP: '/signup',
   BACK: -1,
   FRONT: 1,
 };
