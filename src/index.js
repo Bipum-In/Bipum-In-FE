@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import App from './App';
 import ROUTER from './constants/router';
 import store from './redux/config/configStore';
+import Map from './components/map';
 
 const router = createBrowserRouter([
   {
@@ -14,7 +15,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: '',
+        element: <Map />,
       },
     ],
   },
