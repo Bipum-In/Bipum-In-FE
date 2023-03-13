@@ -8,8 +8,9 @@ import ROUTER from './constants/router';
 import store from './redux/config/configStore';
 import Singup from './pages/Singup';
 import Login from './pages/Login';
-import DashBoard from './pages/DashBoard';
-import AdminMain from './pages/AdminMain';
+import AdminDashBoard from './pages/AdminDashBoard';
+import UserDashBoard from './pages/UserDashBoard';
+import Rending from './pages/Rending';
 
 const router = createBrowserRouter([
   {
@@ -29,12 +30,16 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: ROUTER.PATH.DASHBOARD,
-        element: <DashBoard />,
+        path: ROUTER.PATH.ADMIN_DASHBOARD,
+        element: <AdminDashBoard />,
       },
       {
-        path: ROUTER.PATH.ADMINMAIN,
-        element: <AdminMain />,
+        path: ROUTER.PATH.USER_DASHBOARD,
+        element: <UserDashBoard />,
+      },
+      {
+        path: ROUTER.PATH.RENDING,
+        element: <Rending />,
       },
     ],
   },
