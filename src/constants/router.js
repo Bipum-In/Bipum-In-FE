@@ -1,6 +1,9 @@
 const PATH = {
   MAIN: '/',
   SIGNUP: '/signup',
+  LOGIN: '/login',
+  DASHBOARD: '/dashboard',
+  ADMINMAIN: '/admin-main',
   BACK: -1,
   FRONT: 1,
 };

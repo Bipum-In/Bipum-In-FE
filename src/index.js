@@ -7,6 +7,9 @@ import App from './App';
 import ROUTER from './constants/router';
 import store from './redux/config/configStore';
 import Singup from './pages/Singup';
+import Login from './pages/Login';
+import DashBoard from './pages/DashBoard';
+import AdminMain from './pages/AdminMain';
 
 const router = createBrowserRouter([
   {
@@ -20,6 +23,18 @@ const router = createBrowserRouter([
       {
         path: ROUTER.PATH.SIGNUP,
         element: <Singup />,
+      },
+      {
+        path: ROUTER.PATH.LOGIN,
+        element: <Login />,
+      },
+      {
+        path: ROUTER.PATH.DASHBOARD,
+        element: <DashBoard />,
+      },
+      {
+        path: ROUTER.PATH.ADMINMAIN,
+        element: <AdminMain />,
       },
     ],
   },
