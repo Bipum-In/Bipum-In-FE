@@ -1,3 +1,5 @@
+import { css } from 'styled-components';
+
 const color = {
   white: '#ffffff',
   sky_white: '#f8f9fa',
@@ -70,12 +72,36 @@ const screen = {
   mobile_v: '480px',
 };
 
+const FlexCol = css`
+  display: flex;
+  flex-direction: column;
+`;
+
+const FlexRow = css`
+  display: flex;
+  flex-direction: row;
+`;
+
+const FlexCenter = css`
+  justify-content: center;
+  align-items: center;
+`;
+
+const wh100 = css`
+  width: 100%;
+  height: 100%;
+`;
+
 const theme = {
   color,
   screen,
   fontWeight,
   fontSize,
   borderRadius,
+  wh100,
+  FlexCol,
+  FlexRow,
+  FlexCenter,
 };
 
 export default theme;
