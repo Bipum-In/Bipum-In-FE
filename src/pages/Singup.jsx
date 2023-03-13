@@ -65,20 +65,20 @@ const LoginLayout = styled.div`
 const LoginWrapper = styled.div`
   ${(props) => props.theme.FlexRow}
   ${(props) => props.theme.wh100}
-  flex: auto;
 `;
 
 const LoginLeftSection = styled.div`
   ${(props) => props.theme.FlexCol}
   ${(props) => props.theme.FlexCenter}
-  flex: 5;
+  min-width: 500px;
+  width: 100%;
 `;
 
 const LoginRightSection = styled.div`
   ${(props) => props.theme.FlexRow}
   ${(props) => props.theme.FlexCenter}
-  flex: 5;
   background: ${(props) => props.theme.color.blue};
+  width: 100%;
 `;
 
 const LoginForm = styled.form`

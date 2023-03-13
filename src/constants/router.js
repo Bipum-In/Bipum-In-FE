@@ -2,9 +2,10 @@ const PATH = {
   MAIN: '/',
   SIGNUP: '/signup',
   LOGIN: '/login',
+  ADMIN: '/admin',
+  RENDING: '/rending',
   ADMIN_DASHBOARD: '/admin-dashboard',
   USER_DASHBOARD: '/user-dashboard',
-  RENDING: '/rending',
   BACK: -1,
   FRONT: 1,
 };
