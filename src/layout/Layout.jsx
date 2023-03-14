@@ -1,6 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { styled } from 'styled-components';
+import styled from 'styled-components';
 import Header from './Header';
 import Sidebar from './Sidebar';
 
@@ -25,5 +25,5 @@ const LayoutWrapper = styled.div`
 const OutletContainer = styled.div`
   width: 100%;
   height: 100%;
-  padding-top: 120px;
+  padding-top: 7.5rem;
 `;
