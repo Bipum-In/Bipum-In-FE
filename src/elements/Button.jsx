@@ -42,9 +42,10 @@ const ButtonWrapper = styled.button`
           width: 15rem;
           height: 3.125rem;
           color: white;
-          background-color: ${props => props.theme.color.blue.brandColor6};
+          background-color: ${props => props.theme.color.blue.brandColor6}
           margin: 0 0.6875rem;
-          border: 0.0579rem solid ${props => props.theme.color.grey.brandColor2};
+          border: 0.0579rem solid ${props =>
+            props.theme.color.grey.brandColor2};
           box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
           border-radius: 0.4631rem;
           font-weight: 600;
