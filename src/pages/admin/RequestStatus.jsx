@@ -14,7 +14,7 @@ export default function RequestStatus() {
 
   const handleClickMenu = e => {
     const menuName = e.target.innerText;
-    selectMenu(menuStyle, menuName);
+    selectMenu(menuName);
   };
 
   const selectMenu = menuName => {
@@ -45,6 +45,7 @@ export default function RequestStatus() {
   const handleKakaoLogin = () => {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=bad08c2762b0ad4460013109d47675f2&redirect_uri=http://localhost:3000/api/user/kakao/callback&response_type=code`;
   };
+
   return (
     <RequestStatusWrapper>
       <RequestMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
