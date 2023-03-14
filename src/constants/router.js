@@ -3,6 +3,7 @@ const PATH = {
   SIGNUP: '/signup',
   LOGIN: '/login',
   ADMIN_DASHBOARD: '/admin-dashboard',
+  ADMIN_EQUIPMENT_ADD: '/equipment-add',
   USER_DASHBOARD: '/user-dashboard',
   RENDING: '/rending',
   BACK: -1,
