@@ -10,12 +10,39 @@ export default function RequestMenu() {
     repair: false,
   });
 
+  const handleClickMenu = e => {
+    const menuName = e.target.innerText;
+    switch (menuName) {
+      case '전체':
+        break;
+      case '비품 요청':
+        break;
+
+      case '반납 요청':
+        break;
+
+      case '수리 요청':
+        break;
+
+      default:
+        break;
+    }
+  };
+
   return (
     <RequestMenuContainer>
-      <Button menuStyle={menuStyle.all}>전체</Button>
-      <Button menuStyle={menuStyle.equipment}>비품 요청</Button>
-      <Button menuStyle={menuStyle.return}>반납 요청</Button>
-      <Button menuStyle={menuStyle.repair}>수리 요청</Button>
+      <Button menuStyle={menuStyle.all} onClick={handleClickMenu}>
+        전체
+      </Button>
+      <Button menuStyle={menuStyle.equipment} onClick={handleClickMenu}>
+        비품 요청
+      </Button>
+      <Button menuStyle={menuStyle.return} onClick={handleClickMenu}>
+        반납 요청
+      </Button>
+      <Button menuStyle={menuStyle.repair} onClick={handleClickMenu}>
+        수리 요청
+      </Button>
     </RequestMenuContainer>
   );
 }

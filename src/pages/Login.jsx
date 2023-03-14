@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Axios from '../api/axios';
 
-const axios = new Axios('https://bipum-in.shop');
+const axios = new Axios('http://bipum-in.shop');
 
 export default function Login() {
   const { search } = useLocation();
