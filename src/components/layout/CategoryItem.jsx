@@ -21,16 +21,19 @@ const CategoryItemsContainer = styled.div`
     props.active === 'true'
       ? props.theme.color.blue.brandColor6
       : props.theme.color.grey.brandColor4};
-  cursor: pointer;
-
   svg {
     width: 1.5rem;
     height: 1.5rem;
+
     path {
       stroke: ${props =>
         props.active === 'true'
           ? props.theme.color.blue.brandColor6
           : props.theme.color.grey.brandColor4};
+    }
+    * {
+      transition: 0.2s ease;
+      cursor: pointer;
     }
   }
 
