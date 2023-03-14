@@ -16,6 +16,7 @@ import UserDashBoard from './pages/user/UserDashBoard';
 import Rending from './pages/Rending';
 
 import { ThemeProvider } from 'styled-components';
+import EquipmentAdd from './pages/admin/EquipmentAdd';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
           {
             path: ROUTER.PATH.ADMIN_DASHBOARD,
             element: <AdminDashBoard />,
+          },
+          {
+            path: ROUTER.PATH.ADMIN_EQUIPMENT_ADD,
+            element: <EquipmentAdd />,
           },
           {
             path: ROUTER.PATH.USER_DASHBOARD,
