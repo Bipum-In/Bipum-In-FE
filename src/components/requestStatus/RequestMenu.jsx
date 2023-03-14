@@ -1,46 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Button from '../../elements/Button';
 
-export default function RequestMenu() {
-  const [menuStyle, setMenuClick] = useState({
-    all: true,
-    equipment: false,
-    return: false,
-    repair: false,
-  });
-
-  const handleClickMenu = e => {
-    const menuName = e.target.innerText;
-    switch (menuName) {
-      case '전체':
-        break;
-      case '비품 요청':
-        break;
-
-      case '반납 요청':
-        break;
-
-      case '수리 요청':
-        break;
-
-      default:
-        break;
-    }
-  };
-
+export default function RequestMenu({ menuStyle, onClickMenu }) {
   return (
     <RequestMenuContainer>
-      <Button menuStyle={menuStyle.all} onClick={handleClickMenu}>
+      <Button menuStyle={menuStyle.all} onClick={onClickMenu}>
         전체
       </Button>
-      <Button menuStyle={menuStyle.equipment} onClick={handleClickMenu}>
+      <Button menuStyle={menuStyle.equipment} onClick={onClickMenu}>
         비품 요청
       </Button>
-      <Button menuStyle={menuStyle.return} onClick={handleClickMenu}>
+      <Button menuStyle={menuStyle.return} onClick={onClickMenu}>
         반납 요청
       </Button>
-      <Button menuStyle={menuStyle.repair} onClick={handleClickMenu}>
+      <Button menuStyle={menuStyle.repair} onClick={onClickMenu}>
         수리 요청
       </Button>
     </RequestMenuContainer>
