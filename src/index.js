@@ -8,12 +8,13 @@ import theme from './styles/theme';
 import App from './App';
 import ROUTER from './constants/router';
 import store from './redux/config/configStore';
+import Layout from './layout/Layout';
 import Singup from './pages/Singup';
 import Login from './pages/Login';
-import AdminDashBoard from './pages/AdminDashBoard';
-import UserDashBoard from './pages/UserDashBoard';
+import AdminDashBoard from './pages/admin/AdminDashBoard';
+import UserDashBoard from './pages/user/UserDashBoard';
 import Rending from './pages/Rending';
-import AdminLayout from './pages/AdminLayout';
+
 import { ThemeProvider } from 'styled-components';
 
 const router = createBrowserRouter([
@@ -26,7 +27,7 @@ const router = createBrowserRouter([
         element: <Rending />,
       },
       {
-        element: <AdminLayout />,
+        element: <Layout />,
         children: [
           {
             path: ROUTER.PATH.ADMIN_DASHBOARD,
