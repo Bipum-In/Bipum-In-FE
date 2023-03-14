@@ -24,5 +24,12 @@ export default function RequestMenu({ menuStyle, onClickMenu }) {
 const RequestMenuContainer = styled.div`
   display: flex;
   align-items: center;
-  margin: 2.25rem 0 1.5rem 3.25rem;
+  margin: 0 0 1.5rem 0;
+
+  button:first-child {
+    margin-left: 0;
+  }
+  button:last-child {
+    margin-right: 0;
+  }
 `;

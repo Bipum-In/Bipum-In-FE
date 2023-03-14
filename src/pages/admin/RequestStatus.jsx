@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import RequestMenu from '../../components/requestStatus/RequestMenu';
+import RequestShow from '../../components/requestStatus/RequestShow';
 
 export default function RequestStatus() {
   const [menuStyle, setMenuClick] = useState({
@@ -47,12 +48,17 @@ export default function RequestStatus() {
   return (
     <RequestStatusWrapper>
       <RequestMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
-      <button onClick={handleKakaoLogin}>카카오 로그인</button>
+      <RequestShow />
+      {/* <button onClick={handleKakaoLogin}>카카오 로그인</button> */}
     </RequestStatusWrapper>
   );
 }
 
 const RequestStatusWrapper = styled.section`
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
+  background-color: ${props => props.theme.color.blue.brandColor1};
+  padding: 2.25rem 3.25rem 3.25rem 3.25rem;
 `;
