@@ -101,7 +101,8 @@ export default function Sidebar() {
 
 const SidebarWrapper = styled.aside`
   position: relative;
-  width: 15.625rem;
+  min-width: 15.625rem;
+  width: 100%;
   height: 100%;
   background-color: white;
   box-shadow: -0.3125rem 0 1.5625rem 0 rgba(0, 0, 0, 0.25);
