@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import EquipmentOneAdd from '../../components/equipmentAdd/EquipmentOneAdd';
+import EquipmentInput from '../../components/equipmentAdd/EquipmentInput';
 
 export default function EquipmentAdd() {
   return (
     <EquipmentAddWrapper>
-      <EquipmentOneAdd />
+      <EquipmentInput />
     </EquipmentAddWrapper>
   );
 }
