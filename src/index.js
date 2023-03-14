@@ -1,60 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import GlobalStyle from './styles/globalStyle';
 import theme from './styles/theme';
 
-import App from './App';
-import ROUTER from './constants/router';
 import store from './redux/config/configStore';
-import Layout from './layout/Layout';
-import Singup from './pages/Singup';
-import Login from './pages/Login';
-import AdminDashBoard from './pages/admin/AdminDashBoard';
-import UserDashBoard from './pages/user/UserDashBoard';
-import Rending from './pages/Rending';
-
 import { ThemeProvider } from 'styled-components';
-import EquipmentAdd from './pages/admin/EquipmentAdd';
-
-const router = createBrowserRouter([
-  {
-    path: ROUTER.PATH.MAIN,
-    element: <App />,
-    children: [
-      {
-        index: true,
-        element: <Rending />,
-      },
-      {
-        element: <Layout />,
-        children: [
-          {
-            path: ROUTER.PATH.ADMIN_DASHBOARD,
-            element: <AdminDashBoard />,
-          },
-          {
-            path: ROUTER.PATH.ADMIN_EQUIPMENT_ADD,
-            element: <EquipmentAdd />,
-          },
-          {
-            path: ROUTER.PATH.USER_DASHBOARD,
-            element: <UserDashBoard />,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: ROUTER.PATH.SIGNUP,
-    element: <Singup />,
-  },
-  {
-    path: ROUTER.PATH.LOGIN,
-    element: <Login />,
-  },
-]);
+import router from './router/router';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
