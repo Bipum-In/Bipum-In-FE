@@ -14,7 +14,7 @@ Button.defaultProps = {
   borderR: '.5rem',
   border: 'none',
   bg: 'transparent',
-  ts: '.1s ease',
+  ts: '.2s ease',
   onClick: () => {},
 };
 
