@@ -24,8 +24,8 @@ const requestStatusSlice = Redux.slice(
       bulider,
       __requestStatus,
       'requestStatus',
-      'getRequest',
       'isStatusLoading',
+      'getRequest',
       'isStatusError'
     );
   }
