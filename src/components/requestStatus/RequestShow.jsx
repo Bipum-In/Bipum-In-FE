@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import Input from '../../elements/Input';
+import { ReactComponent as Search } from '../../styles/commonIcon/search.svg';
 
 export default function RequestShow() {
   return (
@@ -8,7 +9,12 @@ export default function RequestShow() {
       <RequestShowTitle>
         <Title>전체</Title>
         <SearchSelect>
-          <Input placeholder="검색어를 입력해주세요 (신청자,담당부서 등)" />
+          <SearchContainer>
+            <SearchIconContainer>
+              <Search />
+            </SearchIconContainer>
+            <Input placeholder="검색어를 입력해주세요 (신청자,담당부서 등)" />
+          </SearchContainer>
           <Select>
             <option value="처리전">처리전</option>
             <option value="처리중">수리중</option>
@@ -43,19 +49,40 @@ const Title = styled.div`
 `;
 
 const SearchSelect = styled.div`
-  display: flex;
-  align-items: center;
+  ${props => props.theme.FlexRow}
+  ${props => props.theme.FlexCenter}
   margin-top: 1.5rem;
+`;
+
+const SearchContainer = styled.div`
+  ${props => props.theme.FlexRow}
+  ${props => props.theme.FlexCenter}
+  width: 28.375rem;
+  height: 2.5rem;
+  background-color: ${props => props.theme.color.grey.brandColor1};
+  margin: 0;
+  margin-right: 1.625rem;
+  border-radius: 0.5rem;
+
   input {
-    width: 28.375rem;
-    height: 2.5rem;
-    background-color: ${props => props.theme.color.grey.brandColor1};
-    padding: 0;
-    margin: 0;
+    font-size: 1rem;
   }
+`;
+
+const SearchIconContainer = styled.div`
+  padding: 0 1rem;
 `;
 
 const Select = styled.select`
   width: 5.8125rem;
   height: 2.5rem;
+  color: ${props => props.theme.color.blue.brandColor6};
+  background-color: ${props => props.theme.color.blue.brandColor1};
+  border: 1px solid ${props => props.theme.color.blue.brandColor3};
+  border-radius: 0.375rem;
+  margin-right: 1.9375rem;
+  text-align-last: center;
+  text-align: center;
+  -ms-text-align-last: center;
+  -moz-text-align-last: center;
 `;
