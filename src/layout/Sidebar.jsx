@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import CategoryItem from '../components/layout/CategoryItem';
 import { useNavigate } from 'react-router-dom';
@@ -8,54 +8,27 @@ import { ReactComponent as Add } from '../styles/sidebarIcon/add.svg';
 import { ReactComponent as Dashboard } from '../styles/sidebarIcon/dashboard.svg';
 import { ReactComponent as List } from '../styles/sidebarIcon/list.svg';
 import { ReactComponent as Management } from '../styles/sidebarIcon/management.svg';
+import useSelectMenu from '../hooks/useSelectMenu';
 
 export default function Sidebar() {
   const navigate = useNavigate();
-
-  const [active, setActive] = useState({
-    dashboard: true,
-    request: false,
-    management: false,
-    add: false,
-  });
+  const [menuStyle, handleClickMenu] = useSelectMenu(
+    [
+      { name: '대시보드', status: true },
+      { name: '요청 현황', status: false },
+      { name: '비품 관리', status: false },
+      { name: '비품 등록', status: false },
+    ],
+    'sideBarMenu'
+  );
 
   const handleClickCategory = e => {
-    const categoryName = e.target.innerText;
-    console.log(categoryName);
-    selectCategory(categoryName);
-  };
-
-  const selectCategory = categoryName => {
-    const initCategory = {
-      dashboard: false,
-      request: false,
-      management: false,
-      add: false,
-    };
-
-    let path = '';
-
-    switch (categoryName) {
-      case '대시보드':
-        setActive({ ...initCategory, dashboard: true });
-        path = ROUTER.PATH.ADMIN_DASHBOARD;
-        break;
-      case '요청 현황':
-        setActive({ ...initCategory, request: true });
-        path = ROUTER.PATH.ADMIN_REQUEST_STATUS;
-        break;
-      case '비품 관리':
-        setActive({ ...initCategory, management: true });
-        path = ROUTER.PATH.MAIN;
-        break;
-      case '비품 등록':
-        path = ROUTER.PATH.ADMIN_EQUIPMENT_ADD;
-        setActive({ ...initCategory, add: true });
-        break;
-      default:
-        return;
-    }
-    navigate(path);
+    const name = e.target.innerText;
+    handleClickMenu(e);
+    name === '대시보드' && navigate(ROUTER.PATH.ADMIN_DASHBOARD);
+    name === '요청 현황' && navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
+    name === '비품 관리' && navigate(ROUTER.PATH.MAIN);
+    name === '비품 등록' && navigate(ROUTER.PATH.ADMIN_EQUIPMENT_ADD);
   };
 
   return (
@@ -67,28 +40,28 @@ export default function Sidebar() {
         <SidebarCategoryContainer>
           <CategoryItem
             onClick={handleClickCategory}
-            category={`${active.dashboard}`}
+            category={`${menuStyle[0].status}`}
             title="대시보드"
           >
             <Dashboard />
           </CategoryItem>
           <CategoryItem
             onClick={handleClickCategory}
-            category={`${active.request}`}
+            category={`${menuStyle[1].status}`}
             title="요청 현황"
           >
             <List />
           </CategoryItem>
           <CategoryItem
             onClick={handleClickCategory}
-            category={`${active.management}`}
+            category={`${menuStyle[2].status}`}
             title="비품 관리"
           >
             <Management />
           </CategoryItem>
           <CategoryItem
             onClick={handleClickCategory}
-            category={`${active.add}`}
+            category={`${menuStyle[3].status}`}
             title="비품 등록"
           >
             <Add />
