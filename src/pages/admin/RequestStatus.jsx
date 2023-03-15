@@ -1,16 +1,28 @@
-import React from 'react';
+import Axios from '../../api/axios';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import RequestMenu from '../../components/requestStatus/RequestMenu';
 import RequestShow from '../../components/requestStatus/RequestShow';
 import useSelectMenu from '../../hooks/useSelectMenu';
 
+const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+
 export default function RequestStatus() {
-  const [menuStyle, handleClickMenu, setSelectName] = useSelectMenu([
-    { name: '전체', status: true },
-    { name: '비품 요청', status: false },
-    { name: '반납 요청', status: false },
-    { name: '수리 요청', status: false },
-  ]);
+  const [menuStyle, handleClickMenu, setSelectName] = useSelectMenu(
+    [
+      { name: '전체', status: true },
+      { name: '비품 요청', status: false },
+      { name: '반납 요청', status: false },
+      { name: '수리 요청', status: false },
+    ],
+    'RequestStorgeKey'
+  );
+
+  useEffect(() => {
+    axios
+      .get('/api/admin/requests?status=UNPROCESSED&page=1')
+      .then(response => console.log(response));
+  }, []);
 
   return (
     <RequestStatusWrapper>

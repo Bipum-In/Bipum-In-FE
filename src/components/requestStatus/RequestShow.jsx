@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import Input from '../../elements/Input';
 import { ReactComponent as Search } from '../../styles/commonIcon/search.svg';
+import { ReactComponent as ArrowDown } from '../../styles/commonIcon/arrowDown.svg';
 
 export default function RequestShow({ setSelectName }) {
   return (
@@ -16,11 +17,16 @@ export default function RequestShow({ setSelectName }) {
             </SearchIconContainer>
             <Input placeholder="검색어를 입력해주세요 (신청자,담당부서 등)" />
           </SearchContainer>
-          <Select>
-            <option value="처리전">처리전</option>
-            <option value="처리중">수리중</option>
-            <option value="처리 완료">처리 완료</option>
-          </Select>
+          <SelectWrapper>
+            <Select>
+              <option value="처리전">처리전</option>
+              <option value="처리중">수리중</option>
+              <option value="처리 완료">처리 완료</option>
+            </Select>
+            <SelectArrow>
+              <ArrowDown />
+            </SelectArrow>
+          </SelectWrapper>
         </SearchSelect>
       </RequestShowTitle>
       <RequestShowBody>
@@ -98,17 +104,42 @@ const SearchIconContainer = styled.div`
 `;
 
 const Select = styled.select`
+  position: relative;
   width: 5.8125rem;
   height: 2.5rem;
   color: ${props => props.theme.color.blue.brandColor6};
   background-color: ${props => props.theme.color.blue.brandColor1};
   border: 1px solid ${props => props.theme.color.blue.brandColor3};
   border-radius: 0.375rem;
-  margin-right: 1.9375rem;
   text-align-last: center;
   text-align: center;
-  -ms-text-align-last: center;
-  -moz-text-align-last: center;
+  appearance: none;
+  padding: 5px 10px;
+  padding-right: 25px;
+`;
+
+const SelectWrapper = styled.div`
+  position: relative;
+  width: 5.8125rem;
+  height: 2.5rem;
+  margin-right: 1.9375rem;
+`;
+
+const SelectArrow = styled.div`
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  height: 15px;
+  width: 15px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  svg {
+    width: 15px;
+    height: 15px;
+    * {
+      stroke: ${props => props.theme.color.blue.brandColor6};
+    }
+  }
 `;
 
 const RequestShowBody = styled.div``;
