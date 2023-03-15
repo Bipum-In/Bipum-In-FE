@@ -5,17 +5,17 @@ import Button from '../../elements/Button';
 export default function RequestMenu({ menuStyle, onClickMenu }) {
   return (
     <RequestMenuContainer>
-      <Button menuStyle={menuStyle.all} onClick={onClickMenu}>
-        전체
+      <Button menuStyle={menuStyle[0].status} onClick={onClickMenu}>
+        {menuStyle[0].name}
       </Button>
-      <Button menuStyle={menuStyle.equipment} onClick={onClickMenu}>
-        비품 요청
+      <Button menuStyle={menuStyle[1].status} onClick={onClickMenu}>
+        {menuStyle[1].name}
       </Button>
-      <Button menuStyle={menuStyle.return} onClick={onClickMenu}>
-        반납 요청
+      <Button menuStyle={menuStyle[2].status} onClick={onClickMenu}>
+        {menuStyle[2].name}
       </Button>
-      <Button menuStyle={menuStyle.repair} onClick={onClickMenu}>
-        수리 요청
+      <Button menuStyle={menuStyle[3].status} onClick={onClickMenu}>
+        {menuStyle[3].name}
       </Button>
     </RequestMenuContainer>
   );

@@ -3,41 +3,15 @@ import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import RequestMenu from '../../components/requestStatus/RequestMenu';
 import RequestShow from '../../components/requestStatus/RequestShow';
+import useSelectMenu from '../../hooks/useSelectMenu';
 
 export default function RequestStatus() {
-  const [menuStyle, setMenuClick] = useState({
-    all: true,
-    equipment: false,
-    return: false,
-    repair: false,
-  });
-
-  const handleClickMenu = e => {
-    const menuName = e.target.innerText;
-    selectMenu(menuName);
-  };
-
-  const selectMenu = menuName => {
-    const initMenu = {
-      all: false,
-      equipment: false,
-      return: false,
-      repair: false,
-    };
-
-    switch (menuName) {
-      case '전체':
-        return setMenuClick({ ...initMenu, all: true });
-      case '비품 요청':
-        return setMenuClick({ ...initMenu, equipment: true });
-      case '반납 요청':
-        return setMenuClick({ ...initMenu, return: true });
-      case '수리 요청':
-        return setMenuClick({ ...initMenu, repair: true });
-      default:
-        return;
-    }
-  };
+  const [menuStyle, handleClickMenu] = useSelectMenu([
+    { name: '전체', status: true },
+    { name: '비품 요청', status: false },
+    { name: '반납 요청', status: false },
+    { name: '수리 요청', status: false },
+  ]);
 
   const a = useLocation();
   console.log(a);
