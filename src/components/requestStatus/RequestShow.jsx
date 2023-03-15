@@ -1,12 +1,20 @@
-import { dblClick } from '@testing-library/user-event/dist/click';
 import React from 'react';
 import styled from 'styled-components';
 import Input from '../../elements/Input';
 import { ReactComponent as Search } from '../../styles/commonIcon/search.svg';
 import { ReactComponent as ArrowDown } from '../../styles/commonIcon/arrowDown.svg';
+import { v4 as uuidv4 } from 'uuid';
+import Pagination from 'react-js-pagination';
 
-export default function RequestShow({ requestData, setSelectName }) {
-  const { content, totalPages } = requestData.data;
+export default function RequestShow({
+  requestData,
+  setSelectName,
+  page,
+  onPage,
+  onChangeStatus,
+}) {
+  const { content, totalPages, totalElements } = requestData.data;
+
   return (
     <RequestShowContainer>
       <RequestShowTitle>
@@ -19,7 +27,7 @@ export default function RequestShow({ requestData, setSelectName }) {
             <Input placeholder="검색어를 입력해주세요 (신청자,담당부서 등)" />
           </SearchContainer>
           <SelectWrapper>
-            <Select>
+            <Select onChange={onChangeStatus}>
               <option value="처리전">처리전</option>
               <option value="처리중">수리중</option>
               <option value="처리 완료">처리 완료</option>
@@ -31,36 +39,53 @@ export default function RequestShow({ requestData, setSelectName }) {
         </SearchSelect>
       </RequestShowTitle>
       <RequestShowBody>
-        <RequestShowListTitle>
-          <Request>요청 구분</Request>
-          <Applicant>신청자</Applicant>
-          <DepartmentCharge>담당 부서</DepartmentCharge>
-          <Type>종류</Type>
-          <Model>모델명</Model>
-          <ApplicationDate>신청일</ApplicationDate>
-          <Status>상태</Status>
-        </RequestShowListTitle>
-        {content.map(data => (
-          <RequestShowList>
-            <RequestList>{data.requestType}</RequestList>
-            <ApplicantList>{data.empName}</ApplicantList>
-            <DepartmentChargeList>{data.deptName}</DepartmentChargeList>
-            <TypeList>{data.modelName}</TypeList>
-            <ModelList>{data.categoryName}</ModelList>
-            <ApplicationDateList>{data.createdAt}</ApplicationDateList>
-            <StatusList>
-              <StatusColor color={'false'} />
-              {data.status}
-            </StatusList>
-          </RequestShowList>
-        ))}
-        <PageContainer>asfsdf</PageContainer>
+        <table>
+          <RequestShowListTitle>
+            <tr>
+              <th>요청구분</th>
+              <th>신청자</th>
+              <th>담당 부서</th>
+              <th>종류</th>
+              <th>모델명</th>
+              <th>신청일</th>
+              <th>상태</th>
+            </tr>
+          </RequestShowListTitle>
+          {content.map(list => (
+            <RequestShowList key={uuidv4()}>
+              <tr>
+                <td>{list.requestType}</td>
+                <td>{list.empName}</td>
+                <td>{list.deptName}</td>
+                <td>{list.categoryName}</td>
+                <td>{list.modelName}</td>
+                <td>{list.createdAt}</td>
+                <td>
+                  <StatusList>
+                    <StatusColor />
+                    {list.status}
+                  </StatusList>
+                </td>
+              </tr>
+            </RequestShowList>
+          ))}
+        </table>
       </RequestShowBody>
+      <PageContainer>
+        <Pagination
+          activePage={page}
+          itemsCountPerPage={10}
+          totalItemsCount={totalElements}
+          pageRangeDisplayed={5}
+          onChange={onPage}
+        />
+      </PageContainer>
     </RequestShowContainer>
   );
 }
 
 const RequestShowContainer = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
   background-color: white;
@@ -147,79 +172,48 @@ const SelectArrow = styled.div`
 `;
 
 const RequestShowBody = styled.div`
-  position: relative;
+  width: 100%;
+  height: 100%;
+
+  table {
+    width: 100%;
+  }
+
+  td,
+  th {
+    padding: 0 10px;
+  }
+
+  td {
+    height: 100%;
+    max-width: 12.5rem;
+    min-width: 9.375rem;
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 `;
 
-const RequestShowListTitle = styled.div`
-  ${props => props.theme.FlexRow}
-  ${props => props.theme.FlexCenter}
-  width: 100%;
+const RequestShowListTitle = styled.thead`
   height: 3.125rem;
   color: ${props => props.theme.color.blue.brandColor6};
   background-color: ${props => props.theme.color.blue.brandColor1};
   margin-top: 1.5rem;
-  /* padding: 0 10.875rem; */
+  padding: 0 2rem;
   font-weight: 600;
   font-size: 1.25rem;
+  text-align: left;
 `;
 
-const RequestShowList = styled.div`
-  ${props => props.theme.FlexRow}
-
-  align-items: center;
+const RequestShowList = styled.tbody`
   height: 3rem;
   border-bottom: 1px solid ${props => props.theme.color.grey.brandColor3};
   font-size: 17px;
+  cursor: pointer;
 `;
 
-const Request = styled.div``;
-const Applicant = styled.div`
-  padding-left: 80px;
-`;
-const DepartmentCharge = styled.div`
-  padding-left: 80px;
-`;
-const Type = styled.div`
-  padding-left: 80px;
-`;
-const Model = styled.div`
-  padding-left: 120px;
-`;
-const ApplicationDate = styled.div`
-  padding-left: 120px;
-`;
-const Status = styled.div`
-  padding-left: 200px;
-`;
-
-const RequestList = styled.div`
-  width: 100px;
-  margin-left: 165px;
-`;
-const ApplicantList = styled.div`
-  width: 100px;
-  margin-left: 52.5px;
-`;
-const DepartmentChargeList = styled.div`
-  width: 100px;
-  margin-left: 50px;
-`;
-const TypeList = styled.div`
-  width: 100px;
-  margin-left: 35px;
-`;
-const ModelList = styled.div`
-  width: 150px;
-  margin-left: 55px;
-`;
-const ApplicationDateList = styled.div`
-  width: 200px;
-  margin-left: 20px;
-`;
 const StatusList = styled.div`
   ${props => props.theme.FlexRow}
-  ${props => props.theme.FlexCenter}
-  margin-left: 40px;
   gap: 0.5rem;
 `;
 
@@ -232,14 +226,56 @@ const StatusColor = styled.div`
 
 const PageContainer = styled.div`
   position: absolute;
-  left: 0;
+  left: 50%;
   bottom: 0;
+  ${props => props.theme.FlexRow}
+  ${props => props.theme.FlexCenter}
+  color: ${props => props.theme.color.blue.brandColor6};
   width: 25rem;
   height: 3.125rem;
-  background-color: aqua;
+  transform: translate(-50%, -1rem);
+
+  .pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+  ul.pagination li {
+    display: inline-block;
+    ${props => props.theme.FlexRow}
+    ${props => props.theme.FlexCenter}
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.25rem;
+  }
+  ul.pagination li a {
+    text-decoration: none;
+    color: black;
+    font-size: 1.125rem;
+  }
+  ul.pagination li.active a {
+    color: white;
+  }
+  ul.pagination li.active {
+    background-color: ${props => props.theme.color.blue.brandColor6};
+  }
+  ul.pagination li a:hover,
+  ul.pagination li a.active {
+    color: ${props => props.theme.color.blue.brandColor6};
+  }
 `;
 
 const PageBtn = styled.div`
-  width: 0.9375rem;
-  height: 0.9375rem; ;
+  width: 1.75rem;
+  height: 1.75rem;
+  background-color: ${props => props.theme.color.blue.brandColor6};
+  border-radius: 0.25rem;
+  text-align: center;
+  line-height: 1.75rem;
+  cursor: pointer;
 `;
