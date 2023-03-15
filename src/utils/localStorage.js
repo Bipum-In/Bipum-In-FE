@@ -11,6 +11,16 @@ const Storage = {
   getUserName() {
     return window.localStorage.getItem('userName');
   },
+
+  getLocalStorageJSON(key) {
+    const parseToJSON = window.localStorage.getItem(key);
+    return JSON.parse(parseToJSON);
+  },
+
+  setLocalStorageJSON(key, data) {
+    const stringToJSON = JSON.stringify(data);
+    return window.localStorage.setItem(key, stringToJSON);
+  },
 };
 
 function setlocalStorage(key, value) {
