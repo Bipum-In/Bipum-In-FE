@@ -4,7 +4,7 @@ export default function useSelectMenu(list) {
   const [menuStyle, setMenuStyle] = useState(list);
 
   const handleClickMenu = e => {
-    const menuName = e.target.value;
+    const menuName = e.target.innerText;
     setMenuStyle(selectMenu(menuName));
   };
 
