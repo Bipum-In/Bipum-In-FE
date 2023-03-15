@@ -12,7 +12,9 @@ const initialState = {
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export const __requestStatus = Redux.asyncThunk('REQUEST', payload =>
-  axios.get(`/api/admin/requests?status=${payload.status}&page=${payload.page}`)
+  axios.get(
+    `/api/admin/requests?type=${payload.type}&status=${payload.status}&page=${payload.page}`
+  )
 );
 
 const requestStatusSlice = Redux.slice(
