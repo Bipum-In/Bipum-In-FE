@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import RequestMenu from '../../components/requestStatus/RequestMenu';
@@ -6,7 +6,7 @@ import RequestShow from '../../components/requestStatus/RequestShow';
 import useSelectMenu from '../../hooks/useSelectMenu';
 
 export default function RequestStatus() {
-  const [menuStyle, handleClickMenu] = useSelectMenu([
+  const [menuStyle, handleClickMenu, setSelectName] = useSelectMenu([
     { name: '전체', status: true },
     { name: '비품 요청', status: false },
     { name: '반납 요청', status: false },
@@ -23,7 +23,7 @@ export default function RequestStatus() {
   return (
     <RequestStatusWrapper>
       <RequestMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
-      <RequestShow />
+      <RequestShow setSelectName={setSelectName} />
       {/* <button onClick={handleKakaoLogin}>카카오 로그인</button> */}
     </RequestStatusWrapper>
   );

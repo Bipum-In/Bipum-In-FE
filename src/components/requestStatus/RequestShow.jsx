@@ -3,11 +3,11 @@ import styled from 'styled-components';
 import Input from '../../elements/Input';
 import { ReactComponent as Search } from '../../styles/commonIcon/search.svg';
 
-export default function RequestShow() {
+export default function RequestShow({ setSelectName }) {
   return (
     <RequestShowContainer>
       <RequestShowTitle>
-        <Title>전체</Title>
+        <Title>{setSelectName()}</Title>
         <SearchSelect>
           <SearchContainer>
             <SearchIconContainer>
