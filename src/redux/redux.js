@@ -31,19 +31,19 @@ const Redux = {
     });
   },
 
-  extraReducer(bulider, thunk, fulfilledFn) {
+  extraReducer(bulider, thunk, stateKey, loadingKey, dataKey, errorkey) {
     bulider.addCase(thunk.pending, (state, _) => {
-      state.isLoading = true;
-      state.isError = false;
+      state[stateKey][loadingKey] = true;
+      state[stateKey][errorkey] = false;
     });
     bulider.addCase(thunk.fulfilled, (state, action) => {
-      state.isLoading = false;
-      state.isError = false;
-      fulfilledFn(state, action);
+      state[stateKey][loadingKey] = false;
+      state[stateKey][errorkey] = false;
+      state[stateKey][dataKey] = action.payload;
     });
     bulider.addCase(thunk.rejected, (state, _) => {
-      state.isLoading = false;
-      state.isError = true;
+      state[stateKey][loadingKey] = false;
+      state[stateKey][errorkey] = true;
     });
   },
 };
