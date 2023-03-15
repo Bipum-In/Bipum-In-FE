@@ -3,7 +3,7 @@ import Redux from '../redux';
 
 const initialState = {
   requestStatus: {
-    getRequest: [],
+    getRequest: null,
     isStatusLoading: false,
     isStatusError: false,
   },
