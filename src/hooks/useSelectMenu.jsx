@@ -16,5 +16,9 @@ export default function useSelectMenu(list) {
     );
   };
 
-  return [menuStyle, handleClickMenu];
+  const setSelectName = () => {
+    return menuStyle.filter(list => list.status)[0].name;
+  };
+
+  return [menuStyle, handleClickMenu, setSelectName];
 }
