@@ -47,10 +47,6 @@ const router = createBrowserRouter([
     path: ROUTER.PATH.LOGIN,
     element: <Login />,
   },
-  {
-    path: '/api/user/kakao/callback',
-    element: <Login />,
-  },
 ]);
 
 export default router;
