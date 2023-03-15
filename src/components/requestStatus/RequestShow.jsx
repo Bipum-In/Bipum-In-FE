@@ -1,3 +1,4 @@
+import { dblClick } from '@testing-library/user-event/dist/click';
 import React from 'react';
 import styled from 'styled-components';
 import Input from '../../elements/Input';
@@ -22,6 +23,29 @@ export default function RequestShow({ setSelectName }) {
           </Select>
         </SearchSelect>
       </RequestShowTitle>
+      <RequestShowBody>
+        <RequestShowListTitle>
+          <Request>요청 구분</Request>
+          <Applicant>신청자</Applicant>
+          <DepartmentCharge>담당 부서</DepartmentCharge>
+          <Type>종류</Type>
+          <Model>모델명</Model>
+          <ApplicationDate>신청일</ApplicationDate>
+          <Status>상태</Status>
+        </RequestShowListTitle>
+        <RequestShowList>
+          <RequestList>수리 요청</RequestList>
+          <ApplicantList>김은지</ApplicantList>
+          <DepartmentChargeList>개발팀</DepartmentChargeList>
+          <TypeList>비디오 캠코더</TypeList>
+          <ModelList>소니 FDR-AX7000</ModelList>
+          <ApplicationDateList>2023.03.14(화) 오전 10:34</ApplicationDateList>
+          <StatusList>
+            <StatusColor color={'false'} />
+            처리전
+          </StatusList>
+        </RequestShowList>
+      </RequestShowBody>
     </RequestShowContainer>
   );
 }
@@ -85,4 +109,80 @@ const Select = styled.select`
   text-align: center;
   -ms-text-align-last: center;
   -moz-text-align-last: center;
+`;
+
+const RequestShowBody = styled.div``;
+
+const RequestShowListTitle = styled.div`
+  ${props => props.theme.FlexRow}
+  ${props => props.theme.FlexCenter}
+  width: 100%;
+  height: 3.125rem;
+  color: ${props => props.theme.color.blue.brandColor6};
+  background-color: ${props => props.theme.color.blue.brandColor1};
+  margin-top: 1.5rem;
+  /* padding: 0 10.875rem; */
+  font-weight: 600;
+  font-size: 1.25rem;
+`;
+
+const RequestShowList = styled.div`
+  ${props => props.theme.FlexRow}
+
+  align-items: center;
+  height: 3rem;
+  border-bottom: 1px solid ${props => props.theme.color.grey.brandColor3};
+  font-size: 17px;
+`;
+
+const Request = styled.div``;
+const Applicant = styled.div`
+  padding-left: 80px;
+`;
+const DepartmentCharge = styled.div`
+  padding-left: 80px;
+`;
+const Type = styled.div`
+  padding-left: 80px;
+`;
+const Model = styled.div`
+  padding-left: 120px;
+`;
+const ApplicationDate = styled.div`
+  padding-left: 160px;
+`;
+const Status = styled.div`
+  padding-left: 200px;
+`;
+
+const RequestList = styled.div`
+  padding-left: 145px;
+`;
+const ApplicantList = styled.div`
+  padding-left: 90px;
+`;
+const DepartmentChargeList = styled.div`
+  padding-left: 100px;
+`;
+const TypeList = styled.div`
+  padding-left: 95px;
+`;
+const ModelList = styled.div`
+  padding-left: 60px;
+`;
+const ApplicationDateList = styled.div`
+  padding-left: 80px;
+`;
+const StatusList = styled.div`
+  ${props => props.theme.FlexRow}
+  ${props => props.theme.FlexCenter}
+  padding-left: 55px;
+  gap: 0.5rem;
+`;
+
+const StatusColor = styled.div`
+  width: 0.9375rem;
+  height: 0.9375rem;
+  background-color: ${props => (props.color === 'false' ? 'red' : 'green')};
+  border-radius: 50%;
 `;
