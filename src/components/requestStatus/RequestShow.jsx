@@ -5,7 +5,8 @@ import Input from '../../elements/Input';
 import { ReactComponent as Search } from '../../styles/commonIcon/search.svg';
 import { ReactComponent as ArrowDown } from '../../styles/commonIcon/arrowDown.svg';
 
-export default function RequestShow({ setSelectName }) {
+export default function RequestShow({ requestData, setSelectName }) {
+  const { content, totalPages } = requestData.data;
   return (
     <RequestShowContainer>
       <RequestShowTitle>
@@ -39,18 +40,21 @@ export default function RequestShow({ setSelectName }) {
           <ApplicationDate>신청일</ApplicationDate>
           <Status>상태</Status>
         </RequestShowListTitle>
-        <RequestShowList>
-          <RequestList>수리 요청</RequestList>
-          <ApplicantList>김은지</ApplicantList>
-          <DepartmentChargeList>개발팀</DepartmentChargeList>
-          <TypeList>비디오 캠코더</TypeList>
-          <ModelList>소니 FDR-AX7000</ModelList>
-          <ApplicationDateList>2023.03.14(화) 오전 10:34</ApplicationDateList>
-          <StatusList>
-            <StatusColor color={'false'} />
-            처리전
-          </StatusList>
-        </RequestShowList>
+        {content.map(data => (
+          <RequestShowList>
+            <RequestList>{data.requestType}</RequestList>
+            <ApplicantList>{data.empName}</ApplicantList>
+            <DepartmentChargeList>{data.deptName}</DepartmentChargeList>
+            <TypeList>{data.modelName}</TypeList>
+            <ModelList>{data.categoryName}</ModelList>
+            <ApplicationDateList>{data.createdAt}</ApplicationDateList>
+            <StatusList>
+              <StatusColor color={'false'} />
+              {data.status}
+            </StatusList>
+          </RequestShowList>
+        ))}
+        <PageContainer>asfsdf</PageContainer>
       </RequestShowBody>
     </RequestShowContainer>
   );
@@ -142,7 +146,9 @@ const SelectArrow = styled.div`
   }
 `;
 
-const RequestShowBody = styled.div``;
+const RequestShowBody = styled.div`
+  position: relative;
+`;
 
 const RequestShowListTitle = styled.div`
   ${props => props.theme.FlexRow}
@@ -180,34 +186,40 @@ const Model = styled.div`
   padding-left: 120px;
 `;
 const ApplicationDate = styled.div`
-  padding-left: 160px;
+  padding-left: 120px;
 `;
 const Status = styled.div`
   padding-left: 200px;
 `;
 
 const RequestList = styled.div`
-  padding-left: 145px;
+  width: 100px;
+  margin-left: 165px;
 `;
 const ApplicantList = styled.div`
-  padding-left: 90px;
+  width: 100px;
+  margin-left: 52.5px;
 `;
 const DepartmentChargeList = styled.div`
-  padding-left: 100px;
+  width: 100px;
+  margin-left: 50px;
 `;
 const TypeList = styled.div`
-  padding-left: 95px;
+  width: 100px;
+  margin-left: 35px;
 `;
 const ModelList = styled.div`
-  padding-left: 60px;
+  width: 150px;
+  margin-left: 55px;
 `;
 const ApplicationDateList = styled.div`
-  padding-left: 80px;
+  width: 200px;
+  margin-left: 20px;
 `;
 const StatusList = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
-  padding-left: 55px;
+  margin-left: 40px;
   gap: 0.5rem;
 `;
 
@@ -216,4 +228,18 @@ const StatusColor = styled.div`
   height: 0.9375rem;
   background-color: ${props => (props.color === 'false' ? 'red' : 'green')};
   border-radius: 50%;
+`;
+
+const PageContainer = styled.div`
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 25rem;
+  height: 3.125rem;
+  background-color: aqua;
+`;
+
+const PageBtn = styled.div`
+  width: 0.9375rem;
+  height: 0.9375rem; ;
 `;

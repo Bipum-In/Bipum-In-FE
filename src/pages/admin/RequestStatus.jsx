@@ -4,10 +4,14 @@ import styled from 'styled-components';
 import RequestMenu from '../../components/requestStatus/RequestMenu';
 import RequestShow from '../../components/requestStatus/RequestShow';
 import useSelectMenu from '../../hooks/useSelectMenu';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import { useDispatch, useSelector } from 'react-redux';
+import { __requestStatus } from '../../redux/modules/requestStatus';
 
 export default function RequestStatus() {
+  const dispatch = useDispatch();
+  const { getRequest, isStatusLoading, isStatusError } = useSelector(
+    state => state.requestStatus.requestStatus
+  );
   const [menuStyle, handleClickMenu, setSelectName] = useSelectMenu(
     [
       { name: '전체', status: true },
@@ -19,15 +23,19 @@ export default function RequestStatus() {
   );
 
   useEffect(() => {
-    axios
-      .get('/api/admin/requests?status=UNPROCESSED&page=1')
-      .then(response => console.log(response));
-  }, []);
+    dispatch(__requestStatus({ status: 'UNPROCESSED', page: 1 }));
+  }, [dispatch]);
 
   return (
     <RequestStatusWrapper>
-      <RequestMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
-      <RequestShow setSelectName={setSelectName} />
+      {isStatusLoading && <div>로딩중</div>}
+      {isStatusError && <div>에러 발생</div>}
+      {getRequest && (
+        <>
+          <RequestMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
+          <RequestShow requestData={getRequest} setSelectName={setSelectName} />
+        </>
+      )}
     </RequestStatusWrapper>
   );
 }
