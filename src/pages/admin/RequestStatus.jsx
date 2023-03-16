@@ -64,7 +64,7 @@ export default function RequestStatus() {
     setPage(1);
     selectName === '전체 보기' && setStatus('ALL');
     selectName === '처리전' && setStatus('UNPROCESSED');
-    selectName === '처리중' && setStatus('REPAIRING');
+    selectName === '처리중' && setStatus('PROCESSING');
     selectName === '처리 완료' && setStatus('PROCESSED');
   };
 

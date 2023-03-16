@@ -31,7 +31,7 @@ export default function RequestShow({
             <Select onChange={onChangeStatus}>
               <option value="전체 보기">전체 보기</option>
               <option value="처리전">처리전</option>
-              <option value="처리중">수리중</option>
+              <option value="처리중">처리중</option>
               <option value="처리 완료">처리 완료</option>
             </Select>
             <SelectArrow>
@@ -185,10 +185,11 @@ const RequestShowBody = styled.div`
   }
 
   tr {
-    display: table;
-    margin: 0 auto;
-    padding: 0 auto;
+    display: flex;
+    margin: 0px auto;
     line-height: 3.3125rem;
+    gap: 1.875rem;
+    justify-content: center;
   }
 
   td {
@@ -209,6 +210,8 @@ const RequestShowListTitle = styled.thead`
   font-weight: 600;
   font-size: 1.25rem;
   text-align: left;
+  padding: 0 2rem;
+  display: flex;
 `;
 
 const RequestShowList = styled.tbody`
@@ -271,7 +274,6 @@ const Status = styled.td`
 const RequestTypeTh = styled.th`
   width: 5rem;
   min-width: 5rem;
-  margin-right: 3.125rem;
 `;
 
 const CategoryNameTh = styled.th`
