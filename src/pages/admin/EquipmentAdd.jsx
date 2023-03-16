@@ -2,17 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../../elements/Button';
 import useSelectMenu from '../../hooks/useSelectMenu';
+import STRING from '../../constants/string';
 
 export default function EquipmentAdd() {
-  const MENUETITLE = {
-    ADDBIPUM: '비품 등록',
-    ADDEXCEL: '엑셀로 전체 등록',
-  };
-
   const [menuStyle, handleClickMenu] = useSelectMenu(
     [
-      { name: MENUETITLE.ADDBIPUM, status: true },
-      { name: MENUETITLE.ADDEXCEL, status: false },
+      { name: STRING.ADDMENUE.ADDBIPUM, status: true },
+      { name: STRING.ADDMENUE.ADDMULTIPLE, status: false },
     ],
     'addEquipment'
   );
@@ -31,23 +27,23 @@ export default function EquipmentAdd() {
           onClick={handleClickAddEquipment}
           menuStyle={menuStyle[0].status}
         >
-          {MENUETITLE.ADDBIPUM}
+          {STRING.ADDMENUE.ADDBIPUM}
         </Button>
         <Button
           onClick={handleClickAddEquipment}
           menuStyle={menuStyle[1].status}
         >
-          {MENUETITLE.ADDEXCEL}
+          {STRING.ADDMENUE.ADDMULTIPLE}
         </Button>
       </AddBtnContainer>
 
       <AddComponentsContainer>
-        {activeComponent === MENUETITLE.ADDBIPUM && (
+        {activeComponent === STRING.ADDMENUE.ADDBIPUM && (
           <>
             <h1>단일 등록</h1>
           </>
         )}
-        {activeComponent === MENUETITLE.ADDEXCEL && (
+        {activeComponent === STRING.ADDMENUE.ADDMULTIPLE && (
           <>
             <h1>복수 등록</h1>
           </>
