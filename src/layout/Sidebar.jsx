@@ -9,15 +9,16 @@ import { ReactComponent as Dashboard } from '../styles/sidebarIcon/dashboard.svg
 import { ReactComponent as List } from '../styles/sidebarIcon/list.svg';
 import { ReactComponent as Management } from '../styles/sidebarIcon/management.svg';
 import useSelectMenu from '../hooks/useSelectMenu';
+import STRING from '../constants/string';
 
 export default function Sidebar() {
   const navigate = useNavigate();
   const [menuStyle, handleClickMenu] = useSelectMenu(
     [
-      { name: '대시보드', status: true },
-      { name: '요청 현황', status: false },
-      { name: '비품 관리', status: false },
-      { name: '비품 등록', status: false },
+      { name: STRING.SIDEBAR.DASHBOARD, status: true },
+      { name: STRING.SIDEBAR.REQUEST_STATUS, status: false },
+      { name: STRING.SIDEBAR.MANAGEMENT, status: false },
+      { name: STRING.SIDEBAR.EQUIPMENT_ADD, status: false },
     ],
     'sideBarMenu'
   );
@@ -25,10 +26,12 @@ export default function Sidebar() {
   const handleClickCategory = e => {
     const name = e.target.innerText;
     handleClickMenu(e);
-    name === '대시보드' && navigate(ROUTER.PATH.ADMIN_DASHBOARD);
-    name === '요청 현황' && navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
-    name === '비품 관리' && navigate(ROUTER.PATH.MAIN);
-    name === '비품 등록' && navigate(ROUTER.PATH.ADMIN_EQUIPMENT_ADD);
+    name === STRING.SIDEBAR.DASHBOARD && navigate(ROUTER.PATH.ADMIN_DASHBOARD);
+    name === STRING.SIDEBAR.REQUEST_STATUS &&
+      navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
+    name === STRING.SIDEBAR.MANAGEMENT && navigate(ROUTER.PATH.MAIN);
+    name === STRING.SIDEBAR.EQUIPMENT_ADD &&
+      navigate(ROUTER.PATH.ADMIN_EQUIPMENT_ADD);
   };
 
   return (
@@ -41,28 +44,28 @@ export default function Sidebar() {
           <CategoryItem
             onClick={handleClickCategory}
             category={`${menuStyle[0].status}`}
-            title="대시보드"
+            title={STRING.SIDEBAR.DASHBOARD}
           >
             <Dashboard />
           </CategoryItem>
           <CategoryItem
             onClick={handleClickCategory}
             category={`${menuStyle[1].status}`}
-            title="요청 현황"
+            title={STRING.SIDEBAR.REQUEST_STATUS}
           >
             <List />
           </CategoryItem>
           <CategoryItem
             onClick={handleClickCategory}
             category={`${menuStyle[2].status}`}
-            title="비품 관리"
+            title={STRING.SIDEBAR.MANAGEMENT}
           >
             <Management />
           </CategoryItem>
           <CategoryItem
             onClick={handleClickCategory}
             category={`${menuStyle[3].status}`}
-            title="비품 등록"
+            title={STRING.SIDEBAR.EQUIPMENT_ADD}
           >
             <Add />
           </CategoryItem>
