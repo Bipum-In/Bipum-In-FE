@@ -9,8 +9,7 @@ export default function useSelectMenu(list, StorgeKey) {
     const menuName = e.target.innerText;
     const select = selectMenu(menuName);
 
-    StorgeKey && Storage.removeLocalStorage(StorgeKey);
-    StorgeKey && Storage.setLocalStorageJSON(StorgeKey, select);
+    Storage.setLocalStorageJSON(StorgeKey, select);
     setMenuStyle(select);
   };
 
