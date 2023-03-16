@@ -27,4 +27,5 @@ const OutletContainer = styled.div`
   height: 100%;
   padding-top: 7.5rem;
   padding: 9.6875rem 3.25rem 3.75rem 3.25rem;
+  background-color: ${props => props.theme.color.blue.brandColor1};
 `;
