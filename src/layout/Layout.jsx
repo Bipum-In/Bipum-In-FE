@@ -26,4 +26,5 @@ const OutletContainer = styled.div`
   width: 100%;
   height: 100%;
   padding-top: 7.5rem;
+  padding: 9.6875rem 3.25rem 3.75rem 3.25rem;
 `;
