@@ -12,7 +12,7 @@ const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 export default function RequestStatus() {
   const dispatch = useDispatch();
   const { getRequest, isStatusLoading, isStatusError } = useSelector(
-    state => state.requestStatus
+    state => state.requestStatus.requestStatus
   );
   const [menuStyle, clickMenu, setSelectName] = useSelectMenu(
     [
@@ -26,12 +26,23 @@ export default function RequestStatus() {
 
   const [page, setPage] = useState(1);
   const [type, setType] = useState('ALL');
-  // const type = useRef('ALL');
-  const [status, setStatus] = useState('UNPROCESSED');
+  const [status, setStatus] = useState('ALL');
+  const [size, setSize] = useState(8);
+  const typeRef = useRef();
+  const sizeRef = useRef();
 
   useEffect(() => {
-    dispatch(__requestStatus({ type, status, page }));
-  }, [dispatch, page, type, status]);
+    typeRef.current = type;
+    sizeRef.current = size;
+    dispatch(
+      __requestStatus({
+        type: typeRef.current,
+        status,
+        page,
+        size: sizeRef.current,
+      })
+    );
+  }, [dispatch, page, type, status, size]);
 
   const handlePage = e => {
     setPage(e);
@@ -51,19 +62,25 @@ export default function RequestStatus() {
     const selectName = e.target.value;
     setStatus(e);
     setPage(1);
+    selectName === '전체 보기' && setStatus('ALL');
     selectName === '처리전' && setStatus('UNPROCESSED');
     selectName === '처리중' && setStatus('REPAIRING');
     selectName === '처리 완료' && setStatus('PROCESSED');
   };
 
-  console.log(type.current);
+  //================= 카카오 로그인 ==================
 
   // const handleKakaoLogin = () => {
-  //   window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=bad08c2762b0ad4460013109d47675f2&redirect_uri=https://bipum-in.shop/api/user/kakao/callback&response_type=code
+  //   window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=bad08c2762b0ad4460013109d47675f2&redirect_uri=http://localhost:3000/api/user/kakao/callback&response_type=code
   //     `;
-
-  //   // axios.post('/api/user/loginadd').then(response => console.log(response));
   // };
+
+  // useEffect(() => {
+  //   const code = search.split('=')[1];
+  //   axios
+  //     .post(`/api/user/login?code=${code}`)
+  //     .then(response => console.log(response));
+  // }, [search]);
 
   if (isStatusError) return <div>에러 발생</div>;
   return (
@@ -75,6 +92,7 @@ export default function RequestStatus() {
             requestData={getRequest}
             setSelectName={setSelectName}
             page={page}
+            pageSize={size}
             onPage={handlePage}
             onChangeStatus={handleChangeStatus}
           />
