@@ -174,9 +174,7 @@ const SelectArrow = styled.div`
 `;
 
 const RequestShowBody = styled.div`
-  /* display: table; */
   width: 100%;
-  /* height: 100%; */
   margin-top: 1.5rem;
 
   table {
@@ -199,7 +197,6 @@ const RequestShowBody = styled.div`
     font-size: 1.0625rem;
     overflow: hidden;
     white-space: nowrap;
-    /* padding: 0 3.75rem; */
   }
 `;
 
@@ -237,7 +234,6 @@ const StatusColor = styled.div`
 const RequestType = styled.td`
   width: 5rem;
   min-width: 5rem;
-  /* padding-right: 3.125rem; */
   font-weight: 600;
 `;
 

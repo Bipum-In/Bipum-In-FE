@@ -27,7 +27,7 @@ export default function RequestStatus() {
   const [page, setPage] = useState(1);
   const [type, setType] = useState('ALL');
   const [status, setStatus] = useState('ALL');
-  const [size, setSize] = useState(8);
+  const [size, setSize] = useState(7);
   const typeRef = useRef();
   const sizeRef = useRef();
 
@@ -109,7 +109,7 @@ const RequestStatusWrapper = styled.section`
   width: 100%;
   height: 100%;
   background-color: ${props => props.theme.color.blue.brandColor1};
-  padding: 2.25rem 3.25rem 3.25rem 3.25rem;
+  /* padding: 2.25rem 3.25rem 3.25rem 3.25rem; */
 `;
 
 const Loading = styled.section`
