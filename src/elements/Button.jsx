@@ -37,31 +37,44 @@ const ButtonWrapper = styled.button`
   white-space: nowrap;
 
   ${props =>
-    props.menuStyle
-      ? css`
-          width: 15rem;
-          height: 3.125rem;
-          color: white;
-          background-color: ${props => props.theme.color.blue.brandColor6};
-          margin: 0 0.6875rem;
-          border: 0.0579rem solid ${props => props.theme.color.grey.brandColor2};
-          box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
-          border-radius: 0.4631rem;
-          font-weight: 600;
-          font-size: 1.25rem;
-        `
-      : css`
-          width: 15rem;
-          height: 3.125rem;
-          color: ${props => props.theme.color.grey.brandColor7};
-          background-color: white;
-          margin: 0 0.6875rem;
-          border: 0.0579rem solid ${props => props.theme.color.grey.brandColor2};
-          box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
-          border-radius: 0.4631rem;
-          font-weight: 400;
-          font-size: 1.25rem;
-        `}
+    props.showAll &&
+    css`
+      color: ${props => props.theme.color.blue.brandColor6};
+      line-height: 1.4919rem;
+      font-size: 1.25rem;
+      svg * {
+        stroke: ${props => props.theme.color.blue.brandColor6};
+      }
+    `}
+
+  ${props =>
+    (props.menuStyle === true || props.menuStyle === false) &&
+    css`
+      width: 15rem;
+      height: 3.125rem;
+      margin: 0 0.6875rem 1.5rem 0;
+      border: 0.0579rem solid ${props => props.theme.color.grey.brandColor2};
+      box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
+      border-radius: 0.4631rem;
+      font-size: 1.25rem;
+    `}
+
+${props =>
+    props.menuStyle === true &&
+    css`
+      color: white;
+      background-color: ${props => props.theme.color.blue.brandColor6};
+      font-weight: 600;
+    `}
+
+${props =>
+    props.menuStyle === false &&
+    css`
+      color: ${props => props.theme.color.grey.brandColor7};
+      background-color: white;
+      font-weight: 400;
+    `}
+
 
   & {
     cursor: pointer;
