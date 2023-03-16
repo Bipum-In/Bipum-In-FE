@@ -1,11 +1,11 @@
 const Storage = {
   setUserName(name) {
-    removeLocalStorage('userName');
-    setlocalStorage('userName', name);
+    this.removeLocalStorage('userName');
+    this.setlocalStorage('userName', name);
   },
 
   removeUserName() {
-    removeLocalStorage('userName');
+    this.removeLocalStorage('userName');
   },
 
   getUserName() {
@@ -21,14 +21,14 @@ const Storage = {
     const stringToJSON = JSON.stringify(data);
     return window.localStorage.setItem(key, stringToJSON);
   },
+
+  setlocalStorage(key, value) {
+    return window.localStorage.setItem(key, value);
+  },
+
+  removeLocalStorage(key) {
+    return window.localStorage.removeItem(key);
+  },
 };
-
-function setlocalStorage(key, value) {
-  return window.localStorage.setItem(key, value);
-}
-
-function removeLocalStorage(key) {
-  return window.localStorage.removeItem(key);
-}
 
 export default Storage;
