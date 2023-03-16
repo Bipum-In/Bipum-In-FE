@@ -9,6 +9,7 @@ import AdminDashBoard from '../pages/admin/AdminDashBoard';
 import UserDashBoard from '../pages/user/UserDashBoard';
 import Rending from '../pages/Rending';
 
+import EquipmentAdd from '../pages/admin/EquipmentAdd';
 import RequestStatus from '../pages/admin/RequestStatus';
 
 const router = createBrowserRouter([
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
           {
             path: ROUTER.PATH.ADMIN_REQUEST_STATUS,
             element: <RequestStatus />,
+          },
+          {
+            path: ROUTER.PATH.ADMIN_EQUIPMENT_ADD,
+            element: <EquipmentAdd />,
           },
           {
             path: ROUTER.PATH.USER_DASHBOARD,
