@@ -10,6 +10,7 @@ export default class Axios {
 
     this.instance.interceptors.response.use(
       response => {
+        console.log(response);
         const token = response.headers.authorization;
 
         if (token) {
