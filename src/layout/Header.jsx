@@ -71,7 +71,7 @@ const HeaderWrapper = styled.header`
 `;
 
 const HeaderContainer = styled.div`
-  width: calc(100vw - 250px);
+  width: calc(100vw - 15.625rem);
   margin-left: auto;
   height: 100%;
 `;
