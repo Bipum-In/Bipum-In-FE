@@ -3,6 +3,7 @@ import styled, { css } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import Pagination from 'react-js-pagination';
 import StatusListHeader from '../common/StatusListHeader';
+import PaginationList from '../common/PaginationList';
 
 export default function RequestShow({
   requestData,
@@ -66,15 +67,12 @@ export default function RequestShow({
           ))}
         </table>
       </RequestShowBody>
-      <PageContainer>
-        <Pagination
-          activePage={page}
-          itemsCountPerPage={pageSize}
-          totalItemsCount={totalElements}
-          pageRangeDisplayed={5}
-          onChange={onPage}
-        />
-      </PageContainer>
+      <PaginationList
+        page={page}
+        pageSize={pageSize}
+        totalElements={totalElements}
+        onPage={onPage}
+      />
     </RequestShowContainer>
   );
 }
@@ -87,84 +85,6 @@ const RequestShowContainer = styled.div`
   border: 0.0579rem solid ${props => props.theme.color.grey.brandColor2};
   box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
   border-radius: 0.4628rem;
-`;
-
-const RequestShowTitle = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-bottom: 1.5rem;
-`;
-
-const Title = styled.div`
-  font-weight: 600;
-  font-size: 1.75rem;
-  margin-top: 1.75rem;
-  margin-left: 2.5rem;
-`;
-
-const SearchSelect = styled.div`
-  ${props => props.theme.FlexRow}
-  ${props => props.theme.FlexCenter}
-  margin-top: 1.5rem;
-`;
-
-const SearchContainer = styled.div`
-  ${props => props.theme.FlexRow}
-  ${props => props.theme.FlexCenter}
-  width: 28.375rem;
-  height: 2.5rem;
-  background-color: ${props => props.theme.color.grey.brandColor1};
-  margin: 0;
-  margin-right: 1.625rem;
-  border-radius: 0.5rem;
-
-  input {
-    font-size: 1rem;
-  }
-`;
-
-const SearchIconContainer = styled.div`
-  padding: 0 1rem;
-`;
-
-const Select = styled.select`
-  position: relative;
-  width: 5.8125rem;
-  height: 2.5rem;
-  color: ${props => props.theme.color.blue.brandColor6};
-  background-color: ${props => props.theme.color.blue.brandColor1};
-  border: 1px solid ${props => props.theme.color.blue.brandColor3};
-  border-radius: 0.375rem;
-  text-align-last: center;
-  text-align: center;
-  appearance: none;
-  padding: 5px 10px;
-  padding-right: 25px;
-`;
-
-const SelectWrapper = styled.div`
-  position: relative;
-  width: 5.8125rem;
-  height: 2.5rem;
-  margin-right: 1.9375rem;
-`;
-
-const SelectArrow = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  height: 15px;
-  width: 15px;
-  transform: translateY(-50%);
-  pointer-events: none;
-  svg {
-    width: 15px;
-    height: 15px;
-    * {
-      stroke: ${props => props.theme.color.blue.brandColor6};
-    }
-  }
 `;
 
 const RequestShowBody = styled.div`
@@ -309,57 +229,4 @@ const CreatedAtTh = styled.th`
 const StatusTh = styled.th`
   width: 6rem;
   min-width: 6rem;
-`;
-
-const PageContainer = styled.div`
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  ${props => props.theme.FlexRow}
-  ${props => props.theme.FlexCenter}
-  color: ${props => props.theme.color.blue.brandColor6};
-  width: 25rem;
-  height: 3.125rem;
-  transform: translate(-50%, -1rem);
-
-  .pagination {
-    display: flex;
-    justify-content: center;
-    margin-top: 15px;
-    gap: 1rem;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-  ul.pagination li {
-    display: inline-block;
-    ${props => props.theme.FlexRow}
-    ${props => props.theme.FlexCenter}
-    width: 1.75rem;
-    height: 1.75rem;
-    border-radius: 0.25rem;
-  }
-  ul.pagination li a {
-    text-decoration: none;
-    color: black;
-    font-size: 1.125rem;
-  }
-  ul.pagination li.active a {
-    color: white;
-  }
-  ul.pagination li.active {
-    background-color: ${props => props.theme.color.blue.brandColor6};
-  }
-`;
-
-const PageBtn = styled.div`
-  width: 1.75rem;
-  height: 1.75rem;
-  background-color: ${props => props.theme.color.blue.brandColor6};
-  border-radius: 0.25rem;
-  text-align: center;
-  line-height: 1.75rem;
-  cursor: pointer;
 `;
