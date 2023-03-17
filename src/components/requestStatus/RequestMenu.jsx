@@ -2,9 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '../../elements/Button';
 
-export default function RequestMenu({ menuStyle, onClickMenu }) {
+export default function RequestMenu({ headerRef, menuStyle, onClickMenu }) {
   return (
-    <RequestMenuContainer>
+    <RequestMenuContainer ref={headerRef}>
       <Button menuStyle={menuStyle[0].status} onClick={onClickMenu}>
         {menuStyle[0].name}
       </Button>

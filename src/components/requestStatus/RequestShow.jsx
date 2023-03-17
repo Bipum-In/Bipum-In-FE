@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Input from '../../elements/Input';
 import { ReactComponent as Search } from '../../styles/commonIcon/search.svg';
@@ -13,12 +13,20 @@ export default function RequestShow({
   pageSize,
   onPage,
   onChangeStatus,
+  containerHeaderRef,
+  listHeaderRef,
+  listRef,
+  onResize,
 }) {
   const { content, totalElements } = requestData.data;
 
+  useEffect(() => {
+    onResize();
+  }, []);
+
   return (
     <RequestShowContainer>
-      <RequestShowTitle>
+      <RequestShowTitle ref={containerHeaderRef}>
         <Title>{setSelectName()}</Title>
         <SearchSelect>
           <SearchContainer>
@@ -41,7 +49,7 @@ export default function RequestShow({
         </SearchSelect>
       </RequestShowTitle>
       <RequestShowBody>
-        <table>
+        <table ref={listHeaderRef}>
           <RequestShowListTitle>
             <tr>
               <RequestTypeTh>요청구분</RequestTypeTh>
@@ -53,6 +61,8 @@ export default function RequestShow({
               <StatusTh>상태</StatusTh>
             </tr>
           </RequestShowListTitle>
+        </table>
+        <table ref={listRef}>
           {content.map(list => (
             <RequestShowList key={uuidv4()}>
               <tr>
@@ -100,6 +110,7 @@ const RequestShowTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 1.5rem;
 `;
 
 const Title = styled.div`
@@ -175,7 +186,6 @@ const SelectArrow = styled.div`
 
 const RequestShowBody = styled.div`
   width: 100%;
-  margin-top: 1.5rem;
 
   table {
     width: 100%;
