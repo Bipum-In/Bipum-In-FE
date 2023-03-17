@@ -23,7 +23,7 @@ export default function StatusListHeader({
           <Input placeholder="검색어를 입력해주세요 (신청자,담당부서 등)" />
         </SearchContainer>
         <SelectWrapper>
-          <Select onChange={onChangeStatus}>
+          <Select onChange={e => onChangeStatus(e, e.target.value)}>
             {selectBoxList.map(value => (
               <option key={value} value={value}>
                 {value}

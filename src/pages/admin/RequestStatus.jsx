@@ -6,20 +6,44 @@ import useSelectMenu from '../../hooks/useSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { __requestStatus } from '../../redux/modules/requestStatus';
 import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
+import useSetStateChange from '../../hooks/useSetStateChange';
 
 export default function RequestStatus() {
   const dispatch = useDispatch();
   const { getRequest, isStatusError } = useSelector(
     state => state.requestStatus.requestStatus
   );
-  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(
+  const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
     [
-      { name: '전체', status: true },
-      { name: '비품 요청', status: false },
-      { name: '반납 요청', status: false },
-      { name: '수리 요청', status: false },
+      { name: '전체', type: 'ALL', status: true },
+      { name: '비품 요청', type: 'SUPPLY', status: false },
+      { name: '반납 요청', type: 'RETURN', status: false },
+      { name: '수리 요청', type: 'REPAIR', status: false },
     ],
     'RequestStorgeKey'
+  );
+  const [page, setPage] = useState(1);
+  const [type, setType] = useState(setSelectType());
+  const [status, setStatus] = useState('ALL');
+
+  const handleClickMenu = useSetStateChange(
+    ['전체', '비품 요청', '반납 요청', '수리 요청'],
+    ['ALL', 'SUPPLY', 'RETURN', 'REPAIR'],
+    setType,
+    e => {
+      clickMenu(e);
+      setPage(1);
+    }
+  );
+
+  const handleChangeStatus = useSetStateChange(
+    ['전체 보기', '처리전', '처리중', '처리 완료'],
+    ['ALL', 'UNPROCESSED', 'PROCESSING', 'PROCESSED'],
+    setStatus,
+    e => {
+      setStatus(e);
+      setPage(1);
+    }
   );
   const [
     containerRef,
@@ -30,10 +54,6 @@ export default function RequestStatus() {
     pageSize,
     handleResize,
   ] = useResizeGetPageSize();
-
-  const [page, setPage] = useState(1);
-  const [type, setType] = useState('ALL');
-  const [status, setStatus] = useState('ALL');
 
   useEffect(() => {
     dispatch(
@@ -50,65 +70,31 @@ export default function RequestStatus() {
     setPage(e);
   };
 
-  const handleClickMenu = e => {
-    const menuName = e.target.innerText;
-    clickMenu(e);
-    setPage(1);
-    menuName === '전체' && setType('ALL');
-    menuName === '비품 요청' && setType('SUPPLY');
-    menuName === '반납 요청' && setType('RETURN');
-    menuName === '수리 요청' && setType('REPAIR');
-  };
-
-  const handleChangeStatus = e => {
-    const selectName = e.target.value;
-    console.log(selectName);
-    setStatus(e);
-    setPage(1);
-    selectName === '전체 보기' && setStatus('ALL');
-    selectName === '처리전' && setStatus('UNPROCESSED');
-    selectName === '처리중' && setStatus('PROCESSING');
-    selectName === '처리 완료' && setStatus('PROCESSED');
-  };
-
-  //================= 카카오 로그인 ==================
-
-  // const handleKakaoLogin = () => {
-  //   window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=bad08c2762b0ad4460013109d47675f2&redirect_uri=http://localhost:3000/api/user/kakao/callback&response_type=code
-  //     `;
-  // };
-
-  // useEffect(() => {
-  //   const code = search.split('=')[1];
-  //   axios
-  //     .post(`/api/user/login?code=${code}`)
-  //     .then(response => console.log(response));
-  // }, [search]);
-
-  if (isStatusError) return <div>에러 발생</div>;
   return (
-    getRequest && (
-      <RequestStatusWrapper ref={containerRef}>
-        <RequestMenu
-          headerRef={headerRef}
-          menuStyle={menuStyle}
-          onClickMenu={handleClickMenu}
-        />
-        <RequestShow
-          requestData={getRequest}
-          setSelectName={setSelectName}
-          page={page}
-          pageSize={pageSize}
-          onPage={handlePage}
-          onChangeStatus={handleChangeStatus}
-          containerHeaderRef={containerHeaderRef}
-          listHeaderRef={listHeaderRef}
-          listRef={listRef}
-          onResize={handleResize}
-        />
-        {/* <button onClick={handleKakaoLogin}>카카오</button> */}
-      </RequestStatusWrapper>
-    )
+    <>
+      {isStatusError && <div>에러 발생</div>}
+      {getRequest && (
+        <RequestStatusWrapper ref={containerRef}>
+          <RequestMenu
+            headerRef={headerRef}
+            menuStyle={menuStyle}
+            onClickMenu={handleClickMenu}
+          />
+          <RequestShow
+            requestData={getRequest}
+            setSelectName={setSelectName}
+            page={page}
+            pageSize={pageSize}
+            onPage={handlePage}
+            onChangeStatus={handleChangeStatus}
+            containerHeaderRef={containerHeaderRef}
+            listHeaderRef={listHeaderRef}
+            listRef={listRef}
+            onResize={handleResize}
+          />
+        </RequestStatusWrapper>
+      )}
+    </>
   );
 }
 
