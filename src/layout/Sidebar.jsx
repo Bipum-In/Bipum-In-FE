@@ -29,7 +29,8 @@ export default function Sidebar() {
     name === STRING.SIDEBAR.DASHBOARD && navigate(ROUTER.PATH.ADMIN_DASHBOARD);
     name === STRING.SIDEBAR.REQUEST_STATUS &&
       navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
-    name === STRING.SIDEBAR.MANAGEMENT && navigate(ROUTER.PATH.MAIN);
+    name === STRING.SIDEBAR.MANAGEMENT &&
+      navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT);
     name === STRING.SIDEBAR.EQUIPMENT_ADD &&
       navigate(ROUTER.PATH.ADMIN_EQUIPMENT_ADD);
   };
@@ -76,7 +77,9 @@ export default function Sidebar() {
 }
 
 const SidebarWrapper = styled.aside`
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
   min-width: 15.625rem;
   max-width: 15.625rem;
   height: 100%;

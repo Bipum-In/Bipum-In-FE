@@ -23,9 +23,9 @@ const LayoutWrapper = styled.div`
 `;
 
 const OutletContainer = styled.div`
-  width: 100%;
+  width: calc(100% - 15.625rem);
   height: 100%;
-  padding-top: 7.5rem;
+  margin-left: auto;
   padding: 9.6875rem 3.25rem 3.75rem 3.25rem;
   background-color: ${props => props.theme.color.blue.brandColor1};
 `;
