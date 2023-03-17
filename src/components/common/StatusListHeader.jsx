@@ -25,7 +25,9 @@ export default function StatusListHeader({
         <SelectWrapper>
           <Select onChange={onChangeStatus}>
             {selectBoxList.map(value => (
-              <option value={value}>{value}</option>
+              <option key={value} value={value}>
+                {value}
+              </option>
             ))}
           </Select>
           <SelectArrow>
