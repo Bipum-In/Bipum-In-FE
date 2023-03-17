@@ -26,5 +26,9 @@ export default function useSelectMenu(list, StorgeKey) {
     return menuStyle.filter(list => list.status)[0].name;
   };
 
-  return [menuStyle, handleClickMenu, setSelectName];
+  const setSelectType = () => {
+    return menuStyle.filter(value => value.status)[0].type;
+  };
+
+  return [menuStyle, handleClickMenu, setSelectName, setSelectType];
 }
