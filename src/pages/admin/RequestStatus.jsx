@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import RequestMenu from '../../components/requestStatus/RequestMenu';
+import StatusMenu from '../../components/requestStatus/StatusMenu';
 import RequestShow from '../../components/requestStatus/RequestShow';
 import useSelectMenu from '../../hooks/useSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
@@ -75,7 +75,7 @@ export default function RequestStatus() {
       {isStatusError && <div>에러 발생</div>}
       {getRequest && (
         <RequestStatusWrapper ref={containerRef}>
-          <RequestMenu
+          <StatusMenu
             headerRef={headerRef}
             menuStyle={menuStyle}
             onClickMenu={handleClickMenu}

@@ -2,14 +2,14 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from '../../elements/Button';
 
-export default function RequestMenu({
+export default function StatusMenu({
   headerRef,
   menuStyle,
   onClickMenu,
   children,
 }) {
   return (
-    <RequestMenuContainer ref={headerRef}>
+    <StatusMenuContainer ref={headerRef}>
       {menuStyle.map(menu => (
         <Button
           key={menu.name}
@@ -20,11 +20,11 @@ export default function RequestMenu({
           {menu.name}
         </Button>
       ))}
-    </RequestMenuContainer>
+    </StatusMenuContainer>
   );
 }
 
-const RequestMenuContainer = styled.div`
+const StatusMenuContainer = styled.div`
   display: flex;
   align-items: center;
 `;
