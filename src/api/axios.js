@@ -11,15 +11,17 @@ export default class Axios {
     this.instance.interceptors.response.use(
       response => {
         console.log(response);
-        const token = response.headers.authorization;
+        // const token = response.headers.authorization;
 
+        return response;
+      },
+      error => {
+        const token =
+          'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkanhvcjAwN0BuYXZlci5jb20iLCJhdXRoIjoiQURNSU4iLCJleHAiOjE3MTA1ODg0MTEsImlhdCI6MTY3OTA1MjQxMX0.GyXlo7KJzz1VBNEzNPSK_OIeSJfeHGcbUABi8XC9Kh4';
         if (token) {
           const [, parseToken] = token.split(' ');
           setCookie(QUERY.COOKIE.COOKIE_NAME, parseToken);
         }
-        return response;
-      },
-      error => {
         alert(error.response.data.result);
         return Promise.reject(error);
       }
