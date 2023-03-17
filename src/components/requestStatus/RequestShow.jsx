@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import StatusListHeader from '../common/StatusListHeader';
-import StatusList from '../common/StatusList';
+import StatusListHeader from '../common/status/StatusListHeader';
+import StatusList from '../common/status/StatusList';
 import PaginationList from '../common/PaginationList';
 
 export default function RequestShow({

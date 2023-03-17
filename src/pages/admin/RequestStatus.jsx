@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import StatusMenu from '../../components/requestStatus/StatusMenu';
+import StatusMenu from '../../components/common/status/StatusMenu';
 import RequestShow from '../../components/requestStatus/RequestShow';
 import useSelectMenu from '../../hooks/useSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
