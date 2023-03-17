@@ -62,6 +62,7 @@ export default function RequestStatus() {
 
   const handleChangeStatus = e => {
     const selectName = e.target.value;
+    console.log(selectName);
     setStatus(e);
     setPage(1);
     selectName === '전체 보기' && setStatus('ALL');
