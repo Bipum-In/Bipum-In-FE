@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Input from '../../elements/Input';
 import { ReactComponent as Search } from '../../styles/commonIcon/search.svg';
 import { ReactComponent as ArrowDown } from '../../styles/commonIcon/arrowDown.svg';
@@ -74,7 +74,7 @@ export default function RequestShow({
                 <CreatedAt>{list.createdAt}</CreatedAt>
                 <Status>
                   <StatusList>
-                    <StatusColor />
+                    <StatusColor status={list.status} />
                     {list.status}
                   </StatusList>
                 </Status>
@@ -237,7 +237,23 @@ const StatusList = styled.div`
 const StatusColor = styled.div`
   width: 0.9375rem;
   height: 0.9375rem;
-  background-color: ${props => (props.color === 'false' ? 'red' : 'green')};
+  ${props =>
+    props.status === '처리전' &&
+    css`
+      background-color: #e12020;
+    `};
+
+  ${props =>
+    props.status === '처리중' &&
+    css`
+      background-color: #ff9900;
+    `};
+
+  ${props =>
+    props.status === '처리완료' &&
+    css`
+      background-color: #027cff;
+    `};
   border-radius: 50%;
 `;
 
