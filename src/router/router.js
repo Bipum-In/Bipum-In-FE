@@ -11,6 +11,7 @@ import Rending from '../pages/Rending';
 
 import EquipmentAdd from '../pages/admin/EquipmentAdd';
 import RequestStatus from '../pages/admin/RequestStatus';
+import EquipmentManagement from '../pages/admin/EquipmentManagement';
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
           {
             path: ROUTER.PATH.ADMIN_REQUEST_STATUS,
             element: <RequestStatus />,
+          },
+          {
+            path: ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT,
+            element: <EquipmentManagement />,
           },
           {
             path: ROUTER.PATH.ADMIN_EQUIPMENT_ADD,
