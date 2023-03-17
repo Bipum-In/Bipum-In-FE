@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
 import styled, { css } from 'styled-components';
-import Input from '../../elements/Input';
-import { ReactComponent as Search } from '../../styles/commonIcon/search.svg';
-import { ReactComponent as ArrowDown } from '../../styles/commonIcon/arrowDown.svg';
 import { v4 as uuidv4 } from 'uuid';
 import Pagination from 'react-js-pagination';
+import StatusListHeader from '../common/StatusListHeader';
 
 export default function RequestShow({
   requestData,
@@ -19,35 +17,20 @@ export default function RequestShow({
   onResize,
 }) {
   const { content, totalElements } = requestData.data;
+  const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
 
   useEffect(() => {
     onResize();
-  }, []);
+  }, [onResize]);
 
   return (
     <RequestShowContainer>
-      <RequestShowTitle ref={containerHeaderRef}>
-        <Title>{setSelectName()}</Title>
-        <SearchSelect>
-          <SearchContainer>
-            <SearchIconContainer>
-              <Search />
-            </SearchIconContainer>
-            <Input placeholder="검색어를 입력해주세요 (신청자,담당부서 등)" />
-          </SearchContainer>
-          <SelectWrapper>
-            <Select onChange={onChangeStatus}>
-              <option value="전체 보기">전체 보기</option>
-              <option value="처리전">처리전</option>
-              <option value="처리중">처리중</option>
-              <option value="처리 완료">처리 완료</option>
-            </Select>
-            <SelectArrow>
-              <ArrowDown />
-            </SelectArrow>
-          </SelectWrapper>
-        </SearchSelect>
-      </RequestShowTitle>
+      <StatusListHeader
+        setSelectName={setSelectName}
+        selectBoxList={selectBoxList}
+        containerHeaderRef={containerHeaderRef}
+        onChangeStatus={onChangeStatus}
+      />
       <RequestShowBody>
         <table ref={listHeaderRef}>
           <RequestShowListTitle>
