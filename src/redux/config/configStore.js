@@ -1,9 +1,9 @@
 import { configureStore } from '@reduxjs/toolkit';
-import getMainSlice from '../modules/main';
+import requestStatus from '../modules/requestStatus';
 
 const store = configureStore({
   reducer: {
-    getMainSlice,
+    requestStatus,
   },
 });
 

@@ -1,30 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
+import GlobalStyle from './styles/globalStyle';
+import theme from './styles/theme';
 
-import App from './App';
-import ROUTER from './constants/router';
 import store from './redux/config/configStore';
-
-const router = createBrowserRouter([
-  {
-    path: ROUTER.PATH.MAIN,
-    element: <App />,
-    children: [
-      {
-        index: true,
-        element: '',
-      },
-    ],
-  },
-]);
+import { ThemeProvider } from 'styled-components';
+import router from './router/router';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <RouterProvider router={router} />
-    </Provider>
-  </React.StrictMode>
+    </ThemeProvider>
+  </Provider>
 );

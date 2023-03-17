@@ -1,24 +1,34 @@
 const Storage = {
   setUserName(name) {
-    removeLocalStorage('userName');
-    setlocalStorage('userName', name);
+    this.removeLocalStorage('userName');
+    this.setlocalStorage('userName', name);
   },
 
   removeUserName() {
-    removeLocalStorage('userName');
+    this.removeLocalStorage('userName');
   },
 
   getUserName() {
     return window.localStorage.getItem('userName');
   },
+
+  getLocalStorageJSON(key) {
+    const parseToJSON = window.localStorage.getItem(key);
+    return JSON.parse(parseToJSON);
+  },
+
+  setLocalStorageJSON(key, data) {
+    const stringToJSON = JSON.stringify(data);
+    return window.localStorage.setItem(key, stringToJSON);
+  },
+
+  setlocalStorage(key, value) {
+    return window.localStorage.setItem(key, value);
+  },
+
+  removeLocalStorage(key) {
+    return window.localStorage.removeItem(key);
+  },
 };
-
-function setlocalStorage(key, value) {
-  return window.localStorage.setItem(key, value);
-}
-
-function removeLocalStorage(key) {
-  return window.localStorage.removeItem(key);
-}
 
 export default Storage;
