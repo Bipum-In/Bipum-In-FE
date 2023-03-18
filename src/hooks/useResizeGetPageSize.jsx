@@ -19,7 +19,7 @@ export default function useResizeGetPageSize() {
     const containerHeaderH = containerHeaderRef.current.clientHeight;
     const listHeaderH = listHeaderRef.current.clientHeight;
     const itemH = listRef.current.firstChild.clientHeight;
-    const pageBar = 50;
+    const pageBar = 80;
 
     const size = calculateSize(
       containerH,
