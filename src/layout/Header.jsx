@@ -65,7 +65,7 @@ const HeaderWrapper = styled.header`
   top: 0;
   left: 0;
   width: 100vw;
-  height: 7.5rem;
+  height: 6.25rem;
   z-index: 0;
   background-color: ${props => props.theme.color.blue.brandColor7};
 `;

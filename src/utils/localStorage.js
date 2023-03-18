@@ -29,6 +29,10 @@ const Storage = {
   removeLocalStorage(key) {
     return window.localStorage.removeItem(key);
   },
+
+  clearLocalStorage() {
+    return window.localStorage.clear();
+  },
 };
 
 export default Storage;
