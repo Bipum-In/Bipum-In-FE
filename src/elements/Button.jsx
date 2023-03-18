@@ -50,13 +50,13 @@ const ButtonWrapper = styled.button`
   ${props =>
     (props.menuStyle === true || props.menuStyle === false) &&
     css`
-      width: 15rem;
-      height: 3.125rem;
-      margin: 0 0.6875rem 1.5rem 0;
+      width: 12.5rem;
+      height: 2.5rem;
+      margin: 0 0.6875rem 1.375rem 0;
       border: 0.0579rem solid ${props => props.theme.color.grey.brandColor2};
       box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
       border-radius: 0.4631rem;
-      font-size: 1.25rem;
+      font-size: 1rem;
     `}
 
 ${props =>
