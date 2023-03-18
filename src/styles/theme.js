@@ -62,6 +62,17 @@ const wh100 = css`
   height: 100%;
 `;
 
+const AbsoluteTL = css`
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+const CursorActive = css`
+  pointer-events: auto;
+  cursor: pointer;
+`;
+
 const theme = {
   color,
   screen,
@@ -70,6 +81,8 @@ const theme = {
   FlexCol,
   FlexRow,
   FlexCenter,
+  AbsoluteTL,
+  CursorActive,
 };
 
 export default theme;
