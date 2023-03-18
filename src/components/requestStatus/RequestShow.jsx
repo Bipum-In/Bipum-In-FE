@@ -16,7 +16,7 @@ export default function RequestShow({
   listRef,
   onResize,
 }) {
-  const { content, totalElements } = requestData.data;
+  // const { content, totalElements } = requestData?.data;
   const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
   const headerList = [
     { name: '요청구분', width: '5rem' },
@@ -27,10 +27,6 @@ export default function RequestShow({
     { name: '신청일', width: '13.75rem' },
     { name: '상태', width: '6rem' },
   ];
-
-  useEffect(() => {
-    onResize();
-  }, [onResize]);
 
   return (
     <RequestShowContainer>
@@ -44,15 +40,17 @@ export default function RequestShow({
         headerList={headerList}
         listHeaderRef={listHeaderRef}
         listRef={listRef}
-        content={content}
+        content={requestData}
         onResize={onResize}
       />
-      <PaginationList
-        page={page}
-        pageSize={pageSize}
-        totalElements={totalElements}
-        onPage={onPage}
-      />
+      {requestData && (
+        <PaginationList
+          page={page}
+          pageSize={pageSize}
+          requestData={requestData}
+          onPage={onPage}
+        />
+      )}
     </RequestShowContainer>
   );
 }

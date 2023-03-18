@@ -6,6 +6,7 @@ export default function StatusList({
   listHeaderRef,
   listRef,
   content,
+  contentKeyArr,
 }) {
   return (
     <RequestShowBody>
@@ -23,26 +24,34 @@ export default function StatusList({
         </RequestShowListTitle>
       </table>
       <table ref={listRef}>
-        {content.map(list => (
-          <RequestShowList key={uuidv4()}>
+        {content ? (
+          content.data.content.map(list => (
+            <RequestShowList key={uuidv4()}>
+              <tr>
+                <One width={headerList[0].width}>{list.requestType}</One>
+                <Two width={headerList[1].width}>{list.categoryName}</Two>
+                <Three width={headerList[2].width}>
+                  {list.modelName ? list.modelName : '-'}
+                </Three>
+                <Four width={headerList[3].width}>{list.empName}</Four>
+                <Five width={headerList[4].width}>{list.deptName}</Five>
+                <Six width={headerList[5].width}>{list.createdAt}</Six>
+                <Seven width={headerList[6].width}>
+                  <Status>
+                    <StatusColor status={list.status} />
+                    {list.status}
+                  </Status>
+                </Seven>
+              </tr>
+            </RequestShowList>
+          ))
+        ) : (
+          <tbody>
             <tr>
-              <One width={headerList[0].width}>{list.requestType}</One>
-              <Two width={headerList[1].width}>{list.categoryName}</Two>
-              <Three width={headerList[2].width}>
-                {list.modelName ? list.modelName : '-'}
-              </Three>
-              <Four width={headerList[3].width}>{list.empName}</Four>
-              <Five width={headerList[4].width}>{list.deptName}</Five>
-              <Six width={headerList[5].width}>{list.createdAt}</Six>
-              <Seven width={headerList[6].width}>
-                <Status>
-                  <StatusColor status={list.status} />
-                  {list.status}
-                </Status>
-              </Seven>
+              <td />
             </tr>
-          </RequestShowList>
-        ))}
+          </tbody>
+        )}
       </table>
     </RequestShowBody>
   );
@@ -54,6 +63,10 @@ const RequestShowBody = styled.div`
   table {
     width: 100%;
     table-layout: auto;
+  }
+
+  tbody {
+    height: 3.5rem;
   }
 
   tr {
@@ -75,7 +88,7 @@ const RequestShowBody = styled.div`
 `;
 
 const RequestShowListTitle = styled.thead`
-  height: 50px;
+  height: 3.5rem;
   color: ${props => props.theme.color.blue.brandColor6};
   background-color: ${props => props.theme.color.blue.brandColor1};
   font-weight: 600;
@@ -86,7 +99,6 @@ const RequestShowListTitle = styled.thead`
 `;
 
 const RequestShowList = styled.tbody`
-  height: 3rem;
   border-bottom: 1px solid ${props => props.theme.color.grey.brandColor3};
   font-size: 17px;
   cursor: pointer;

@@ -4,9 +4,10 @@ import styled from 'styled-components';
 export default function PaginationList({
   page,
   pageSize,
-  totalElements,
+  requestData,
   onPage,
 }) {
+  const { totalElements } = requestData.data;
   return (
     <PageContainer>
       <Pagination

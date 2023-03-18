@@ -52,19 +52,30 @@ export default function RequestStatus() {
     listHeaderRef,
     listRef,
     pageSize,
+    firstPageSize,
     handleResize,
   ] = useResizeGetPageSize();
 
   useEffect(() => {
+    let size = 0;
+
+    if (!pageSize && !firstPageSize) {
+      size = handleResize();
+    } else {
+      size = pageSize ? pageSize : firstPageSize;
+    }
+
     dispatch(
       __requestStatus({
         type,
         status,
         page,
-        size: pageSize,
+        size,
       })
     );
-  }, [dispatch, page, type, status, pageSize]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, page, type, status, pageSize, handleResize]);
 
   const handlePage = e => {
     setPage(e);
@@ -73,27 +84,25 @@ export default function RequestStatus() {
   return (
     <>
       {isStatusError && <div>에러 발생</div>}
-      {getRequest && (
-        <RequestStatusWrapper ref={containerRef}>
-          <StatusMenu
-            headerRef={headerRef}
-            menuStyle={menuStyle}
-            onClickMenu={handleClickMenu}
-          />
-          <RequestShow
-            requestData={getRequest}
-            setSelectName={setSelectName}
-            page={page}
-            pageSize={pageSize}
-            onPage={handlePage}
-            onChangeStatus={handleChangeStatus}
-            containerHeaderRef={containerHeaderRef}
-            listHeaderRef={listHeaderRef}
-            listRef={listRef}
-            onResize={handleResize}
-          />
-        </RequestStatusWrapper>
-      )}
+      <RequestStatusWrapper ref={containerRef}>
+        <StatusMenu
+          headerRef={headerRef}
+          menuStyle={menuStyle}
+          onClickMenu={handleClickMenu}
+        />
+        <RequestShow
+          requestData={getRequest}
+          setSelectName={setSelectName}
+          page={page}
+          pageSize={pageSize ? pageSize : firstPageSize}
+          onPage={handlePage}
+          onChangeStatus={handleChangeStatus}
+          containerHeaderRef={containerHeaderRef}
+          listHeaderRef={listHeaderRef}
+          listRef={listRef}
+          onResize={handleResize}
+        />
+      </RequestStatusWrapper>
     </>
   );
 }
