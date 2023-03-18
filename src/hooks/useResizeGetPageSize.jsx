@@ -6,8 +6,12 @@ export default function useResizeGetPageSize() {
   const containerHeaderRef = useRef(null);
   const listHeaderRef = useRef(null);
   const listRef = useRef(null);
+
   const [timeoutId, setTimeoutId] = useState(null);
-  const [listSize, setListSize] = useState(1);
+  const [listSize, setListSize] = useState(null);
+
+  const listSizeRef = useRef(0);
+  const checkRender = useRef(false);
 
   const handleResize = useCallback(() => {
     const containerH = containerRef.current.clientHeight;
@@ -26,7 +30,16 @@ export default function useResizeGetPageSize() {
       itemH
     );
 
-    setListSize(size <= 0 ? 1 : size);
+    if (checkRender.current) {
+      setListSize(size <= 0 ? 1 : size);
+    } else {
+      const calcSize = size <= 0 ? 1 : size;
+
+      listSizeRef.current = calcSize;
+      checkRender.current = true;
+
+      return calcSize;
+    }
   }, [listRef]);
 
   const calculateSize = (
@@ -63,6 +76,7 @@ export default function useResizeGetPageSize() {
     listHeaderRef,
     listRef,
     listSize,
+    listSizeRef.current,
     handleResize,
   ];
 }
