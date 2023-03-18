@@ -1,6 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import CategoryItem from '../components/layout/CategoryItem';
+import {
+  CategoryItemLeft,
+  CategoryItemRight,
+} from '../components/layout/CategoryItem';
 import { useNavigate } from 'react-router-dom';
 import ROUTER from '../constants/routerConst';
 import logo from '../styles/logo.svg';
@@ -8,8 +11,12 @@ import { ReactComponent as Add } from '../styles/sidebarIcon/add.svg';
 import { ReactComponent as Dashboard } from '../styles/sidebarIcon/dashboard.svg';
 import { ReactComponent as List } from '../styles/sidebarIcon/list.svg';
 import { ReactComponent as Management } from '../styles/sidebarIcon/management.svg';
+import { ReactComponent as Logout } from '../styles/sidebarIcon/logout.svg';
 import useSelectMenu from '../hooks/useSelectMenu';
 import STRING from '../constants/string';
+import { removeCookie } from '../utils/cookie';
+import QUERY from '../constants/query';
+import Storage from '../utils/localStorage';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -35,6 +42,14 @@ export default function Sidebar() {
       navigate(ROUTER.PATH.ADMIN_EQUIPMENT_ADD);
   };
 
+  const cleanTokenNStorage = () => {
+    navigate('/');
+    Storage.clearLocalStorage();
+  };
+
+  const handleLogoutBtn = () =>
+    removeCookie(QUERY.COOKIE.COOKIE_NAME, cleanTokenNStorage());
+
   return (
     <>
       <SidebarWrapper>
@@ -42,34 +57,39 @@ export default function Sidebar() {
           <Logo />
         </LogoContainer>
         <SidebarCategoryContainer>
-          <CategoryItem
+          <CategoryItemLeft
             onClick={handleClickCategory}
             category={`${menuStyle[0].status}`}
             title={STRING.SIDEBAR.DASHBOARD}
           >
             <Dashboard />
-          </CategoryItem>
-          <CategoryItem
+          </CategoryItemLeft>
+          <CategoryItemLeft
             onClick={handleClickCategory}
             category={`${menuStyle[1].status}`}
             title={STRING.SIDEBAR.REQUEST_STATUS}
           >
             <List />
-          </CategoryItem>
-          <CategoryItem
+          </CategoryItemLeft>
+          <CategoryItemLeft
             onClick={handleClickCategory}
             category={`${menuStyle[2].status}`}
             title={STRING.SIDEBAR.MANAGEMENT}
           >
             <Management />
-          </CategoryItem>
-          <CategoryItem
+          </CategoryItemLeft>
+          <CategoryItemLeft
             onClick={handleClickCategory}
             category={`${menuStyle[3].status}`}
             title={STRING.SIDEBAR.EQUIPMENT_ADD}
           >
             <Add />
-          </CategoryItem>
+          </CategoryItemLeft>
+          <LogoutContainer>
+            <CategoryItemRight onClick={handleLogoutBtn} title="로그아웃">
+              <Logout />
+            </CategoryItemRight>
+          </LogoutContainer>
         </SidebarCategoryContainer>
       </SidebarWrapper>
     </>
@@ -77,6 +97,8 @@ export default function Sidebar() {
 }
 
 const SidebarWrapper = styled.aside`
+  ${props => props.theme.FlexCol};
+  align-items: center;
   position: fixed;
   top: 0;
   left: 0;
@@ -92,18 +114,28 @@ const SidebarWrapper = styled.aside`
 const LogoContainer = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
-  padding-top: 2.625rem;
+  height: 6.25rem;
+  width: 100%;
+  margin: 1.875rem 0;
 `;
 
 const Logo = styled.div`
-  width: 5.375rem;
-  height: 2.3125rem;
-  background: url(${logo}) no-repeat center center / cover;
+  min-width: 7.25rem;
+  height: 1.9375rem;
+  background: url(${logo}) no-repeat;
 `;
 
 const SidebarCategoryContainer = styled.div`
   ${props => props.theme.FlexCol};
   ${props => props.theme.FlexCenter};
-  width: 6.4375rem;
-  margin: 5.9375rem auto;
+  height: 100%;
+  width: 100%;
+  gap: 0.9375rem;
+`;
+
+const LogoutContainer = styled.div`
+  ${props => props.theme.FlexRow}
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: 3.625rem;
 `;
