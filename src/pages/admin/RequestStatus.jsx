@@ -1,30 +1,53 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+
 import StatusMenu from '../../components/common/status/StatusMenu';
 import RequestShow from '../../components/requestStatus/RequestShow';
+
 import useSelectMenu from '../../hooks/useSelectMenu';
+import useSetStateChange from '../../hooks/useSetStateChange';
+import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { __requestStatus } from '../../redux/modules/requestStatus';
-import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
-import useSetStateChange from '../../hooks/useSetStateChange';
+
+const menuData = [
+  { name: '전체', type: 'ALL', status: true },
+  { name: '비품 요청', type: 'SUPPLY', status: false },
+  { name: '반납 요청', type: 'RETURN', status: false },
+  { name: '수리 요청', type: 'REPAIR', status: false },
+];
 
 export default function RequestStatus() {
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+  const [status, setStatus] = useState('ALL');
+  const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
+    menuData,
+    'RequestStorgeKey'
+  );
+  const [type, setType] = useState(setSelectType());
+
   const { getRequest, isStatusError } = useSelector(
     state => state.requestStatus.requestStatus
   );
-  const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
-    [
-      { name: '전체', type: 'ALL', status: true },
-      { name: '비품 요청', type: 'SUPPLY', status: false },
-      { name: '반납 요청', type: 'RETURN', status: false },
-      { name: '수리 요청', type: 'REPAIR', status: false },
-    ],
-    'RequestStorgeKey'
-  );
-  const [page, setPage] = useState(1);
-  const [type, setType] = useState(setSelectType());
-  const [status, setStatus] = useState('ALL');
+
+  const [
+    containerRef,
+    headerRef,
+    containerHeaderRef,
+    listHeaderRef,
+    listRef,
+    pageSize,
+    firstPageSize,
+    handleResize,
+  ] = useResizeGetPageSize();
+
+  useEffect(() => {
+    const size = pageSize || firstPageSize || handleResize();
+    dispatch(__requestStatus({ type, status, page, size }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, page, type, status, pageSize, handleResize]);
 
   const handleClickMenu = useSetStateChange(
     ['전체', '비품 요청', '반납 요청', '수리 요청'],
@@ -45,37 +68,6 @@ export default function RequestStatus() {
       setPage(1);
     }
   );
-  const [
-    containerRef,
-    headerRef,
-    containerHeaderRef,
-    listHeaderRef,
-    listRef,
-    pageSize,
-    firstPageSize,
-    handleResize,
-  ] = useResizeGetPageSize();
-
-  useEffect(() => {
-    let size = 0;
-
-    if (!pageSize && !firstPageSize) {
-      size = handleResize();
-    } else {
-      size = pageSize ? pageSize : firstPageSize;
-    }
-
-    dispatch(
-      __requestStatus({
-        type,
-        status,
-        page,
-        size,
-      })
-    );
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, page, type, status, pageSize, handleResize]);
 
   const handlePage = e => {
     setPage(e);
@@ -94,7 +86,7 @@ export default function RequestStatus() {
           requestData={getRequest}
           setSelectName={setSelectName}
           page={page}
-          pageSize={pageSize ? pageSize : firstPageSize}
+          pageSize={pageSize || firstPageSize}
           onPage={handlePage}
           onChangeStatus={handleChangeStatus}
           containerHeaderRef={containerHeaderRef}

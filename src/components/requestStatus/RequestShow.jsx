@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import StatusListHeader from '../common/status/StatusListHeader';
 import StatusList from '../common/status/StatusList';
@@ -16,7 +15,6 @@ export default function RequestShow({
   listRef,
   onResize,
 }) {
-  // const { content, totalElements } = requestData?.data;
   const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
   const headerList = [
     { name: '요청구분', width: '5rem' },
