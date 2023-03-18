@@ -28,15 +28,15 @@ const PageContainer = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
   color: ${props => props.theme.color.blue.brandColor6};
-  width: 25rem;
+  width: 24.3125rem;
   height: 3.125rem;
-  transform: translate(-50%, -1rem);
+  transform: translate(-50%, -1.8125rem);
 
   .pagination {
     display: flex;
     justify-content: center;
     margin-top: 0.9375rem;
-    gap: 1rem;
+    gap: 1.75rem;
   }
 
   ul {
