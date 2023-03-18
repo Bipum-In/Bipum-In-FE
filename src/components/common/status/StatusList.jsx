@@ -103,8 +103,8 @@ const RequestShowListTitle = styled.thead`
 `;
 
 const RequestShowList = styled.tbody`
-  border-bottom: 1px solid ${props => props.theme.color.grey.brandColor3};
-  font-size: 17px;
+  border-bottom: 0.0625rem solid ${props => props.theme.color.grey.brandColor3};
+  font-size: 1.0625rem;
   cursor: pointer;
 `;
 

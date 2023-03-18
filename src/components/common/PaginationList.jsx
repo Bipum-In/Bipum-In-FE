@@ -35,7 +35,7 @@ const PageContainer = styled.div`
   .pagination {
     display: flex;
     justify-content: center;
-    margin-top: 15px;
+    margin-top: 0.9375rem;
     gap: 1rem;
   }
 

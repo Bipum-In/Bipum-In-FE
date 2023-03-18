@@ -84,13 +84,13 @@ const Select = styled.select`
   height: 2.5rem;
   color: ${props => props.theme.color.blue.brandColor6};
   background-color: ${props => props.theme.color.blue.brandColor1};
-  border: 1px solid ${props => props.theme.color.blue.brandColor3};
+  border: 0.0625rem solid ${props => props.theme.color.blue.brandColor3};
   border-radius: 0.375rem;
   text-align-last: center;
   text-align: center;
   appearance: none;
-  padding: 5px 10px;
-  padding-right: 25px;
+  padding: 0.3125rem 0.625rem;
+  padding-right: 1.5625rem;
 `;
 
 const SelectWrapper = styled.div`
@@ -103,14 +103,14 @@ const SelectWrapper = styled.div`
 const SelectArrow = styled.div`
   position: absolute;
   top: 50%;
-  right: 10px;
-  height: 15px;
-  width: 15px;
+  right: 0.625rem;
+  height: 0.9375rem;
+  width: 0.9375rem;
   transform: translateY(-50%);
   pointer-events: none;
   svg {
-    width: 15px;
-    height: 15px;
+    width: 0.9375rem;
+    height: 0.9375rem;
     * {
       stroke: ${props => props.theme.color.blue.brandColor6};
     }
