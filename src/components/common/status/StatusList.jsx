@@ -28,17 +28,21 @@ export default function StatusList({
           content.data.content.map(list => (
             <RequestShowList key={uuidv4()}>
               <tr>
-                <One width={headerList[0].width}>{list.requestType}</One>
-                <Two width={headerList[1].width}>{list.categoryName}</Two>
+                <One width={headerList[0].width}>{list[contentKeyArr[0]]}</One>
+                <Two width={headerList[1].width}>{list[contentKeyArr[1]]}</Two>
                 <Three width={headerList[2].width}>
-                  {list.modelName ? list.modelName : '-'}
+                  {list[contentKeyArr[2]] ? list[contentKeyArr[2]] : '-'}
                 </Three>
-                <Four width={headerList[3].width}>{list.empName}</Four>
-                <Five width={headerList[4].width}>{list.deptName}</Five>
-                <Six width={headerList[5].width}>{list.createdAt}</Six>
+                <Four width={headerList[3].width}>
+                  {list[contentKeyArr[3]]}
+                </Four>
+                <Five width={headerList[4].width}>
+                  {list[contentKeyArr[4]]}
+                </Five>
+                <Six width={headerList[5].width}>{list[contentKeyArr[5]]}</Six>
                 <Seven width={headerList[6].width}>
                   <Status>
-                    <StatusColor status={list.status} />
+                    <StatusColor status={list[contentKeyArr[6]]} />
                     {list.status}
                   </Status>
                 </Seven>

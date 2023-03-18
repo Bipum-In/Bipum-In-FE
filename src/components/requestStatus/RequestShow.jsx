@@ -28,6 +28,16 @@ export default function RequestShow({
     { name: '상태', width: '6rem' },
   ];
 
+  const contentKeyArr = [
+    'requestType',
+    'categoryName',
+    'modelName',
+    'empName',
+    'deptName',
+    'createdAt',
+    'status',
+  ];
+
   return (
     <RequestShowContainer>
       <StatusListHeader
@@ -41,6 +51,7 @@ export default function RequestShow({
         listHeaderRef={listHeaderRef}
         listRef={listRef}
         content={requestData}
+        contentKeyArr={contentKeyArr}
         onResize={onResize}
       />
       {requestData && (
