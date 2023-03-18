@@ -11,7 +11,7 @@ import { __dashboardStatus } from '../../redux/modules/dashboardStatus';
 export default function AdminDashBoard() {
   const dispatch = useDispatch();
 
-  const { getDashboard, isDashboardLoading, isDashboardError } = useSelector(
+  const { getDashboard, isDashboardError } = useSelector(
     state => state.dashboardStatus.dashboardStatus
   );
 
@@ -19,46 +19,51 @@ export default function AdminDashBoard() {
     dispatch(__dashboardStatus());
   }, [dispatch]);
 
-  const categoryCardData = getDashboard.data?.supplyCountDtos;
+  if (isDashboardError) return <div>에러 발생</div>;
+
+  const categoryCardData = getDashboard?.data?.supplyCountDtos;
 
   return (
-    <AdminDashBoardWrapper>
-      <TopSideContainer>
-        <EquipmentStatusContainer>
-          <AnchorBtn onClick={() => {}}>
-            비품 현황
-            <ArrowDown />
-          </AnchorBtn>
+    <>
+      {getDashboard && (
+        <AdminDashBoardWrapper>
+          <TopSideContainer>
+            <EquipmentStatusContainer>
+              <AnchorBtn onClick={() => {}}>
+                비품 현황
+                <ArrowDown />
+              </AnchorBtn>
 
-          {/* <StatusCard></StatusCard> */}
-        </EquipmentStatusContainer>
-        <AlertContainer>
-          <AnchorBtn onClick={() => {}}>
-            알림
-            <ArrowDown />
-          </AnchorBtn>
-        </AlertContainer>
-      </TopSideContainer>
-      <CategorySideWrapper>
-        <AnchorBtn onClick={() => {}}>
-          비품 카테고리
-          <ArrowDown />
-        </AnchorBtn>
-        <EquipmentCardContainer>
-          {categoryCardData &&
-            categoryCardData.map(card => (
-              <DashboardCard
-                key={uuidv4()}
-                totalCount={card.totalCount}
-                categoryName={card.categoryName}
-                useCount={card.useCount}
-                repairCount={card.repairCount}
-                stockCount={card.stockCount}
-              />
-            ))}
-        </EquipmentCardContainer>
-      </CategorySideWrapper>
-    </AdminDashBoardWrapper>
+              {/* <StatusCard></StatusCard> */}
+            </EquipmentStatusContainer>
+            <AlertContainer>
+              <AnchorBtn onClick={() => {}}>
+                알림
+                <ArrowDown />
+              </AnchorBtn>
+            </AlertContainer>
+          </TopSideContainer>
+          <CategorySideWrapper>
+            <AnchorBtn onClick={() => {}}>
+              비품 카테고리
+              <ArrowDown />
+            </AnchorBtn>
+            <EquipmentCardContainer>
+              {categoryCardData.map(card => (
+                <DashboardCard
+                  key={uuidv4()}
+                  totalCount={card.totalCount}
+                  categoryName={card.categoryName}
+                  useCount={card.useCount}
+                  repairCount={card.repairCount}
+                  stockCount={card.stockCount}
+                />
+              ))}
+            </EquipmentCardContainer>
+          </CategorySideWrapper>
+        </AdminDashBoardWrapper>
+      )}
+    </>
   );
 }
 
