@@ -70,7 +70,7 @@ const RequestShowBody = styled.div`
   }
 
   tbody {
-    height: 3.5rem;
+    height: 3.3125rem;
   }
 
   tr {
@@ -92,11 +92,11 @@ const RequestShowBody = styled.div`
 `;
 
 const RequestShowListTitle = styled.thead`
-  height: 3.5rem;
+  height: 3.125rem;
   color: ${props => props.theme.color.blue.brandColor6};
   background-color: ${props => props.theme.color.blue.brandColor1};
   font-weight: 600;
-  font-size: 1.25rem;
+  font-size: 1.1875rem;
   text-align: left;
   padding: 0 2rem;
   display: flex;
