@@ -18,7 +18,10 @@ const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export const getEquipmentList = Redux.asyncThunk(
   'EQUIPMENT',
-  payload => axios.get(`/api/supply?categoryId=${payload.categoryId}`),
+  payload =>
+    axios.get(
+      `/api/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
+    ),
   response => response.data.data
 );
 
@@ -26,23 +29,33 @@ export const getCategoryList = Redux.asyncThunk(
   'CATEGORY',
   () => axios.get(`/api/category`),
   response => {
-    const category = response.data.data
-      .map((v, i) =>
-        i === 0 ? { ...v, status: true } : { ...v, status: false }
-      )
-      .map(obj => {
-        return {
-          name: obj.categoryName,
-          type: obj.categoryId,
-          status: obj.status,
-        };
-      });
-    return category;
+    const parseLargeCategory = largeCategory(response);
+    return { largeCategory: parseLargeCategory, category: response.data.data };
   }
 );
 
+const largeCategory = response => {
+  return [{ largeCategory: '전체' }, ...response.data.data]
+    .reduce((acc, cur) => {
+      const index = acc.findIndex(el => el.largeCategory === cur.largeCategory);
+      if (index === -1) {
+        acc.push(cur);
+      } else {
+        acc[index] = cur;
+      }
+      return acc;
+    }, [])
+    .map((v, i) => (i === 0 ? { ...v, status: true } : { ...v, status: false }))
+    .map(obj => {
+      return {
+        name: obj.largeCategory,
+        status: obj.status,
+      };
+    });
+};
+
 const equipmentStatusSlice = Redux.slice(
-  'getEquipment',
+  'Equipment',
   initialState,
   {},
   bulider => {
