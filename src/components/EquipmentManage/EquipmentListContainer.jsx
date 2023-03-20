@@ -9,27 +9,20 @@ import useSetStateChange from '../../hooks/useSetStateChange';
 import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { __requestStatus } from '../../redux/modules/requestStatus';
+import { getEquipmentList } from '../../redux/modules/equipmentStatus';
 
-const menuData = [
-  { name: '전체', type: 'ALL', status: true },
-  { name: '비품 요청', type: 'SUPPLY', status: false },
-  { name: '반납 요청', type: 'RETURN', status: false },
-  { name: '수리 요청', type: 'REPAIR', status: false },
-];
-
-export default function EquipmentListContainer() {
+export default function EquipmentListContainer({ category }) {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
   const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
-    menuData,
+    category,
     'quipmentStorgeKey'
   );
-  const [type, setType] = useState(setSelectType());
+  const [categoryId, setCategoryId] = useState(setSelectType());
 
-  const { getRequest, isStatusError } = useSelector(
-    state => state.requestStatus.requestStatus
+  const { getEquipment, isEquipmentError } = useSelector(
+    state => state.equipmentStatus.equipmentStatus
   );
 
   const [
@@ -44,15 +37,15 @@ export default function EquipmentListContainer() {
   ] = useResizeGetPageSize();
 
   useEffect(() => {
-    const size = pageSize || firstPageSize || handleResize();
-    dispatch(__requestStatus({ type, status, page, size }));
+    // const size = pageSize || firstPageSize || handleResize();
+    dispatch(getEquipmentList({ categoryId: categoryId }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, page, type, status, pageSize, handleResize]);
+  }, [dispatch]);
 
   const handleClickMenu = useSetStateChange(
-    ['전체', '비품 요청', '반납 요청', '수리 요청'],
-    ['ALL', 'SUPPLY', 'RETURN', 'REPAIR'],
-    setType,
+    category.map(item => item.name),
+    category.map(item => item.type),
+    setCategoryId,
     e => {
       clickMenu(e);
       setPage(1);
@@ -75,7 +68,7 @@ export default function EquipmentListContainer() {
 
   return (
     <>
-      {isStatusError && <div>에러 발생</div>}
+      {isEquipmentError && <div>에러 발생</div>}
       <RequestStatusWrapper ref={containerRef}>
         <StatusMenu
           headerRef={headerRef}
@@ -83,7 +76,7 @@ export default function EquipmentListContainer() {
           onClickMenu={handleClickMenu}
         />
         <EquipmentShow
-          requestData={getRequest}
+          requestData={getEquipment}
           setSelectName={setSelectName}
           page={page}
           pageSize={pageSize || firstPageSize}
