@@ -11,10 +11,13 @@ const initialState = {
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export const __requestStatus = Redux.asyncThunk('REQUEST', payload =>
-  axios.get(
-    `/api/admin/requests?type=${payload.type}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
-  )
+export const __requestStatus = Redux.asyncThunk(
+  'REQUEST',
+  payload =>
+    axios.get(
+      `/api/admin/requests?keyword=${payload.keyword}&type=${payload.type}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
+    ),
+  response => response.data.data
 );
 
 const requestStatusSlice = Redux.slice(
