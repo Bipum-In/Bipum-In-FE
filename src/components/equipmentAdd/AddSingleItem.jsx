@@ -2,19 +2,16 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Button from '../../elements/Button';
-// import SelectBoxs from '../common/SelectBoxs';
 import Input from '../../elements/Input';
-import { ReactComponent as ArrowDown } from '../../styles/commonIcon/arrowDown.svg';
+import SelectBoxs from '../common/SelectBoxs';
 export default function AddSingleItem() {
   const [formImage, setFormformImage] = useState(null);
   const [preview, setPreview] = useState('');
-
-  const dispatch = useDispatch();
-
+  // const dispatch = useDispatch();
   function onChangeimge(e) {
     const img = e.target.files[0];
     const formImg = new FormData();
-    formImg.append('imageFile', img);
+    formImg.append('image', img);
     const reader = new FileReader();
     setFormformImage(formImg);
     reader.onloadend = () => {
@@ -27,12 +24,6 @@ export default function AddSingleItem() {
       setPreview('');
     }
   }
-
-  // const onValid = data => {
-  //   console.log(data);
-  // };
-
-  //날짜 동적으로 표시
   const getDaysInMonth = (year, month) => {
     const date = new Date(year, month, 1);
     const lastDay = new Date(
@@ -42,25 +33,27 @@ export default function AddSingleItem() {
     ).getDate();
     return Array.from({ length: lastDay }, (_, i) => i + 1);
   };
-  //제품명, 시리얼넘버 인풋 스테이트
   const [nameValue, setNameValue] = useState('');
   const [serialValue, setSerialValue] = useState('');
-  //비품종류 셀렉트
-  const [typeSeleteValue, setTypeSeleteValue] =
-    useState('비품 종류를 선택해주세요');
+
+  const [mainTypeSeleteValue, setMainTypeSeleteValue] = useState('대분류');
   const [isShowOptions, setShowOptions] = useState(false);
-  const handleOnChangeTypeSelectValue = e => {
+  const handleOnChangeMainTypeSelectValue = e => {
     const { innerText } = e.target;
-    setTypeSeleteValue(innerText);
+    setMainTypeSeleteValue(innerText);
   };
-  //년도 셀렉트
+  const [subTypeSeleteValue, setSubTypeSeleteValue] = useState('소분류');
+  const [isShowSubOptions, setShowSubOptions] = useState(false);
+  const handleOnChangeSubTypeSelectValue = e => {
+    const { innerText } = e.target;
+    setSubTypeSeleteValue(innerText);
+  };
   const [yearSeleteValue, setYearSeleteValue] = useState('');
   const [isShowYearOptions, setShowYearOptions] = useState(false);
   const handleYearChange = e => {
     const { innerText } = e.target;
     setYearSeleteValue(innerText);
   };
-  //2000~2023 반복문
   const yearOptions = [];
   for (let year = 2000; year <= 2023; year++) {
     yearOptions.push(
@@ -69,14 +62,12 @@ export default function AddSingleItem() {
       </Option>
     );
   }
-  //월 셀렉트
   const [monthSeleteValue, setMonthSeleteValue] = useState('');
   const [isShowMonthOptions, setShowMonthOptions] = useState(false);
   const handleMonthChange = e => {
     const { innerText } = e.target;
     setMonthSeleteValue(innerText);
   };
-  //1월~12월 반복문
   const monthOptions = [];
   for (let month = 1; month <= 12; month++) {
     monthOptions.push(
@@ -85,56 +76,57 @@ export default function AddSingleItem() {
       </Option>
     );
   }
-  //일 셀렉트
   const [daySeleteValue, setDaySeleteValue] = useState('');
   const [isShowDayOptions, setShowDayOptions] = useState(false);
-
   const handleDayChange = e => {
     const { innerText } = e.target;
     setDaySeleteValue(innerText);
   };
-  //협력업체 셀렉트
   const [partnerSeleteValue, setPartnerSeleteValue] = useState('회사명');
   const [isShowPartnerOptions, setShowPartnerOptions] = useState(false);
-
   const handleOnChangePartnerSelectValue = e => {
     const { innerText } = e.target;
     setPartnerSeleteValue(innerText);
   };
-  //부서명 셀렉트
   const [depSeleteValue, setDepSeleteValue] = useState('부서명');
   const [isShowDepOptions, setShowDepOptions] = useState(false);
-
   const handleOnChangeDepSelectValue = e => {
     const { innerText } = e.target;
     setDepSeleteValue(innerText);
   };
-  //사우 명 셀렉트
   const [nameSeleteValue, setNameSeleteValue] = useState('이름');
   const [isShowNameOptions, setShowNameOptions] = useState(false);
-
   const handleOnChangeNameSelectValue = e => {
     const { innerText } = e.target;
     setNameSeleteValue(innerText);
   };
-
   return (
     <Container>
       <AddContainer>
         <EquipmentContainer>
           <TypeBox>
             <TypeTitle requiredinput="true">비품종류</TypeTitle>
-            <SelectBox
+            <SelectBoxs
               onClick={() => setShowOptions(isShowOptions => !isShowOptions)}
               eqtype="true"
+              seleteValue={mainTypeSeleteValue}
+              show={isShowOptions}
+              height="true"
+              arrow="true"
             >
-              <CurrentState>{typeSeleteValue}</CurrentState>
-              <SelectOptions show={isShowOptions} height="true">
-                <Option onClick={handleOnChangeTypeSelectValue}>비품</Option>
-                <Option onClick={handleOnChangeTypeSelectValue}>종류</Option>
-                <Option onClick={handleOnChangeTypeSelectValue}>선택</Option>
-              </SelectOptions>
-            </SelectBox>
+              <Option onClick={handleOnChangeMainTypeSelectValue}>비품</Option>
+            </SelectBoxs>
+            <SelectBoxs
+              onClick={() =>
+                setShowSubOptions(isShowSubOptions => !isShowSubOptions)
+              }
+              eqtype="true"
+              seleteValue={subTypeSeleteValue}
+              show={isShowSubOptions}
+              height="true"
+            >
+              <Option onClick={handleOnChangeSubTypeSelectValue}>선택</Option>
+            </SelectBoxs>
           </TypeBox>
           <TypeBox>
             <TypeTitle requiredinput="true">제품명</TypeTitle>
@@ -160,131 +152,111 @@ export default function AddSingleItem() {
             <TypeBox>
               <TypeTitle>취득일자</TypeTitle>
               <AcquisitionYear>
-                <SelectBox
+                <SelectBoxs
                   onClick={() =>
                     setShowYearOptions(isShowYearOptions => !isShowYearOptions)
                   }
+                  seleteValue={yearSeleteValue}
+                  text="년"
+                  show={isShowYearOptions}
                 >
-                  <CurrentState>{yearSeleteValue}년</CurrentState>
-                  <SelectOptions show={isShowYearOptions}>
-                    {yearOptions}
-                  </SelectOptions>
-                </SelectBox>
+                  {yearOptions}
+                </SelectBoxs>
               </AcquisitionYear>
 
               <AcquisitionMonth>
-                <SelectBox
+                <SelectBoxs
                   onClick={() =>
                     setShowMonthOptions(
                       isShowMonthOptions => !isShowMonthOptions
                     )
                   }
+                  seleteValue={monthSeleteValue}
+                  text="월"
+                  show={isShowMonthOptions}
                 >
-                  <ArrowDown />
-                  <CurrentState>{monthSeleteValue}월</CurrentState>
-                  <SelectOptions show={isShowMonthOptions}>
-                    {monthOptions}
-                  </SelectOptions>
-                </SelectBox>
+                  {monthOptions}
+                </SelectBoxs>
               </AcquisitionMonth>
               <AcquisitionDay>
-                <SelectBox
+                <SelectBoxs
                   onClick={() =>
                     setShowDayOptions(isShowDayOptions => !isShowDayOptions)
                   }
+                  seleteValue={daySeleteValue}
+                  text="일"
+                  show={isShowDayOptions}
                 >
-                  <CurrentState>{daySeleteValue}일</CurrentState>
-                  <SelectOptions show={isShowDayOptions}>
-                    <Option onClick={handleDayChange}>
-                      {getDaysInMonth(
-                        new Date().getFullYear(),
-                        parseInt(monthSeleteValue) - 1
-                      ).map(day => (
-                        <Option key={day} value={day}>
-                          {day}
-                        </Option>
-                      ))}
-                    </Option>
-                  </SelectOptions>
-                </SelectBox>
+                  <Option onClick={handleDayChange}>
+                    {getDaysInMonth(
+                      new Date().getFullYear(),
+                      parseInt(monthSeleteValue) - 1
+                    ).map(day => (
+                      <Option key={day} value={day}>
+                        {day}
+                      </Option>
+                    ))}
+                  </Option>
+                </SelectBoxs>
               </AcquisitionDay>
             </TypeBox>
           </AcquisitionContainer>
           <TypeBox>
             <TypeTitle>협력업체</TypeTitle>
             <PartnerCompany>
-              <SelectBox
+              <SelectBoxs
                 onClick={() =>
                   setShowPartnerOptions(
                     isShowPartnerOptions => !isShowPartnerOptions
                   )
                 }
+                seleteValue={partnerSeleteValue}
+                show={isShowPartnerOptions}
+                height="true"
               >
-                <CurrentState>{partnerSeleteValue}</CurrentState>
-
-                <SelectOptions show={isShowPartnerOptions} height="true">
-                  <Option onClick={handleOnChangePartnerSelectValue}>
-                    협력
-                  </Option>
-                  <Option onClick={handleOnChangePartnerSelectValue}>
-                    업체
-                  </Option>
-                  <Option onClick={handleOnChangePartnerSelectValue}>
-                    등록
-                  </Option>
-                </SelectOptions>
-              </SelectBox>
+                <Option onClick={handleOnChangePartnerSelectValue}>협력</Option>
+              </SelectBoxs>
             </PartnerCompany>
           </TypeBox>
 
           <TypeBox>
             <TypeTitle>사용자</TypeTitle>
             <DepName>
-              <SelectBox
+              <SelectBoxs
                 onClick={() =>
                   setShowDepOptions(isShowDepOptions => !isShowDepOptions)
                 }
+                seleteValue={depSeleteValue}
+                show={isShowDepOptions}
+                height="true"
               >
-                <CurrentState>{depSeleteValue}</CurrentState>
-                <SelectOptions show={isShowDepOptions} height="true">
-                  <Option onClick={handleOnChangeDepSelectValue}>비품</Option>
-                  <Option onClick={handleOnChangeDepSelectValue}>종류</Option>
-                  <Option onClick={handleOnChangeDepSelectValue}>선택</Option>
-                </SelectOptions>
-              </SelectBox>
+                <Option onClick={handleOnChangeDepSelectValue}>선택</Option>
+              </SelectBoxs>
             </DepName>
             <UserName>
-              <SelectBox
+              <SelectBoxs
                 onClick={() =>
                   setShowNameOptions(isShowNameOptions => !isShowNameOptions)
                 }
+                seleteValue={nameSeleteValue}
+                show={isShowNameOptions}
+                height="true"
               >
-                <CurrentState>{nameSeleteValue}</CurrentState>
-                <SelectOptions show={isShowNameOptions} height="true">
-                  <Option onClick={handleOnChangeNameSelectValue}>
-                    부서에
-                  </Option>
-                  <Option onClick={handleOnChangeNameSelectValue}>있는</Option>
-                  <Option onClick={handleOnChangeNameSelectValue}>
-                    사우명?
-                  </Option>
-                </SelectOptions>
-              </SelectBox>
+                <Option onClick={handleOnChangeNameSelectValue}>사우명?</Option>
+              </SelectBoxs>
             </UserName>
           </TypeBox>
         </EquipmentContainer>
-
         <ImageContainer>
-          <ImageBox>사진 첨부</ImageBox>
+          사진첨부
           {preview && <Image src={preview} alt="preview" />}
-          <RegiinputFile
+          <ImageinputFile
             as={'input'}
             type="file"
             accept="image/*"
             onChange={onChangeimge}
           />
         </ImageContainer>
-
         <ButtonBox>
           <Button type="submit">비품 등록 완료</Button>
         </ButtonBox>
@@ -292,8 +264,7 @@ export default function AddSingleItem() {
     </Container>
   );
 }
-
-const RegiinputFile = styled.div`
+const ImageinputFile = styled.div`
   ::file-selector-button {
     border: 0;
     border-radius: 6px;
@@ -308,19 +279,17 @@ const RegiinputFile = styled.div`
     cursor: pointer;
   }
 `;
-
 const PartnerCompany = styled.div`
   width: 5.8125rem;
   height: 2.5rem;
 `;
-
 const DepName = styled.div`
   ${props => props.theme.FlexRow};
   width: 5.8125rem;
   height: 2.5rem;
 `;
 const UserName = styled.div`
-  width: 4.875rem;
+  width: 5.8125rem;
   height: 2.5rem;
 `;
 const Option = styled.ul`
@@ -331,79 +300,14 @@ const Option = styled.ul`
     background-color: #d0e4ff;
   }
 `;
-
-const SelectOptions = styled.ul`
-  position: absolute;
-  top: 2.1875rem;
-  left: 0;
-  width: 100%;
-  overflow-y: auto;
-
-  ${props =>
-    props.height === 'true'
-      ? css`
-           max-height: ${props => (props.show ? 'none' : '0')};
-          height: 6.1819rem;
-          }
-        `
-      : css`
-          max-height: ${props => (props.show ? 'none' : '0')};
-          height: 8.2425rem;
-        `}
-  padding: 0;
-  border-radius: 0.5rem;
-  background-color: #f6faff;
-  z-index: 30;
-`;
-
-const CurrentState = styled.label`
-  margin-left: 0.25rem;
-  text-align: center;
-`;
-
-const SelectBox = styled.div`
-  position: relative;
-  border-radius: 0.375rem;
-  border: 0.0625rem solid;
-  font-weight: 600;
-  font-size: 1.125rem;
-  line-height: 1.3125rem;
-  padding: 8px;
-  svg {
-    position: absolute;
-    right: 5px;
-    top: 50%;
-    transform: translateY(-50%);
-  }
-  ${props => props.theme.FlexCenter};
-  ${props =>
-    props.eqtype === 'true'
-      ? css`
-          width: 14.125rem;
-          color: ${props => props.theme.color.blue.brandColor6};
-          background-color: ${props.theme.color.blue.brandColor1};
-          border-color: ${props => props.theme.color.blue.brandColor6};
-          &::before {
-            color: ${props => props.theme.color.blue.brandColor6};
-          }
-        `
-      : css`
-          width: 100%;
-          color: ${props => props.theme.color.grey.brandColor7};
-          background-color: ${props.theme.color.grey.brandColor1};
-          border-color: ${props => props.theme.color.grey.brandColor3};
-        `}
-
-  height: 2.5rem;
-  cursor: pointer;
-`;
-
 const ButtonBox = styled.div`
   position: absolute;
+  /* border: 1px solid red; */
+  right: 0rem;
   bottom: 3.5rem;
   display: flex;
   justify-content: center;
-  width: 77.5%;
+  width: 100%;
 
   Button {
     border: 0;
@@ -415,35 +319,21 @@ const ButtonBox = styled.div`
     background-color: ${props => props.theme.color.blue.brandColor6};
   }
 `;
-
 const AcquisitionYear = styled.div`
   width: 6.5625rem;
   height: 2.5rem;
 `;
-
 const AcquisitionDay = styled.div`
   width: 5rem;
   height: 2.5rem;
 `;
-
 const AcquisitionMonth = styled.div`
   width: 5rem;
   height: 2.5rem;
 `;
-
 const AcquisitionContainer = styled.div`
   height: 2.5rem;
 `;
-
-const ImageBox = styled.p`
-  margin-top: 0;
-  width: 4.1875rem;
-  height: 1.3125rem;
-  font-weight: 600;
-  font-size: 1.125rem;
-  line-height: 1.3125rem;
-`;
-
 const Image = styled.img`
   background-color: ${props => props.theme.color.grey.brandColor1};
   width: 23.75rem;
@@ -451,11 +341,13 @@ const Image = styled.img`
   border-radius: 0.5rem;
   margin-bottom: 1.375rem;
 `;
-
 const ImageContainer = styled.div`
   ${props => props.theme.FlexCol};
   width: 23.75rem;
   height: 30.625rem;
+  font-weight: 600;
+  font-size: 1.125rem;
+  line-height: 1.3125rem;
 `;
 const TypeTitle = styled.span`
   font-size: 1.125rem;
@@ -470,7 +362,6 @@ const TypeTitle = styled.span`
       }
     `}
 `;
-
 const TypeBox = styled.div`
   ${props => props.theme.FlexRow};
   align-items: center;
@@ -484,23 +375,21 @@ const TypeBox = styled.div`
     border-radius: 0.5rem;
   }
 `;
-
 const EquipmentContainer = styled.div`
   ${props => props.theme.FlexCol};
   width: 37rem;
   height: 30.625rem;
   gap: 3.125rem;
 `;
-
 const AddContainer = styled.form`
   width: 100%;
-  margin: 7.25rem 11rem 12rem 176px;
   display: flex;
+  margin: 7.25rem 11rem 12rem 11rem;
   justify-content: space-between;
 `;
-
 const Container = styled.div`
   ${props => props.theme.wh100};
+  height: 73.9vh;
   display: flex;
   overflow: hidden;
   position: relative;
