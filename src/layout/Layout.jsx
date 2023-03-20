@@ -24,7 +24,8 @@ const LayoutWrapper = styled.div`
 
 const OutletContainer = styled.div`
   width: calc(100% - 15.625rem);
-  height: 100%;
+  min-height: 100%;
+  height: max-content;
   margin-left: auto;
   padding: 9.6875rem 3.25rem 3.75rem 3.25rem;
   background-color: ${props => props.theme.color.blue.brandColor1};

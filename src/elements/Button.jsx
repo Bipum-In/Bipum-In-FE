@@ -41,10 +41,9 @@ const ButtonWrapper = styled.button`
     css`
       color: ${props => props.theme.color.blue.brandColor6};
       line-height: 1.4919rem;
-      font-size: 1.25rem;
-      svg * {
-        stroke: ${props => props.theme.color.blue.brandColor6};
-      }
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 1rem 0;
     `}
 
   ${props =>
