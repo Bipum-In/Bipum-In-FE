@@ -9,7 +9,24 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow: overlay;
+  overflow: hidden;
+  background-color: ${props => props.theme.color.blue.brandColor1};
 }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-clip: padding-box;
+      border: 0 solid transparent;
+      border-radius: 10px;
+      background-color: ${props => props.theme.color.blue.brandColor6};
+    }
+    ::-webkit-scrollbar-track {
+      background-color: transparent;
+    }
 
 html,
 body,
