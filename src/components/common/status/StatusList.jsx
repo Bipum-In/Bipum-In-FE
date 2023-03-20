@@ -6,6 +6,7 @@ export default function StatusList({
   listHeaderRef,
   listRef,
   content,
+  contentKey,
   contentKeyArr,
 }) {
   return (
@@ -25,7 +26,7 @@ export default function StatusList({
       </table>
       <table ref={listRef}>
         {content ? (
-          content.data.content.map(list => (
+          content[contentKey].map(list => (
             <RequestShowList key={uuidv4()}>
               <tr>
                 <One width={headerList[0].width}>{list[contentKeyArr[0]]}</One>

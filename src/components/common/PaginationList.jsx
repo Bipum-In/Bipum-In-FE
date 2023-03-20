@@ -7,7 +7,7 @@ export default function PaginationList({
   requestData,
   onPage,
 }) {
-  const { totalElements } = requestData.data;
+  const { totalElements } = requestData;
   return (
     <PageContainer>
       <Pagination

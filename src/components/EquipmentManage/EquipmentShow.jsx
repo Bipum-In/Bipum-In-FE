@@ -27,12 +27,12 @@ export default function EquipmentShow({
   ];
 
   const contentKeyArr = [
-    'requestType',
-    'categoryName',
     'modelName',
-    'empName',
-    'deptName',
+    'serialNum',
     'createdAt',
+    'partners',
+    'username',
+    'deptName',
     'status',
   ];
 
@@ -50,7 +50,6 @@ export default function EquipmentShow({
         listRef={listRef}
         content={requestData}
         contentKeyArr={contentKeyArr}
-        onResize={onResize}
       />
       {requestData && (
         <PaginationList

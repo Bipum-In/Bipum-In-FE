@@ -22,6 +22,7 @@ export default function RequestStatus() {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
+  const [keyword, setKeyword] = useState('');
   const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
     menuData,
     'RequestStorgeKey'
@@ -45,9 +46,9 @@ export default function RequestStatus() {
 
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
-    dispatch(__requestStatus({ type, status, page, size }));
+    dispatch(__requestStatus({ keyword, type, status, page, size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, page, type, status, pageSize, handleResize]);
+  }, [dispatch, keyword, page, type, status, pageSize, handleResize]);
 
   const handleClickMenu = useSetStateChange(
     ['전체', '비품 요청', '반납 요청', '수리 요청'],

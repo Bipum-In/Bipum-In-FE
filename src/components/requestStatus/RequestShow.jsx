@@ -49,8 +49,8 @@ export default function RequestShow({
         listHeaderRef={listHeaderRef}
         listRef={listRef}
         content={requestData}
+        contentKey="content"
         contentKeyArr={contentKeyArr}
-        onResize={onResize}
       />
       {requestData && (
         <PaginationList
