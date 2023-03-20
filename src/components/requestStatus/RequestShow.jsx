@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import Input from '../../elements/Input';
 import { ReactComponent as Search } from '../../styles/commonIcon/search.svg';
@@ -13,12 +13,20 @@ export default function RequestShow({
   pageSize,
   onPage,
   onChangeStatus,
+  containerHeaderRef,
+  listHeaderRef,
+  listRef,
+  onResize,
 }) {
   const { content, totalElements } = requestData.data;
 
+  useEffect(() => {
+    onResize();
+  }, []);
+
   return (
     <RequestShowContainer>
-      <RequestShowTitle>
+      <RequestShowTitle ref={containerHeaderRef}>
         <Title>{setSelectName()}</Title>
         <SearchSelect>
           <SearchContainer>
@@ -31,7 +39,7 @@ export default function RequestShow({
             <Select onChange={onChangeStatus}>
               <option value="전체 보기">전체 보기</option>
               <option value="처리전">처리전</option>
-              <option value="처리중">수리중</option>
+              <option value="처리중">처리중</option>
               <option value="처리 완료">처리 완료</option>
             </Select>
             <SelectArrow>
@@ -41,7 +49,7 @@ export default function RequestShow({
         </SearchSelect>
       </RequestShowTitle>
       <RequestShowBody>
-        <table>
+        <table ref={listHeaderRef}>
           <RequestShowListTitle>
             <tr>
               <RequestTypeTh>요청구분</RequestTypeTh>
@@ -53,6 +61,8 @@ export default function RequestShow({
               <StatusTh>상태</StatusTh>
             </tr>
           </RequestShowListTitle>
+        </table>
+        <table ref={listRef}>
           {content.map(list => (
             <RequestShowList key={uuidv4()}>
               <tr>
@@ -100,6 +110,7 @@ const RequestShowTitle = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-bottom: 1.5rem;
 `;
 
 const Title = styled.div`
@@ -174,10 +185,7 @@ const SelectArrow = styled.div`
 `;
 
 const RequestShowBody = styled.div`
-  /* display: table; */
   width: 100%;
-  /* height: 100%; */
-  margin-top: 1.5rem;
 
   table {
     width: 100%;
@@ -185,10 +193,11 @@ const RequestShowBody = styled.div`
   }
 
   tr {
-    display: table;
-    margin: 0 auto;
-    padding: 0 auto;
+    display: flex;
+    margin: 0px auto;
     line-height: 3.3125rem;
+    gap: 1.875rem;
+    justify-content: center;
   }
 
   td {
@@ -198,7 +207,6 @@ const RequestShowBody = styled.div`
     font-size: 1.0625rem;
     overflow: hidden;
     white-space: nowrap;
-    /* padding: 0 3.75rem; */
   }
 `;
 
@@ -209,6 +217,8 @@ const RequestShowListTitle = styled.thead`
   font-weight: 600;
   font-size: 1.25rem;
   text-align: left;
+  padding: 0 2rem;
+  display: flex;
 `;
 
 const RequestShowList = styled.tbody`
@@ -234,7 +244,6 @@ const StatusColor = styled.div`
 const RequestType = styled.td`
   width: 5rem;
   min-width: 5rem;
-  /* padding-right: 3.125rem; */
   font-weight: 600;
 `;
 
@@ -271,7 +280,6 @@ const Status = styled.td`
 const RequestTypeTh = styled.th`
   width: 5rem;
   min-width: 5rem;
-  margin-right: 3.125rem;
 `;
 
 const CategoryNameTh = styled.th`

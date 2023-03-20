@@ -1,17 +1,15 @@
-import Axios from '../../api/axios';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import RequestMenu from '../../components/requestStatus/RequestMenu';
 import RequestShow from '../../components/requestStatus/RequestShow';
 import useSelectMenu from '../../hooks/useSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { __requestStatus } from '../../redux/modules/requestStatus';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 export default function RequestStatus() {
   const dispatch = useDispatch();
-  const { getRequest, isStatusLoading, isStatusError } = useSelector(
+  const { getRequest, isStatusError } = useSelector(
     state => state.requestStatus.requestStatus
   );
   const [menuStyle, clickMenu, setSelectName] = useSelectMenu(
@@ -23,26 +21,30 @@ export default function RequestStatus() {
     ],
     'RequestStorgeKey'
   );
+  const [
+    containerRef,
+    headerRef,
+    containerHeaderRef,
+    listHeaderRef,
+    listRef,
+    pageSize,
+    handleResize,
+  ] = useResizeGetPageSize();
 
   const [page, setPage] = useState(1);
   const [type, setType] = useState('ALL');
   const [status, setStatus] = useState('ALL');
-  const [size, setSize] = useState(8);
-  const typeRef = useRef();
-  const sizeRef = useRef();
 
   useEffect(() => {
-    typeRef.current = type;
-    sizeRef.current = size;
     dispatch(
       __requestStatus({
-        type: typeRef.current,
+        type,
         status,
         page,
-        size: sizeRef.current,
+        size: pageSize,
       })
     );
-  }, [dispatch, page, type, status, size]);
+  }, [dispatch, page, type, status, pageSize]);
 
   const handlePage = e => {
     setPage(e);
@@ -64,7 +66,7 @@ export default function RequestStatus() {
     setPage(1);
     selectName === '전체 보기' && setStatus('ALL');
     selectName === '처리전' && setStatus('UNPROCESSED');
-    selectName === '처리중' && setStatus('REPAIRING');
+    selectName === '처리중' && setStatus('PROCESSING');
     selectName === '처리 완료' && setStatus('PROCESSED');
   };
 
@@ -84,38 +86,34 @@ export default function RequestStatus() {
 
   if (isStatusError) return <div>에러 발생</div>;
   return (
-    <RequestStatusWrapper>
-      {getRequest && (
-        <>
-          <RequestMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
-          <RequestShow
-            requestData={getRequest}
-            setSelectName={setSelectName}
-            page={page}
-            pageSize={size}
-            onPage={handlePage}
-            onChangeStatus={handleChangeStatus}
-          />
-        </>
-      )}
-      {/* <button onClick={handleKakaoLogin}>카카오</button> */}
-    </RequestStatusWrapper>
+    getRequest && (
+      <RequestStatusWrapper ref={containerRef}>
+        <RequestMenu
+          headerRef={headerRef}
+          menuStyle={menuStyle}
+          onClickMenu={handleClickMenu}
+        />
+        <RequestShow
+          requestData={getRequest}
+          setSelectName={setSelectName}
+          page={page}
+          pageSize={pageSize}
+          onPage={handlePage}
+          onChangeStatus={handleChangeStatus}
+          containerHeaderRef={containerHeaderRef}
+          listHeaderRef={listHeaderRef}
+          listRef={listRef}
+          onResize={handleResize}
+        />
+        {/* <button onClick={handleKakaoLogin}>카카오</button> */}
+      </RequestStatusWrapper>
+    )
   );
 }
 
 const RequestStatusWrapper = styled.section`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-  background-color: ${props => props.theme.color.blue.brandColor1};
-  padding: 2.25rem 3.25rem 3.25rem 3.25rem;
-`;
-
-const Loading = styled.section`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100%;
 `;
