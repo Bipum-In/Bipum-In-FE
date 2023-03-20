@@ -2,35 +2,27 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import StatusMenu from '../../components/common/status/StatusMenu';
-import RequestShow from '../../components/requestStatus/RequestShow';
+import EquipmentShow from '../../components/EquipmentManage/EquipmentShow';
 
 import useSelectMenu from '../../hooks/useSelectMenu';
 import useSetStateChange from '../../hooks/useSetStateChange';
 import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { __requestStatus } from '../../redux/modules/requestStatus';
+import { getEquipmentList } from '../../redux/modules/equipmentStatus';
 
-const menuData = [
-  { name: '전체', type: 'ALL', status: true },
-  { name: '비품 요청', type: 'SUPPLY', status: false },
-  { name: '반납 요청', type: 'RETURN', status: false },
-  { name: '수리 요청', type: 'REPAIR', status: false },
-];
-
-export default function RequestStatus() {
+export default function EquipmentListContainer({ category }) {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
-  const [keyword, setKeyword] = useState('');
   const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
-    menuData,
-    'RequestStorgeKey'
+    category,
+    'quipmentStorgeKey'
   );
-  const [type, setType] = useState(setSelectType());
+  const [categoryId, setCategoryId] = useState(setSelectType());
 
-  const { getRequest, isStatusError } = useSelector(
-    state => state.requestStatus.requestStatus
+  const { getEquipment, isEquipmentError } = useSelector(
+    state => state.equipmentStatus.equipmentStatus
   );
 
   const [
@@ -45,15 +37,15 @@ export default function RequestStatus() {
   ] = useResizeGetPageSize();
 
   useEffect(() => {
-    const size = pageSize || firstPageSize || handleResize();
-    dispatch(__requestStatus({ keyword, type, status, page, size }));
+    // const size = pageSize || firstPageSize || handleResize();
+    dispatch(getEquipmentList({ categoryId: categoryId }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, keyword, page, type, status, pageSize, handleResize]);
+  }, [dispatch]);
 
   const handleClickMenu = useSetStateChange(
-    ['전체', '비품 요청', '반납 요청', '수리 요청'],
-    ['ALL', 'SUPPLY', 'RETURN', 'REPAIR'],
-    setType,
+    category.map(item => item.name),
+    category.map(item => item.type),
+    setCategoryId,
     e => {
       clickMenu(e);
       setPage(1);
@@ -76,15 +68,15 @@ export default function RequestStatus() {
 
   return (
     <>
-      {isStatusError && <div>에러 발생</div>}
+      {isEquipmentError && <div>에러 발생</div>}
       <RequestStatusWrapper ref={containerRef}>
         <StatusMenu
           headerRef={headerRef}
           menuStyle={menuStyle}
           onClickMenu={handleClickMenu}
         />
-        <RequestShow
-          requestData={getRequest}
+        <EquipmentShow
+          requestData={getEquipment}
           setSelectName={setSelectName}
           page={page}
           pageSize={pageSize || firstPageSize}

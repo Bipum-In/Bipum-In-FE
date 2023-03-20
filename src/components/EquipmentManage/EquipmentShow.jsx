@@ -3,7 +3,7 @@ import StatusListHeader from '../common/status/StatusListHeader';
 import StatusList from '../common/status/StatusList';
 import PaginationList from '../common/PaginationList';
 
-export default function RequestShow({
+export default function EquipmentShow({
   requestData,
   setSelectName,
   page,
@@ -17,22 +17,22 @@ export default function RequestShow({
 }) {
   const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
   const headerList = [
-    { name: '요청구분', width: '5rem' },
-    { name: '종류', width: '4.375rem' },
-    { name: '제품명', width: '21.875rem' },
-    { name: '신청자', width: '4.375rem' },
-    { name: '담당부서', width: '7.5rem' },
-    { name: '신청일', width: '13.75rem' },
-    { name: '상태', width: '6rem' },
+    { name: '제품명', width: '15.625rem' },
+    { name: '시리얼넘버', width: '8.75rem' },
+    { name: '등록일자', width: '6.25rem' },
+    { name: '협력업체', width: '9.375rem' },
+    { name: '사용자', width: '4.375rem' },
+    { name: '부서', width: '7.5rem' },
+    { name: '상태', width: '4.375rem' },
   ];
 
   const contentKeyArr = [
-    'requestType',
-    'categoryName',
     'modelName',
-    'empName',
-    'deptName',
+    'serialNum',
     'createdAt',
+    'partners',
+    'username',
+    'deptName',
     'status',
   ];
 
@@ -49,7 +49,6 @@ export default function RequestShow({
         listHeaderRef={listHeaderRef}
         listRef={listRef}
         content={requestData}
-        contentKey="content"
         contentKeyArr={contentKeyArr}
       />
       {requestData && (
