@@ -53,15 +53,13 @@ export default function EquipmentAdd() {
     </EquipmentWrapper>
   );
 }
-
-// --------
 const EquipmentWrapper = styled.div`
   ${props => props.theme.FlexCol};
   ${props => props.theme.wh100};
 `;
-
 const AddBtnContainer = styled.div`
   ${props => props.theme.FlexRow};
+
   justify-content: flex-start;
   gap: 0.5375rem;
 `;
@@ -69,8 +67,6 @@ const AddComponentsContainer = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.wh100};
   background-color: white;
-  border: 1px solid blue;
-  /* border: 0.0579rem solid ${props => props.theme.color.grey.brandColor2}; */
   box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
   border-radius: 0.4628rem;
 `;
