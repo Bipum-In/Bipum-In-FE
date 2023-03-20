@@ -49,6 +49,7 @@ export default function EquipmentShow({
         listHeaderRef={listHeaderRef}
         listRef={listRef}
         content={requestData}
+        contentKey="content"
         contentKeyArr={contentKeyArr}
       />
       {requestData && (

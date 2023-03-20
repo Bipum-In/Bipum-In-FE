@@ -15,16 +15,17 @@ export default function EquipmentListContainer({ category }) {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
+  const [keyword, setKeyword] = useState('');
   const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
-    category,
+    category.largeCategory,
     'quipmentStorgeKey'
   );
-  const [categoryId, setCategoryId] = useState(setSelectType());
+  const [categoryId, setCategoryId] = useState('');
 
   const { getEquipment, isEquipmentError } = useSelector(
     state => state.equipmentStatus.equipmentStatus
   );
-
+  console.log(getEquipment);
   const [
     containerRef,
     headerRef,
@@ -37,20 +38,19 @@ export default function EquipmentListContainer({ category }) {
   ] = useResizeGetPageSize();
 
   useEffect(() => {
-    // const size = pageSize || firstPageSize || handleResize();
-    dispatch(getEquipmentList({ categoryId: categoryId }));
+    const size = pageSize || firstPageSize || handleResize();
+    dispatch(getEquipmentList({ keyword, categoryId, status, page, size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch]);
+  }, [dispatch, keyword, page, status, pageSize, handleResize]);
 
-  const handleClickMenu = useSetStateChange(
-    category.map(item => item.name),
-    category.map(item => item.type),
-    setCategoryId,
-    e => {
-      clickMenu(e);
-      setPage(1);
-    }
-  );
+  const handleClickMenu = useSetStateChange();
+  // category.map(item => item.name),
+  // category.map(item => item.type),
+  // setCategoryId,
+  // e => {
+  //   clickMenu(e);
+  //   setPage(1);
+  // }
 
   const handleChangeStatus = useSetStateChange(
     ['전체 보기', '처리전', '처리중', '처리 완료'],
