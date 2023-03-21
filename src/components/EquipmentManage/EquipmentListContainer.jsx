@@ -11,24 +11,22 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
 
-export default function EquipmentListContainer({ category }) {
+export default function EquipmentListContainer({
+  category: { category, largeCategory },
+}) {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [categoryList, setCategoryList] = useState({ show: false, list: [] });
-
-  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(
-    category.largeCategory
-  );
+  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(largeCategory);
+  const [resizeRef, pageSize, firstPageSize, handleResize] =
+    useResizeGetPageSize();
 
   const { getEquipment, isEquipmentError } = useSelector(
     state => state.equipmentStatus.equipmentStatus
   );
-
-  const [resizeRef, pageSize, firstPageSize, handleResize] =
-    useResizeGetPageSize();
 
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
@@ -47,22 +45,16 @@ export default function EquipmentListContainer({ category }) {
       return;
     }
 
-    const parseCategoryList = getCategoryList(name, category.category);
+    const parseCategoryList = getCategoryList(name, category);
     setCategoryList({ show: true, list: parseCategoryList });
   };
 
   const handleClickCategory = e => {
     const name = e.target.innerText;
-    const categoryId = categoryList.list.filter(
-      item => item.categoryName === name
-    )[0]['categoryId'];
-    console.log(categoryId, category);
+    const categoryId = getCategoryId(name, categoryList);
+
     setCategoryId(categoryId);
     setPage(1);
-  };
-
-  const getCategoryList = (name, categoryList) => {
-    return categoryList.filter(list => list.largeCategory === name);
   };
 
   const handleChangeStatus = useSetStateChange(
@@ -77,6 +69,16 @@ export default function EquipmentListContainer({ category }) {
 
   const handlePage = e => {
     setPage(e);
+  };
+
+  const getCategoryList = (name, categoryList) => {
+    return categoryList.filter(list => list.largeCategory === name);
+  };
+
+  const getCategoryId = (name, categoryList) => {
+    return categoryList.list.filter(item => item.categoryName === name)[0][
+      'categoryId'
+    ];
   };
 
   return (
