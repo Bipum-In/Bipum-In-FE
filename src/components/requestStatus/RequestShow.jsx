@@ -10,6 +10,8 @@ export default function RequestShow({
   pageSize,
   onPage,
   onChangeStatus,
+  searchRef,
+  onSubmit,
   containerHeaderRef,
   listHeaderRef,
   listRef,
@@ -44,6 +46,8 @@ export default function RequestShow({
         selectBoxList={selectBoxList}
         containerHeaderRef={containerHeaderRef}
         onChangeStatus={onChangeStatus}
+        searchRef={searchRef}
+        onSearchSubmit={onSubmit}
       />
       <StatusList
         headerList={headerList}

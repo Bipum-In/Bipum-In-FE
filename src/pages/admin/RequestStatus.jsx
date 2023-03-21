@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import StatusMenu from '../../components/common/status/StatusMenu';
@@ -23,6 +23,7 @@ export default function RequestStatus() {
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
+  const searchRef = useRef();
   const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
     menuData,
     'RequestStorgeKey'
@@ -49,6 +50,12 @@ export default function RequestStatus() {
     dispatch(__requestStatus({ keyword, type, status, page, size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, keyword, page, type, status, pageSize, handleResize]);
+
+  const onSubmit = e => {
+    e.preventDefault();
+    const keyword = searchRef.current.value;
+    setKeyword(keyword);
+  };
 
   const handleClickMenu = useSetStateChange(
     ['전체', '비품 요청', '반납 요청', '수리 요청'],
@@ -90,6 +97,8 @@ export default function RequestStatus() {
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
           onChangeStatus={handleChangeStatus}
+          searchRef={searchRef}
+          onSubmit={onSubmit}
           containerHeaderRef={containerHeaderRef}
           listHeaderRef={listHeaderRef}
           listRef={listRef}

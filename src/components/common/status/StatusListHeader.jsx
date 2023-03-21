@@ -11,6 +11,7 @@ export default function StatusListHeader({
   containerHeaderRef,
   onChangeStatus,
   onSearchSubmit,
+  searchRef,
   children,
 }) {
   return (
@@ -24,7 +25,10 @@ export default function StatusListHeader({
               <Search />
             </Button>
           </SearchIconContainer>
-          <Input placeholder="검색어를 입력해주세요 (신청자,담당부서 등)" />
+          <Input
+            ref={searchRef}
+            placeholder="검색어를 입력해주세요 (신청자,담당부서 등)"
+          />
         </SearchContainer>
         <SelectWrapper>
           <Select onChange={e => onChangeStatus(e, e.target.value)}>
