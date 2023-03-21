@@ -14,7 +14,7 @@ export default function EquipmentShow({
   onSubmit,
   resizeRef,
 }) {
-  const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
+  const selectBoxList = ['전체 보기', '사용중', '재고', '수리중'];
   const headerList = [
     { name: '종류', width: '5.6875rem' },
     { name: '제품명', width: '15.625rem' },
