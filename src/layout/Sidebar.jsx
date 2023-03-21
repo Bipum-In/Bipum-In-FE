@@ -17,9 +17,13 @@ import STRING from '../constants/string';
 import { removeCookie } from '../utils/cookie';
 import QUERY from '../constants/query';
 import Storage from '../utils/localStorage';
+import { CustomModal } from '../elements/Modal';
+import { useModalState } from '../hooks/useModalState';
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const [logoutModal, setLogoutModal] = useModalState();
+
   const [menuStyle, handleClickMenu] = useSelectMenu(
     [
       { name: STRING.SIDEBAR.DASHBOARD, status: true },
@@ -44,11 +48,15 @@ export default function Sidebar() {
 
   const cleanTokenNStorage = () => {
     navigate('/');
+    setLogoutModal(true);
     Storage.clearLocalStorage();
   };
 
   const handleLogoutBtn = () =>
     removeCookie(QUERY.COOKIE.COOKIE_NAME, cleanTokenNStorage());
+
+  const handleModalShow = () => setLogoutModal();
+  const handleModalClose = () => setLogoutModal(false);
 
   return (
     <>
@@ -86,9 +94,17 @@ export default function Sidebar() {
             <Add />
           </CategoryItemLeft>
           <LogoutContainer>
-            <CategoryItemRight onClick={handleLogoutBtn} title="로그아웃">
+            <CategoryItemRight onClick={handleModalShow} title="로그아웃">
               <Logout />
             </CategoryItemRight>
+            <CustomModal
+              isOpen={logoutModal}
+              onClose={handleModalClose}
+              submit={handleLogoutBtn}
+              text={'로그아웃'}
+            >
+              정말 로그아웃 하시겠습니까?
+            </CustomModal>
           </LogoutContainer>
         </SidebarCategoryContainer>
       </SidebarWrapper>
