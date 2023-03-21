@@ -8,6 +8,7 @@ export default function StatusList({
   content,
   contentKey,
   contentKeyArr,
+  onDetail,
 }) {
   return (
     <RequestShowBody>
@@ -28,7 +29,10 @@ export default function StatusList({
       <table ref={listRef}>
         {content ? (
           content[contentKey].map(list => (
-            <RequestShowList key={uuidv4()}>
+            <RequestShowList
+              key={uuidv4()}
+              onClick={() => onDetail(list.requestId || list.supplyId)}
+            >
               <tr>
                 <Zero width={headerList[0].width}>
                   {list[contentKeyArr[0]]}
