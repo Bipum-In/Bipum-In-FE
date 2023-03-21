@@ -47,6 +47,14 @@ const ButtonWrapper = styled.button`
     `}
 
   ${props =>
+    props.category &&
+    css`
+      color: ${props => props.theme.color.blue.brandColor6};
+      font-weight: 600;
+    `}
+
+
+  ${props =>
     (props.menuStyle === true || props.menuStyle === false) &&
     css`
       width: 12.5rem;
