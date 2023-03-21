@@ -3,12 +3,14 @@ import styled from 'styled-components';
 import { ReactComponent as Search } from '../../../styles/commonIcon/search.svg';
 import { ReactComponent as ArrowDown } from '../../../styles/commonIcon/arrowDown.svg';
 import Input from '../../../elements/Input';
+import Button from '../../../elements/Button';
 
 export default function StatusListHeader({
   setSelectName,
   selectBoxList,
   containerHeaderRef,
   onChangeStatus,
+  onSearchSubmit,
   children,
 }) {
   return (
@@ -16,9 +18,11 @@ export default function StatusListHeader({
       <Title>{setSelectName()}</Title>
       <SearchSelect>
         {children}
-        <SearchContainer>
+        <SearchContainer onSubmit={onSearchSubmit}>
           <SearchIconContainer>
-            <Search />
+            <Button>
+              <Search />
+            </Button>
           </SearchIconContainer>
           <Input placeholder="검색어를 입력해주세요 (신청자,담당부서 등)" />
         </SearchContainer>
@@ -59,7 +63,7 @@ const SearchSelect = styled.div`
   margin-top: 1.5rem;
 `;
 
-const SearchContainer = styled.div`
+const SearchContainer = styled.form`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
   width: 28.375rem;
@@ -71,11 +75,15 @@ const SearchContainer = styled.div`
 
   input {
     font-size: 1rem;
+    padding: 0.5rem 0.5rem 0.5rem 0;
   }
 `;
 
 const SearchIconContainer = styled.div`
   padding: 0 1rem;
+  button {
+    padding: 0;
+  }
 `;
 
 const Select = styled.select`
