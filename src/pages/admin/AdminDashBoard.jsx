@@ -1,14 +1,18 @@
 import React, { useEffect } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import DashboardCard from '../../components/adminDashBoard/DashboardCard';
 import { v4 as uuidv4 } from 'uuid';
-import { ReactComponent as NewIcon } from '../../styles/commonIcon/new.svg';
+import { ReactComponent as RequestIcon } from '../../styles/commonIcon/requestIcon.svg';
+import { ReactComponent as ArrowIcon } from '../../styles/commonIcon/arrowDown.svg';
 import AnchorBtn from '../../components/adminDashBoard/AnchorBtn';
 import { useDispatch, useSelector } from 'react-redux';
 import { __dashboardStatus } from '../../redux/modules/dashboardStatus';
 import { ManagementCards } from '../../components/adminDashBoard/ManagementCard';
 import { dashboardAlertData } from '../../mock/dashboardAlertData';
 import { FormatKoreanTime } from '../../utils/formatDate';
+import CategoryItems from '../../components/common/CategoryItems';
+import { getCategoryList } from '../../redux/modules/equipmentStatus';
+import ScrollToTop from '../../hooks/useScrollToTop';
 
 export default function AdminDashBoard() {
   const dispatch = useDispatch();
@@ -16,16 +20,23 @@ export default function AdminDashBoard() {
   const { getDashboard, isDashboardError } = useSelector(
     state => state.dashboardStatus.dashboardStatus
   );
+  const { getCategory, isCategoryError } = useSelector(
+    state => state.equipmentStatus.category
+  );
 
+  console.log(getCategory);
   useEffect(() => {
     dispatch(__dashboardStatus());
+    dispatch(getCategoryList());
   }, [dispatch]);
 
-  if (isDashboardError) return <div>에러 발생</div>;
+  if (isDashboardError || isCategoryError) return <div>에러 발생</div>;
 
+  const categoryListData = getCategory?.data;
   const categoryCardData = getDashboard?.data?.supplyCountDtos;
   const requestsCountData = getDashboard?.data?.requestsCountDto.countMap;
   const requestsDate = getDashboard?.data?.requestsCountDto.modifiedAtMap;
+
   const totalRequestCount = requestsCountData
     ? Object.values(requestsCountData).reduce(
         (accumulator, currentValue) => accumulator + currentValue,
@@ -35,20 +46,21 @@ export default function AdminDashBoard() {
 
   //mookdata
   const alertData = dashboardAlertData.data.alertDtos;
-  console.log(alertData);
 
   return (
     <>
-      {getDashboard && (
-        <AdminDashBoardWrapper>
+      {getDashboard && getCategory && (
+        <AdminDashBoardWrapper id="scrollable-div">
           <TopSideContainer>
             <EquipmentTopContainer col="true">
-              <AnchorBtn onClick={() => {}}>관리 현황</AnchorBtn>
+              <AnchorBtn onClick={() => {}}>
+                관리 현황 <ArrowIcon />
+              </AnchorBtn>
               <ManagementWrapper>
                 <ManagementAlertTopContainer>
                   <NewAlertContainer>
-                    <NewIcon />
-                    <NewAlertTitle>새로운 요청</NewAlertTitle>
+                    <RequestIcon />
+                    <NewAlertTitle>처리대기 요청</NewAlertTitle>
                     <NewAlertNum>{totalRequestCount}건</NewAlertNum>
                   </NewAlertContainer>
                 </ManagementAlertTopContainer>
@@ -65,7 +77,7 @@ export default function AdminDashBoard() {
               <AnchorBtn onClick={() => {}}>알림</AnchorBtn>
               <AlertAndAddContainer>
                 {alertData.map(data => (
-                  <AlertListContainer>
+                  <AlertListContainer key={uuidv4()}>
                     <AlertImgContainer>
                       <AlertImg src={data.alertImg} alt="" />
                     </AlertImgContainer>
@@ -86,7 +98,11 @@ export default function AdminDashBoard() {
             </EquipmentTopContainer>
           </TopSideContainer>
           <CategorySideWrapper>
-            <AnchorBtn onClick={() => {}}>비품 카테고리</AnchorBtn>
+            <AnchorBtn onClick={() => {}}>
+              비품 목록
+              <ArrowIcon />
+            </AnchorBtn>
+            <CategoryItems getCategory={categoryListData} />
             <EquipmentBottomContainer>
               {categoryCardData.map(card => (
                 <DashboardCard
@@ -100,6 +116,7 @@ export default function AdminDashBoard() {
               ))}
             </EquipmentBottomContainer>
           </CategorySideWrapper>
+          <ScrollToTop targetSelector="#scrollable-div" />
         </AdminDashBoardWrapper>
       )}
     </>
@@ -108,12 +125,17 @@ export default function AdminDashBoard() {
 
 const AdminDashBoardWrapper = styled.div`
   ${props => props.theme.FlexCol};
+  height: calc(100vh - 100px);
+  overflow: auto;
+  margin: -3.25rem -3.25rem 0 0;
+  padding: 3.25rem 0;
 `;
 
 const TopSideContainer = styled.div`
   ${props => props.theme.FlexRow};
   width: 100%;
-  padding-bottom: 2.5rem;
+  padding: 0 3.25rem 2.5rem 0;
+
   gap: 3.5rem;
   @media (max-width: ${props => props.theme.screen.dashboardFullWidth}) {
     ${props => props.theme.FlexRow};
@@ -126,16 +148,6 @@ const TopSideContainer = styled.div`
 
 const EquipmentTopContainer = styled.div`
   ${props => props.theme.FlexCol};
-  /* width: 33%; */
-
-  /* ${props =>
-    props.col === 'true' &&
-    css`
-      @media (max-width: ${props => props.theme.screen.dashboardFullWidth}) {
-        width: 47%;
-      }
-    `} */
-
   @media (max-width: ${props => props.theme.screen.fullWideDesktop}) {
     width: 100%;
   }
@@ -146,6 +158,7 @@ const CategorySideWrapper = styled.div`
   ${props => props.theme.FlexCol};
   align-items: flex-start;
   width: 100%;
+  padding-right: 3.25rem;
 `;
 
 const EquipmentBottomContainer = styled.div`

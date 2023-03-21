@@ -20,6 +20,9 @@ const CategoryBtnContainer = styled.div`
   width: 100%;
   svg {
     transform: rotate(-90deg);
+    path {
+      stroke: ${props => props.theme.color.blue.brandColor6};
+    }
   }
   button * {
     align-items: center;
