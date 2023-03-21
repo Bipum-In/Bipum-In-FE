@@ -12,9 +12,6 @@ export default function AddSingleItem() {
 
   useEffect(() => {
     dispatch(getCategoryList());
-  }, [dispatch]);
-
-  useEffect(() => {
     dispatch(__partnersList());
   }, [dispatch]);
 
