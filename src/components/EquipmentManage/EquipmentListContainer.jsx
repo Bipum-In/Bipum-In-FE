@@ -15,12 +15,13 @@ export default function EquipmentListContainer({
   category: { category, largeCategory },
 }) {
   const dispatch = useDispatch();
-  const searchRef = useRef();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [categoryList, setCategoryList] = useState({ show: false, list: [] });
+  const searchRef = useRef();
+
   const [menuStyle, clickMenu, setSelectName] = useSelectMenu(largeCategory);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
@@ -55,6 +56,7 @@ export default function EquipmentListContainer({
 
     setCategoryId(categoryId);
     setPage(1);
+    searchRef.current.value = '';
   };
 
   const onSubmit = e => {
