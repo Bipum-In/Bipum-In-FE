@@ -22,14 +22,11 @@ export default function RequestStatus() {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
+  const [type, setType] = useState('ALL');
   const [keyword, setKeyword] = useState('');
   const searchRef = useRef();
-  const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
-    menuData,
-    'RequestStorgeKey'
-  );
-  const [type, setType] = useState(setSelectType());
 
+  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(menuData);
   const { getRequest, isStatusError } = useSelector(
     state => state.requestStatus.requestStatus
   );
