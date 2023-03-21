@@ -4,6 +4,7 @@ import styled, { css } from 'styled-components';
 import Button from '../../elements/Button';
 import Input from '../../elements/Input';
 import { getCategoryList } from '../../redux/modules/equipmentStatus';
+import { __partnersList } from '../../redux/modules/partnersList';
 import SelectBoxs from '../common/SelectBoxs';
 
 export default function AddSingleItem() {
@@ -13,14 +14,23 @@ export default function AddSingleItem() {
     dispatch(getCategoryList());
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(__partnersList());
+  }, [dispatch]);
+
+  const { getPartners, isPartnersLoading, isPartnersError } = useSelector(
+    state => state.partnersList.partnersList
+  );
+
+  const partnersData = getPartners?.data;
+
   const { getCategory, isCategoryLoading, isCategoryError } = useSelector(
     state => state.equipmentStatus.category
   );
 
-  const lageCategoryData = getCategory?.largeCategory;
-
-  const subCategoryData = getCategory?.category;
-  console.log(subCategoryData);
+  const largeCategories = Array.from(
+    new Set(getCategory?.category.map(item => item.largeCategory))
+  );
 
   const [formImage, setFormformImage] = useState(null);
   const [preview, setPreview] = useState('');
@@ -53,18 +63,26 @@ export default function AddSingleItem() {
   const [nameValue, setNameValue] = useState('');
   const [serialValue, setSerialValue] = useState('');
 
-  const [mainTypeSeleteValue, setMainTypeSeleteValue] = useState('대분류');
+  const [selectedLargeCategory, setSelectedLargeCategory] = useState('대분류');
+  // const [mainTypeSeleteValue, setMainTypeSeleteValue] = useState('대분류');
   const [isShowOptions, setShowOptions] = useState(false);
   const handleOnChangeMainTypeSelectValue = e => {
     const { innerText } = e.target;
-    setMainTypeSeleteValue(innerText);
+    setSelectedLargeCategory(innerText);
+    // setSelectedLargeCategory(innerText);
   };
+
   const [subTypeSeleteValue, setSubTypeSeleteValue] = useState('소분류');
   const [isShowSubOptions, setShowSubOptions] = useState(false);
   const handleOnChangeSubTypeSelectValue = e => {
     const { innerText } = e.target;
     setSubTypeSeleteValue(innerText);
   };
+
+  const categoryData = getCategory?.category.filter(
+    item => item.largeCategory === selectedLargeCategory
+  );
+
   const [yearSeleteValue, setYearSeleteValue] = useState('');
   const [isShowYearOptions, setShowYearOptions] = useState(false);
   const handleYearChange = e => {
@@ -117,182 +135,202 @@ export default function AddSingleItem() {
     const { innerText } = e.target;
     setNameSeleteValue(innerText);
   };
+
   return (
-    <Container>
-      <AddContainer>
-        <EquipmentContainer>
-          <TypeBox>
-            <TypeTitle requiredinput="true">비품종류</TypeTitle>
-            <SelectBoxs
-              onClick={() => setShowOptions(isShowOptions => !isShowOptions)}
-              eqtype="true"
-              seleteValue={mainTypeSeleteValue}
-              show={isShowOptions}
-              height="true"
-              arrow="true"
-            >
-              {lageCategoryData?.map(item => {
-                return (
-                  <Option onClick={handleOnChangeMainTypeSelectValue}>
-                    {item.name}
-                  </Option>
-                );
-              })}
-            </SelectBoxs>
-            <SelectBoxs
-              onClick={() =>
-                setShowSubOptions(isShowSubOptions => !isShowSubOptions)
-              }
-              eqtype="true"
-              seleteValue={subTypeSeleteValue}
-              show={isShowSubOptions}
-              height="true"
-            >
-              {subCategoryData?.map(item => {
-                return (
-                  <Option onClick={handleOnChangeSubTypeSelectValue}>
-                    {item.categoryName}
-                  </Option>
-                );
-              })}
-            </SelectBoxs>
-          </TypeBox>
-          <TypeBox>
-            <TypeTitle requiredinput="true">제품명</TypeTitle>
-            <Input
-              type="text"
-              value={nameValue}
-              onChange={event => setNameValue(event.target.value)}
-              placeholder="제품명을 기입해주세요"
-              required
-            />
-          </TypeBox>
-          <TypeBox>
-            <TypeTitle requiredinput="true">시리얼 넘버</TypeTitle>
-            <Input
-              type="text"
-              value={serialValue}
-              onChange={event => setSerialValue(event.target.value)}
-              placeholder="시리얼넘버를 기입해주세요"
-              required
-            />
-          </TypeBox>
-          <AcquisitionContainer>
-            <TypeBox>
-              <TypeTitle>취득일자</TypeTitle>
-              <AcquisitionYear>
+    <>
+      {getCategory && (
+        <Container>
+          <AddContainer>
+            <EquipmentContainer>
+              <TypeBox>
+                <TypeTitle requiredinput="true">비품종류</TypeTitle>
                 <SelectBoxs
                   onClick={() =>
-                    setShowYearOptions(isShowYearOptions => !isShowYearOptions)
+                    setShowOptions(isShowOptions => !isShowOptions)
                   }
-                  seleteValue={yearSeleteValue}
-                  text="년"
-                  show={isShowYearOptions}
+                  eqtype="true"
+                  seleteValue={selectedLargeCategory}
+                  show={isShowOptions}
+                  height="true"
+                  arrow="true"
                 >
-                  {yearOptions}
-                </SelectBoxs>
-              </AcquisitionYear>
-
-              <AcquisitionMonth>
-                <SelectBoxs
-                  onClick={() =>
-                    setShowMonthOptions(
-                      isShowMonthOptions => !isShowMonthOptions
-                    )
-                  }
-                  seleteValue={monthSeleteValue}
-                  text="월"
-                  show={isShowMonthOptions}
-                >
-                  {monthOptions}
-                </SelectBoxs>
-              </AcquisitionMonth>
-              <AcquisitionDay>
-                <SelectBoxs
-                  onClick={() =>
-                    setShowDayOptions(isShowDayOptions => !isShowDayOptions)
-                  }
-                  seleteValue={daySeleteValue}
-                  text="일"
-                  show={isShowDayOptions}
-                >
-                  <Option onClick={handleDayChange}>
-                    {getDaysInMonth(
-                      new Date().getFullYear(),
-                      parseInt(monthSeleteValue) - 1
-                    ).map(day => (
-                      <Option key={day} value={day}>
-                        {day}
+                  {largeCategories.map(item => {
+                    return (
+                      <Option onClick={handleOnChangeMainTypeSelectValue}>
+                        {item}
                       </Option>
-                    ))}
-                  </Option>
+                    );
+                  })}
                 </SelectBoxs>
-              </AcquisitionDay>
-            </TypeBox>
-          </AcquisitionContainer>
-          <TypeBox>
-            <TypeTitle>협력업체</TypeTitle>
-            <PartnerCompany>
-              <SelectBoxs
-                onClick={() =>
-                  setShowPartnerOptions(
-                    isShowPartnerOptions => !isShowPartnerOptions
-                  )
-                }
-                seleteValue={partnerSeleteValue}
-                show={isShowPartnerOptions}
-                height="true"
-              >
-                <Option onClick={handleOnChangePartnerSelectValue}>협력</Option>
-              </SelectBoxs>
-            </PartnerCompany>
-          </TypeBox>
+                <SelectBoxs
+                  onClick={() =>
+                    setShowSubOptions(isShowSubOptions => !isShowSubOptions)
+                  }
+                  eqtype="true"
+                  seleteValue={subTypeSeleteValue}
+                  show={isShowSubOptions}
+                  height="true"
+                >
+                  {categoryData.map(item => {
+                    return (
+                      <Option onClick={handleOnChangeSubTypeSelectValue}>
+                        {item.categoryName}
+                      </Option>
+                    );
+                  })}
+                </SelectBoxs>
+              </TypeBox>
+              <TypeBox>
+                <TypeTitle requiredinput="true">제품명</TypeTitle>
+                <Input
+                  type="text"
+                  value={nameValue}
+                  onChange={event => setNameValue(event.target.value)}
+                  placeholder="제품명을 기입해주세요"
+                  required
+                />
+              </TypeBox>
+              <TypeBox>
+                <TypeTitle requiredinput="true">시리얼 넘버</TypeTitle>
+                <Input
+                  type="text"
+                  value={serialValue}
+                  onChange={event => setSerialValue(event.target.value)}
+                  placeholder="시리얼넘버를 기입해주세요"
+                  required
+                />
+              </TypeBox>
+              <AcquisitionContainer>
+                <TypeBox>
+                  <TypeTitle>취득일자</TypeTitle>
+                  <AcquisitionYear>
+                    <SelectBoxs
+                      onClick={() =>
+                        setShowYearOptions(
+                          isShowYearOptions => !isShowYearOptions
+                        )
+                      }
+                      seleteValue={yearSeleteValue}
+                      text="년"
+                      show={isShowYearOptions}
+                    >
+                      {yearOptions}
+                    </SelectBoxs>
+                  </AcquisitionYear>
 
-          <TypeBox>
-            <TypeTitle>사용자</TypeTitle>
-            <DepName>
-              <SelectBoxs
-                onClick={() =>
-                  setShowDepOptions(isShowDepOptions => !isShowDepOptions)
-                }
-                seleteValue={depSeleteValue}
-                show={isShowDepOptions}
-                height="true"
-              >
-                <Option onClick={handleOnChangeDepSelectValue}>선택</Option>
-              </SelectBoxs>
-            </DepName>
-            <UserName>
-              <SelectBoxs
-                onClick={() =>
-                  setShowNameOptions(isShowNameOptions => !isShowNameOptions)
-                }
-                seleteValue={nameSeleteValue}
-                show={isShowNameOptions}
-                height="true"
-              >
-                <Option onClick={handleOnChangeNameSelectValue}>사우명?</Option>
-              </SelectBoxs>
-            </UserName>
-          </TypeBox>
-        </EquipmentContainer>
-        <ImageContainer>
-          사진첨부
-          {preview && <Image src={preview} alt="preview" />}
-          <ImageinputFile
-            as={'input'}
-            type="file"
-            accept="image/*"
-            onChange={onChangeimge}
-          />
-        </ImageContainer>
-        <ButtonBox>
-          <Button type="submit">비품 등록 완료</Button>
-        </ButtonBox>
-      </AddContainer>
-    </Container>
+                  <AcquisitionMonth>
+                    <SelectBoxs
+                      onClick={() =>
+                        setShowMonthOptions(
+                          isShowMonthOptions => !isShowMonthOptions
+                        )
+                      }
+                      seleteValue={monthSeleteValue}
+                      text="월"
+                      show={isShowMonthOptions}
+                    >
+                      {monthOptions}
+                    </SelectBoxs>
+                  </AcquisitionMonth>
+                  <AcquisitionDay>
+                    <SelectBoxs
+                      onClick={() =>
+                        setShowDayOptions(isShowDayOptions => !isShowDayOptions)
+                      }
+                      seleteValue={daySeleteValue}
+                      text="일"
+                      show={isShowDayOptions}
+                    >
+                      <Option onClick={handleDayChange}>
+                        {getDaysInMonth(
+                          new Date().getFullYear(),
+                          parseInt(monthSeleteValue) - 1
+                        ).map(day => (
+                          <Option key={day} value={day}>
+                            {day}
+                          </Option>
+                        ))}
+                      </Option>
+                    </SelectBoxs>
+                  </AcquisitionDay>
+                </TypeBox>
+              </AcquisitionContainer>
+              <TypeBox>
+                <TypeTitle>협력업체</TypeTitle>
+                <PartnerCompany>
+                  <SelectBoxs
+                    onClick={() =>
+                      setShowPartnerOptions(
+                        isShowPartnerOptions => !isShowPartnerOptions
+                      )
+                    }
+                    seleteValue={partnerSeleteValue}
+                    show={isShowPartnerOptions}
+                    height="true"
+                  >
+                    {partnersData?.map(item => {
+                      return (
+                        <Option onClick={handleOnChangePartnerSelectValue}>
+                          {item.partnersName}
+                        </Option>
+                      );
+                    })}
+                  </SelectBoxs>
+                </PartnerCompany>
+              </TypeBox>
+
+              <TypeBox>
+                <TypeTitle>사용자</TypeTitle>
+                <DepName>
+                  <SelectBoxs
+                    onClick={() =>
+                      setShowDepOptions(isShowDepOptions => !isShowDepOptions)
+                    }
+                    seleteValue={depSeleteValue}
+                    show={isShowDepOptions}
+                    height="true"
+                  >
+                    <Option onClick={handleOnChangeDepSelectValue}>선택</Option>
+                  </SelectBoxs>
+                </DepName>
+                <UserName>
+                  <SelectBoxs
+                    onClick={() =>
+                      setShowNameOptions(
+                        isShowNameOptions => !isShowNameOptions
+                      )
+                    }
+                    seleteValue={nameSeleteValue}
+                    show={isShowNameOptions}
+                    height="true"
+                  >
+                    <Option onClick={handleOnChangeNameSelectValue}>
+                      사우명?
+                    </Option>
+                  </SelectBoxs>
+                </UserName>
+              </TypeBox>
+            </EquipmentContainer>
+            <ImageContainer>
+              사진첨부
+              {preview && <Image src={preview} alt="preview" />}
+              <ImageinputFile
+                as={'input'}
+                type="file"
+                accept="image/*"
+                onChange={onChangeimge}
+              />
+            </ImageContainer>
+            <ButtonBox>
+              <Button type="submit">비품 등록 완료</Button>
+            </ButtonBox>
+          </AddContainer>
+        </Container>
+      )}
+    </>
   );
 }
+
 const ImageinputFile = styled.div`
   ::file-selector-button {
     border: 0;
