@@ -61,11 +61,12 @@ export default function StatusList({
                         {list[contentKeyArr[6]]}
                       </Status>
                     </Six>
-                    <Seven width={headerList[7].width}>
-                      <RequsetColor status={list[contentKeyArr[7]]}>
-                        {list[contentKeyArr[7]]}
-                      </RequsetColor>
-                    </Seven>
+                    <RequsetSeven
+                      width={headerList[7].width}
+                      status={list[contentKeyArr[7]]}
+                    >
+                      {list[contentKeyArr[7]]}
+                    </RequsetSeven>
                   </>
                 )}
               </tr>
@@ -105,7 +106,7 @@ const RequestShowBody = styled.div`
   }
 
   td {
-    height: 100%;
+    /* height: 100%; */
     text-align: left;
     text-overflow: ellipsis;
     font-size: 1.0625rem;
@@ -129,6 +130,10 @@ const RequestShowList = styled.tbody`
   border-bottom: 0.0625rem solid ${props => props.theme.color.grey.brandColor3};
   font-size: 1.0625rem;
   cursor: pointer;
+
+  &:hover {
+    background-color: ${props => props.theme.color.blue.brandColor2};
+  }
 `;
 
 const Status = styled.div`
@@ -245,13 +250,13 @@ const Seven = styled.td`
   height: 100%;
 `;
 
-const RequsetColor = styled.div`
+const RequsetSeven = styled.td`
   display: flex;
   justify-content: center;
   align-items: center;
-
   width: ${props => props.width};
   min-width: ${props => props.width};
+  border-radius: 0.25rem;
   height: 1.8125rem;
 
   ${props =>
