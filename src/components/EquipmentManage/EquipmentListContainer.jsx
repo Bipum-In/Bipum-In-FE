@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import CategoryItems from '../../components/common/CategoryItems';
@@ -11,32 +11,24 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
 
-export default function EquipmentListContainer({ category }) {
+export default function EquipmentListContainer({
+  category: { category, largeCategory },
+}) {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState('');
   const [categoryList, setCategoryList] = useState({ show: false, list: [] });
+  const searchRef = useRef();
 
-  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(
-    category.largeCategory
-  );
+  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(largeCategory);
+  const [resizeRef, pageSize, firstPageSize, handleResize] =
+    useResizeGetPageSize();
 
   const { getEquipment, isEquipmentError } = useSelector(
     state => state.equipmentStatus.equipmentStatus
   );
-
-  const [
-    containerRef,
-    headerRef,
-    containerHeaderRef,
-    listHeaderRef,
-    listRef,
-    pageSize,
-    firstPageSize,
-    handleResize,
-  ] = useResizeGetPageSize();
 
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
@@ -45,32 +37,32 @@ export default function EquipmentListContainer({ category }) {
   }, [dispatch, keyword, categoryId, page, status, pageSize, handleResize]);
 
   const handleClickMenu = e => {
+    const name = e.target.innerText;
+    const parseCategoryList = getCategoryList(name, category);
     clickMenu(e);
 
-    const name = e.target.innerText;
     if (name === '전체') {
       setCategoryList({ show: false, list: categoryList.list });
       setCategoryId('');
       setPage(1);
       return;
     }
-
-    const parseCategoryList = getCategoryList(name, category.category);
     setCategoryList({ show: true, list: parseCategoryList });
   };
 
   const handleClickCategory = e => {
     const name = e.target.innerText;
-    const categoryId = categoryList.list.filter(
-      item => item.categoryName === name
-    )[0]['categoryId'];
-    console.log(categoryId, category);
+    const categoryId = getCategoryId(name, categoryList);
+
     setCategoryId(categoryId);
     setPage(1);
+    searchRef.current.value = '';
   };
 
-  const getCategoryList = (name, categoryList) => {
-    return categoryList.filter(list => list.largeCategory === name);
+  const onSubmit = e => {
+    e.preventDefault();
+    const keyword = searchRef.current.value;
+    setKeyword(keyword);
   };
 
   const handleChangeStatus = useSetStateChange(
@@ -87,11 +79,21 @@ export default function EquipmentListContainer({ category }) {
     setPage(e);
   };
 
+  const getCategoryList = (name, categoryList) => {
+    return categoryList.filter(list => list.largeCategory === name);
+  };
+
+  const getCategoryId = (name, categoryList) => {
+    return categoryList.list.filter(item => item.categoryName === name)[0][
+      'categoryId'
+    ];
+  };
+
   return (
     <>
       {isEquipmentError && <div>에러 발생</div>}
-      <RequestStatusWrapper ref={containerRef}>
-        <CategoryContainer ref={headerRef}>
+      <RequestStatusWrapper ref={resizeRef.containerRef}>
+        <CategoryContainer ref={resizeRef.headerRef}>
           <CategoryItems
             getCategory={menuStyle}
             getSmallCategory={categoryList}
@@ -106,9 +108,9 @@ export default function EquipmentListContainer({ category }) {
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
           onChangeStatus={handleChangeStatus}
-          containerHeaderRef={containerHeaderRef}
-          listHeaderRef={listHeaderRef}
-          listRef={listRef}
+          searchRef={searchRef}
+          onSubmit={onSubmit}
+          resizeRef={resizeRef}
           onResize={handleResize}
         />
       </RequestStatusWrapper>

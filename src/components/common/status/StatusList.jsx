@@ -6,8 +6,8 @@ export default function StatusList({
   listHeaderRef,
   listRef,
   content,
-  contentKey,
   contentKeyArr,
+  onDetail,
 }) {
   return (
     <RequestShowBody>
@@ -27,8 +27,11 @@ export default function StatusList({
       </table>
       <table ref={listRef}>
         {content ? (
-          content[contentKey].map(list => (
-            <RequestShowList key={uuidv4()}>
+          content.content.map(list => (
+            <RequestShowList
+              key={uuidv4()}
+              onClick={() => onDetail(list.requestId || list.supplyId)}
+            >
               <tr>
                 <Zero width={headerList[0].width}>
                   {list[contentKeyArr[0]]}
@@ -44,13 +47,31 @@ export default function StatusList({
                 <Five width={headerList[5].width}>
                   {list[contentKeyArr[5]]}
                 </Five>
-                <Six width={headerList[6].width}>{list[contentKeyArr[6]]}</Six>
-                <Seven width={headerList[7].width}>
-                  <Status>
-                    <StatusColor status={list[contentKeyArr[7]]} />
-                    {list.status}
-                  </Status>
-                </Seven>
+                {headerList[7].name === '상태' ? (
+                  <>
+                    <Six width={headerList[6].width}>
+                      {list[contentKeyArr[6]]}
+                    </Six>
+                    <Seven width={headerList[7].width}>
+                      {list[contentKeyArr[7]]}
+                    </Seven>
+                  </>
+                ) : (
+                  <>
+                    <Six width={headerList[6].width}>
+                      <Status>
+                        <StatusColor status={list[contentKeyArr[6]]} />
+                        {list[contentKeyArr[6]]}
+                      </Status>
+                    </Six>
+                    <RequsetSeven
+                      width={headerList[7].width}
+                      status={list[contentKeyArr[7]]}
+                    >
+                      {list[contentKeyArr[7]]}
+                    </RequsetSeven>
+                  </>
+                )}
               </tr>
             </RequestShowList>
           ))
@@ -80,6 +101,7 @@ const RequestShowBody = styled.div`
 
   tr {
     display: flex;
+    align-items: center;
     margin: 0px auto;
     line-height: 3.3125rem;
     gap: 1.875rem;
@@ -87,7 +109,7 @@ const RequestShowBody = styled.div`
   }
 
   td {
-    height: 100%;
+    /* height: 100%; */
     text-align: left;
     text-overflow: ellipsis;
     font-size: 1.0625rem;
@@ -111,6 +133,10 @@ const RequestShowList = styled.tbody`
   border-bottom: 0.0625rem solid ${props => props.theme.color.grey.brandColor3};
   font-size: 1.0625rem;
   cursor: pointer;
+
+  &:hover {
+    background-color: ${props => props.theme.color.blue.brandColor2};
+  }
 `;
 
 const Status = styled.div`
@@ -220,6 +246,37 @@ const Six = styled.td`
 `;
 
 const Seven = styled.td`
+  display: flex;
+  align-items: center;
   width: ${props => props.width};
   min-width: ${props => props.width};
+  height: 100%;
+`;
+
+const RequsetSeven = styled.td`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: ${props => props.width};
+  min-width: ${props => props.width};
+  border-radius: 0.25rem;
+  height: 1.8125rem;
+
+  ${props =>
+    props.status === '승인' &&
+    css`
+      background-color: #e0ffd6;
+    `}
+
+  ${props =>
+    props.status === '거절' &&
+    css`
+      background-color: #ffe8e8;
+    `}
+
+    ${props =>
+    props.status === '폐기' &&
+    css`
+      background-color: #efecd9;
+    `}
 `;

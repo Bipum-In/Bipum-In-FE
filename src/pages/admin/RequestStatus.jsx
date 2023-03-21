@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import StatusMenu from '../../components/common/status/StatusMenu';
@@ -22,33 +22,29 @@ export default function RequestStatus() {
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
+  const [type, setType] = useState('ALL');
   const [keyword, setKeyword] = useState('');
-  const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
-    menuData,
-    'RequestStorgeKey'
-  );
-  const [type, setType] = useState(setSelectType());
+  const searchRef = useRef();
+
+  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(menuData);
+  const [resizeRef, pageSize, firstPageSize, handleResize] =
+    useResizeGetPageSize();
 
   const { getRequest, isStatusError } = useSelector(
     state => state.requestStatus.requestStatus
   );
-
-  const [
-    containerRef,
-    headerRef,
-    containerHeaderRef,
-    listHeaderRef,
-    listRef,
-    pageSize,
-    firstPageSize,
-    handleResize,
-  ] = useResizeGetPageSize();
 
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
     dispatch(__requestStatus({ keyword, type, status, page, size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, keyword, page, type, status, pageSize, handleResize]);
+
+  const onSubmit = e => {
+    e.preventDefault();
+    const keyword = searchRef.current.value;
+    setKeyword(keyword);
+  };
 
   const handleClickMenu = useSetStateChange(
     ['전체', '비품 요청', '반납 요청', '수리 요청'],
@@ -57,6 +53,8 @@ export default function RequestStatus() {
     e => {
       clickMenu(e);
       setPage(1);
+      setKeyword('');
+      searchRef.current.value = '';
     }
   );
 
@@ -77,9 +75,9 @@ export default function RequestStatus() {
   return (
     <>
       {isStatusError && <div>에러 발생</div>}
-      <RequestStatusWrapper ref={containerRef}>
+      <RequestStatusWrapper ref={resizeRef.containerRef}>
         <StatusMenu
-          headerRef={headerRef}
+          headerRef={resizeRef.headerRef}
           menuStyle={menuStyle}
           onClickMenu={handleClickMenu}
         />
@@ -90,9 +88,9 @@ export default function RequestStatus() {
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
           onChangeStatus={handleChangeStatus}
-          containerHeaderRef={containerHeaderRef}
-          listHeaderRef={listHeaderRef}
-          listRef={listRef}
+          searchRef={searchRef}
+          onSubmit={onSubmit}
+          resizeRef={resizeRef}
           onResize={handleResize}
         />
       </RequestStatusWrapper>
