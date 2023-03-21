@@ -27,16 +27,8 @@ export default function EquipmentListContainer({ category }) {
     state => state.equipmentStatus.equipmentStatus
   );
 
-  const [
-    containerRef,
-    headerRef,
-    containerHeaderRef,
-    listHeaderRef,
-    listRef,
-    pageSize,
-    firstPageSize,
-    handleResize,
-  ] = useResizeGetPageSize();
+  const [resizeRef, pageSize, firstPageSize, handleResize] =
+    useResizeGetPageSize();
 
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
@@ -90,8 +82,8 @@ export default function EquipmentListContainer({ category }) {
   return (
     <>
       {isEquipmentError && <div>에러 발생</div>}
-      <RequestStatusWrapper ref={containerRef}>
-        <CategoryContainer ref={headerRef}>
+      <RequestStatusWrapper ref={resizeRef.containerRef}>
+        <CategoryContainer ref={resizeRef.headerRef}>
           <CategoryItems
             getCategory={menuStyle}
             getSmallCategory={categoryList}
@@ -106,9 +98,7 @@ export default function EquipmentListContainer({ category }) {
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
           onChangeStatus={handleChangeStatus}
-          containerHeaderRef={containerHeaderRef}
-          listHeaderRef={listHeaderRef}
-          listRef={listRef}
+          resizeRef={resizeRef}
           onResize={handleResize}
         />
       </RequestStatusWrapper>

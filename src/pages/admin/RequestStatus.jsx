@@ -27,20 +27,12 @@ export default function RequestStatus() {
   const searchRef = useRef();
 
   const [menuStyle, clickMenu, setSelectName] = useSelectMenu(menuData);
+  const [resizeRef, pageSize, firstPageSize, handleResize] =
+    useResizeGetPageSize();
+
   const { getRequest, isStatusError } = useSelector(
     state => state.requestStatus.requestStatus
   );
-
-  const [
-    containerRef,
-    headerRef,
-    containerHeaderRef,
-    listHeaderRef,
-    listRef,
-    pageSize,
-    firstPageSize,
-    handleResize,
-  ] = useResizeGetPageSize();
 
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
@@ -81,9 +73,9 @@ export default function RequestStatus() {
   return (
     <>
       {isStatusError && <div>에러 발생</div>}
-      <RequestStatusWrapper ref={containerRef}>
+      <RequestStatusWrapper ref={resizeRef.containerRef}>
         <StatusMenu
-          headerRef={headerRef}
+          headerRef={resizeRef.headerRef}
           menuStyle={menuStyle}
           onClickMenu={handleClickMenu}
         />
@@ -96,9 +88,7 @@ export default function RequestStatus() {
           onChangeStatus={handleChangeStatus}
           searchRef={searchRef}
           onSubmit={onSubmit}
-          containerHeaderRef={containerHeaderRef}
-          listHeaderRef={listHeaderRef}
-          listRef={listRef}
+          resizeRef={resizeRef}
           onResize={handleResize}
         />
       </RequestStatusWrapper>

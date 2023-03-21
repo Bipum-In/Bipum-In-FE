@@ -12,9 +12,7 @@ export default function RequestShow({
   onChangeStatus,
   searchRef,
   onSubmit,
-  containerHeaderRef,
-  listHeaderRef,
-  listRef,
+  resizeRef,
 }) {
   const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
   const headerList = [
@@ -44,15 +42,15 @@ export default function RequestShow({
       <StatusListHeader
         setSelectName={setSelectName}
         selectBoxList={selectBoxList}
-        containerHeaderRef={containerHeaderRef}
+        containerHeaderRef={resizeRef.containerHeaderRef}
         onChangeStatus={onChangeStatus}
         searchRef={searchRef}
         onSearchSubmit={onSubmit}
       />
       <StatusList
         headerList={headerList}
-        listHeaderRef={listHeaderRef}
-        listRef={listRef}
+        listHeaderRef={resizeRef.listHeaderRef}
+        listRef={resizeRef.listRef}
         content={requestData}
         contentKey="content"
         contentKeyArr={contentKeyArr}

@@ -10,10 +10,7 @@ export default function EquipmentShow({
   pageSize,
   onPage,
   onChangeStatus,
-  containerHeaderRef,
-  listHeaderRef,
-  listRef,
-  onResize,
+  resizeRef,
 }) {
   const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
   const headerList = [
@@ -43,13 +40,13 @@ export default function EquipmentShow({
       <StatusListHeader
         setSelectName={setSelectName}
         selectBoxList={selectBoxList}
-        containerHeaderRef={containerHeaderRef}
+        containerHeaderRef={resizeRef.containerHeaderRef}
         onChangeStatus={onChangeStatus}
       />
       <StatusList
         headerList={headerList}
-        listHeaderRef={listHeaderRef}
-        listRef={listRef}
+        listHeaderRef={resizeRef.listHeaderRef}
+        listRef={resizeRef.listRef}
         content={requestData}
         contentKey="content"
         contentKeyArr={contentKeyArr}
