@@ -43,18 +43,19 @@ export default function EquipmentListContainer({ category }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, keyword, page, status, pageSize, handleResize]);
 
-  const handleClickMenu = useSetStateChange();
-  // category.map(item => item.name),
-  // category.map(item => item.type),
-  // setCategoryId,
-  // e => {
-  //   clickMenu(e);
-  //   setPage(1);
-  // }
+  const handleClickMenu = useSetStateChange(
+    category.largeCategory.map(item => item.name),
+    category.largeCategory.map(item => item.type),
+    setCategoryId,
+    e => {
+      clickMenu(e);
+      setPage(1);
+    }
+  );
 
   const handleChangeStatus = useSetStateChange(
-    ['전체 보기', '처리전', '처리중', '처리 완료'],
-    ['ALL', 'UNPROCESSED', 'PROCESSING', 'PROCESSED'],
+    ['전체 보기', '사용중', '재고', '수리중'],
+    ['ALL', 'USING', 'STOCK', 'REPAIRING'],
     setStatus,
     e => {
       setStatus(e);

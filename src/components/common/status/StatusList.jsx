@@ -14,13 +14,14 @@ export default function StatusList({
       <table ref={listHeaderRef}>
         <RequestShowListTitle>
           <tr>
-            <OneTh width={headerList[0].width}>{headerList[0].name}</OneTh>
-            <TwoTh width={headerList[1].width}>{headerList[1].name}</TwoTh>
-            <ThreeTh width={headerList[2].width}>{headerList[2].name}</ThreeTh>
-            <FourTh width={headerList[3].width}>{headerList[3].name}</FourTh>
-            <FiveTh width={headerList[4].width}>{headerList[4].name}</FiveTh>
-            <SixTh width={headerList[5].width}>{headerList[5].name}</SixTh>
-            <SevenTh width={headerList[6].width}>{headerList[6].name}</SevenTh>
+            <ZeroTh width={headerList[0].width}>{headerList[0].name}</ZeroTh>
+            <OneTh width={headerList[1].width}>{headerList[1].name}</OneTh>
+            <TwoTh width={headerList[2].width}>{headerList[2].name}</TwoTh>
+            <ThreeTh width={headerList[3].width}>{headerList[3].name}</ThreeTh>
+            <FourTh width={headerList[4].width}>{headerList[4].name}</FourTh>
+            <FiveTh width={headerList[5].width}>{headerList[5].name}</FiveTh>
+            <SixTh width={headerList[6].width}>{headerList[6].name}</SixTh>
+            <SevenTh width={headerList[7].width}>{headerList[7].name}</SevenTh>
           </tr>
         </RequestShowListTitle>
       </table>
@@ -29,21 +30,24 @@ export default function StatusList({
           content[contentKey].map(list => (
             <RequestShowList key={uuidv4()}>
               <tr>
-                <One width={headerList[0].width}>{list[contentKeyArr[0]]}</One>
-                <Two width={headerList[1].width}>{list[contentKeyArr[1]]}</Two>
-                <Three width={headerList[2].width}>
-                  {list[contentKeyArr[2]] ? list[contentKeyArr[2]] : '-'}
+                <Zero width={headerList[0].width}>
+                  {list[contentKeyArr[0]]}
+                </Zero>
+                <One width={headerList[1].width}>{list[contentKeyArr[1]]}</One>
+                <Two width={headerList[2].width}>{list[contentKeyArr[2]]}</Two>
+                <Three width={headerList[3].width}>
+                  {list[contentKeyArr[3]] ? list[contentKeyArr[3]] : '-'}
                 </Three>
-                <Four width={headerList[3].width}>
-                  {list[contentKeyArr[3]]}
-                </Four>
-                <Five width={headerList[4].width}>
+                <Four width={headerList[4].width}>
                   {list[contentKeyArr[4]]}
+                </Four>
+                <Five width={headerList[5].width}>
+                  {list[contentKeyArr[5]]}
                 </Five>
-                <Six width={headerList[5].width}>{list[contentKeyArr[5]]}</Six>
-                <Seven width={headerList[6].width}>
+                <Six width={headerList[6].width}>{list[contentKeyArr[6]]}</Six>
+                <Seven width={headerList[7].width}>
                   <Status>
-                    <StatusColor status={list[contentKeyArr[6]]} />
+                    <StatusColor status={list[contentKeyArr[7]]} />
                     {list.status}
                   </Status>
                 </Seven>
@@ -138,6 +142,11 @@ const StatusColor = styled.div`
   border-radius: 50%;
 `;
 
+const ZeroTh = styled.th`
+  width: ${props => props.width};
+  min-width: ${props => props.width};
+`;
+
 const OneTh = styled.th`
   width: ${props => props.width};
   min-width: ${props => props.width};
@@ -171,6 +180,12 @@ const SixTh = styled.th`
 const SevenTh = styled.th`
   width: ${props => props.width};
   min-width: ${props => props.width};
+`;
+
+const Zero = styled.td`
+  width: ${props => props.width};
+  min-width: ${props => props.width};
+  font-weight: 600;
 `;
 
 const One = styled.td`
