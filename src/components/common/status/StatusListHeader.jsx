@@ -75,10 +75,10 @@ const SearchContainer = styled.form`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
   width: 28.375rem;
-  height: 2.5rem;
+  height: 2.125rem;
   background-color: ${props => props.theme.color.grey.brandColor1};
   margin: 0;
-  margin-right: 1.625rem;
+  margin-right: 1rem;
   border-radius: 0.5rem;
 
   input {
@@ -97,7 +97,7 @@ const SearchIconContainer = styled.div`
 const Select = styled.select`
   position: relative;
   width: 5.8125rem;
-  height: 2.5rem;
+  height: 2.125rem;
   color: ${props => props.theme.color.blue.brandColor6};
   background-color: ${props => props.theme.color.blue.brandColor1};
   border: 0.0625rem solid ${props => props.theme.color.blue.brandColor3};
@@ -111,6 +111,8 @@ const Select = styled.select`
 
 const SelectWrapper = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
   width: 5.8125rem;
   height: 2.5rem;
   margin-right: 1.9375rem;

@@ -86,7 +86,7 @@ const RequestShowContainer = styled.div`
 `;
 
 const EquipmentAddConatiner = styled.div`
-  margin-right: 0.5rem;
+  margin-right: 1rem;
   button {
     width: 5.5625rem;
     height: 2.125rem;
