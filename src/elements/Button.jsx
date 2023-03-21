@@ -37,6 +37,36 @@ const ButtonWrapper = styled.button`
   white-space: nowrap;
 
   ${props =>
+    props.submit &&
+    css`
+      padding: 0rem 0.625rem;
+      font-size: 1rem;
+      width: 15rem;
+      height: 3.5rem;
+      text-align: center;
+      color: white;
+      background: ${props =>
+        props.disabled
+          ? props.theme.color.grey.brandColor3
+          : props.theme.color.blue.brandColor6};
+    `}
+
+  ${props =>
+    props.cancel &&
+    css`
+      padding: 0rem 0.625rem;
+      font-size: 1rem;
+      width: 15rem;
+      height: 3.5rem;
+      text-align: center;
+      color: ${props => props.theme.color.blue.brandColor6};
+      border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
+      background-color: white;
+      margin-right: 1.25rem;
+    `}
+
+
+  ${props =>
     props.showAll &&
     css`
       color: ${props => props.theme.color.blue.brandColor6};
