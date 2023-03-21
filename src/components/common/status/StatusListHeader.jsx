@@ -10,7 +10,6 @@ export default function StatusListHeader({
   selectBoxList,
   containerHeaderRef,
   onChangeStatus,
-  onSearchSubmit,
   children,
 }) {
   return (
@@ -18,7 +17,7 @@ export default function StatusListHeader({
       <Title>{setSelectName()}</Title>
       <SearchSelect>
         {children}
-        <SearchContainer onSubmit={onSearchSubmit}>
+        <SearchContainer>
           <SearchIconContainer>
             <Button>
               <Search />
