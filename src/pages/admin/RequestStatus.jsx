@@ -16,6 +16,7 @@ const menuData = [
   { name: '비품 요청', type: 'SUPPLY', status: false },
   { name: '반납 요청', type: 'RETURN', status: false },
   { name: '수리 요청', type: 'REPAIR', status: false },
+  { name: '보고서 결재', type: 'REPORT', status: false },
 ];
 
 export default function RequestStatus() {
@@ -47,8 +48,8 @@ export default function RequestStatus() {
   };
 
   const handleClickMenu = useSetStateChange(
-    ['전체', '비품 요청', '반납 요청', '수리 요청'],
-    ['ALL', 'SUPPLY', 'RETURN', 'REPAIR'],
+    ['전체', '비품 요청', '반납 요청', '수리 요청', '보고서 결재'],
+    ['ALL', 'SUPPLY', 'RETURN', 'REPAIR', 'REPORT'],
     setType,
     e => {
       clickMenu(e);
