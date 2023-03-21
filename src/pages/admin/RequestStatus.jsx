@@ -10,6 +10,7 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { __requestStatus } from '../../redux/modules/requestStatus';
+import { useLocation } from 'react-router-dom';
 
 const menuData = [
   { name: '전체', type: 'ALL', status: true },
@@ -20,12 +21,14 @@ const menuData = [
 ];
 
 export default function RequestStatus() {
+  const { state } = useLocation();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
   const [type, setType] = useState('ALL');
   const [keyword, setKeyword] = useState('');
   const searchRef = useRef();
+  const selectBoxRef = useRef();
 
   const [menuStyle, clickMenu, setSelectName] = useSelectMenu(menuData);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
@@ -34,6 +37,13 @@ export default function RequestStatus() {
   const { getRequest, isStatusError } = useSelector(
     state => state.requestStatus.requestStatus
   );
+
+  useEffect(() => {
+    if (state === 'UNPROCESSED') {
+      setStatus(state.status);
+      selectBoxRef.current.value = '처리전';
+    }
+  }, [state]);
 
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
@@ -92,7 +102,7 @@ export default function RequestStatus() {
           searchRef={searchRef}
           onSubmit={onSubmit}
           resizeRef={resizeRef}
-          onResize={handleResize}
+          selectBoxRef={selectBoxRef}
         />
       </RequestStatusWrapper>
     </>

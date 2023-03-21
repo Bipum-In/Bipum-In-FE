@@ -12,6 +12,7 @@ export default function StatusListHeader({
   onChangeStatus,
   onSearchSubmit,
   searchRef,
+  selectBoxRef,
   children,
 }) {
   return (
@@ -31,7 +32,10 @@ export default function StatusListHeader({
           />
         </SearchContainer>
         <SelectWrapper>
-          <Select onChange={e => onChangeStatus(e, e.target.value)}>
+          <Select
+            ref={selectBoxRef}
+            onChange={e => onChangeStatus(e, e.target.value)}
+          >
             {selectBoxList.map(value => (
               <option key={value} value={value}>
                 {value}
