@@ -70,11 +70,13 @@ export default function useResizeGetPageSize() {
   }, [throttledHandleResize]);
 
   return [
-    containerRef,
-    headerRef,
-    containerHeaderRef,
-    listHeaderRef,
-    listRef,
+    {
+      containerRef,
+      headerRef,
+      containerHeaderRef,
+      listHeaderRef,
+      listRef,
+    },
     listSize,
     listSizeRef.current,
     handleResize,
