@@ -53,6 +53,8 @@ export default function RequestStatus() {
     e => {
       clickMenu(e);
       setPage(1);
+      setKeyword('');
+      searchRef.current.value = '';
     }
   );
 
