@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 //npm install framer-motion
 import { motion, AnimatePresence } from 'framer-motion';
@@ -33,8 +33,6 @@ export default function Modal({ isOpen, onClose, children }) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'auto';
     }
   }, [isOpen]);
 
