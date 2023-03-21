@@ -44,13 +44,30 @@ export default function StatusList({
                 <Five width={headerList[5].width}>
                   {list[contentKeyArr[5]]}
                 </Five>
-                <Six width={headerList[6].width}>{list[contentKeyArr[6]]}</Six>
-                <Seven width={headerList[7].width}>
-                  <Status>
-                    <StatusColor status={list[contentKeyArr[7]]} />
-                    {list.status}
-                  </Status>
-                </Seven>
+                {headerList[7].name === '상태' ? (
+                  <>
+                    <Six width={headerList[6].width}>
+                      {list[contentKeyArr[6]]}
+                    </Six>
+                    <Seven width={headerList[7].width}>
+                      {list[contentKeyArr[7]]}
+                    </Seven>
+                  </>
+                ) : (
+                  <>
+                    <Six width={headerList[6].width}>
+                      <Status>
+                        <StatusColor status={list[contentKeyArr[6]]} />
+                        {list[contentKeyArr[6]]}
+                      </Status>
+                    </Six>
+                    <Seven width={headerList[7].width}>
+                      <RequsetColor status={list[contentKeyArr[7]]}>
+                        {list[contentKeyArr[7]]}
+                      </RequsetColor>
+                    </Seven>
+                  </>
+                )}
               </tr>
             </RequestShowList>
           ))
@@ -80,6 +97,7 @@ const RequestShowBody = styled.div`
 
   tr {
     display: flex;
+    align-items: center;
     margin: 0px auto;
     line-height: 3.3125rem;
     gap: 1.875rem;
@@ -220,6 +238,37 @@ const Six = styled.td`
 `;
 
 const Seven = styled.td`
+  display: flex;
+  align-items: center;
   width: ${props => props.width};
   min-width: ${props => props.width};
+  height: 100%;
+`;
+
+const RequsetColor = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: ${props => props.width};
+  min-width: ${props => props.width};
+  height: 1.8125rem;
+
+  ${props =>
+    props.status === '승인' &&
+    css`
+      background-color: #e0ffd6;
+    `}
+
+  ${props =>
+    props.status === '거절' &&
+    css`
+      background-color: #ffe8e8;
+    `}
+
+    ${props =>
+    props.status === '폐기' &&
+    css`
+      background-color: #efecd9;
+    `}
 `;

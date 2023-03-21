@@ -13,17 +13,17 @@ export default function RequestShow({
   containerHeaderRef,
   listHeaderRef,
   listRef,
-  onResize,
 }) {
   const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
   const headerList = [
     { name: '요청구분', width: '5rem' },
     { name: '종류', width: '4.375rem' },
-    { name: '제품명', width: '21.875rem' },
+    { name: '제품명', width: '18rem' },
     { name: '신청자', width: '4.375rem' },
     { name: '담당부서', width: '7.5rem' },
     { name: '신청일', width: '13.75rem' },
     { name: '상태', width: '6rem' },
+    { name: '결과', width: '2.8125rem' },
   ];
 
   const contentKeyArr = [
@@ -34,6 +34,7 @@ export default function RequestShow({
     'deptName',
     'createdAt',
     'status',
+    'acceptResult',
   ];
 
   return (
