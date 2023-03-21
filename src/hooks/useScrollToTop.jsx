@@ -14,7 +14,7 @@ const ScrollToTopIcon = styled(FiArrowUpCircle)`
   height: 50px;
   color: ${props => props.theme.color.blue.brandColor6};
   cursor: pointer;
-  transition: color 0.2s, opacity 1s, transform 0.3s;
+  transition: color 0.2s, opacity 0.2s, transform 0.3s;
   opacity: ${({ 'data-visible': visible }) => (visible ? 1 : 0)};
   transform: ${({ 'data-visible': visible }) =>
     visible ? 'translateY(0)' : 'translateY(5rem)'};
@@ -41,8 +41,8 @@ const ScrollToTop = ({ targetSelector }) => {
 
   const scrollToTop = () => {
     const target = targetRef.current;
-
     if (target) {
+      setVisible(false);
       target.scrollTo({
         top: 0,
         behavior: 'smooth',
