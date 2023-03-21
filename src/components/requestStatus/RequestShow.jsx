@@ -52,7 +52,6 @@ export default function RequestShow({
         listHeaderRef={resizeRef.listHeaderRef}
         listRef={resizeRef.listRef}
         content={requestData}
-        contentKey="content"
         contentKeyArr={contentKeyArr}
       />
       {requestData && (
