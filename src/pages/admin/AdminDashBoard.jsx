@@ -32,7 +32,7 @@ export default function AdminDashBoard() {
 
   if (isDashboardError || isCategoryError) return <div>에러 발생</div>;
 
-  const categoryListData = getCategory?.data;
+  const categoryListData = getCategory?.largeCategory;
   const categoryCardData = getDashboard?.data?.supplyCountDtos;
   const requestsCountData = getDashboard?.data?.requestsCountDto.countMap;
   const requestsDate = getDashboard?.data?.requestsCountDto.modifiedAtMap;
