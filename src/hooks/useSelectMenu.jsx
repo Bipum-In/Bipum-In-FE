@@ -1,16 +1,12 @@
 import { useState } from 'react';
-import Storage from '../utils/localStorage';
 
-export default function useSelectMenu(list, StorgeKey) {
-  const getStorage = Storage.getLocalStorageJSON(StorgeKey);
-  const [menuStyle, setMenuStyle] = useState(getStorage ? getStorage : list);
+export default function useSelectMenu(list) {
+  const [menuStyle, setMenuStyle] = useState(list);
 
   const handleClickMenu = e => {
     const menuName = e.target.innerText;
     const select = selectMenu(menuName);
 
-    StorgeKey && Storage.removeLocalStorage(StorgeKey);
-    StorgeKey && Storage.setLocalStorageJSON(StorgeKey, select);
     setMenuStyle(select);
   };
 
