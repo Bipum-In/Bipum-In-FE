@@ -16,11 +16,11 @@ export default function EquipmentListContainer({ category }) {
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
-  const [menuStyle, clickMenu, setSelectName, setSelectType] = useSelectMenu(
-    category.largeCategory,
-    'quipmentStorgeKey'
-  );
   const [categoryId, setCategoryId] = useState('');
+
+  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(
+    category.largeCategory
+  );
 
   const { getEquipment, isEquipmentError } = useSelector(
     state => state.equipmentStatus.equipmentStatus
@@ -48,7 +48,7 @@ export default function EquipmentListContainer({ category }) {
     category.largeCategory.map(item => item.type),
     setCategoryId,
     e => {
-      clickMenu(e);
+      // clickMenu(e);
       setPage(1);
     }
   );
