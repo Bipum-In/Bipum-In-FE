@@ -45,6 +45,8 @@ export default function EquipmentListContainer({
       setCategoryList({ show: false, list: categoryList.list });
       setCategoryId('');
       setPage(1);
+      setKeyword('');
+      searchRef.current.value = '';
       return;
     }
     setCategoryList({ show: true, list: parseCategoryList });
@@ -56,6 +58,7 @@ export default function EquipmentListContainer({
 
     setCategoryId(categoryId);
     setPage(1);
+    setKeyword('');
     searchRef.current.value = '';
   };
 
