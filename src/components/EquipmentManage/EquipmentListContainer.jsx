@@ -35,17 +35,16 @@ export default function EquipmentListContainer({
   }, [dispatch, keyword, categoryId, page, status, pageSize, handleResize]);
 
   const handleClickMenu = e => {
+    const name = e.target.innerText;
+    const parseCategoryList = getCategoryList(name, category);
     clickMenu(e);
 
-    const name = e.target.innerText;
     if (name === '전체') {
       setCategoryList({ show: false, list: categoryList.list });
       setCategoryId('');
       setPage(1);
       return;
     }
-
-    const parseCategoryList = getCategoryList(name, category);
     setCategoryList({ show: true, list: parseCategoryList });
   };
 
