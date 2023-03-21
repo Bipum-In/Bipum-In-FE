@@ -17,6 +17,7 @@ export default function EquipmentShow({
 }) {
   const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
   const headerList = [
+    { name: '종류', width: '5.6875rem' },
     { name: '제품명', width: '15.625rem' },
     { name: '시리얼넘버', width: '8.75rem' },
     { name: '등록일자', width: '6.25rem' },
@@ -27,6 +28,7 @@ export default function EquipmentShow({
   ];
 
   const contentKeyArr = [
+    'category',
     'modelName',
     'serialNum',
     'createdAt',
@@ -49,6 +51,7 @@ export default function EquipmentShow({
         listHeaderRef={listHeaderRef}
         listRef={listRef}
         content={requestData}
+        contentKey="content"
         contentKeyArr={contentKeyArr}
       />
       {requestData && (
