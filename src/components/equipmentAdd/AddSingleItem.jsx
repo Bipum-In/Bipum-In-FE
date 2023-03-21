@@ -1,10 +1,27 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Button from '../../elements/Button';
 import Input from '../../elements/Input';
+import { getCategoryList } from '../../redux/modules/equipmentStatus';
 import SelectBoxs from '../common/SelectBoxs';
+
 export default function AddSingleItem() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCategoryList());
+  }, [dispatch]);
+
+  const { getCategory, isCategoryLoading, isCategoryError } = useSelector(
+    state => state.equipmentStatus.category
+  );
+
+  const lageCategoryData = getCategory?.largeCategory;
+
+  const subCategoryData = getCategory?.category;
+  console.log(subCategoryData);
+
   const [formImage, setFormformImage] = useState(null);
   const [preview, setPreview] = useState('');
   // const dispatch = useDispatch();
@@ -114,7 +131,13 @@ export default function AddSingleItem() {
               height="true"
               arrow="true"
             >
-              <Option onClick={handleOnChangeMainTypeSelectValue}>비품</Option>
+              {lageCategoryData?.map(item => {
+                return (
+                  <Option onClick={handleOnChangeMainTypeSelectValue}>
+                    {item.name}
+                  </Option>
+                );
+              })}
             </SelectBoxs>
             <SelectBoxs
               onClick={() =>
@@ -125,7 +148,13 @@ export default function AddSingleItem() {
               show={isShowSubOptions}
               height="true"
             >
-              <Option onClick={handleOnChangeSubTypeSelectValue}>선택</Option>
+              {subCategoryData?.map(item => {
+                return (
+                  <Option onClick={handleOnChangeSubTypeSelectValue}>
+                    {item.categoryName}
+                  </Option>
+                );
+              })}
             </SelectBoxs>
           </TypeBox>
           <TypeBox>
