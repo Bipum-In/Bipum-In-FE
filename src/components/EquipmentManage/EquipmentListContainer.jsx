@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import CategoryItems from '../../components/common/CategoryItems';
@@ -15,6 +15,7 @@ export default function EquipmentListContainer({
   category: { category, largeCategory },
 }) {
   const dispatch = useDispatch();
+  const searchRef = useRef();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
@@ -54,6 +55,12 @@ export default function EquipmentListContainer({
 
     setCategoryId(categoryId);
     setPage(1);
+  };
+
+  const onSubmit = e => {
+    e.preventDefault();
+    const keyword = searchRef.current.value;
+    setKeyword(keyword);
   };
 
   const handleChangeStatus = useSetStateChange(
@@ -99,6 +106,8 @@ export default function EquipmentListContainer({
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
           onChangeStatus={handleChangeStatus}
+          searchRef={searchRef}
+          onSubmit={onSubmit}
           resizeRef={resizeRef}
           onResize={handleResize}
         />

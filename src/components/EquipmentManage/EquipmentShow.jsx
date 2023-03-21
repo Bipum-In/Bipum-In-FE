@@ -10,6 +10,8 @@ export default function EquipmentShow({
   pageSize,
   onPage,
   onChangeStatus,
+  searchRef,
+  onSubmit,
   resizeRef,
 }) {
   const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
@@ -42,6 +44,8 @@ export default function EquipmentShow({
         selectBoxList={selectBoxList}
         containerHeaderRef={resizeRef.containerHeaderRef}
         onChangeStatus={onChangeStatus}
+        searchRef={searchRef}
+        onSearchSubmit={onSubmit}
       />
       <StatusList
         headerList={headerList}
