@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import StatusMenu from '../../components/common/status/StatusMenu';
 import CategoryItems from '../../components/common/CategoryItems';
 import EquipmentShow from '../../components/EquipmentManage/EquipmentShow';
 
@@ -18,8 +17,7 @@ export default function EquipmentListContainer({ category }) {
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState('');
-  const [categoryList, setCategoryList] = useState([]);
-  const [showCategoryList, setShowCategoryList] = useState(false);
+  const [categoryList, setCategoryList] = useState({ show: false, list: [] });
 
   const [menuStyle, clickMenu, setSelectName] = useSelectMenu(
     category.largeCategory
@@ -51,13 +49,24 @@ export default function EquipmentListContainer({ category }) {
 
     const name = e.target.innerText;
     if (name === '전체') {
-      setShowCategoryList(false);
+      setCategoryList({ show: false, list: categoryList.list });
+      setCategoryId('');
+      setPage(1);
       return;
     }
 
-    const categoryList = getCategoryList(name, category.category);
-    setCategoryList(categoryList);
-    setShowCategoryList(true);
+    const parseCategoryList = getCategoryList(name, category.category);
+    setCategoryList({ show: true, list: parseCategoryList });
+  };
+
+  const handleClickCategory = e => {
+    const name = e.target.innerText;
+    const categoryId = categoryList.list.filter(
+      item => item.categoryName === name
+    )[0]['categoryId'];
+    console.log(categoryId, category);
+    setCategoryId(categoryId);
+    setPage(1);
   };
 
   const getCategoryList = (name, categoryList) => {
@@ -85,7 +94,9 @@ export default function EquipmentListContainer({ category }) {
         <CategoryContainer ref={headerRef}>
           <CategoryItems
             getCategory={menuStyle}
+            getSmallCategory={categoryList}
             onClickMenu={handleClickMenu}
+            onClickCategory={handleClickCategory}
           />
         </CategoryContainer>
         <EquipmentShow
@@ -113,5 +124,6 @@ const RequestStatusWrapper = styled.section`
 `;
 
 const CategoryContainer = styled.div`
+  position: relative;
   margin-bottom: 1.125rem;
 `;

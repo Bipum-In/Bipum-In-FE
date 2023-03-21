@@ -37,7 +37,7 @@ export default function EquipmentShow({
     'deptName',
     'status',
   ];
-  console.log(requestData);
+
   return (
     <RequestShowContainer>
       <StatusListHeader
