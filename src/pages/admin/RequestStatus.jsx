@@ -11,6 +11,8 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 import { useDispatch, useSelector } from 'react-redux';
 import { __requestStatus } from '../../redux/modules/requestStatus';
 import { useLocation } from 'react-router-dom';
+import Modal from '../../elements/Modal';
+import RequestDetail from '../../components/requestStatus/RequestDetail';
 
 const menuData = [
   { name: '전체', type: 'ALL', status: true },
@@ -87,6 +89,9 @@ export default function RequestStatus() {
           selectBoxRef={selectBoxRef}
         />
       </RequestStatusWrapper>
+      <Modal isOpen={true}>
+        <RequestDetail />
+      </Modal>
     </>
   );
 }
