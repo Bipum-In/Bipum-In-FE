@@ -24,8 +24,8 @@ export default function RequestStatus() {
   const { state } = useLocation();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const [status, setStatus] = useState('ALL');
   const [type, setType] = useState('ALL');
+  const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
   const selectBoxRef = useRef();
 
@@ -40,7 +40,6 @@ export default function RequestStatus() {
   useEffect(() => {
     if (state === 'UNPROCESSED') {
       setStatus(state.status);
-      selectBoxRef.current.value = '처리전';
     }
   }, [state]);
 
@@ -58,16 +57,6 @@ export default function RequestStatus() {
       clickMenu(e);
       setPage(1);
       setKeyword('');
-    }
-  );
-
-  const handleChangeStatus = useSetStateChange(
-    ['전체 보기', '처리전', '처리중', '처리 완료'],
-    ['ALL', 'UNPROCESSED', 'PROCESSING', 'PROCESSED'],
-    setStatus,
-    e => {
-      setStatus(e);
-      setPage(1);
     }
   );
 
@@ -90,7 +79,8 @@ export default function RequestStatus() {
           page={page}
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
-          onChangeStatus={handleChangeStatus}
+          status={status}
+          setStatus={setStatus}
           keyword={keyword}
           setKeyword={setKeyword}
           resizeRef={resizeRef}

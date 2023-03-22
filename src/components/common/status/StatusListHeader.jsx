@@ -9,10 +9,10 @@ export default function StatusListHeader({
   setSelectName,
   selectBoxList,
   containerHeaderRef,
-  onChangeStatus,
+  status,
+  setStatus,
   keyword,
   setKeyword,
-  selectBoxRef,
   children,
 }) {
   return (
@@ -33,12 +33,9 @@ export default function StatusListHeader({
           />
         </SearchContainer>
         <SelectWrapper>
-          <Select
-            ref={selectBoxRef}
-            onChange={e => onChangeStatus(e, e.target.value)}
-          >
-            {selectBoxList.map(value => (
-              <option key={value} value={value}>
+          <Select value={status} onChange={e => setStatus(e.target.value)}>
+            {selectBoxList.name.map((value, index) => (
+              <option key={value} value={selectBoxList.type[index]}>
                 {value}
               </option>
             ))}

@@ -9,13 +9,16 @@ export default function RequestShow({
   page,
   pageSize,
   onPage,
-  onChangeStatus,
+  status,
+  setStatus,
   keyword,
   setKeyword,
   resizeRef,
-  selectBoxRef,
 }) {
-  const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
+  const selectBoxList = {
+    name: ['전체 보기', '처리전', '처리중', '처리 완료'],
+    type: ['ALL', 'UNPROCESSED', 'PROCESSING', 'PROCESSED'],
+  };
   const headerList = [
     { name: '요청구분', width: '5rem' },
     { name: '종류', width: '4.375rem' },
@@ -44,10 +47,10 @@ export default function RequestShow({
         setSelectName={setSelectName}
         selectBoxList={selectBoxList}
         containerHeaderRef={resizeRef.containerHeaderRef}
-        onChangeStatus={onChangeStatus}
+        status={status}
+        setStatus={setStatus}
         keyword={keyword}
         setKeyword={setKeyword}
-        selectBoxRef={selectBoxRef}
       />
       <StatusList
         headerList={headerList}
