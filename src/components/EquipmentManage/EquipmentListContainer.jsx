@@ -10,6 +10,7 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
+import Modal from '../../elements/Modal';
 
 export default function EquipmentListContainer({
   category: { category, largeCategory },
@@ -95,7 +96,7 @@ export default function EquipmentListContainer({
   return (
     <>
       {isEquipmentError && <div>에러 발생</div>}
-      <RequestStatusWrapper ref={resizeRef.containerRef}>
+      <EquipmentListWrapper ref={resizeRef.containerRef}>
         <CategoryContainer ref={resizeRef.headerRef}>
           <CategoryItems
             getCategory={menuStyle}
@@ -116,12 +117,15 @@ export default function EquipmentListContainer({
           resizeRef={resizeRef}
           onResize={handleResize}
         />
-      </RequestStatusWrapper>
+      </EquipmentListWrapper>
+      <Modal isOpen={false}>
+        <EquipmentAddWrapper>모달</EquipmentAddWrapper>
+      </Modal>
     </>
   );
 }
 
-const RequestStatusWrapper = styled.section`
+const EquipmentListWrapper = styled.section`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -131,4 +135,10 @@ const RequestStatusWrapper = styled.section`
 const CategoryContainer = styled.div`
   position: relative;
   margin-bottom: 1.125rem;
+`;
+
+const EquipmentAddWrapper = styled.div`
+  width: 80vw;
+  height: 80vh;
+  padding: 3rem;
 `;
