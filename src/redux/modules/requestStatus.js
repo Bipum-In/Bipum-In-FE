@@ -54,7 +54,6 @@ const requestStatusSlice = Redux.slice(
       state.requestDetail.getDetail = null;
     },
     setRequestData: (state, action) => {
-      console.log(action.payload);
       state.requestData.menu = current(state.requestData.menu).map(menu =>
         menu.name === action.payload.name
           ? { ...menu, status: true }

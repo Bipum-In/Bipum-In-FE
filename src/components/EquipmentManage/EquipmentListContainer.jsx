@@ -6,7 +6,6 @@ import CategoryItems from '../../components/common/CategoryItems';
 import EquipmentShow from '../../components/EquipmentManage/EquipmentShow';
 
 import useSelectMenu from '../../hooks/useSelectMenu';
-import useSetStateChange from '../../hooks/useSetStateChange';
 import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,20 +16,24 @@ export default function EquipmentListContainer({
   category: { category, largeCategory },
 }) {
   const dispatch = useDispatch();
+  const {
+    equipmentStatus: { getEquipment, isEquipmentError },
+    categoryData: { categoryIdData, categoryNameData },
+  } = useSelector(state => state.equipmentStatus);
+
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
-  const [categoryId, setCategoryId] = useState('');
-  const [categoryTitle, setCategoryTitle] = useState('전체');
-  const [categoryList, setCategoryList] = useState({ show: false, list: [] });
+  const [categoryId, setCategoryId] = useState(categoryIdData);
+  const [categoryTitle, setCategoryTitle] = useState(categoryNameData);
+  const [categoryList, setCategoryList] = useState({
+    show: false,
+    list: [category],
+  });
 
   const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
-
-  const { getEquipment, isEquipmentError } = useSelector(
-    state => state.equipmentStatus.equipmentStatus
-  );
 
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();

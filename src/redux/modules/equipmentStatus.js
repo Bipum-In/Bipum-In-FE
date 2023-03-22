@@ -12,6 +12,10 @@ const initialState = {
     isCategoryLoading: false,
     isCategoryError: false,
   },
+  categoryData: {
+    categoryIdData: '',
+    categoryNameData: '전체',
+  },
 };
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
@@ -57,7 +61,12 @@ const largeCategory = response => {
 const equipmentStatusSlice = Redux.slice(
   'Equipment',
   initialState,
-  {},
+  {
+    setCategoryData: (state, action) => {
+      state.categoryData.categoryIdData = action.payload.categoryId;
+      state.categoryData.categoryNameData = action.payload.categoryName;
+    },
+  },
   bulider => {
     Redux.extraReducer(
       bulider,
@@ -78,4 +87,5 @@ const equipmentStatusSlice = Redux.slice(
   }
 );
 
+export const { setCategoryData } = equipmentStatusSlice.actions;
 export default equipmentStatusSlice.reducer;
