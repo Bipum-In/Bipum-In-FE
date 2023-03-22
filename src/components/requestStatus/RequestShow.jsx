@@ -13,6 +13,7 @@ export default function RequestShow({
   setStatus,
   keyword,
   setKeyword,
+  onClickDetail,
   resizeRef,
 }) {
   const selectBoxList = {
@@ -58,6 +59,7 @@ export default function RequestShow({
         listRef={resizeRef.listRef}
         content={requestData}
         contentKeyArr={contentKeyArr}
+        onDetail={onClickDetail}
       />
       {requestData && (
         <PaginationList

@@ -72,6 +72,10 @@ export default function RequestStatus() {
     setKeyword(e.target.value);
   };
 
+  const handleClickDetail = id => {
+    console.log(id);
+  };
+
   const handlePage = e => {
     setPage(e);
   };
@@ -95,6 +99,7 @@ export default function RequestStatus() {
           setStatus={handleChangeState}
           keyword={keyword}
           setKeyword={handleChangeKeyword}
+          onClickDetail={handleClickDetail}
           resizeRef={resizeRef}
         />
       </RequestStatusWrapper>
