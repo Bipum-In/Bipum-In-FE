@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function RequestDetail() {
+export default function RequestDetail({ detailId }) {
   return <RequestDetailWrapper>모달</RequestDetailWrapper>;
 }
 const RequestDetailWrapper = styled.div`

@@ -30,7 +30,7 @@ export default function RequestStatus() {
   const [status, setStatus] = useState('ALL');
   const [categoryTitle, setCategoryTitle] = useState('전체');
   const [keyword, setKeyword] = useState('');
-  const [showModal, setShowModal] = useState(false);
+  const [modal, setModal] = useState({ show: false, detailId: null });
 
   const [menuStyle, clickMenu] = useSelectMenu(menuData);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
@@ -72,7 +72,9 @@ export default function RequestStatus() {
     setKeyword(e.target.value);
   };
 
-  const handleClickDetail = id => {};
+  const handleClickDetail = id => {
+    setModal({ show: true, detailId: id });
+  };
 
   const handlePage = e => {
     setPage(e);
@@ -101,8 +103,8 @@ export default function RequestStatus() {
           resizeRef={resizeRef}
         />
       </RequestStatusWrapper>
-      <Modal isOpen={showModal}>
-        <RequestDetail />
+      <Modal isOpen={modal.show}>
+        <RequestDetail detailId={modal.detailId} />
       </Modal>
     </>
   );
