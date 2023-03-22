@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+import { FormatDateToDot, FormatKoreanTime } from '../../../utils/formatDate';
 
 export default function StatusList({
   headerList,
@@ -42,15 +43,27 @@ export default function StatusList({
                 <Two width={headerList[2].width}>
                   {list[contentKeyArr[2]] || '-'}
                 </Two>
-                <Three width={headerList[3].width}>
-                  {list[contentKeyArr[3]] || '-'}
-                </Three>
+                {headerList[3].name === '등록일자' ? (
+                  <Three width={headerList[3].width}>
+                    {FormatDateToDot(list[contentKeyArr[3]]) || '-'}
+                  </Three>
+                ) : (
+                  <Three width={headerList[3].width}>
+                    {list[contentKeyArr[3]] || '-'}
+                  </Three>
+                )}
                 <Four width={headerList[4].width}>
                   {list[contentKeyArr[4]] || '-'}
                 </Four>
-                <Five width={headerList[5].width}>
-                  {list[contentKeyArr[5]] || '-'}
-                </Five>
+                {headerList[5].name === '사용자' ? (
+                  <Five width={headerList[5].width}>
+                    {list[contentKeyArr[5]] || '-'}
+                  </Five>
+                ) : (
+                  <Five width={headerList[5].width}>
+                    {FormatKoreanTime(list[contentKeyArr[5]]) || '-'}
+                  </Five>
+                )}
                 {headerList[7].name === '상태' ? (
                   <>
                     <Six width={headerList[6].width}>
