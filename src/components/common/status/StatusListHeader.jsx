@@ -10,8 +10,8 @@ export default function StatusListHeader({
   selectBoxList,
   containerHeaderRef,
   onChangeStatus,
-  onSearchSubmit,
-  searchRef,
+  keyword,
+  setKeyword,
   selectBoxRef,
   children,
 }) {
@@ -20,14 +20,15 @@ export default function StatusListHeader({
       <Title>{setSelectName()}</Title>
       <SearchSelect>
         {children}
-        <SearchContainer onSubmit={onSearchSubmit}>
+        <SearchContainer>
           <SearchIconContainer>
             <Button>
               <Search />
             </Button>
           </SearchIconContainer>
           <Input
-            ref={searchRef}
+            value={keyword}
+            setState={setKeyword}
             placeholder="검색어를 입력해주세요 (신청자,담당부서 등)"
           />
         </SearchContainer>
@@ -71,7 +72,7 @@ const SearchSelect = styled.div`
   margin-top: 1.5rem;
 `;
 
-const SearchContainer = styled.form`
+const SearchContainer = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
   width: 28.375rem;

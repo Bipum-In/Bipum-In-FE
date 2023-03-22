@@ -12,8 +12,8 @@ export default function EquipmentShow({
   pageSize,
   onPage,
   onChangeStatus,
-  searchRef,
-  onSubmit,
+  keyword,
+  setKeyword,
   resizeRef,
 }) {
   const selectBoxList = ['전체 보기', '사용중', '재고', '수리중'];
@@ -46,8 +46,8 @@ export default function EquipmentShow({
         selectBoxList={selectBoxList}
         containerHeaderRef={resizeRef.containerHeaderRef}
         onChangeStatus={onChangeStatus}
-        searchRef={searchRef}
-        onSearchSubmit={onSubmit}
+        keyword={keyword}
+        setKeyword={setKeyword}
       >
         <EquipmentAddConatiner>
           <Button>

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+
 import styled from 'styled-components';
 
 import CategoryItems from '../../components/common/CategoryItems';
@@ -18,10 +19,11 @@ export default function EquipmentListContainer({
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
+
   const [keyword, setKeyword] = useState('');
+  console.log(keyword);
   const [categoryId, setCategoryId] = useState('');
   const [categoryList, setCategoryList] = useState({ show: false, list: [] });
-  const searchRef = useRef();
 
   const [menuStyle, clickMenu, setSelectName] = useSelectMenu(largeCategory);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
@@ -47,7 +49,7 @@ export default function EquipmentListContainer({
       setCategoryId('');
       setPage(1);
       setKeyword('');
-      searchRef.current.value = '';
+
       return;
     }
     setCategoryList({ show: true, list: parseCategoryList });
@@ -60,13 +62,6 @@ export default function EquipmentListContainer({
     setCategoryId(categoryId);
     setPage(1);
     setKeyword('');
-    searchRef.current.value = '';
-  };
-
-  const onSubmit = e => {
-    e.preventDefault();
-    const keyword = searchRef.current.value;
-    setKeyword(keyword);
   };
 
   const handleChangeStatus = useSetStateChange(
@@ -112,8 +107,8 @@ export default function EquipmentListContainer({
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
           onChangeStatus={handleChangeStatus}
-          searchRef={searchRef}
-          onSubmit={onSubmit}
+          keyword={keyword}
+          setKeyword={setKeyword}
           resizeRef={resizeRef}
           onResize={handleResize}
         />
