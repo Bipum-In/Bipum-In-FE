@@ -3,6 +3,7 @@ import styled from 'styled-components';
 
 import StatusMenu from '../../components/common/status/StatusMenu';
 import RequestShow from '../../components/requestStatus/RequestShow';
+import RequestModal from '../../components/requestStatus/RequestModal';
 
 import useSelectMenu from '../../hooks/useSelectMenu';
 import useSetStateChange from '../../hooks/useSetStateChange';
@@ -12,7 +13,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { __requestStatus } from '../../redux/modules/requestStatus';
 import { useLocation } from 'react-router-dom';
 import Modal from '../../elements/Modal';
-import RequestDetail from '../../components/requestStatus/RequestDetail';
 
 const menuData = [
   { name: '전체', type: 'ALL', status: true },
@@ -104,7 +104,7 @@ export default function RequestStatus() {
         />
       </RequestStatusWrapper>
       <Modal isOpen={modal.show}>
-        <RequestDetail detailId={modal.detailId} />
+        <RequestModal detailId={modal.detailId} />
       </Modal>
     </>
   );
