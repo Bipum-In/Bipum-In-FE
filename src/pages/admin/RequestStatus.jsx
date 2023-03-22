@@ -27,7 +27,6 @@ export default function RequestStatus() {
   const [status, setStatus] = useState('ALL');
   const [type, setType] = useState('ALL');
   const [keyword, setKeyword] = useState('');
-  const searchRef = useRef();
   const selectBoxRef = useRef();
 
   const [menuStyle, clickMenu, setSelectName] = useSelectMenu(menuData);
@@ -51,12 +50,6 @@ export default function RequestStatus() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, keyword, page, type, status, pageSize, handleResize]);
 
-  const onSubmit = e => {
-    e.preventDefault();
-    const keyword = searchRef.current.value;
-    setKeyword(keyword);
-  };
-
   const handleClickMenu = useSetStateChange(
     ['전체', '비품 요청', '반납 요청', '수리 요청', '보고서 결재'],
     ['ALL', 'SUPPLY', 'RETURN', 'REPAIR', 'REPORT'],
@@ -65,7 +58,6 @@ export default function RequestStatus() {
       clickMenu(e);
       setPage(1);
       setKeyword('');
-      searchRef.current.value = '';
     }
   );
 
@@ -99,8 +91,8 @@ export default function RequestStatus() {
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
           onChangeStatus={handleChangeStatus}
-          searchRef={searchRef}
-          onSubmit={onSubmit}
+          keyword={keyword}
+          setKeyword={setKeyword}
           resizeRef={resizeRef}
           selectBoxRef={selectBoxRef}
         />
