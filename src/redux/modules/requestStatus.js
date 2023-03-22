@@ -7,6 +7,11 @@ const initialState = {
     isStatusLoading: false,
     isStatusError: false,
   },
+  requestDetail: {
+    getDetail: null,
+    isDetailLoading: false,
+    isDetailError: false,
+  },
 };
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
@@ -20,20 +25,29 @@ export const __requestStatus = Redux.asyncThunk(
   response => response.data.data
 );
 
-const requestStatusSlice = Redux.slice(
-  'getRequest',
-  initialState,
-  {},
-  bulider => {
-    Redux.extraReducer(
-      bulider,
-      __requestStatus,
-      'requestStatus',
-      'isStatusLoading',
-      'getRequest',
-      'isStatusError'
-    );
-  }
+export const requestDetail = Redux.asyncThunk(
+  'DETAIL',
+  payload => axios.get(`/api/requests/${payload}`),
+  response => response.data.data
 );
+
+const requestStatusSlice = Redux.slice('Request', initialState, {}, bulider => {
+  Redux.extraReducer(
+    bulider,
+    __requestStatus,
+    'requestStatus',
+    'isStatusLoading',
+    'getRequest',
+    'isStatusError'
+  );
+  Redux.extraReducer(
+    bulider,
+    requestDetail,
+    'requestDetail',
+    'isDetailLoading',
+    'getDetail',
+    'isDetailError'
+  );
+});
 
 export default requestStatusSlice.reducer;
