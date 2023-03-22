@@ -22,7 +22,9 @@ export default function ManagementStatus({ getDashboard }) {
     <>
       {requestsCountDto && (
         <styleds.EquipmentTopContainer col="true">
-          <AnchorBtn onClick={() => {}}>
+          <AnchorBtn
+            onClick={() => navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT)}
+          >
             관리 현황 <ArrowIcon />
           </AnchorBtn>
           <ManagementWrapper>
