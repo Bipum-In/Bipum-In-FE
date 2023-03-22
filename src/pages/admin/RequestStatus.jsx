@@ -26,6 +26,7 @@ export default function RequestStatus() {
   const [categoryTitle, setCategoryTitle] = useState('전체');
   const [keyword, setKeyword] = useState('');
   const [modal, setModal] = useState({ show: false, detailId: null });
+
   const [menuStyle, clickMenu] = useSelectMenu(menu);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
