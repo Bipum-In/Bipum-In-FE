@@ -41,7 +41,7 @@ export default function RequestStatus() {
   );
 
   useEffect(() => {
-    if (state.status === 'UNPROCESSED') {
+    if (state) {
       setStatus(state.status);
     }
   }, [state]);
