@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import StatusMenu from '../../components/common/status/StatusMenu';
@@ -10,23 +10,29 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { __requestStatus } from '../../redux/modules/requestStatus';
+import { useLocation } from 'react-router-dom';
+import Modal from '../../elements/Modal';
+import RequestDetail from '../../components/requestStatus/RequestDetail';
 
 const menuData = [
   { name: '전체', type: 'ALL', status: true },
   { name: '비품 요청', type: 'SUPPLY', status: false },
   { name: '반납 요청', type: 'RETURN', status: false },
   { name: '수리 요청', type: 'REPAIR', status: false },
+  { name: '보고서 결재', type: 'REPORT', status: false },
 ];
 
 export default function RequestStatus() {
+  const { state } = useLocation();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const [status, setStatus] = useState('ALL');
   const [type, setType] = useState('ALL');
+  const [status, setStatus] = useState('ALL');
+  const [categoryTitle, setCategoryTitle] = useState('전체');
   const [keyword, setKeyword] = useState('');
-  const searchRef = useRef();
+  const [modal, setModal] = useState({ show: false, detailId: null });
 
-  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(menuData);
+  const [menuStyle, clickMenu] = useSelectMenu(menuData);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
@@ -35,38 +41,40 @@ export default function RequestStatus() {
   );
 
   useEffect(() => {
+    if (state === 'UNPROCESSED') {
+      setStatus(state.status);
+    }
+  }, [state]);
+
+  useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
     dispatch(__requestStatus({ keyword, type, status, page, size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, keyword, page, type, status, pageSize, handleResize]);
 
-  const onSubmit = e => {
-    e.preventDefault();
-    const keyword = searchRef.current.value;
-    setKeyword(keyword);
-  };
-
   const handleClickMenu = useSetStateChange(
-    ['전체', '비품 요청', '반납 요청', '수리 요청'],
-    ['ALL', 'SUPPLY', 'RETURN', 'REPAIR'],
+    ['전체', '비품 요청', '반납 요청', '수리 요청', '보고서 결재'],
+    ['ALL', 'SUPPLY', 'RETURN', 'REPAIR', 'REPORT'],
     setType,
     e => {
       clickMenu(e);
       setPage(1);
       setKeyword('');
-      searchRef.current.value = '';
+      setCategoryTitle(e.target.innerText);
     }
   );
 
-  const handleChangeStatus = useSetStateChange(
-    ['전체 보기', '처리전', '처리중', '처리 완료'],
-    ['ALL', 'UNPROCESSED', 'PROCESSING', 'PROCESSED'],
-    setStatus,
-    e => {
-      setStatus(e);
-      setPage(1);
-    }
-  );
+  const handleChangeState = e => {
+    setStatus(e.target.value);
+  };
+
+  const handleChangeKeyword = e => {
+    setKeyword(e.target.value);
+  };
+
+  const handleClickDetail = id => {
+    setModal({ show: true, detailId: id });
+  };
 
   const handlePage = e => {
     setPage(e);
@@ -83,17 +91,21 @@ export default function RequestStatus() {
         />
         <RequestShow
           requestData={getRequest}
-          setSelectName={setSelectName}
+          setSelectName={categoryTitle}
           page={page}
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
-          onChangeStatus={handleChangeStatus}
-          searchRef={searchRef}
-          onSubmit={onSubmit}
+          status={status}
+          setStatus={handleChangeState}
+          keyword={keyword}
+          setKeyword={handleChangeKeyword}
+          onClickDetail={handleClickDetail}
           resizeRef={resizeRef}
-          onResize={handleResize}
         />
       </RequestStatusWrapper>
+      <Modal isOpen={modal.show}>
+        <RequestDetail detailId={modal.detailId} />
+      </Modal>
     </>
   );
 }

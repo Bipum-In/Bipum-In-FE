@@ -9,12 +9,17 @@ export default function RequestShow({
   page,
   pageSize,
   onPage,
-  onChangeStatus,
-  searchRef,
-  onSubmit,
+  status,
+  setStatus,
+  keyword,
+  setKeyword,
+  onClickDetail,
   resizeRef,
 }) {
-  const selectBoxList = ['전체 보기', '처리전', '처리중', '처리 완료'];
+  const selectBoxList = {
+    name: ['전체 보기', '처리전', '처리중', '처리 완료'],
+    type: ['ALL', 'UNPROCESSED', 'PROCESSING', 'PROCESSED'],
+  };
   const headerList = [
     { name: '요청구분', width: '5rem' },
     { name: '종류', width: '4.375rem' },
@@ -43,9 +48,10 @@ export default function RequestShow({
         setSelectName={setSelectName}
         selectBoxList={selectBoxList}
         containerHeaderRef={resizeRef.containerHeaderRef}
-        onChangeStatus={onChangeStatus}
-        searchRef={searchRef}
-        onSearchSubmit={onSubmit}
+        status={status}
+        setStatus={setStatus}
+        keyword={keyword}
+        setKeyword={setKeyword}
       />
       <StatusList
         headerList={headerList}
@@ -53,6 +59,7 @@ export default function RequestShow({
         listRef={resizeRef.listRef}
         content={requestData}
         contentKeyArr={contentKeyArr}
+        onDetail={onClickDetail}
       />
       {requestData && (
         <PaginationList

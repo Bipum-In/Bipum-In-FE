@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export const Input = React.forwardRef((props, ref) => (
-  <InputStyle {...props} ref={ref} />
-));
+export const Input = ({ value, setState, ...props }) => (
+  <InputStyle {...props} value={value} onChange={setState} />
+);
 
 Input.defaultProps = {
   padding: '.5rem',

@@ -2,6 +2,8 @@ import styled from 'styled-components';
 import StatusListHeader from '../common/status/StatusListHeader';
 import StatusList from '../common/status/StatusList';
 import PaginationList from '../common/PaginationList';
+import { ReactComponent as Plus } from '../../styles/commonIcon/plus.svg';
+import Button from '../../elements/Button';
 
 export default function EquipmentShow({
   requestData,
@@ -9,12 +11,17 @@ export default function EquipmentShow({
   page,
   pageSize,
   onPage,
-  onChangeStatus,
-  searchRef,
-  onSubmit,
+  status,
+  setStatus,
+  keyword,
+  setKeyword,
+  onClickDetail,
   resizeRef,
 }) {
-  const selectBoxList = ['전체 보기', '사용중', '재고', '수리중'];
+  const selectBoxList = {
+    name: ['전체 보기', '사용중', '재고', '수리중'],
+    type: ['ALL', 'USING', 'STOCK', 'REPAIRING'],
+  };
   const headerList = [
     { name: '종류', width: '5.6875rem' },
     { name: '제품명', width: '15.625rem' },
@@ -43,16 +50,25 @@ export default function EquipmentShow({
         setSelectName={setSelectName}
         selectBoxList={selectBoxList}
         containerHeaderRef={resizeRef.containerHeaderRef}
-        onChangeStatus={onChangeStatus}
-        searchRef={searchRef}
-        onSearchSubmit={onSubmit}
-      />
+        status={status}
+        setStatus={setStatus}
+        keyword={keyword}
+        setKeyword={setKeyword}
+      >
+        <EquipmentAddConatiner>
+          <Button>
+            <Plus />
+            비품등록
+          </Button>
+        </EquipmentAddConatiner>
+      </StatusListHeader>
       <StatusList
         headerList={headerList}
         listHeaderRef={resizeRef.listHeaderRef}
         listRef={resizeRef.listRef}
         content={requestData}
         contentKeyArr={contentKeyArr}
+        onDetail={onClickDetail}
       />
       {requestData && (
         <PaginationList
@@ -74,4 +90,20 @@ const RequestShowContainer = styled.div`
   border: 0.0579rem solid ${props => props.theme.color.grey.brandColor2};
   box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
   border-radius: 0.4628rem;
+`;
+
+const EquipmentAddConatiner = styled.div`
+  margin-right: 1rem;
+  button {
+    width: 5.5625rem;
+    height: 2.125rem;
+    color: white;
+    background-color: ${props => props.theme.color.blue.brandColor5};
+  }
+
+  svg {
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-right: 0.3125rem;
+  }
 `;

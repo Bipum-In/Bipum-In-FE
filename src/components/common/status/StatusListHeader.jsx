@@ -9,31 +9,33 @@ export default function StatusListHeader({
   setSelectName,
   selectBoxList,
   containerHeaderRef,
-  onChangeStatus,
-  onSearchSubmit,
-  searchRef,
+  status,
+  setStatus,
+  keyword,
+  setKeyword,
   children,
 }) {
   return (
     <RequestShowTitle ref={containerHeaderRef}>
-      <Title>{setSelectName()}</Title>
+      <Title>{setSelectName}</Title>
       <SearchSelect>
         {children}
-        <SearchContainer onSubmit={onSearchSubmit}>
+        <SearchContainer>
           <SearchIconContainer>
             <Button>
               <Search />
             </Button>
           </SearchIconContainer>
           <Input
-            ref={searchRef}
+            value={keyword}
+            setState={setKeyword}
             placeholder="검색어를 입력해주세요 (신청자,담당부서 등)"
           />
         </SearchContainer>
         <SelectWrapper>
-          <Select onChange={e => onChangeStatus(e, e.target.value)}>
-            {selectBoxList.map(value => (
-              <option key={value} value={value}>
+          <Select value={status} onChange={setStatus}>
+            {selectBoxList.name.map((value, index) => (
+              <option key={value} value={selectBoxList.type[index]}>
                 {value}
               </option>
             ))}
@@ -67,14 +69,14 @@ const SearchSelect = styled.div`
   margin-top: 1.5rem;
 `;
 
-const SearchContainer = styled.form`
+const SearchContainer = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
   width: 28.375rem;
-  height: 2.5rem;
+  height: 2.125rem;
   background-color: ${props => props.theme.color.grey.brandColor1};
   margin: 0;
-  margin-right: 1.625rem;
+  margin-right: 1rem;
   border-radius: 0.5rem;
 
   input {
@@ -93,7 +95,7 @@ const SearchIconContainer = styled.div`
 const Select = styled.select`
   position: relative;
   width: 5.8125rem;
-  height: 2.5rem;
+  height: 2.125rem;
   color: ${props => props.theme.color.blue.brandColor6};
   background-color: ${props => props.theme.color.blue.brandColor1};
   border: 0.0625rem solid ${props => props.theme.color.blue.brandColor3};
@@ -107,6 +109,8 @@ const Select = styled.select`
 
 const SelectWrapper = styled.div`
   position: relative;
+  display: flex;
+  align-items: center;
   width: 5.8125rem;
   height: 2.5rem;
   margin-right: 1.9375rem;

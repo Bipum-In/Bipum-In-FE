@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
 
 import CategoryItems from '../../components/common/CategoryItems';
@@ -10,6 +11,7 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
+import Modal from '../../elements/Modal';
 
 export default function EquipmentListContainer({
   category: { category, largeCategory },
@@ -19,10 +21,10 @@ export default function EquipmentListContainer({
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState('');
+  const [categoryTitle, setCategoryTitle] = useState('전체');
   const [categoryList, setCategoryList] = useState({ show: false, list: [] });
-  const searchRef = useRef();
 
-  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(largeCategory);
+  const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
@@ -45,6 +47,8 @@ export default function EquipmentListContainer({
       setCategoryList({ show: false, list: categoryList.list });
       setCategoryId('');
       setPage(1);
+      setKeyword('');
+      setCategoryTitle('전체');
       return;
     }
     setCategoryList({ show: true, list: parseCategoryList });
@@ -54,30 +58,25 @@ export default function EquipmentListContainer({
     const name = e.target.innerText;
     const categoryId = getCategoryId(name, categoryList);
 
+    setCategoryTitle(name);
     setCategoryId(categoryId);
     setPage(1);
-    searchRef.current.value = '';
+    setKeyword('');
   };
-
-  const onSubmit = e => {
-    e.preventDefault();
-    const keyword = searchRef.current.value;
-    setKeyword(keyword);
-  };
-
-  const handleChangeStatus = useSetStateChange(
-    ['전체 보기', '사용중', '재고', '수리중'],
-    ['ALL', 'USING', 'STOCK', 'REPAIRING'],
-    setStatus,
-    e => {
-      setStatus(e);
-      setPage(1);
-    }
-  );
 
   const handlePage = e => {
     setPage(e);
   };
+
+  const handleChangeState = e => {
+    setStatus(e.target.value);
+  };
+
+  const handleChangeKeyword = e => {
+    setKeyword(e.target.value);
+  };
+
+  const handleClickDetail = id => {};
 
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.largeCategory === name);
@@ -92,7 +91,7 @@ export default function EquipmentListContainer({
   return (
     <>
       {isEquipmentError && <div>에러 발생</div>}
-      <RequestStatusWrapper ref={resizeRef.containerRef}>
+      <EquipmentListWrapper ref={resizeRef.containerRef}>
         <CategoryContainer ref={resizeRef.headerRef}>
           <CategoryItems
             getCategory={menuStyle}
@@ -103,22 +102,26 @@ export default function EquipmentListContainer({
         </CategoryContainer>
         <EquipmentShow
           requestData={getEquipment}
-          setSelectName={setSelectName}
+          setSelectName={categoryTitle}
           page={page}
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
-          onChangeStatus={handleChangeStatus}
-          searchRef={searchRef}
-          onSubmit={onSubmit}
+          status={status}
+          setStatus={handleChangeState}
+          keyword={keyword}
+          setKeyword={handleChangeKeyword}
+          onClickDetail={handleClickDetail}
           resizeRef={resizeRef}
-          onResize={handleResize}
         />
-      </RequestStatusWrapper>
+      </EquipmentListWrapper>
+      <Modal isOpen={false}>
+        <EquipmentAddWrapper>모달</EquipmentAddWrapper>
+      </Modal>
     </>
   );
 }
 
-const RequestStatusWrapper = styled.section`
+const EquipmentListWrapper = styled.section`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -128,4 +131,10 @@ const RequestStatusWrapper = styled.section`
 const CategoryContainer = styled.div`
   position: relative;
   margin-bottom: 1.125rem;
+`;
+
+const EquipmentAddWrapper = styled.div`
+  width: 80vw;
+  height: 80vh;
+  padding: 3rem;
 `;
