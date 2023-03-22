@@ -25,13 +25,14 @@ const menuData = [
 export default function RequestStatus() {
   const { state } = useLocation();
   const dispatch = useDispatch();
-  const [showModal, setShowModal] = useState(false);
   const [page, setPage] = useState(1);
   const [type, setType] = useState('ALL');
   const [status, setStatus] = useState('ALL');
+  const [categoryTitle, setCategoryTitle] = useState('전체');
   const [keyword, setKeyword] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
-  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(menuData);
+  const [menuStyle, clickMenu] = useSelectMenu(menuData);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
@@ -59,6 +60,7 @@ export default function RequestStatus() {
       clickMenu(e);
       setPage(1);
       setKeyword('');
+      setCategoryTitle(e.target.innerText);
     }
   );
 
@@ -85,7 +87,7 @@ export default function RequestStatus() {
         />
         <RequestShow
           requestData={getRequest}
-          setSelectName={setSelectName}
+          setSelectName={categoryTitle}
           page={page}
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
