@@ -25,6 +25,7 @@ const menuData = [
 export default function RequestStatus() {
   const { state } = useLocation();
   const dispatch = useDispatch();
+  const [showModal, setShowModal] = useState(false);
   const [page, setPage] = useState(1);
   const [type, setType] = useState('ALL');
   const [status, setStatus] = useState('ALL');
@@ -87,7 +88,7 @@ export default function RequestStatus() {
           resizeRef={resizeRef}
         />
       </RequestStatusWrapper>
-      <Modal isOpen={true}>
+      <Modal isOpen={showModal}>
         <RequestDetail />
       </Modal>
     </>
