@@ -11,27 +11,20 @@ import CategoryStatus from '../../components/adminDashBoard/status/CategoryStatu
 
 export default function AdminDashBoard() {
   const dispatch = useDispatch();
-
+  const [status, setStatus] = useState('ALL');
   const { getDashboard, isDashboardError } = useSelector(
     state => state.dashboardStatus.dashboardStatus
   );
-  const { getCategory, isCategoryError } = useSelector(
-    state => state.equipmentStatus.category
-  );
 
-  const [status, setStatus] = useState('ALL');
-
-  console.log(getCategory);
   useEffect(() => {
     dispatch(__dashboardStatus({ status }));
     dispatch(getCategoryList());
   }, [dispatch, status]);
 
-  if (isDashboardError || isCategoryError) return <div>에러 발생</div>;
-
   return (
     <>
-      {getDashboard && getCategory && (
+      {isDashboardError && <div>에러 발생</div>}
+      {getDashboard && (
         <AdminDashBoardWrapper id="scrollable-div">
           <TopSideContainer>
             <ManagementStatus getDashboard={getDashboard} />
@@ -39,12 +32,7 @@ export default function AdminDashBoard() {
             <TestStatus />
           </TopSideContainer>
           <BottomSideContainer>
-            <CategoryStatus
-              status={status}
-              setStatus={setStatus}
-              getDashboard={getDashboard}
-              getCategory={getCategory}
-            />
+            <CategoryStatus setStatus={setStatus} getDashboard={getDashboard} />
           </BottomSideContainer>
           <ScrollToTop targetSelector="#scrollable-div" />
         </AdminDashBoardWrapper>
