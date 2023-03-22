@@ -12,13 +12,6 @@ export default function ManagementStatus({ getDashboard }) {
   const navigate = useNavigate();
   const { requestsCountDto } = getDashboard.data;
 
-  const totalRequestCount = requestsCountDto.countMap
-    ? Object.values(requestsCountDto.countMap).reduce(
-        (accumulator, currentValue) => accumulator + currentValue,
-        0
-      )
-    : 0;
-
   const moveTo = () => {
     navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
       state: { status: 'UNPROCESSED' },
@@ -37,7 +30,9 @@ export default function ManagementStatus({ getDashboard }) {
               <NewAlertContainer onClick={moveTo}>
                 <RequestIcon />
                 <NewAlertTitle>처리대기 요청</NewAlertTitle>
-                <NewAlertNum>{totalRequestCount}건</NewAlertNum>
+                <NewAlertNum>
+                  {requestsCountDto.countMap.UnProcessedRequests}건
+                </NewAlertNum>
               </NewAlertContainer>
             </ManagementAlertTopContainer>
             <ManagementAlertBottomContainer>
