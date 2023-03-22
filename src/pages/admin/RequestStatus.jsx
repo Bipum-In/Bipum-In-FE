@@ -41,7 +41,7 @@ export default function RequestStatus() {
   );
 
   useEffect(() => {
-    if (state === 'UNPROCESSED') {
+    if (state.status === 'UNPROCESSED') {
       setStatus(state.status);
     }
   }, [state]);
@@ -50,7 +50,16 @@ export default function RequestStatus() {
     const size = pageSize || firstPageSize || handleResize();
     dispatch(__requestStatus({ keyword, type, status, page, size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, keyword, page, type, status, pageSize, handleResize]);
+  }, [
+    dispatch,
+    keyword,
+    page,
+    type,
+    status,
+    pageSize,
+    handleResize,
+    modal.show,
+  ]);
 
   const handleClickMenu = useSetStateChange(
     ['전체', '비품 요청', '반납 요청', '수리 요청', '보고서 결재'],
@@ -104,7 +113,10 @@ export default function RequestStatus() {
         />
       </RequestStatusWrapper>
       <Modal isOpen={modal.show}>
-        <RequestModal detailId={modal.detailId} />
+        <RequestModal
+          isClose={() => setModal({ ...modal, show: false })}
+          detailId={modal.detailId}
+        />
       </Modal>
     </>
   );

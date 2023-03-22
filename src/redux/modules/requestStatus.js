@@ -31,23 +31,33 @@ export const requestDetail = Redux.asyncThunk(
   response => response.data.data
 );
 
-const requestStatusSlice = Redux.slice('Request', initialState, {}, bulider => {
-  Redux.extraReducer(
-    bulider,
-    __requestStatus,
-    'requestStatus',
-    'isStatusLoading',
-    'getRequest',
-    'isStatusError'
-  );
-  Redux.extraReducer(
-    bulider,
-    requestDetail,
-    'requestDetail',
-    'isDetailLoading',
-    'getDetail',
-    'isDetailError'
-  );
-});
+const requestStatusSlice = Redux.slice(
+  'Request',
+  initialState,
+  {
+    initDetail: (state, _) => {
+      state.requestDetail.getDetail = null;
+    },
+  },
+  bulider => {
+    Redux.extraReducer(
+      bulider,
+      __requestStatus,
+      'requestStatus',
+      'isStatusLoading',
+      'getRequest',
+      'isStatusError'
+    );
+    Redux.extraReducer(
+      bulider,
+      requestDetail,
+      'requestDetail',
+      'isDetailLoading',
+      'getDetail',
+      'isDetailError'
+    );
+  }
+);
 
+export const { initDetail } = requestStatusSlice.actions;
 export default requestStatusSlice.reducer;
