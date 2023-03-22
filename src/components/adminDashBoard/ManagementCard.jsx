@@ -7,6 +7,9 @@ import ROUTER from '../../constants/routerConst';
 
 import STRING, { REQUEST_PAGES } from '../../constants/string';
 
+import { useDispatch } from 'react-redux';
+import { initRequest, setRequestData } from '../../redux/modules/requestStatus';
+
 export function ManagementCard({
   statusTitle,
   statusCount,
@@ -28,29 +31,30 @@ export function ManagementCard({
 
 export function ManagementCards({ requestsCountData, requestsDate }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const moveToSupply = () => {
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
-      state: REQUEST_PAGES.SUPPLY,
-    });
+    dispatch(initRequest());
+    dispatch(setRequestData(REQUEST_PAGES.SUPPLY));
+    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
   };
 
   const moveToRepair = () => {
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
-      state: REQUEST_PAGES.REPAIR,
-    });
+    dispatch(initRequest());
+    dispatch(setRequestData(REQUEST_PAGES.REPAIR));
+    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
   };
 
   const moveToReturn = () => {
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
-      state: REQUEST_PAGES.RETURN,
-    });
+    dispatch(initRequest());
+    dispatch(setRequestData(REQUEST_PAGES.RETURN));
+    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
   };
 
   const moveToReport = () => {
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
-      state: REQUEST_PAGES.REPORT,
-    });
+    dispatch(initRequest());
+    dispatch(setRequestData(REQUEST_PAGES.REPORT));
+    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
   };
 
   return (

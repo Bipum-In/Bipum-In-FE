@@ -43,7 +43,7 @@ const REQUEST_NAME = {
 
 export const REQUEST_PAGES = {
   UNPROCESSED: {
-    name: REQUEST_NAME.UNPROCESSED,
+    name: REQUEST_NAME.ALL,
     type: REQUEST_TYPES.ALL,
     status: REQUEST_STATUSES.UNPROCESSED,
   },
