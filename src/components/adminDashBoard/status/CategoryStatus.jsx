@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AnchorBtn from '../AnchorBtn';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,38 +9,29 @@ import DashboardCard from '../DashboardCard';
 import useSelectMenu from '../../../hooks/useSelectMenu';
 import STRING from '../../../constants/string';
 
-export default function CategoryStatus({
-  getDashboard,
-  getCategory,
-  setStatus,
-  status,
-}) {
+export default function CategoryStatus({ getDashboard, setStatus }) {
+  const { getCategory, isCategoryError } = useSelector(
+    state => state.equipmentStatus.category
+  );
   const { largeCategory } = getCategory;
   const { supplyCountDtos } = getDashboard.data;
-  const [categoryList, setCategoryList] = useState({
-    show: false,
-    list: getCategory,
-  });
-
   const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
 
   const handleClickMenue = e => {
     const name = e.target.innerText;
-    const parseCategoryList = getCategoryList(name, largeCategory);
+    getCategoryList(name, largeCategory);
     clickMenu(e);
     setStatus(STRING.LARGECATEGORY[name] || 'ALL');
-    setCategoryList({ show: true, list: parseCategoryList });
   };
 
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.name === name);
   };
 
-  console.log(categoryList);
-
   return (
     <>
-      {largeCategory && (
+      {isCategoryError && <div>에러 발생</div>}
+      {getCategory && (
         <>
           <AnchorBtn onClick={() => {}}>
             비품 목록
