@@ -62,6 +62,10 @@ export default function RequestStatus() {
     }
   );
 
+  const handleChangeState = e => {
+    setStatus(e.target.value);
+  };
+
   const handlePage = e => {
     setPage(e);
   };
@@ -82,7 +86,7 @@ export default function RequestStatus() {
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
           status={status}
-          setStatus={setStatus}
+          setStatus={handleChangeState}
           keyword={keyword}
           setKeyword={setKeyword}
           resizeRef={resizeRef}

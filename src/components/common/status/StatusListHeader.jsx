@@ -33,7 +33,7 @@ export default function StatusListHeader({
           />
         </SearchContainer>
         <SelectWrapper>
-          <Select value={status} onChange={e => setStatus(e.target.value)}>
+          <Select value={status} onChange={e => setStatus(e)}>
             {selectBoxList.name.map((value, index) => (
               <option key={value} value={selectBoxList.type[index]}>
                 {value}
