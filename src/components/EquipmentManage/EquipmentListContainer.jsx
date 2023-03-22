@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
@@ -19,9 +19,7 @@ export default function EquipmentListContainer({
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('ALL');
-
   const [keyword, setKeyword] = useState('');
-  console.log(keyword);
   const [categoryId, setCategoryId] = useState('');
   const [categoryList, setCategoryList] = useState({ show: false, list: [] });
 
@@ -64,16 +62,6 @@ export default function EquipmentListContainer({
     setKeyword('');
   };
 
-  const handleChangeStatus = useSetStateChange(
-    ['전체 보기', '사용중', '재고', '수리중'],
-    ['ALL', 'USING', 'STOCK', 'REPAIRING'],
-    setStatus,
-    e => {
-      setStatus(e);
-      setPage(1);
-    }
-  );
-
   const handlePage = e => {
     setPage(e);
   };
@@ -106,7 +94,8 @@ export default function EquipmentListContainer({
           page={page}
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
-          onChangeStatus={handleChangeStatus}
+          status={status}
+          setStatus={setStatus}
           keyword={keyword}
           setKeyword={setKeyword}
           resizeRef={resizeRef}

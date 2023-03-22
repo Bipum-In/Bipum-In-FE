@@ -11,12 +11,16 @@ export default function EquipmentShow({
   page,
   pageSize,
   onPage,
-  onChangeStatus,
+  status,
+  setStatus,
   keyword,
   setKeyword,
   resizeRef,
 }) {
-  const selectBoxList = ['전체 보기', '사용중', '재고', '수리중'];
+  const selectBoxList = {
+    name: ['전체 보기', '사용중', '재고', '수리중'],
+    type: ['ALL', 'USING', 'STOCK', 'REPAIRING'],
+  };
   const headerList = [
     { name: '종류', width: '5.6875rem' },
     { name: '제품명', width: '15.625rem' },
@@ -45,7 +49,8 @@ export default function EquipmentShow({
         setSelectName={setSelectName}
         selectBoxList={selectBoxList}
         containerHeaderRef={resizeRef.containerHeaderRef}
-        onChangeStatus={onChangeStatus}
+        status={status}
+        setStatus={setStatus}
         keyword={keyword}
         setKeyword={setKeyword}
       >
