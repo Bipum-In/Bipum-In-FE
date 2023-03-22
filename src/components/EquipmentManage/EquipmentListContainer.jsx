@@ -21,9 +21,10 @@ export default function EquipmentListContainer({
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState('');
+  const [categoryTitle, setCategoryTitle] = useState('전체');
   const [categoryList, setCategoryList] = useState({ show: false, list: [] });
 
-  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(largeCategory);
+  const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
@@ -47,7 +48,7 @@ export default function EquipmentListContainer({
       setCategoryId('');
       setPage(1);
       setKeyword('');
-
+      setCategoryTitle('전체');
       return;
     }
     setCategoryList({ show: true, list: parseCategoryList });
@@ -57,6 +58,7 @@ export default function EquipmentListContainer({
     const name = e.target.innerText;
     const categoryId = getCategoryId(name, categoryList);
 
+    setCategoryTitle(name);
     setCategoryId(categoryId);
     setPage(1);
     setKeyword('');
@@ -90,7 +92,7 @@ export default function EquipmentListContainer({
         </CategoryContainer>
         <EquipmentShow
           requestData={getEquipment}
-          setSelectName={setSelectName}
+          setSelectName={categoryTitle}
           page={page}
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}

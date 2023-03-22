@@ -17,7 +17,7 @@ export default function StatusListHeader({
 }) {
   return (
     <RequestShowTitle ref={containerHeaderRef}>
-      <Title>{setSelectName()}</Title>
+      <Title>{setSelectName}</Title>
       <SearchSelect>
         {children}
         <SearchContainer>
