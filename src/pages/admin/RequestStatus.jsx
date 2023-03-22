@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import StatusMenu from '../../components/common/status/StatusMenu';
@@ -29,7 +29,6 @@ export default function RequestStatus() {
   const [type, setType] = useState('ALL');
   const [status, setStatus] = useState('ALL');
   const [keyword, setKeyword] = useState('');
-  const selectBoxRef = useRef();
 
   const [menuStyle, clickMenu, setSelectName] = useSelectMenu(menuData);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
@@ -86,7 +85,6 @@ export default function RequestStatus() {
           keyword={keyword}
           setKeyword={setKeyword}
           resizeRef={resizeRef}
-          selectBoxRef={selectBoxRef}
         />
       </RequestStatusWrapper>
       <Modal isOpen={true}>
