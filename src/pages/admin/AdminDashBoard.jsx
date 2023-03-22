@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { __dashboardStatus } from '../../redux/modules/dashboardStatus';
@@ -19,11 +19,13 @@ export default function AdminDashBoard() {
     state => state.equipmentStatus.category
   );
 
+  const [status, setStatus] = useState('ALL');
+
   console.log(getCategory);
   useEffect(() => {
-    dispatch(__dashboardStatus());
+    dispatch(__dashboardStatus({ status }));
     dispatch(getCategoryList());
-  }, [dispatch]);
+  }, [dispatch, status]);
 
   if (isDashboardError || isCategoryError) return <div>에러 발생</div>;
 
@@ -38,6 +40,8 @@ export default function AdminDashBoard() {
           </TopSideContainer>
           <BottomSideContainer>
             <CategoryStatus
+              status={status}
+              setStatus={setStatus}
               getDashboard={getDashboard}
               getCategory={getCategory}
             />

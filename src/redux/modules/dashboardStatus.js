@@ -12,7 +12,7 @@ const initialState = {
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export const __dashboardStatus = Redux.asyncThunk('DASHBOARD', payload =>
-  axios.get(`/api/admin/main`)
+  axios.get(`/api/admin/main?largeCategory=${payload.status}`)
 );
 
 const dashboardStatusSlice = Redux.slice(
