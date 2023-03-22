@@ -68,6 +68,14 @@ export default function EquipmentListContainer({
     setPage(e);
   };
 
+  const handleChangeState = e => {
+    setStatus(e.target.value);
+  };
+
+  const handleChangeKeyword = e => {
+    setKeyword(e.target.value);
+  };
+
   const handleClickDetail = id => {};
 
   const getCategoryList = (name, categoryList) => {
@@ -99,9 +107,9 @@ export default function EquipmentListContainer({
           pageSize={pageSize || firstPageSize}
           onPage={handlePage}
           status={status}
-          setStatus={setStatus}
+          setStatus={handleChangeState}
           keyword={keyword}
-          setKeyword={setKeyword}
+          setKeyword={handleChangeKeyword}
           onClickDetail={handleClickDetail}
           resizeRef={resizeRef}
         />
