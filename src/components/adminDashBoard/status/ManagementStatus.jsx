@@ -7,14 +7,15 @@ import { ReactComponent as RequestIcon } from '../../../styles/commonIcon/reques
 import { ReactComponent as ArrowIcon } from '../../../styles/commonIcon/arrowDown.svg';
 import { ManagementCards } from '../ManagementCard';
 import ROUTER from '../../../constants/routerConst';
+import { REQUEST_PAGES } from '../../../constants/string';
 
 export default function ManagementStatus({ getDashboard }) {
   const navigate = useNavigate();
   const { requestsCountDto } = getDashboard.data;
 
-  const moveTo = () => {
+  const moveToUnprocessed = () => {
     navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
-      state: { status: 'UNPROCESSED' },
+      state: REQUEST_PAGES.UNPROCESSED,
     });
   };
 
@@ -29,7 +30,7 @@ export default function ManagementStatus({ getDashboard }) {
           </AnchorBtn>
           <ManagementWrapper>
             <ManagementAlertTopContainer>
-              <NewAlertContainer onClick={moveTo}>
+              <NewAlertContainer onClick={moveToUnprocessed}>
                 <RequestIcon />
                 <NewAlertTitle>처리대기 요청</NewAlertTitle>
                 <NewAlertNum>
