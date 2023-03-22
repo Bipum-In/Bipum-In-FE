@@ -66,6 +66,10 @@ export default function RequestStatus() {
     setStatus(e.target.value);
   };
 
+  const handleChangeKeyword = e => {
+    setKeyword(e.target.value);
+  };
+
   const handlePage = e => {
     setPage(e);
   };
@@ -88,7 +92,7 @@ export default function RequestStatus() {
           status={status}
           setStatus={handleChangeState}
           keyword={keyword}
-          setKeyword={setKeyword}
+          setKeyword={handleChangeKeyword}
           resizeRef={resizeRef}
         />
       </RequestStatusWrapper>
