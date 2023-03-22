@@ -26,8 +26,8 @@ export default function RequestStatus() {
   const { state } = useLocation();
   const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const [type, setType] = useState('ALL');
-  const [status, setStatus] = useState('ALL');
+  const [type, setType] = useState(state?.type || 'ALL');
+  const [status, setStatus] = useState(state?.status || 'ALL');
   const [categoryTitle, setCategoryTitle] = useState('전체');
   const [keyword, setKeyword] = useState('');
   const [modal, setModal] = useState({ show: false, detailId: null });
@@ -41,6 +41,7 @@ export default function RequestStatus() {
   );
 
   useEffect(() => {
+    console.log(modal.show);
     const size = pageSize || firstPageSize || handleResize();
     dispatch(__requestStatus({ keyword, type, status, page, size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
