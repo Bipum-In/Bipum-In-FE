@@ -2,10 +2,20 @@ import React from 'react';
 import styled from 'styled-components';
 import { FormatDateToDot } from '../../utils/formatDate';
 
-export function ManagementCard({ statusTitle, statusCount, statusDate }) {
+import { useNavigate } from 'react-router-dom';
+import ROUTER from '../../constants/routerConst';
+
+import STRING, { REQUEST_PAGES } from '../../constants/string';
+
+export function ManagementCard({
+  statusTitle,
+  statusCount,
+  statusDate,
+  onClick,
+}) {
   return (
     <>
-      <CardWrapper>
+      <CardWrapper onClick={onClick}>
         <DetailContainer>
           <StatusTitle>{statusTitle}</StatusTitle>
           <StatusCount>{statusCount}건</StatusCount>
@@ -17,25 +27,55 @@ export function ManagementCard({ statusTitle, statusCount, statusDate }) {
 }
 
 export function ManagementCards({ requestsCountData, requestsDate }) {
+  const navigate = useNavigate();
+
+  const moveToSupply = () => {
+    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
+      state: REQUEST_PAGES.SUPPLY,
+    });
+  };
+
+  const moveToRepair = () => {
+    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
+      state: REQUEST_PAGES.REPAIR,
+    });
+  };
+
+  const moveToReturn = () => {
+    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
+      state: REQUEST_PAGES.RETURN,
+    });
+  };
+
+  const moveToReport = () => {
+    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
+      state: REQUEST_PAGES.REPORT,
+    });
+  };
+
   return (
     <>
       <ManagementCard
-        statusTitle={'비품 요청'}
+        onClick={moveToSupply}
+        statusTitle={STRING.REQUEST_NAME.SUPPLY}
         statusCount={requestsCountData.supplyRequests}
         statusDate={FormatDateToDot(requestsDate.supplyModifiedAt)}
       />
       <ManagementCard
-        statusTitle={'반납 요청'}
+        onClick={moveToRepair}
+        statusTitle={STRING.REQUEST_NAME.REPAIR}
         statusCount={requestsCountData.returnRequests}
         statusDate={FormatDateToDot(requestsDate.returnModifiedAt)}
       />
       <ManagementCard
-        statusTitle={'수리 요청'}
+        onClick={moveToReturn}
+        statusTitle={STRING.REQUEST_NAME.RETURN}
         statusCount={requestsCountData.repairRequests}
         statusDate={FormatDateToDot(requestsDate.repairModifiedAt)}
       />
       <ManagementCard
-        statusTitle={'보고서 결제'}
+        onClick={moveToReport}
+        statusTitle={STRING.REQUEST_NAME.REPORT}
         statusCount={requestsCountData.ReportRequests}
         statusDate={FormatDateToDot(requestsDate.ReportRequests)}
       />
@@ -53,6 +93,7 @@ const CardWrapper = styled.div`
   padding: 0.3125rem;
   background-color: white;
   border: 0.0625rem solid ${props => props.theme.color.grey.brandColor2};
+  ${props => props.theme.CursorActive};
 `;
 
 const DetailContainer = styled.div`
