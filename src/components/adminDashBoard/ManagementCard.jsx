@@ -35,9 +35,9 @@ export function ManagementCards({ requestsCountData, requestsDate }) {
         statusDate={FormatDateToDot(requestsDate.repairModifiedAt)}
       />
       <ManagementCard
-        statusTitle={'수리중'}
-        statusCount={requestsCountData.inRepairRequests}
-        statusDate={FormatDateToDot(requestsDate.inRepairModifiedAt)}
+        statusTitle={'보고서 결제'}
+        statusCount={requestsCountData.ReportRequests}
+        statusDate={FormatDateToDot(requestsDate.ReportRequests)}
       />
     </>
   );
