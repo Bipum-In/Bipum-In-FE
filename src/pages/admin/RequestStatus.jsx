@@ -41,12 +41,6 @@ export default function RequestStatus() {
   );
 
   useEffect(() => {
-    if (state) {
-      setStatus(state.status);
-    }
-  }, [state]);
-
-  useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
     dispatch(__requestStatus({ keyword, type, status, page, size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
