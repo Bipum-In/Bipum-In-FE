@@ -68,6 +68,8 @@ export default function EquipmentListContainer({
     setPage(e);
   };
 
+  const handleClickDetail = id => {};
+
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.largeCategory === name);
   };
@@ -100,8 +102,8 @@ export default function EquipmentListContainer({
           setStatus={setStatus}
           keyword={keyword}
           setKeyword={setKeyword}
+          onClickDetail={handleClickDetail}
           resizeRef={resizeRef}
-          onResize={handleResize}
         />
       </EquipmentListWrapper>
       <Modal isOpen={false}>

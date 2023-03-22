@@ -15,6 +15,7 @@ export default function EquipmentShow({
   setStatus,
   keyword,
   setKeyword,
+  onClickDetail,
   resizeRef,
 }) {
   const selectBoxList = {
@@ -67,6 +68,7 @@ export default function EquipmentShow({
         listRef={resizeRef.listRef}
         content={requestData}
         contentKeyArr={contentKeyArr}
+        onDetail={onClickDetail}
       />
       {requestData && (
         <PaginationList

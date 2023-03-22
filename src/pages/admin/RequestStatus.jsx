@@ -72,9 +72,7 @@ export default function RequestStatus() {
     setKeyword(e.target.value);
   };
 
-  const handleClickDetail = id => {
-    console.log(id);
-  };
+  const handleClickDetail = id => {};
 
   const handlePage = e => {
     setPage(e);
