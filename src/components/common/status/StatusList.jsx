@@ -34,41 +34,45 @@ export default function StatusList({
             >
               <tr>
                 <Zero width={headerList[0].width}>
-                  {list[contentKeyArr[0]]}
+                  {list[contentKeyArr[0]] || '-'}
                 </Zero>
-                <One width={headerList[1].width}>{list[contentKeyArr[1]]}</One>
-                <Two width={headerList[2].width}>{list[contentKeyArr[2]]}</Two>
+                <One width={headerList[1].width}>
+                  {list[contentKeyArr[1]] || '-'}
+                </One>
+                <Two width={headerList[2].width}>
+                  {list[contentKeyArr[2]] || '-'}
+                </Two>
                 <Three width={headerList[3].width}>
-                  {list[contentKeyArr[3]] ? list[contentKeyArr[3]] : '-'}
+                  {list[contentKeyArr[3]] || '-'}
                 </Three>
                 <Four width={headerList[4].width}>
-                  {list[contentKeyArr[4]]}
+                  {list[contentKeyArr[4]] || '-'}
                 </Four>
                 <Five width={headerList[5].width}>
-                  {list[contentKeyArr[5]]}
+                  {list[contentKeyArr[5]] || '-'}
                 </Five>
                 {headerList[7].name === '상태' ? (
                   <>
                     <Six width={headerList[6].width}>
-                      {list[contentKeyArr[6]]}
+                      {list[contentKeyArr[6]] || '-'}
                     </Six>
                     <Seven width={headerList[7].width}>
-                      {list[contentKeyArr[7]]}
+                      <Status>
+                        <StatusColor status={list[contentKeyArr[7]]} />
+                        {list[contentKeyArr[7]] || '-'}
+                      </Status>
                     </Seven>
                   </>
                 ) : (
                   <>
                     <Six width={headerList[6].width}>
-                      <Status>
-                        <StatusColor status={list[contentKeyArr[6]]} />
-                        {list[contentKeyArr[6]]}
-                      </Status>
+                      {list[contentKeyArr[6]] || '-'}
                     </Six>
                     <RequsetSeven
                       width={headerList[7].width}
                       status={list[contentKeyArr[7]]}
                     >
-                      {list[contentKeyArr[7]]}
+                      {list[contentKeyArr[7]] || '-'}
                     </RequsetSeven>
                   </>
                 )}
@@ -112,7 +116,7 @@ const RequestShowBody = styled.div`
     /* height: 100%; */
     text-align: left;
     text-overflow: ellipsis;
-    font-size: 1.0625rem;
+    font-size: 0.875rem;
     overflow: hidden;
     white-space: nowrap;
   }
@@ -122,8 +126,10 @@ const RequestShowListTitle = styled.thead`
   height: 3.125rem;
   color: ${props => props.theme.color.blue.brandColor6};
   background-color: ${props => props.theme.color.blue.brandColor1};
+  border-top: 1px solid ${props => props.theme.color.grey.brandColor3};
+  border-bottom: 1px solid ${props => props.theme.color.grey.brandColor3};
   font-weight: 600;
-  font-size: 1.1875rem;
+  font-size: 1rem;
   text-align: left;
   padding: 0 2rem;
   display: flex;
@@ -149,21 +155,21 @@ const StatusColor = styled.div`
   width: 0.9375rem;
   height: 0.9375rem;
   ${props =>
-    props.status === '처리전' &&
-    css`
-      background-color: #e12020;
-    `};
-
-  ${props =>
-    props.status === '처리중' &&
-    css`
-      background-color: #ff9900;
-    `};
-
-  ${props =>
-    props.status === '처리완료' &&
+    props.status === '재고' &&
     css`
       background-color: #027cff;
+    `};
+
+  ${props =>
+    props.status === '사용중' &&
+    css`
+      background-color: #37d259;
+    `};
+
+  ${props =>
+    props.status === '수리중' &&
+    css`
+      background-color: #ff8502;
     `};
   border-radius: 50%;
 `;
