@@ -74,11 +74,11 @@ export function CustomModal({
       <ModalMsgContainer width={'500px'}>{children}</ModalMsgContainer>
       <CloseContainer>
         <CloseButtonContainer>
-          <Button onClick={onClose} cancel type="button">
-            취소
-          </Button>
           <Button onClick={submit} submit type="button" disabled={disabled}>
             {text}
+          </Button>
+          <Button onClick={onClose} cancel type="button">
+            취소
           </Button>
         </CloseButtonContainer>
       </CloseContainer>
@@ -103,7 +103,7 @@ const Backdrop = styled(motion.div)`
   height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.4);
-  backdrop-filter: blur(2px);
+  /* backdrop-filter: blur(2px); */
 `;
 
 const ModalContainer = styled(motion.div)`
@@ -116,22 +116,22 @@ const ModalContainer = styled(motion.div)`
 const CloseContainer = styled.div`
   display: flex;
   justify-content: flex-start;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  border-top: 1px solid rgb(247, 247, 247);
-  min-height: 56px;
+  border-bottom-left-radius: 0.375rem;
+  border-bottom-right-radius: 0.375rem;
+  border-top: 0.0625rem solid rgb(247, 247, 247);
+  min-height: 3.5rem;
   padding: ${props => props.padding};
-  margin-top: 0px;
+  margin-top: 0;
   align-items: center;
 `;
 
 const ModalMsgContainer = styled.div`
-  font-size: 16px;
-  padding: 40px 30px;
+  font-size: 1rem;
+  padding: 2.5rem 1.875rem;
   text-align: center;
   letter-spacing: -0.5px;
   white-space: pre-line;
-  line-height: 21px;
+  line-height: 1.3125rem;
   font-weight: bold;
   min-width: ${props => props.width};
   color: #333333;
