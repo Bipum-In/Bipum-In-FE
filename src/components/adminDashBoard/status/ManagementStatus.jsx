@@ -8,15 +8,17 @@ import { ReactComponent as ArrowIcon } from '../../../styles/commonIcon/arrowDow
 import { ManagementCards } from '../ManagementCard';
 import ROUTER from '../../../constants/routerConst';
 import { REQUEST_PAGES } from '../../../constants/string';
+import { useDispatch } from 'react-redux';
+import { setRequestData } from '../../../redux/modules/requestStatus';
 
 export default function ManagementStatus({ getDashboard }) {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { requestsCountDto } = getDashboard.data;
 
   const moveToUnprocessed = () => {
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS, {
-      state: REQUEST_PAGES.UNPROCESSED,
-    });
+    dispatch(setRequestData(REQUEST_PAGES.UNPROCESSED));
+    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
   };
 
   return (

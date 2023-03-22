@@ -77,8 +77,7 @@ export default function RequestDetail({ isClose, detail }) {
   };
 
   const putRequest = data => {
-    axios.put(`/api/admin/requests`, data);
-    isClose();
+    axios.put(`/api/admin/requests`, data).then(() => isClose());
   };
 
   return (

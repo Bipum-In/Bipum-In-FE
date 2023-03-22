@@ -1,3 +1,4 @@
+import { current } from '@reduxjs/toolkit';
 import Axios from '../../api/axios';
 import Redux from '../redux';
 
@@ -11,6 +12,17 @@ const initialState = {
     getDetail: null,
     isDetailLoading: false,
     isDetailError: false,
+  },
+  requestData: {
+    selectStatus: 'ALL',
+    menuType: 'ALL',
+    menu: [
+      { name: '전체', type: 'ALL', status: true },
+      { name: '비품 요청', type: 'SUPPLY', status: false },
+      { name: '반납 요청', type: 'RETURN', status: false },
+      { name: '수리 요청', type: 'REPAIR', status: false },
+      { name: '보고서 결재', type: 'REPORT', status: false },
+    ],
   },
 };
 
@@ -35,8 +47,21 @@ const requestStatusSlice = Redux.slice(
   'Request',
   initialState,
   {
+    initRequest: (state, _) => {
+      state.requestStatus.getRequest = null;
+    },
     initDetail: (state, _) => {
       state.requestDetail.getDetail = null;
+    },
+    setRequestData: (state, action) => {
+      console.log(action.payload);
+      state.requestData.menu = current(state.requestData.menu).map(menu =>
+        menu.name === action.payload.name
+          ? { ...menu, status: true }
+          : { ...menu, status: false }
+      );
+      state.requestData.menuType = action.payload.type;
+      state.requestData.selectStatus = action.payload.status;
     },
   },
   bulider => {
@@ -59,5 +84,6 @@ const requestStatusSlice = Redux.slice(
   }
 );
 
-export const { initDetail } = requestStatusSlice.actions;
+export const { initRequest, initDetail, setRequestData } =
+  requestStatusSlice.actions;
 export default requestStatusSlice.reducer;
