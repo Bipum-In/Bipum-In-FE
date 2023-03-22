@@ -1,42 +1,41 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
+
 import {
   CategoryItemLeft,
   CategoryItemRight,
 } from '../components/layout/CategoryItem';
-import { useNavigate } from 'react-router-dom';
-import ROUTER from '../constants/routerConst';
+
 import logo from '../styles/logo.svg';
 import { ReactComponent as Add } from '../styles/sidebarIcon/add.svg';
 import { ReactComponent as Dashboard } from '../styles/sidebarIcon/dashboard.svg';
 import { ReactComponent as List } from '../styles/sidebarIcon/list.svg';
 import { ReactComponent as Management } from '../styles/sidebarIcon/management.svg';
 import { ReactComponent as Logout } from '../styles/sidebarIcon/logout.svg';
-import useSelectMenu from '../hooks/useSelectMenu';
+
+import ROUTER from '../constants/routerConst';
 import STRING from '../constants/string';
-import { removeCookie } from '../utils/cookie';
 import QUERY from '../constants/query';
+
 import Storage from '../utils/localStorage';
+import { removeCookie } from '../utils/cookie';
 import { CustomModal } from '../elements/Modal';
 import { useModalState } from '../hooks/useModalState';
 
 export default function Sidebar() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const [logoutModal, setLogoutModal] = useModalState();
-
-  const [menuStyle, handleClickMenu] = useSelectMenu(
-    [
-      { name: STRING.SIDEBAR.DASHBOARD, status: true },
-      { name: STRING.SIDEBAR.REQUEST_STATUS, status: false },
-      { name: STRING.SIDEBAR.MANAGEMENT, status: false },
-      { name: STRING.SIDEBAR.EQUIPMENT_ADD, status: false },
-    ],
-    'sideBarMenu'
-  );
+  const categoryStyle = [
+    pathname === ROUTER.PATH.ADMIN_DASHBOARD && true,
+    pathname === ROUTER.PATH.ADMIN_REQUEST_STATUS && true,
+    pathname === ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT && true,
+    pathname === ROUTER.PATH.ADMIN_EQUIPMENT_ADD && true,
+  ];
 
   const handleClickCategory = e => {
     const name = e.target.innerText;
-    handleClickMenu(e);
     name === STRING.SIDEBAR.DASHBOARD && navigate(ROUTER.PATH.ADMIN_DASHBOARD);
     name === STRING.SIDEBAR.REQUEST_STATUS &&
       navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
@@ -67,28 +66,28 @@ export default function Sidebar() {
         <SidebarCategoryContainer>
           <CategoryItemLeft
             onClick={handleClickCategory}
-            category={`${menuStyle[0].status}`}
+            category={`${categoryStyle[0]}`}
             title={STRING.SIDEBAR.DASHBOARD}
           >
             <Dashboard />
           </CategoryItemLeft>
           <CategoryItemLeft
             onClick={handleClickCategory}
-            category={`${menuStyle[1].status}`}
+            category={`${categoryStyle[1]}`}
             title={STRING.SIDEBAR.REQUEST_STATUS}
           >
             <List />
           </CategoryItemLeft>
           <CategoryItemLeft
             onClick={handleClickCategory}
-            category={`${menuStyle[2].status}`}
+            category={`${categoryStyle[2]}`}
             title={STRING.SIDEBAR.MANAGEMENT}
           >
             <Management />
           </CategoryItemLeft>
           <CategoryItemLeft
             onClick={handleClickCategory}
-            category={`${menuStyle[3].status}`}
+            category={`${categoryStyle[3]}`}
             title={STRING.SIDEBAR.EQUIPMENT_ADD}
           >
             <Add />
