@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled, { css } from 'styled-components';
 import Button from '../../elements/Button';
 import Input from '../../elements/Input';
+import { v4 as uuidv4 } from 'uuid';
 import { getCategoryList } from '../../redux/modules/equipmentStatus';
 import { __partnersList } from '../../redux/modules/partnersList';
 import SelectBoxs from '../common/SelectBoxs';
@@ -153,7 +154,10 @@ export default function AddSingleItem() {
                 >
                   {largeCategories.map(item => {
                     return (
-                      <Option onClick={handleOnChangeMainTypeSelectValue}>
+                      <Option
+                        key={uuidv4()}
+                        onClick={handleOnChangeMainTypeSelectValue}
+                      >
                         {item}
                       </Option>
                     );
@@ -170,7 +174,10 @@ export default function AddSingleItem() {
                 >
                   {categoryData.map(item => {
                     return (
-                      <Option onClick={handleOnChangeSubTypeSelectValue}>
+                      <Option
+                        key={uuidv4()}
+                        onClick={handleOnChangeSubTypeSelectValue}
+                      >
                         {item.categoryName}
                       </Option>
                     );
@@ -243,9 +250,7 @@ export default function AddSingleItem() {
                           new Date().getFullYear(),
                           parseInt(monthSeleteValue) - 1
                         ).map(day => (
-                          <Option key={day} value={day}>
-                            {day}
-                          </Option>
+                          <Option key={uuidv4()}>{day}</Option>
                         ))}
                       </Option>
                     </SelectBoxs>
@@ -267,7 +272,10 @@ export default function AddSingleItem() {
                   >
                     {partnersData?.map(item => {
                       return (
-                        <Option onClick={handleOnChangePartnerSelectValue}>
+                        <Option
+                          key={uuidv4()}
+                          onClick={handleOnChangePartnerSelectValue}
+                        >
                           {item.partnersName}
                         </Option>
                       );
