@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import CategoryItems from '../../components/common/CategoryItems';
-import EquipmentShow from '../../components/EquipmentManage/EquipmentShow';
+import EquipmentShow from '../../components/equipmentManage/EquipmentShow';
 
 import useSelectMenu from '../../hooks/useSelectMenu';
 import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
