@@ -1,11 +1,12 @@
 import styled from 'styled-components';
 
 export default function UserContent({
-  categoryName,
-  requestType,
-  requestStatus,
-  serialNum,
   content,
+  serialNum,
+  modelName,
+  requestType,
+  categoryName,
+  requestStatus,
 }) {
   return (
     <UserContentWrapper>
@@ -17,6 +18,10 @@ export default function UserContent({
         <UserContentContainer>
           <ContentName>사용처</ContentName>
           <ContentType>개인</ContentType>
+        </UserContentContainer>
+        <UserContentContainer>
+          <ContentName>제품명</ContentName>
+          <ContentType>{modelName}</ContentType>
         </UserContentContainer>
         {requestType !== '비품 요청' && requestStatus === '처리전' && (
           <UserContentContainer>
@@ -42,7 +47,7 @@ const UserContentWrapper = styled.div`
 const UserContentContainer = styled.div`
   ${props => props.theme.FlexCol};
   gap: 0.375rem;
-  margin-right: 2.625rem;
+  margin-right: 1.5rem;
 `;
 
 const CategoryNameAndList = styled.div`
@@ -52,6 +57,7 @@ const CategoryNameAndList = styled.div`
 
 const ContentName = styled.span`
   color: ${props => props.theme.color.grey.brandColor5};
+  min-width: 3rem;
   font-size: 0.8125rem;
   font-weight: 500;
 `;

@@ -105,6 +105,7 @@ export default function RequestDetail({ isClose, detail }) {
           <UserContent
             content={content}
             serialNum={serialNum}
+            modelName={modelName}
             requestType={requestType}
             categoryName={categoryName}
             requestStatus={requestStatus}
