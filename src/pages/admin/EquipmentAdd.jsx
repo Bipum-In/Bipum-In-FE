@@ -1,56 +1,46 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+
 import AddSingleItem from '../../components/equipmentAdd/AddSingleItem';
-import Button from '../../elements/Button';
+import StatusMenu from '../../components/common/status/StatusMenu';
+
 import useSelectMenu from '../../hooks/useSelectMenu';
 import STRING from '../../constants/string';
 
-export default function EquipmentAdd() {
-  const [menuStyle, handleClickMenu] = useSelectMenu(
-    [
-      { name: STRING.ADDMENUE.ADDBIPUM, status: true },
-      { name: STRING.ADDMENUE.ADDMULTIPLE, status: false },
-    ],
-    'addEquipment'
-  );
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategoryList } from '../../redux/modules/equipmentStatus';
 
-  const [activeComponent, setActiveComponent] = useState(menuStyle[0].name);
-  const handleClickAddEquipment = e => {
-    const name = e.target.innerText;
-    handleClickMenu(e);
-    setActiveComponent(name);
-  };
+export default function EquipmentAdd() {
+  const dispatch = useDispatch();
+  const [menuStyle, handleClickMenu] = useSelectMenu([
+    { name: STRING.ADDMENUE.ADDBIPUM, status: true },
+    { name: STRING.ADDMENUE.ADDMULTIPLE, status: false },
+  ]);
+  const { getCategory } = useSelector(state => state.equipmentStatus.category);
+
+  useEffect(() => {
+    dispatch(getCategoryList());
+  }, [dispatch]);
 
   return (
-    <EquipmentWrapper>
-      <AddBtnContainer>
-        <Button
-          onClick={handleClickAddEquipment}
-          menuStyle={menuStyle[0].status}
-        >
-          {STRING.ADDMENUE.ADDBIPUM}
-        </Button>
-        <Button
-          onClick={handleClickAddEquipment}
-          menuStyle={menuStyle[1].status}
-        >
-          {STRING.ADDMENUE.ADDMULTIPLE}
-        </Button>
-      </AddBtnContainer>
-
-      <AddComponentsContainer>
-        {activeComponent === STRING.ADDMENUE.ADDBIPUM && (
-          <>
-            <AddSingleItem>단일 등록</AddSingleItem>
-          </>
-        )}
-        {activeComponent === STRING.ADDMENUE.ADDMULTIPLE && (
-          <>
-            <div>복수 등록</div>
-          </>
-        )}
-      </AddComponentsContainer>
-    </EquipmentWrapper>
+    <>
+      {getCategory && (
+        <EquipmentWrapper>
+          <AddBtnContainer>
+            <StatusMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
+          </AddBtnContainer>
+          <AddComponentsContainer>
+            {menuStyle[0].status && (
+              <AddSingleItem
+                category={getCategory.category}
+                largeCategory={getCategory.largeCategory}
+              />
+            )}
+            {menuStyle[1].status && <div>복수 등록</div>}
+          </AddComponentsContainer>
+        </EquipmentWrapper>
+      )}
+    </>
   );
 }
 const EquipmentWrapper = styled.div`

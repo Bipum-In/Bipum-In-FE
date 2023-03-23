@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export const Input = ({ value, setState, ...props }) => (
-  <InputStyle {...props} value={value} onChange={setState} />
-);
+export default function Input({ value, setState, ...props }) {
+  return <InputStyle {...props} value={value} onChange={setState} />;
+}
 
 Input.defaultProps = {
   padding: '.5rem',
@@ -33,5 +33,3 @@ const InputStyle = styled.input`
   transition: ${props => props.ts};
   color: ${props => props.color};
 `;
-
-export default Input;

@@ -20,6 +20,7 @@ export default function RequestShow({
     name: ['전체 보기', '처리전', '처리중', '처리 완료'],
     type: ['ALL', 'UNPROCESSED', 'PROCESSING', 'PROCESSED'],
   };
+
   const headerList = [
     { name: '요청구분', width: '5rem' },
     { name: '종류', width: '4.375rem' },
