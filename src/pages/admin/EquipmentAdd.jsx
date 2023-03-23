@@ -1,54 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+
 import AddSingleItem from '../../components/equipmentAdd/AddSingleItem';
-import Button from '../../elements/Button';
+import StatusMenu from '../../components/common/status/StatusMenu';
+
 import useSelectMenu from '../../hooks/useSelectMenu';
 import STRING from '../../constants/string';
 
 export default function EquipmentAdd() {
-  const [menuStyle, handleClickMenu] = useSelectMenu(
-    [
-      { name: STRING.ADDMENUE.ADDBIPUM, status: true },
-      { name: STRING.ADDMENUE.ADDMULTIPLE, status: false },
-    ],
-    'addEquipment'
-  );
-
-  const [activeComponent, setActiveComponent] = useState(menuStyle[0].name);
-  const handleClickAddEquipment = e => {
-    const name = e.target.innerText;
-    handleClickMenu(e);
-    setActiveComponent(name);
-  };
+  const [menuStyle, handleClickMenu] = useSelectMenu([
+    { name: STRING.ADDMENUE.ADDBIPUM, status: true },
+    { name: STRING.ADDMENUE.ADDMULTIPLE, status: false },
+  ]);
 
   return (
     <EquipmentWrapper>
       <AddBtnContainer>
-        <Button
-          onClick={handleClickAddEquipment}
-          menuStyle={menuStyle[0].status}
-        >
-          {STRING.ADDMENUE.ADDBIPUM}
-        </Button>
-        <Button
-          onClick={handleClickAddEquipment}
-          menuStyle={menuStyle[1].status}
-        >
-          {STRING.ADDMENUE.ADDMULTIPLE}
-        </Button>
+        <StatusMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
       </AddBtnContainer>
-
       <AddComponentsContainer>
-        {activeComponent === STRING.ADDMENUE.ADDBIPUM && (
-          <>
-            <AddSingleItem>단일 등록</AddSingleItem>
-          </>
-        )}
-        {activeComponent === STRING.ADDMENUE.ADDMULTIPLE && (
-          <>
-            <div>복수 등록</div>
-          </>
-        )}
+        {menuStyle[0].status && <AddSingleItem />}
+        {menuStyle[1].status && <div>복수 등록</div>}
       </AddComponentsContainer>
     </EquipmentWrapper>
   );
