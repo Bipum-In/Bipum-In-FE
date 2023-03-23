@@ -24,7 +24,6 @@ export default function RequestModal({ isClose, detailId }) {
   );
 }
 const RequestModalWrapper = styled.div`
-  width: 70vw;
-  height: 70vh;
-  padding: 3rem;
+  width: 35.625rem;
+  height: 100%;
 `;
