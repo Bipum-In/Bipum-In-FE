@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../../elements/Button';
 import Input from '../../elements/Input';
-import { v4 as uuidv4 } from 'uuid';
-import SelectBoxs from '../common/SelectBoxs';
 import Axios from '../../api/axios';
 import SelectCategory from '../common/SelectCategory';
+import SelectCategoryList from './single/SelectCategoryList';
+import SelectDate from './single/SelectDate';
+import EquipmentInput from './single/EquipmentInput';
+import SelectUser from './single/SelectUser';
+import ImageAdd from './single/ImageAdd';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const equipmentData = {
@@ -29,11 +31,20 @@ export default function AddSingleItem({ category, largeCategory }) {
   const [nameValue, setNameValue] = useState('');
   const [serialValue, setSerialValue] = useState('');
   const [smallCategory, setSmallCategory] = useState(null);
+  const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
 
   useEffect(() => {
     axios.get(`/api/partners`).then(res => setPartners(res.data.data));
     axios.get(`/api/dept`).then(res => setDept(res.data.data));
   }, []);
+
+  const handleChangeNameValue = e => {
+    setNameValue(e.target.value);
+  };
+
+  const handleChangeSerialValue = e => {
+    setSerialValue(e.target.value);
+  };
 
   const handleChangeLargeCategory = e => {
     const { ko, eng } = JSON.parse(e.target.value);
@@ -77,6 +88,7 @@ export default function AddSingleItem({ category, largeCategory }) {
   const handleChangeUser = e => {
     const { ko: user } = JSON.parse(e.target.value);
     equipmentData.userId = user;
+    console.log(equipmentData);
   };
 
   const parseCategoryData = (name, getCategory) => {
@@ -148,71 +160,36 @@ export default function AddSingleItem({ category, largeCategory }) {
             <EquipmentContainer>
               <TypeBox>
                 <TypeTitle requiredinput="true">비품종류</TypeTitle>
-                <SelectCategory
-                  category={largeCategory}
-                  optionName="name"
-                  optionNullName="대분류"
-                  optionKey="name"
-                  optionValueKey="name"
-                  onChangeCategory={handleChangeLargeCategory}
-                />
-                <SelectCategory
-                  category={smallCategory}
-                  optionName="categoryName"
-                  optionNullName="소분류"
-                  optionKey="categoryName"
-                  optionValueKey="categoryName"
-                  onChangeCategory={handleChangeSmallCategory}
+                <SelectCategoryList
+                  category={[parseLargeCategory, smallCategory]}
+                  optionName={['name', 'categoryName']}
+                  optionNullName={['대분류', '소분류']}
+                  optionKey={['name', 'categoryName']}
+                  optionValueKey={['name', 'categoryName']}
+                  onChangeCategory={[
+                    handleChangeLargeCategory,
+                    handleChangeSmallCategory,
+                  ]}
                 />
               </TypeBox>
-              <TypeBox>
-                <TypeTitle requiredinput="true">제품명</TypeTitle>
-                <Input
-                  type="text"
-                  value={nameValue}
-                  setState={event => setNameValue(event.target.value)}
-                  placeholder="제품명을 기입해주세요"
-                  required
-                />
-              </TypeBox>
-              <TypeBox>
-                <TypeTitle requiredinput="true">시리얼 넘버</TypeTitle>
-                <Input
-                  type="text"
-                  value={serialValue}
-                  setState={event => setSerialValue(event.target.value)}
-                  placeholder="시리얼넘버를 기입해주세요"
-                  required
-                />
-              </TypeBox>
-              <AcquisitionContainer>
-                <TypeBox>
-                  <TypeTitle>취득일자</TypeTitle>
-                  <AcquisitionYear>
-                    <SelectCategory
-                      category={setSelectYear()}
-                      optionNullName="년"
-                      onChangeCategory={handleChangeYear}
-                    />
-                  </AcquisitionYear>
-                  <AcquisitionMonth>
-                    <SelectCategory
-                      category={setSelectMonth()}
-                      optionNullName="월"
-                      onChangeCategory={handleChangeMonth}
-                    />
-                  </AcquisitionMonth>
-                  <AcquisitionDay>
-                    <SelectCategory
-                      category={
-                        year && month && setSelectDaysInMonth(year, month)
-                      }
-                      optionNullName="일"
-                      onChangeCategory={handleChangeDay}
-                    />
-                  </AcquisitionDay>
-                </TypeBox>
-              </AcquisitionContainer>
+              <EquipmentInput
+                value={[nameValue, serialValue]}
+                setValue={[handleChangeNameValue, handleChangeSerialValue]}
+              />
+              <SelectDate
+                year={year}
+                month={month}
+                setSelect={[
+                  setSelectYear,
+                  setSelectMonth,
+                  setSelectDaysInMonth,
+                ]}
+                handleChange={[
+                  handleChangeYear,
+                  handleChangeMonth,
+                  handleChangeDay,
+                ]}
+              />
               <TypeBox>
                 <TypeTitle>협력업체</TypeTitle>
                 <PartnerCompany>
@@ -226,41 +203,16 @@ export default function AddSingleItem({ category, largeCategory }) {
                   />
                 </PartnerCompany>
               </TypeBox>
-
-              <TypeBox>
-                <TypeTitle>사용자</TypeTitle>
-                <DepName>
-                  <SelectCategory
-                    category={dept}
-                    optionNullName="부서명"
-                    optionKey={'deptName'}
-                    optionValueKey={'deptId'}
-                    optionName={'deptName'}
-                    onChangeCategory={handleChangeDept}
-                  />
-                </DepName>
-                <UserName>
-                  <SelectCategory
-                    category={user}
-                    optionNullName="사원명"
-                    optionKey={'empName'}
-                    optionValueKey={'userId'}
-                    optionName={'empName'}
-                    onChangeCategory={handleChangeUser}
-                  />
-                </UserName>
-              </TypeBox>
-            </EquipmentContainer>
-            <ImageContainer>
-              사진첨부
-              {preview && <Image src={preview} alt="preview" />}
-              <ImageinputFile
-                as={'input'}
-                type="file"
-                accept="image/*"
-                onChange={onChangeimge}
+              <SelectUser
+                category={[dept, user]}
+                optionNullName={['부서명', '사원명']}
+                optionKey={['deptName', 'empName']}
+                optionValueKey={['deptId', 'userId']}
+                optionName={['deptName', 'empName']}
+                onChangeCategory={[handleChangeDept, handleChangeUser]}
               />
-            </ImageContainer>
+            </EquipmentContainer>
+            <ImageAdd preview={preview} onChangeimge={onChangeimge} />
             <ButtonBox>
               <Button type="submit">비품 등록 완료</Button>
             </ButtonBox>
@@ -271,42 +223,11 @@ export default function AddSingleItem({ category, largeCategory }) {
   );
 }
 
-const ImageinputFile = styled.div`
-  ::file-selector-button {
-    border: 0;
-    border-radius: 6px;
-    ${props => props.theme.FlexCol};
-    ${props => props.theme.FlexCenter};
-    color: ${props => props.theme.color.blue.brandColor6};
-    width: 100%;
-    height: 2.8125rem;
-    font-weight: 700;
-    font-size: 1.375rem;
-    background-color: #e4f0ff;
-    cursor: pointer;
-  }
-`;
 const PartnerCompany = styled.div`
   width: 5.8125rem;
   height: 2.5rem;
 `;
-const DepName = styled.div`
-  ${props => props.theme.FlexRow};
-  width: 5.8125rem;
-  height: 2.5rem;
-`;
-const UserName = styled.div`
-  width: 5.8125rem;
-  height: 2.5rem;
-`;
-const Option = styled.li`
-  font-size: 0.875rem;
-  padding: 0.375rem 0.5rem;
-  transition: background-color 0.2s ease-in;
-  &:hover {
-    background-color: #d0e4ff;
-  }
-`;
+
 const ButtonBox = styled.div`
   position: absolute;
   right: 0rem;
@@ -325,36 +246,7 @@ const ButtonBox = styled.div`
     background-color: ${props => props.theme.color.blue.brandColor6};
   }
 `;
-const AcquisitionYear = styled.div`
-  width: 6.5625rem;
-  height: 2.5rem;
-`;
-const AcquisitionDay = styled.div`
-  width: 5rem;
-  height: 2.5rem;
-`;
-const AcquisitionMonth = styled.div`
-  width: 5rem;
-  height: 2.5rem;
-`;
-const AcquisitionContainer = styled.div`
-  height: 2.5rem;
-`;
-const Image = styled.img`
-  background-color: ${props => props.theme.color.grey.brandColor1};
-  width: 23.75rem;
-  height: 23.75rem;
-  border-radius: 0.5rem;
-  margin-bottom: 1.375rem;
-`;
-const ImageContainer = styled.div`
-  ${props => props.theme.FlexCol};
-  width: 23.75rem;
-  height: 30.625rem;
-  font-weight: 600;
-  font-size: 1.125rem;
-  line-height: 1.3125rem;
-`;
+
 const TypeTitle = styled.span`
   font-size: 1.125rem;
   width: 8.75rem;
@@ -387,12 +279,14 @@ const EquipmentContainer = styled.div`
   height: 30.625rem;
   gap: 3.125rem;
 `;
+
 const AddContainer = styled.form`
   width: 100%;
   display: flex;
   margin: 7.25rem 11rem 12rem 11rem;
   justify-content: space-between;
 `;
+
 const Container = styled.div`
   ${props => props.theme.wh100};
   height: 73.9vh;

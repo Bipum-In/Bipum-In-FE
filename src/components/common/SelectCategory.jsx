@@ -9,7 +9,6 @@ export default function SelectCategory({
   optionValueKey,
   onChangeCategory,
 }) {
-  console.log(category);
   return (
     <Select onChange={onChangeCategory}>
       <option>{optionNullName}</option>
