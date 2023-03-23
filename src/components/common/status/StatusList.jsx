@@ -284,18 +284,21 @@ const RequsetSeven = styled.td`
   ${props =>
     props.status === '승인' &&
     css`
+      color: #285818;
       background-color: #e0ffd6;
     `}
 
   ${props =>
     props.status === '거절' &&
     css`
+      color: #e02121;
       background-color: #ffe8e8;
     `}
 
     ${props =>
     props.status === '폐기' &&
     css`
+      color: #6d5517;
       background-color: #efecd9;
     `}
 `;
