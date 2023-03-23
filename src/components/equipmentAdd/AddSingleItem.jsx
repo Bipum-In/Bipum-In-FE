@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../../elements/Button';
-import Input from '../../elements/Input';
 import Axios from '../../api/axios';
 import SelectCategory from '../common/SelectCategory';
 import SelectCategoryList from './single/SelectCategoryList';
@@ -9,6 +8,7 @@ import SelectDate from './single/SelectDate';
 import EquipmentInput from './single/EquipmentInput';
 import SelectUser from './single/SelectUser';
 import ImageAdd from './single/ImageAdd';
+import useSetEquipmentAddDate from '../../hooks/useSetEquipmentAddDate';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const equipmentData = {
@@ -31,7 +31,12 @@ export default function AddSingleItem({ category, largeCategory }) {
   const [nameValue, setNameValue] = useState('');
   const [serialValue, setSerialValue] = useState('');
   const [smallCategory, setSmallCategory] = useState(null);
+  const [formImage, setFormformImage] = useState(null);
+  const [preview, setPreview] = useState('');
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
+
+  const [setSelectYear, setSelectMonth, setSelectDaysInMonth] =
+    useSetEquipmentAddDate();
 
   useEffect(() => {
     axios.get(`/api/partners`).then(res => setPartners(res.data.data));
@@ -39,6 +44,7 @@ export default function AddSingleItem({ category, largeCategory }) {
   }, []);
 
   const handleChangeNameValue = e => {
+    console.log(e.target.value);
     setNameValue(e.target.value);
   };
 
@@ -72,7 +78,8 @@ export default function AddSingleItem({ category, largeCategory }) {
 
   const handleChangeDay = e => {
     const day = e.target.value;
-    setDay(day);
+    const parseDay = Number(day.split('일')[0]);
+    setDay(parseDay);
   };
 
   const handleChangePartners = e => {
@@ -88,75 +95,49 @@ export default function AddSingleItem({ category, largeCategory }) {
   const handleChangeUser = e => {
     const { ko: user } = JSON.parse(e.target.value);
     equipmentData.userId = user;
-    console.log(equipmentData);
   };
 
   const parseCategoryData = (name, getCategory) => {
     return getCategory.filter(item => item.largeCategory === name);
   };
 
-  const setSelectYear = () => {
-    const date = new Date();
-    const year = date.getFullYear();
-
-    return Array.from({ length: 30 }).map((_, i) => `${year - i}년`);
-  };
-
-  const setSelectMonth = () => {
-    return Array.from({ length: 12 }).map((_, i) => `${i + 1}월`);
-  };
-
-  const setSelectDaysInMonth = (year, month) => {
-    const date = new Date(year, month, 0);
-    const days = date.getDate();
-    return Array.from({ length: days }).map((_, i) => `${i + 1}일`);
-  };
-
-  const getUserData = deptId => {
-    axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
-  };
-
-  //========================================================
-
-  const [formImage, setFormformImage] = useState(null);
-  const [preview, setPreview] = useState('');
-  function onChangeimge(e) {
+  const onChangeimge = e => {
     const img = e.target.files[0];
-    const formImg = new FormData();
-    formImg.append('image', img);
+    if (!img) return;
+
+    setFormformImage(img);
+    setPreviewImage(img);
+  };
+
+  const setPreviewImage = img => {
     const reader = new FileReader();
-    setFormformImage(formImg);
     reader.onloadend = () => {
       setPreview(reader.result);
     };
-    console.log(img);
-    if (img) {
-      reader.readAsDataURL(img);
-    } else {
-      setPreview('');
-    }
-  }
-
-  const onValid = data => {
-    const formData = new FormData();
-    // formData.append('largeCategory');
-    // formData.append('categoryName');
-    // formData.append('modelName');
-    // formData.append('serialNum');
-    // formData.append('createdAt');
-    // formData.append('partnersId');
-    // formData.append('userId');
-    for (const keyValue of formImage) {
-      formData.append(keyValue[0], keyValue[1]);
-    }
-    console.log(data);
+    reader.readAsDataURL(img);
   };
+
+  const setFormData = () => {
+    const formData = new FormData();
+    equipmentData.createdAt = new Date();
+    equipmentData.modelName = nameValue;
+    equipmentData.serialNum = serialValue;
+
+    formData.append('largeCategory', equipmentData);
+    formData.append('image', formImage);
+    sendFormData(formData);
+  };
+
+  const getUserData = deptId =>
+    axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
+
+  const sendFormData = formData => axios.post(`/api/supply/`, formData);
 
   return (
     <>
       {category && (
         <Container>
-          <AddContainer onSubmit={onValid}>
+          <AddContainer>
             <EquipmentContainer>
               <TypeBox>
                 <TypeTitle requiredinput="true">비품종류</TypeTitle>
@@ -214,7 +195,7 @@ export default function AddSingleItem({ category, largeCategory }) {
             </EquipmentContainer>
             <ImageAdd preview={preview} onChangeimge={onChangeimge} />
             <ButtonBox>
-              <Button type="submit">비품 등록 완료</Button>
+              <Button onClick={setFormData}>비품 등록 완료</Button>
             </ButtonBox>
           </AddContainer>
         </Container>
@@ -280,7 +261,7 @@ const EquipmentContainer = styled.div`
   gap: 3.125rem;
 `;
 
-const AddContainer = styled.form`
+const AddContainer = styled.main`
   width: 100%;
   display: flex;
   margin: 7.25rem 11rem 12rem 11rem;
