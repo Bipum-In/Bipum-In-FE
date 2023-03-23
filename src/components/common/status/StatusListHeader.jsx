@@ -58,7 +58,7 @@ const RequestShowTitle = styled.div`
 
 const Title = styled.div`
   font-weight: 600;
-  font-size: 1.75rem;
+  font-size: 1.25rem;
   margin-top: 1.75rem;
   margin-left: 2.5rem;
 `;
@@ -94,12 +94,14 @@ const SearchIconContainer = styled.div`
 
 const Select = styled.select`
   position: relative;
-  width: 5.8125rem;
+  width: 100%;
   height: 2.125rem;
   color: ${props => props.theme.color.blue.brandColor6};
   background-color: ${props => props.theme.color.blue.brandColor1};
   border: 0.0625rem solid ${props => props.theme.color.blue.brandColor3};
   border-radius: 0.375rem;
+  font-weight: 600;
+  font-size: 0.875rem;
   text-align-last: center;
   text-align: center;
   appearance: none;
@@ -111,7 +113,7 @@ const SelectWrapper = styled.div`
   position: relative;
   display: flex;
   align-items: center;
-  width: 5.8125rem;
+  width: 5.6rem;
   height: 2.5rem;
   margin-right: 1.9375rem;
 `;
