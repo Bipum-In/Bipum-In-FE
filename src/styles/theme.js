@@ -36,11 +36,13 @@ const screen = {
   dashboardFullWidth: '2458px',
   fullWideDesktop: '1630px',
   wide_desktop: '1400px',
-  desktop: '1200px',
+  desktop: '1280px',
   tablet_h: '1024px',
   tablet_v: '768px',
   mobile_h: '600px',
   mobile_v: '480px',
+  fullWidth: 1630,
+  desktopSize: 1280,
 };
 
 const FlexCol = css`
