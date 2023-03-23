@@ -111,6 +111,32 @@ code {
   height: 100vh;
 }
 
+
+ @media (max-width: 1620px) {
+  html {
+    font-size: 15px;
+  }
+}
+@media (max-width: 1520px) {
+  html {
+    font-size: 14px;
+  }
+}
+@media (max-width: 1420px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1280px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+
+
+
 `;
 
 export default GlobalStyle;
