@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import AddSingleItem from '../../components/equipmentAdd/AddSingleItem';
@@ -7,22 +7,40 @@ import StatusMenu from '../../components/common/status/StatusMenu';
 import useSelectMenu from '../../hooks/useSelectMenu';
 import STRING from '../../constants/string';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategoryList } from '../../redux/modules/equipmentStatus';
+
 export default function EquipmentAdd() {
+  const dispatch = useDispatch();
   const [menuStyle, handleClickMenu] = useSelectMenu([
     { name: STRING.ADDMENUE.ADDBIPUM, status: true },
     { name: STRING.ADDMENUE.ADDMULTIPLE, status: false },
   ]);
+  const { getCategory } = useSelector(state => state.equipmentStatus.category);
+
+  useEffect(() => {
+    dispatch(getCategoryList());
+  }, [dispatch]);
 
   return (
-    <EquipmentWrapper>
-      <AddBtnContainer>
-        <StatusMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
-      </AddBtnContainer>
-      <AddComponentsContainer>
-        {menuStyle[0].status && <AddSingleItem />}
-        {menuStyle[1].status && <div>복수 등록</div>}
-      </AddComponentsContainer>
-    </EquipmentWrapper>
+    <>
+      {getCategory && (
+        <EquipmentWrapper>
+          <AddBtnContainer>
+            <StatusMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
+          </AddBtnContainer>
+          <AddComponentsContainer>
+            {menuStyle[0].status && (
+              <AddSingleItem
+                category={getCategory.category}
+                largeCategory={getCategory.largeCategory}
+              />
+            )}
+            {menuStyle[1].status && <div>복수 등록</div>}
+          </AddComponentsContainer>
+        </EquipmentWrapper>
+      )}
+    </>
   );
 }
 const EquipmentWrapper = styled.div`

@@ -41,6 +41,15 @@ const REQUEST_NAME = {
   REPORT: '보고서 결재',
 };
 
+const CATEGORY = {
+  전체: 'ALL',
+  컴퓨터: 'COMPUTER',
+  디지털: 'DIGITAL',
+  가전제품: 'ELECTRONICS',
+  가구: 'FURNITURE',
+  기타: 'ETC',
+};
+
 export const REQUEST_PAGES = {
   UNPROCESSED: {
     name: REQUEST_NAME.ALL,
@@ -76,6 +85,7 @@ const STRING = {
   REQUEST_TYPES,
   REQUEST_STATUSES,
   REQUEST_NAME,
+  CATEGORY,
 };
 
 export default STRING;
