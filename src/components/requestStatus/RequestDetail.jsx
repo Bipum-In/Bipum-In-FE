@@ -29,7 +29,7 @@ export default function RequestDetail({ isClose, detail }) {
     createdAt,
     modifiedAt,
   } = detail;
-  console.log(image);
+
   const [stockList, setStockList] = useState(null);
   const [declineComment, setDeclineComment] = useState('');
   const data = useRef({
