@@ -85,9 +85,9 @@ export default function EquipmentListContainer({
 
   const handleClickDetail = id => {};
 
-  const handleSingleModal = () => setShowSingleModal(false);
+  const handleSingleModal = () => setShowSingleModal(state => !state);
 
-  const handleMultipleModal = () => setShowMultipleModal(false);
+  const handleMultipleModal = () => setShowMultipleModal(state => !state);
 
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.largeCategory === name);
@@ -122,6 +122,8 @@ export default function EquipmentListContainer({
           keyword={keyword}
           setKeyword={handleChangeKeyword}
           onClickDetail={handleClickDetail}
+          onClickSingleModal={handleSingleModal}
+          onClickMultiModal={handleMultipleModal}
           resizeRef={resizeRef}
         />
       </EquipmentListWrapper>

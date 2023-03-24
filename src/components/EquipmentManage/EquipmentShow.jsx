@@ -16,6 +16,8 @@ export default function EquipmentShow({
   keyword,
   setKeyword,
   onClickDetail,
+  onClickSingleModal,
+  onClickMultiModal,
   resizeRef,
 }) {
   const selectBoxList = {
@@ -56,11 +58,11 @@ export default function EquipmentShow({
         setKeyword={setKeyword}
       >
         <EquipmentAddConatiner>
-          <Button>
+          <Button onClick={onClickSingleModal}>
             <Plus />
             단일 등록
           </Button>
-          <Button>
+          <Button onClick={onClickMultiModal}>
             <Plus />
             복수 등록
           </Button>
