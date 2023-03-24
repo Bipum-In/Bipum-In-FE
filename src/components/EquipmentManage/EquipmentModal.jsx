@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import Modal from '../../elements/Modal';
 import ModalHeader from '../common/ModalHeader';
 import AddSingleItem from '../equipmentAdd/AddSingleItem';
+import EquipmentDetail from './detail/EquipmentDetail';
 
 export default function EquipmentModal({
   showDetialModal,
@@ -16,6 +17,7 @@ export default function EquipmentModal({
       <Modal isOpen={showDetialModal.show}>
         <EquipmentDetailWrapper>
           <ModalHeader isClose={handleDetailModal} requestType={'비품 상세'} />
+          <EquipmentDetail detailId={showDetialModal.id} />
         </EquipmentDetailWrapper>
       </Modal>
       <Modal isOpen={showSingleModal}>
