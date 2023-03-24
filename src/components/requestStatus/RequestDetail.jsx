@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Axios from '../../api/axios';
 
-import Header from './detail/Header';
+import ModalHeader from '../common/ModalHeader';
 import Provide from './detail/Provide';
 import UserInfo from './detail/UserInfo';
 import UserContent from './detail/UserContent';
@@ -93,7 +93,7 @@ export default function RequestDetail({ isClose, detail }) {
 
   return (
     <DetailContainer>
-      <Header isClose={isClose} requestType={requestType} />
+      <ModalHeader isClose={isClose} requestType={requestType} />
       <ContentContainer>
         <RequestContainer>
           <UserInfo

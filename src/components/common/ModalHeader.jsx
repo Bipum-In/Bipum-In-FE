@@ -1,8 +1,8 @@
 import styled from 'styled-components';
-import Button from '../../../elements/Button';
-import { ReactComponent as XClose } from '../../../styles/commonIcon/close.svg';
+import Button from '../../elements/Button';
+import { ReactComponent as XClose } from '../../styles/commonIcon/close.svg';
 
-export default function Header({ isClose, requestType }) {
+export default function ModalHeader({ isClose, requestType }) {
   return (
     <TitleContainer>
       <Title>
