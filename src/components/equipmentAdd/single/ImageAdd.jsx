@@ -1,11 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import { ReactComponent as DefaultImage } from '../../../styles/commonIcon/defaultImage.svg';
 
 export default function ImageAdd({ preview, onChangeimge }) {
   return (
     <ImageContainer>
       사진첨부
-      {preview && <Image src={preview} alt="preview" />}
+      {preview ? <Image src={preview} alt="preview" /> : <DefaultImage />}
       <ImageinputFile
         as={'input'}
         type="file"
@@ -35,6 +36,7 @@ const ImageContainer = styled.div`
 
 const ImageinputFile = styled.div`
   ::file-selector-button {
+    margin-top: 1.4375rem;
     border: 0;
     border-radius: 6px;
     ${props => props.theme.FlexCol};

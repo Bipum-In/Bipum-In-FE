@@ -33,6 +33,7 @@ export default function AddSingleItem({ category, largeCategory }) {
   const [smallCategory, setSmallCategory] = useState(null);
   const [formImage, setFormformImage] = useState(null);
   const [preview, setPreview] = useState('');
+
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
 
   const [setSelectYear, setSelectMonth, setSelectDaysInMonth] =
@@ -124,7 +125,15 @@ export default function AddSingleItem({ category, largeCategory }) {
     equipmentData.serialNum = serialValue;
 
     formData.append('largeCategory', equipmentData);
+    formData.append('categoryName', equipmentData);
+    formData.append('modelName', equipmentData);
+    formData.append('serialNum', equipmentData);
+    formData.append('createdAt', equipmentData);
+    formData.append('partnersId', equipmentData);
+    formData.append('userId', equipmentData);
+
     formData.append('image', formImage);
+    console.log(equipmentData);
     sendFormData(formData);
   };
 
@@ -141,17 +150,20 @@ export default function AddSingleItem({ category, largeCategory }) {
             <EquipmentContainer>
               <TypeBox>
                 <TypeTitle requiredinput="true">비품종류</TypeTitle>
-                <SelectCategoryList
-                  category={[parseLargeCategory, smallCategory]}
-                  optionName={['name', 'categoryName']}
-                  optionNullName={['대분류', '소분류']}
-                  optionKey={['name', 'categoryName']}
-                  optionValueKey={['name', 'categoryName']}
-                  onChangeCategory={[
-                    handleChangeLargeCategory,
-                    handleChangeSmallCategory,
-                  ]}
-                />
+                <SelectCaregoryConteiner>
+                  <SelectCategoryList
+                    eqtype="true"
+                    category={[parseLargeCategory, smallCategory]}
+                    optionName={['name', 'categoryName']}
+                    optionNullName={['대분류', '소분류']}
+                    optionKey={['name', 'categoryName']}
+                    optionValueKey={['name', 'categoryName']}
+                    onChangeCategory={[
+                      handleChangeLargeCategory,
+                      handleChangeSmallCategory,
+                    ]}
+                  />
+                </SelectCaregoryConteiner>
               </TypeBox>
               <EquipmentInput
                 value={[nameValue, serialValue]}
@@ -203,6 +215,19 @@ export default function AddSingleItem({ category, largeCategory }) {
     </>
   );
 }
+
+const SelectCaregoryConteiner = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  select {
+    width: 5.25rem;
+    height: 2.6rem;
+
+    border-color: ${props => props.theme.color.blue.brandColor3};
+    color: ${props => props.theme.color.blue.brandColor6};
+    background-color: ${props => props.theme.color.blue.brandColor1};
+  }
+`;
 
 const PartnerCompany = styled.div`
   width: 5.8125rem;
@@ -256,19 +281,21 @@ const TypeBox = styled.div`
 `;
 const EquipmentContainer = styled.div`
   ${props => props.theme.FlexCol};
-  width: 37rem;
   height: 30.625rem;
   gap: 3.125rem;
+  border-right: 1px solid;
+  border-color: ${props => props.theme.color.grey.brandColor2};
+  padding-right: 9.5rem;
 `;
 
-const AddContainer = styled.main`
+const AddContainer = styled.article`
   width: 100%;
   display: flex;
   margin: 7.25rem 11rem 12rem 11rem;
   justify-content: space-between;
 `;
 
-const Container = styled.div`
+const Container = styled.section`
   ${props => props.theme.wh100};
   height: 73.9vh;
   display: flex;

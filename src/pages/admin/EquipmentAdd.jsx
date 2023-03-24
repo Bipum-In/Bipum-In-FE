@@ -53,7 +53,7 @@ const AddBtnContainer = styled.div`
   justify-content: flex-start;
   gap: 0.5375rem;
 `;
-const AddComponentsContainer = styled.div`
+const AddComponentsContainer = styled.main`
   ${props => props.theme.FlexRow};
   ${props => props.theme.wh100};
   background-color: white;
