@@ -28,6 +28,8 @@ export default function EquipmentListContainer({
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);
   const [categoryTitle, setCategoryTitle] = useState(categoryNameData);
+  const [showSingleModal, setShowSingleModal] = useState(false);
+  const [showMultipleModal, setShowMultipleModal] = useState(false);
   const [categoryList, setCategoryList] = useState({
     show: false,
     list: [category],
@@ -83,6 +85,10 @@ export default function EquipmentListContainer({
 
   const handleClickDetail = id => {};
 
+  const handleSingleModal = () => setShowSingleModal(false);
+
+  const handleMultipleModal = () => setShowMultipleModal(false);
+
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.largeCategory === name);
   };
@@ -119,9 +125,9 @@ export default function EquipmentListContainer({
           resizeRef={resizeRef}
         />
       </EquipmentListWrapper>
-      <Modal isOpen={true}>
+      <Modal isOpen={showSingleModal}>
         <EquipmentAddWrapper>
-          <ModalHeader isClose={''} requestType={'단일 등록'} />
+          <ModalHeader isClose={handleSingleModal} requestType={'단일 등록'} />
           <AddSingleItem category={category} largeCategory={largeCategory} />
         </EquipmentAddWrapper>
       </Modal>
