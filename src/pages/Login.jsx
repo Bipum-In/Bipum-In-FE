@@ -19,7 +19,7 @@ export default function Login() {
 
   useEffect(() => {
     const code = search.split('=')[1];
-    console.log(code);
+
     if (code && !checkCode) {
       axios.post(`/api/user/login?code=${code}`).then(res => {
         setWriteUser(res.data.data);
@@ -30,22 +30,26 @@ export default function Login() {
     }
 
     writeUser && navigate('/admin-dashboard');
-  }, [navigate, search, writeUser]);
+  }, [checkCode, navigate, search, writeUser]);
 
   const handleKakaoLogin = () => {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=bad08c2762b0ad4460013109d47675f2&redirect_uri=http://localhost:3000/api/user/kakao/callback&response_type=code`;
   };
 
   const handleLoginInfoAdd = () => {
-    if (departmentId || empName || phone)
-      return alert('모든 정보를 입력해주세요');
+    const { ko: deptId } = JSON.parse(departmentId);
+
+    if (!deptId || !empName || !phone) return alert('모든 정보를 입력해주세요');
 
     const loginadd = {
-      departmentId,
+      departmentId: deptId,
       empName,
       phone,
     };
-    axios.post(`/api/user/loginadd`, loginadd);
+
+    axios
+      .post(`/api/user/loginadd`, loginadd)
+      .then(res => setWriteUser(res.data.data));
   };
 
   const handleChangeDepartmentId = e => setDepartmentId(e.target.value);
@@ -61,8 +65,8 @@ export default function Login() {
             category={departmentList}
             optionName={'deptName'}
             optionNullName={'팀을 선택해주세요'}
-            optionKey={'deptId'}
-            optionValueKey={'deptName'}
+            optionKey={'deptName'}
+            optionValueKey={'deptId'}
             onChangeCategory={handleChangeDepartmentId}
           />
           <p>사용자 이름</p>

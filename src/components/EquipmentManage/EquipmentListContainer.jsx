@@ -150,15 +150,17 @@ const CategoryContainer = styled.div`
 `;
 
 const EquipmentAddWrapper = styled.div`
+  ${props => props.theme.flexCol}
+
   width: 80vw;
   height: 80vh;
   section {
     width: 100%;
-    height: 100%;
     padding: 3rem;
   }
 
   article {
+    height: 100%;
     margin: 0;
   }
 `;
