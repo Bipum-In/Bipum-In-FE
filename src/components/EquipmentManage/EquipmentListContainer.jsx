@@ -10,9 +10,6 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
-import Modal from '../../elements/Modal';
-import AddSingleItem from '../equipmentAdd/AddSingleItem';
-import ModalHeader from '../common/ModalHeader';
 import EquipmentModal from './EquipmentModal';
 
 export default function EquipmentListContainer({
@@ -29,6 +26,10 @@ export default function EquipmentListContainer({
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);
   const [categoryTitle, setCategoryTitle] = useState(categoryNameData);
+  const [showDetailModal, setShowDetailModal] = useState({
+    show: false,
+    id: null,
+  });
   const [showSingleModal, setShowSingleModal] = useState(false);
   const [showMultipleModal, setShowMultipleModal] = useState(false);
   const [categoryList, setCategoryList] = useState({
@@ -84,9 +85,8 @@ export default function EquipmentListContainer({
     setKeyword(e.target.value);
   };
 
-  const handleClickDetail = id => {
-    console.log(id);
-  };
+  const handleDetailModal = id =>
+    setShowDetailModal(state => ({ show: !state.show, id: id }));
 
   const handleSingleModal = () => setShowSingleModal(state => !state);
 
@@ -124,14 +124,16 @@ export default function EquipmentListContainer({
           setStatus={handleChangeState}
           keyword={keyword}
           setKeyword={handleChangeKeyword}
-          onClickDetail={handleClickDetail}
+          onClickDetail={handleDetailModal}
           onClickSingleModal={handleSingleModal}
           onClickMultiModal={handleMultipleModal}
           resizeRef={resizeRef}
         />
       </EquipmentListWrapper>
       <EquipmentModal
+        showDetialModal={showDetailModal}
         showSingleModal={showSingleModal}
+        handleDetailModal={handleDetailModal}
         handleSingleModal={handleSingleModal}
         category={category}
         largeCategory={largeCategory}

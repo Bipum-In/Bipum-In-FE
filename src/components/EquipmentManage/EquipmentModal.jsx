@@ -13,7 +13,7 @@ export default function EquipmentModal({
 }) {
   return (
     <>
-      <Modal isOpen={showDetialModal}>
+      <Modal isOpen={showDetialModal.show}>
         <EquipmentDetailWrapper>
           <ModalHeader isClose={handleDetailModal} requestType={'비품 상세'} />
         </EquipmentDetailWrapper>
