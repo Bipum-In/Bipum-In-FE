@@ -1,10 +1,17 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import Button from '../elements/Button';
 
 function Rending() {
   return (
     <PageWrapper>
       <BannerSection>
+        <Login>
+          <Link to="/login">
+            <Button>로그인</Button>
+          </Link>
+        </Login>
         <BannerTitle>화장실 감 </BannerTitle>
       </BannerSection>
       <ProductSection>
@@ -105,10 +112,23 @@ function Rending() {
 export default Rending;
 
 const PageWrapper = styled.div`
-  font-family: "Noto Sans KR", sans-serif;
+  font-family: 'Noto Sans KR', sans-serif;
   color: #333;
   height: 100%;
   overflow: auto;
+`;
+
+const Login = styled.div`
+  position: fixed;
+  top: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  width: 5rem;
+  color: white;
+  background-color: ${props => props.theme.color.blue.brandColor6};
+  border-radius: 0.25rem;
+  transform: translate(-1rem, 1rem);
 `;
 
 const BannerSection = styled.section`
