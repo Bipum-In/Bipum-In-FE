@@ -13,6 +13,7 @@ import { getEquipmentList } from '../../redux/modules/equipmentStatus';
 import Modal from '../../elements/Modal';
 import AddSingleItem from '../equipmentAdd/AddSingleItem';
 import ModalHeader from '../common/ModalHeader';
+import EquipmentModal from './EquipmentModal';
 
 export default function EquipmentListContainer({
   category: { category, largeCategory },
@@ -83,7 +84,9 @@ export default function EquipmentListContainer({
     setKeyword(e.target.value);
   };
 
-  const handleClickDetail = id => {};
+  const handleClickDetail = id => {
+    console.log(id);
+  };
 
   const handleSingleModal = () => setShowSingleModal(state => !state);
 
@@ -127,12 +130,12 @@ export default function EquipmentListContainer({
           resizeRef={resizeRef}
         />
       </EquipmentListWrapper>
-      <Modal isOpen={showSingleModal}>
-        <EquipmentAddWrapper>
-          <ModalHeader isClose={handleSingleModal} requestType={'단일 등록'} />
-          <AddSingleItem category={category} largeCategory={largeCategory} />
-        </EquipmentAddWrapper>
-      </Modal>
+      <EquipmentModal
+        showSingleModal={showSingleModal}
+        handleSingleModal={handleSingleModal}
+        category={category}
+        largeCategory={largeCategory}
+      />
     </>
   );
 }
@@ -147,20 +150,4 @@ const EquipmentListWrapper = styled.section`
 const CategoryContainer = styled.div`
   position: relative;
   margin-bottom: 1.125rem;
-`;
-
-const EquipmentAddWrapper = styled.div`
-  ${props => props.theme.flexCol}
-
-  width: 80vw;
-  height: 80vh;
-  section {
-    width: 100%;
-    padding: 3rem;
-  }
-
-  article {
-    height: 100%;
-    margin: 0;
-  }
 `;
