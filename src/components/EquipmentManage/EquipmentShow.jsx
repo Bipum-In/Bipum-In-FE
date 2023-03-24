@@ -58,7 +58,11 @@ export default function EquipmentShow({
         <EquipmentAddConatiner>
           <Button>
             <Plus />
-            비품등록
+            단일 등록
+          </Button>
+          <Button>
+            <Plus />
+            복수 등록
           </Button>
         </EquipmentAddConatiner>
       </StatusListHeader>
@@ -93,12 +97,21 @@ const RequestShowContainer = styled.div`
 `;
 
 const EquipmentAddConatiner = styled.div`
+  display: flex;
   margin-right: 1rem;
-  button {
+
+  button:first-child {
     width: 5.5625rem;
     height: 2.125rem;
     color: white;
     background-color: ${props => props.theme.color.blue.brandColor5};
+  }
+
+  button:last-child {
+    width: 5.5625rem;
+    height: 2.125rem;
+    color: white;
+    background-color: #3aa471;
   }
 
   svg {
