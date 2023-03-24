@@ -21,15 +21,15 @@ export default function Login() {
     const code = search.split('=')[1];
     console.log(code);
     if (code && !checkCode) {
-      setCheckCode(true);
-      axios
-        .post(`/api/user/login?code=${code}`)
-        .then(res => setWriteUser(res.data.data));
+      axios.post(`/api/user/login?code=${code}`).then(res => {
+        setWriteUser(res.data.data);
+        setCheckCode(true);
+      });
 
       axios.get(`/api/dept`).then(res => setDepartmentList(res.data.data));
     }
 
-    // writeUser && navigate('/admin-dashboard');
+    writeUser && navigate('/admin-dashboard');
   }, [navigate, search, writeUser]);
 
   const handleKakaoLogin = () => {
@@ -55,7 +55,7 @@ export default function Login() {
   return (
     <LoginWrapper>
       {!checkCode && <button onClick={handleKakaoLogin}>카카오 로그인</button>}
-      {writeUser && checkCode && (
+      {!writeUser && checkCode && (
         <SetUserInfo>
           <SelectCategory
             category={departmentList}
