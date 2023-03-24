@@ -11,6 +11,8 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
 import Modal from '../../elements/Modal';
+import AddSingleItem from '../equipmentAdd/AddSingleItem';
+import ModalHeader from '../common/ModalHeader';
 
 export default function EquipmentListContainer({
   category: { category, largeCategory },
@@ -117,8 +119,11 @@ export default function EquipmentListContainer({
           resizeRef={resizeRef}
         />
       </EquipmentListWrapper>
-      <Modal isOpen={false}>
-        <EquipmentAddWrapper>모달</EquipmentAddWrapper>
+      <Modal isOpen={true}>
+        <EquipmentAddWrapper>
+          <ModalHeader isClose={''} requestType={'단일 등록'} />
+          <AddSingleItem category={category} largeCategory={largeCategory} />
+        </EquipmentAddWrapper>
       </Modal>
     </>
   );
@@ -139,5 +144,13 @@ const CategoryContainer = styled.div`
 const EquipmentAddWrapper = styled.div`
   width: 80vw;
   height: 80vh;
-  padding: 3rem;
+  section {
+    width: 100%;
+    height: 100%;
+    padding: 3rem;
+  }
+
+  article {
+    margin: 0;
+  }
 `;
