@@ -152,7 +152,6 @@ export default function AddSingleItem({ category, largeCategory }) {
                 <TypeTitle requiredinput="true">비품종류</TypeTitle>
                 <SelectCaregoryConteiner>
                   <SelectCategoryList
-                    eqtype="true"
                     category={[parseLargeCategory, smallCategory]}
                     optionName={['name', 'categoryName']}
                     optionNullName={['대분류', '소분류']}
