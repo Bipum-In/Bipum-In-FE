@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { ReactComponent as ArrowDown } from '../../../styles/commonIcon/arrowDown.svg';
 
 export default function Provide({
+  image,
   comment,
   stockList,
   requestType,
@@ -37,10 +38,9 @@ export default function Provide({
         <EquipmentImageContainer>
           <span>비품 사진</span>
           <ImageContainer>
-            <img
-              src="https://cdn.autopostkorea.com/autopost/2021/12/24144910/2-34.jpg"
-              alt="equipmentImg"
-            />
+            {image.map(img => (
+              <img src={img} alt="equipmentImg" />
+            ))}
           </ImageContainer>
         </EquipmentImageContainer>
       )}

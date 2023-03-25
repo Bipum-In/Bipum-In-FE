@@ -39,7 +39,7 @@ export const __requestStatus = Redux.asyncThunk(
 
 export const requestDetail = Redux.asyncThunk(
   'DETAIL',
-  payload => axios.get(`/api/requests/${payload}`),
+  payload => axios.get(`/api/admin/requests/${payload}`),
   response => response.data.data
 );
 

@@ -12,6 +12,8 @@ import SelectCategoryList from '../../equipmentAdd/single/SelectCategoryList';
 import useSetEquipmentAddDate from '../../../hooks/useSetEquipmentAddDate';
 import SelectCategory from '../../common/SelectCategory';
 import Axios from '../../../api/axios';
+import SelectUser from '../../equipmentAdd/single/SelectUser';
+import SelectDate from '../../equipmentAdd/single/SelectDate';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const equipmentData = {
@@ -187,33 +189,22 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
                     <TextType>
                       <span>등록 일자</span>
                       {edit ? (
-                        <>
-                          <Date>
-                            <SelectCategory
-                              category={setSelectYear()}
-                              optionNullName="년"
-                              onChangeCategory={handleChangeYear}
-                            />
-                          </Date>
-                          <Date>
-                            <SelectCategory
-                              category={setSelectMonth()}
-                              optionNullName="월"
-                              onChangeCategory={handleChangeMonth}
-                            />
-                          </Date>
-                          <Date>
-                            <SelectCategory
-                              category={
-                                year &&
-                                month &&
-                                setSelectDaysInMonth(year, month)
-                              }
-                              optionNullName="일"
-                              onChangeCategory={handleChangeDay}
-                            />
-                          </Date>
-                        </>
+                        <Date>
+                          <SelectDate
+                            year={year}
+                            month={month}
+                            setSelect={[
+                              setSelectYear,
+                              setSelectMonth,
+                              setSelectDaysInMonth,
+                            ]}
+                            handleChange={[
+                              handleChangeYear,
+                              handleChangeMonth,
+                              handleChangeDay,
+                            ]}
+                          />
+                        </Date>
                       ) : (
                         <span>{getDetail.supplyDetail.createdAt}</span>
                       )}
@@ -221,14 +212,16 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
                     <TextType>
                       <span>협력업체</span>
                       {edit ? (
-                        <SelectCategory
-                          category={partners}
-                          optionNullName="회사명"
-                          optionKey={'partnersName'}
-                          optionValueKey={'partnersId'}
-                          optionName={'partnersName'}
-                          onChangeCategory={handleChangePartners}
-                        />
+                        <Partners>
+                          <SelectCategory
+                            category={partners}
+                            optionNullName="회사명"
+                            optionKey={'partnersName'}
+                            optionValueKey={'partnersId'}
+                            optionName={'partnersName'}
+                            onChangeCategory={handleChangePartners}
+                          />
+                        </Partners>
                       ) : (
                         <span>{getDetail.supplyDetail.partnersName}</span>
                       )}
@@ -236,24 +229,19 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
                     <TextType>
                       <span>사용자</span>
                       {edit ? (
-                        <>
-                          <SelectCategory
-                            category={dept}
-                            optionNullName={'부서명'}
-                            optionKey={'deptName'}
-                            optionValueKey={'deptId'}
-                            optionName={'deptName'}
-                            onChangeCategory={handleChangeDept}
+                        <DeptUser>
+                          <SelectUser
+                            category={[dept, user]}
+                            optionNullName={['부서명', '사원명']}
+                            optionKey={['deptName', 'empName']}
+                            optionValueKey={['deptId', 'userId']}
+                            optionName={['deptName', 'empName']}
+                            onChangeCategory={[
+                              handleChangeDept,
+                              handleChangeUser,
+                            ]}
                           />
-                          <SelectCategory
-                            category={user}
-                            optionNullName={'사원명'}
-                            optionKey={'empName'}
-                            optionValueKey={'userId'}
-                            optionName={'empName'}
-                            onChangeCategory={handleChangeUser}
-                          />
-                        </>
+                        </DeptUser>
                       ) : (
                         <span>
                           {`${getDetail.supplyDetail.deptName} / ${getDetail.supplyDetail.empName}`}
@@ -442,15 +430,26 @@ const TextType = styled.div`
 const Date = styled.div`
   display: flex;
   align-items: center;
+  gap: 0.5rem;
+
+  div:first-child {
+    padding: 0;
+  }
 
   div {
-    padding: 0;
-    width: 4.5rem;
+    width: 100%;
+    height: 100%;
   }
+`;
 
-  span {
-    display: none;
-  }
+const Partners = styled.div`
+  min-width: 5rem;
+`;
+
+const DeptUser = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 `;
 
 const History = styled.div`

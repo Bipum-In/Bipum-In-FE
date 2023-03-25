@@ -50,8 +50,9 @@ const EquipmentAddWrapper = styled.div`
     padding: 3rem;
   }
 
-  article {
+  form {
     height: 100%;
     margin: 0;
+    padding: 0;
   }
 `;
