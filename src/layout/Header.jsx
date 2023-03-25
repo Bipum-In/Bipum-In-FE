@@ -4,8 +4,10 @@ import { ReactComponent as Search } from '../styles/commonIcon/search.svg';
 import { ReactComponent as Alaram } from '../styles/commonIcon/alarm.svg';
 import { ReactComponent as Settings } from '../styles/commonIcon/settings.svg';
 import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg';
+
 import useOutsideClick from '../hooks/useOutsideClick';
 import test from '../styles/test.png';
+
 export default function Header() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
@@ -60,6 +62,7 @@ export default function Header() {
     </HeaderWrapper>
   );
 }
+
 const HeaderWrapper = styled.header`
   position: fixed;
   top: 0;
@@ -74,6 +77,9 @@ const HeaderContainer = styled.div`
   width: calc(100vw - 15.625rem);
   margin-left: auto;
   height: 100%;
+  @media (max-width: ${props => props.theme.screen.desktop}) {
+    width: calc(100vw);
+  }
 `;
 
 const ItemContainer = styled.div`
