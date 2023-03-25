@@ -18,7 +18,7 @@ export default function RequestShow({
 }) {
   const selectBoxList = {
     name: ['전체 보기', '처리전', '처리중', '처리 완료'],
-    type: ['ALL', 'UNPROCESSED', 'PROCESSING', 'PROCESSED'],
+    type: ['', 'UNPROCESSED', 'PROCESSING', 'PROCESSED'],
   };
 
   const headerList = [
