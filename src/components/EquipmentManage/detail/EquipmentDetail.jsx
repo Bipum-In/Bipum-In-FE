@@ -7,7 +7,6 @@ import STRING from '../../../constants/string';
 import Button from '../../../elements/Button';
 import Input from '../../../elements/Input';
 
-import SelectDate from '../../equipmentAdd/single/SelectDate';
 import SelectCategoryList from '../../equipmentAdd/single/SelectCategoryList';
 
 import useSetEquipmentAddDate from '../../../hooks/useSetEquipmentAddDate';
