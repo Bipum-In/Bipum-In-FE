@@ -156,10 +156,6 @@ export default function AddSingleItem({ category, largeCategory }) {
       .catch(err => console.log(err));
   };
 
-  const isDisabled = '';
-
-  console.log(equipmentData.largeCategory);
-
   return (
     <>
       {category && (
@@ -188,20 +184,25 @@ export default function AddSingleItem({ category, largeCategory }) {
                   setValue={[handleChangeNameValue, handleChangeSerialValue]}
                   onCrawling={handleClickCrawling}
                 />
-                <SelectDate
-                  year={year}
-                  month={month}
-                  setSelect={[
-                    setSelectYear,
-                    setSelectMonth,
-                    setSelectDaysInMonth,
-                  ]}
-                  handleChange={[
-                    handleChangeYear,
-                    handleChangeMonth,
-                    handleChangeDay,
-                  ]}
-                />
+                <AcquisitionContainer>
+                  <TypeBox>
+                    <TypeTitle>취득일자</TypeTitle>
+                    <SelectDate
+                      year={year}
+                      month={month}
+                      setSelect={[
+                        setSelectYear,
+                        setSelectMonth,
+                        setSelectDaysInMonth,
+                      ]}
+                      handleChange={[
+                        handleChangeYear,
+                        handleChangeMonth,
+                        handleChangeDay,
+                      ]}
+                    />
+                  </TypeBox>
+                </AcquisitionContainer>
                 <TypeBox>
                   <TypeTitle>협력업체</TypeTitle>
                   <PartnerCompany>
@@ -215,20 +216,23 @@ export default function AddSingleItem({ category, largeCategory }) {
                     />
                   </PartnerCompany>
                 </TypeBox>
-                <SelectUser
-                  category={[dept, user]}
-                  optionNullName={['부서명', '사원명']}
-                  optionKey={['deptName', 'empName']}
-                  optionValueKey={['deptId', 'userId']}
-                  optionName={['deptName', 'empName']}
-                  onChangeCategory={[handleChangeDept, handleChangeUser]}
-                />
+                <TypeBox>
+                  <TypeTitle>사용자</TypeTitle>
+                  <SelectUser
+                    category={[dept, user]}
+                    optionNullName={['부서명', '사원명']}
+                    optionKey={['deptName', 'empName']}
+                    optionValueKey={['deptId', 'userId']}
+                    optionName={['deptName', 'empName']}
+                    onChangeCategory={[handleChangeDept, handleChangeUser]}
+                  />
+                </TypeBox>
               </EquipmentLeftContainer>
               <Hr />
               <ImageAdd preview={preview} onChangeimge={onChangeimge} />
             </EquipmentDetailContainer>
             <SubminPostContainer>
-              <Button submit post onClick={setFormData} disabled={isDisabled}>
+              <Button submit post onClick={setFormData}>
                 비품 등록 완료
               </Button>
             </SubminPostContainer>
@@ -262,6 +266,10 @@ const SelectCaregoryConteiner = styled.div`
 
 const PartnerCompany = styled.div`
   width: 5.8125rem;
+  height: 2.5rem;
+`;
+
+const AcquisitionContainer = styled.div`
   height: 2.5rem;
 `;
 
