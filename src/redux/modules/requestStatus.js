@@ -14,10 +14,10 @@ const initialState = {
     isDetailError: false,
   },
   requestData: {
-    selectStatus: 'ALL',
-    menuType: 'ALL',
+    selectStatus: '',
+    menuType: '',
     menu: [
-      { name: '전체', type: 'ALL', status: true },
+      { name: '전체', type: '', status: true },
       { name: '비품 요청', type: 'SUPPLY', status: false },
       { name: '반납 요청', type: 'RETURN', status: false },
       { name: '수리 요청', type: 'REPAIR', status: false },
@@ -39,7 +39,7 @@ export const __requestStatus = Redux.asyncThunk(
 
 export const requestDetail = Redux.asyncThunk(
   'DETAIL',
-  payload => axios.get(`/api/requests/${payload}`),
+  payload => axios.get(`/api/admin/requests/${payload}`),
   response => response.data.data
 );
 

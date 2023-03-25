@@ -48,7 +48,7 @@ export default function RequestStatus() {
 
   const handleClickMenu = useSetStateChange(
     ['전체', '비품 요청', '반납 요청', '수리 요청', '보고서 결재'],
-    ['ALL', 'SUPPLY', 'RETURN', 'REPAIR', 'REPORT'],
+    ['', 'SUPPLY', 'RETURN', 'REPAIR', 'REPORT'],
     setType,
     e => {
       clickMenu(e);

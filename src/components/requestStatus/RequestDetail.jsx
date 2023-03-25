@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Axios from '../../api/axios';
 
-import Header from './detail/Header';
+import ModalHeader from '../common/ModalHeader';
 import Provide from './detail/Provide';
 import UserInfo from './detail/UserInfo';
 import UserContent from './detail/UserContent';
@@ -23,7 +23,7 @@ export default function RequestDetail({ isClose, detail }) {
     modelName,
     serialNum,
     content,
-    image,
+    imageList,
     userImage,
     deptName,
     empName,
@@ -33,10 +33,9 @@ export default function RequestDetail({ isClose, detail }) {
     modifiedAt,
   } = detail;
 
-  const [stockList, setStockList] = useState(null);
+  const [stockList, setStockList] = useState({ data: null, check: false });
   const [declineComment, setDeclineComment] = useState('');
   const data = useRef({
-    requestId,
     acceptResult: '',
     supplyId: 0,
     comment: '',
@@ -46,7 +45,9 @@ export default function RequestDetail({ isClose, detail }) {
     if (requestType === '비품 요청' && requestStatus === '처리전') {
       axios
         .get(`/api/supply/stock/${categoryId}`)
-        .then(res => setStockList(res.data.data));
+        .then(res => setStockList({ data: res.data.data, check: true }));
+    } else {
+      setStockList({ data: null, check: true });
     }
   }, [categoryId, requestStatus, requestType]);
 
@@ -88,54 +89,58 @@ export default function RequestDetail({ isClose, detail }) {
   };
 
   const putRequest = data => {
-    axios.put(`/api/admin/requests`, data).then(() => isClose());
+    axios.put(`/api/admin/requests/${requestId}`, data).then(() => isClose());
   };
 
   return (
-    <DetailContainer>
-      <Header isClose={isClose} requestType={requestType} />
-      <ContentContainer>
-        <RequestContainer>
-          <UserInfo
-            empName={empName}
-            deptName={deptName}
-            username={username}
-            userImage={userImage}
-          />
-          <UserContent
-            content={content}
-            serialNum={serialNum}
-            modelName={modelName}
+    <>
+      {stockList.check && (
+        <DetailContainer>
+          <ModalHeader isClose={isClose} requestType={requestType} />
+          <ContentContainer>
+            <RequestContainer>
+              <UserInfo
+                empName={empName}
+                deptName={deptName}
+                username={username}
+                userImage={userImage}
+              />
+              <UserContent
+                content={content}
+                serialNum={serialNum}
+                modelName={modelName}
+                requestType={requestType}
+                categoryName={categoryName}
+                requestStatus={requestStatus}
+              />
+            </RequestContainer>
+            <Provide
+              image={imageList}
+              comment={comment}
+              stockList={stockList.data}
+              requestType={requestType}
+              requestStatus={requestStatus}
+              declineComment={declineComment}
+              setDeclineComment={setDeclineComment}
+              handleChangeSelect={handleChangeSelect}
+            />
+          </ContentContainer>
+          <ProcessButton
             requestType={requestType}
-            categoryName={categoryName}
+            requestStatus={requestStatus}
+            handleAccept={handleAccept}
+            handleDecline={handleDecline}
+            handleDispose={handleDispose}
+            handleRepairComplete={handleRepairComplete}
+          />
+          <CreatedAtFormatDate
+            createdAt={createdAt}
+            modifiedAt={modifiedAt}
             requestStatus={requestStatus}
           />
-        </RequestContainer>
-        <Provide
-          image={image}
-          comment={comment}
-          stockList={stockList}
-          requestType={requestType}
-          requestStatus={requestStatus}
-          declineComment={declineComment}
-          setDeclineComment={setDeclineComment}
-          handleChangeSelect={handleChangeSelect}
-        />
-      </ContentContainer>
-      <ProcessButton
-        requestType={requestType}
-        requestStatus={requestStatus}
-        handleAccept={handleAccept}
-        handleDecline={handleDecline}
-        handleDispose={handleDispose}
-        handleRepairComplete={handleRepairComplete}
-      />
-      <CreatedAtFormatDate
-        createdAt={createdAt}
-        modifiedAt={modifiedAt}
-        requestStatus={requestStatus}
-      />
-    </DetailContainer>
+        </DetailContainer>
+      )}
+    </>
   );
 }
 

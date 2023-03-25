@@ -17,7 +17,6 @@ export default function RequestModal({ isClose, detailId }) {
 
   return (
     <RequestModalWrapper>
-      {isDetailLoading && <div>로딩중</div>}
       {isDetailError && <div>에러</div>}
       {getDetail && <RequestDetail isClose={isClose} detail={getDetail} />}
     </RequestModalWrapper>

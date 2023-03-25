@@ -10,7 +10,7 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
-import Modal from '../../elements/Modal';
+import EquipmentModal from './EquipmentModal';
 
 export default function EquipmentListContainer({
   category: { category, largeCategory },
@@ -26,6 +26,12 @@ export default function EquipmentListContainer({
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);
   const [categoryTitle, setCategoryTitle] = useState(categoryNameData);
+  const [showDetailModal, setShowDetailModal] = useState({
+    show: false,
+    id: null,
+  });
+  const [showSingleModal, setShowSingleModal] = useState(false);
+  const [showMultipleModal, setShowMultipleModal] = useState(false);
   const [categoryList, setCategoryList] = useState({
     show: false,
     list: [category],
@@ -79,7 +85,12 @@ export default function EquipmentListContainer({
     setKeyword(e.target.value);
   };
 
-  const handleClickDetail = id => {};
+  const handleDetailModal = id =>
+    setShowDetailModal(state => ({ show: !state.show, id: id }));
+
+  const handleSingleModal = () => setShowSingleModal(state => !state);
+
+  const handleMultipleModal = () => setShowMultipleModal(state => !state);
 
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.largeCategory === name);
@@ -113,13 +124,20 @@ export default function EquipmentListContainer({
           setStatus={handleChangeState}
           keyword={keyword}
           setKeyword={handleChangeKeyword}
-          onClickDetail={handleClickDetail}
+          onClickDetail={handleDetailModal}
+          onClickSingleModal={handleSingleModal}
+          onClickMultiModal={handleMultipleModal}
           resizeRef={resizeRef}
         />
       </EquipmentListWrapper>
-      <Modal isOpen={false}>
-        <EquipmentAddWrapper>모달</EquipmentAddWrapper>
-      </Modal>
+      <EquipmentModal
+        showDetialModal={showDetailModal}
+        showSingleModal={showSingleModal}
+        handleDetailModal={handleDetailModal}
+        handleSingleModal={handleSingleModal}
+        category={category}
+        largeCategory={largeCategory}
+      />
     </>
   );
 }
@@ -134,10 +152,4 @@ const EquipmentListWrapper = styled.section`
 const CategoryContainer = styled.div`
   position: relative;
   margin-bottom: 1.125rem;
-`;
-
-const EquipmentAddWrapper = styled.div`
-  width: 80vw;
-  height: 80vh;
-  padding: 3rem;
 `;

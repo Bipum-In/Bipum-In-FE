@@ -50,6 +50,13 @@ const CATEGORY = {
   기타: 'ETC',
 };
 
+const EQUIPMENT_STATUS = {
+  ALL: '전체',
+  STOCK: '재고',
+  USING: '사용중',
+  REPAIRING: '수리중',
+};
+
 export const REQUEST_PAGES = {
   UNPROCESSED: {
     name: REQUEST_NAME.ALL,
@@ -86,6 +93,7 @@ const STRING = {
   REQUEST_STATUSES,
   REQUEST_NAME,
   CATEGORY,
+  EQUIPMENT_STATUS,
 };
 
 export default STRING;

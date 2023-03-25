@@ -7,6 +7,11 @@ const initialState = {
     isEquipmentLoading: false,
     isEquipmentError: false,
   },
+  equipmentDetail: {
+    getDetail: null,
+    isDetailLoading: false,
+    isDetailError: false,
+  },
   category: {
     getCategory: null,
     isCategoryLoading: false,
@@ -26,6 +31,12 @@ export const getEquipmentList = Redux.asyncThunk(
     axios.get(
       `/api/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
     ),
+  response => response.data.data
+);
+
+export const getEquipmentDetail = Redux.asyncThunk(
+  'EQUIPMENT_DETAIL',
+  payload => axios.get(`/api/supply/${payload}`),
   response => response.data.data
 );
 
@@ -75,6 +86,14 @@ const equipmentStatusSlice = Redux.slice(
       'isEquipmentLoading',
       'getEquipment',
       'isEquipmentError'
+    );
+    Redux.extraReducer(
+      bulider,
+      getEquipmentDetail,
+      'equipmentDetail',
+      'isDetailLoading',
+      'getDetail',
+      'isDetailError'
     );
     Redux.extraReducer(
       bulider,
