@@ -85,6 +85,7 @@ export default function AddSingleItem({ category, largeCategory }) {
 
   const handleChangePartners = e => {
     const { ko: partners } = JSON.parse(e.target.value);
+    console.log(partners);
     equipmentData.partnersId = partners;
   };
 
@@ -118,7 +119,8 @@ export default function AddSingleItem({ category, largeCategory }) {
     reader.readAsDataURL(img);
   };
 
-  const setFormData = () => {
+  const setFormData = e => {
+    e.preventDefault();
     const formData = new FormData();
     equipmentData.createdAt = new Date();
     equipmentData.modelName = nameValue;
@@ -142,78 +144,108 @@ export default function AddSingleItem({ category, largeCategory }) {
 
   const sendFormData = formData => axios.post(`/api/supply/`, formData);
 
+  const handleClickCrawling = e => {
+    e.preventDefault();
+    setPreview(getCrawlingData(nameValue));
+  };
+
+  const getCrawlingData = modelname => {
+    axios
+      .get(`/api/supply/search?modelName=${modelname}`)
+      .then(res => setPreview(res.data.data.image))
+      .catch(err => console.log(err));
+  };
+
+  const isDisabled = '';
+
+  console.log(equipmentData.largeCategory);
+
   return (
     <>
       {category && (
-        <Container>
-          <AddContainer>
-            <EquipmentContainer>
-              <TypeBox>
-                <TypeTitle requiredinput="true">비품종류</TypeTitle>
-                <SelectCaregoryConteiner>
-                  <SelectCategoryList
-                    category={[parseLargeCategory, smallCategory]}
-                    optionName={['name', 'categoryName']}
-                    optionNullName={['대분류', '소분류']}
-                    optionKey={['name', 'categoryName']}
-                    optionValueKey={['name', 'categoryName']}
-                    onChangeCategory={[
-                      handleChangeLargeCategory,
-                      handleChangeSmallCategory,
-                    ]}
-                  />
-                </SelectCaregoryConteiner>
-              </TypeBox>
-              <EquipmentInput
-                value={[nameValue, serialValue]}
-                setValue={[handleChangeNameValue, handleChangeSerialValue]}
-              />
-              <SelectDate
-                year={year}
-                month={month}
-                setSelect={[
-                  setSelectYear,
-                  setSelectMonth,
-                  setSelectDaysInMonth,
-                ]}
-                handleChange={[
-                  handleChangeYear,
-                  handleChangeMonth,
-                  handleChangeDay,
-                ]}
-              />
-              <TypeBox>
-                <TypeTitle>협력업체</TypeTitle>
-                <PartnerCompany>
-                  <SelectCategory
-                    category={partners}
-                    optionNullName="회사명"
-                    optionKey={'partnersName'}
-                    optionValueKey={'partnersId'}
-                    optionName={'partnersName'}
-                    onChangeCategory={handleChangePartners}
-                  />
-                </PartnerCompany>
-              </TypeBox>
-              <SelectUser
-                category={[dept, user]}
-                optionNullName={['부서명', '사원명']}
-                optionKey={['deptName', 'empName']}
-                optionValueKey={['deptId', 'userId']}
-                optionName={['deptName', 'empName']}
-                onChangeCategory={[handleChangeDept, handleChangeUser]}
-              />
-            </EquipmentContainer>
-            <ImageAdd preview={preview} onChangeimge={onChangeimge} />
-            <ButtonBox>
-              <Button onClick={setFormData}>비품 등록 완료</Button>
-            </ButtonBox>
-          </AddContainer>
-        </Container>
+        <AddEquipmentWrapper>
+          <AddEquipmentArticle>
+            <EquipmentDetailContainer>
+              <EquipmentLeftContainer>
+                <TypeBox>
+                  <TypeTitle requiredinput="true">비품종류</TypeTitle>
+                  <SelectCaregoryConteiner>
+                    <SelectCategoryList
+                      category={[parseLargeCategory, smallCategory]}
+                      optionName={['name', 'categoryName']}
+                      optionNullName={['대분류', '소분류']}
+                      optionKey={['name', 'categoryName']}
+                      optionValueKey={['name', 'categoryName']}
+                      onChangeCategory={[
+                        handleChangeLargeCategory,
+                        handleChangeSmallCategory,
+                      ]}
+                    />
+                  </SelectCaregoryConteiner>
+                </TypeBox>
+                <EquipmentInput
+                  value={[nameValue, serialValue]}
+                  setValue={[handleChangeNameValue, handleChangeSerialValue]}
+                  onCrawling={handleClickCrawling}
+                />
+                <SelectDate
+                  year={year}
+                  month={month}
+                  setSelect={[
+                    setSelectYear,
+                    setSelectMonth,
+                    setSelectDaysInMonth,
+                  ]}
+                  handleChange={[
+                    handleChangeYear,
+                    handleChangeMonth,
+                    handleChangeDay,
+                  ]}
+                />
+                <TypeBox>
+                  <TypeTitle>협력업체</TypeTitle>
+                  <PartnerCompany>
+                    <SelectCategory
+                      category={partners}
+                      optionNullName="회사명"
+                      optionKey={'partnersName'}
+                      optionValueKey={'partnersId'}
+                      optionName={'partnersName'}
+                      onChangeCategory={handleChangePartners}
+                    />
+                  </PartnerCompany>
+                </TypeBox>
+                <SelectUser
+                  category={[dept, user]}
+                  optionNullName={['부서명', '사원명']}
+                  optionKey={['deptName', 'empName']}
+                  optionValueKey={['deptId', 'userId']}
+                  optionName={['deptName', 'empName']}
+                  onChangeCategory={[handleChangeDept, handleChangeUser]}
+                />
+              </EquipmentLeftContainer>
+              <Hr />
+              <ImageAdd preview={preview} onChangeimge={onChangeimge} />
+            </EquipmentDetailContainer>
+            <SubminPostContainer>
+              <Button submit post onClick={setFormData} disabled={isDisabled}>
+                비품 등록 완료
+              </Button>
+            </SubminPostContainer>
+          </AddEquipmentArticle>
+        </AddEquipmentWrapper>
       )}
     </>
   );
 }
+
+const AddEquipmentWrapper = styled.section`
+  ${props => props.theme.wh100};
+  height: 73.9vh;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+`;
 
 const SelectCaregoryConteiner = styled.div`
   display: flex;
@@ -231,25 +263,6 @@ const SelectCaregoryConteiner = styled.div`
 const PartnerCompany = styled.div`
   width: 5.8125rem;
   height: 2.5rem;
-`;
-
-const ButtonBox = styled.div`
-  position: absolute;
-  right: 0rem;
-  bottom: 3.5rem;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-
-  Button {
-    border: 0;
-    color: white;
-    width: 21.9375rem;
-    height: 3.875rem;
-    font-weight: 700;
-    font-size: 1.375rem;
-    background-color: ${props => props.theme.color.blue.brandColor6};
-  }
 `;
 
 const TypeTitle = styled.span`
@@ -278,26 +291,35 @@ const TypeBox = styled.div`
     border-radius: 0.5rem;
   }
 `;
-const EquipmentContainer = styled.div`
+
+const AddEquipmentArticle = styled.form`
   ${props => props.theme.FlexCol};
-  height: 30.625rem;
-  gap: 3.125rem;
-  border-right: 1px solid;
-  border-color: ${props => props.theme.color.grey.brandColor2};
-  padding-right: 9.5rem;
-`;
-
-const AddContainer = styled.article`
   width: 100%;
-  display: flex;
-  margin: 7.25rem 11rem 12rem 11rem;
-  justify-content: space-between;
+  padding: 7.5rem 8.75rem 0;
 `;
 
-const Container = styled.section`
-  ${props => props.theme.wh100};
-  height: 73.9vh;
-  display: flex;
-  overflow: hidden;
-  position: relative;
+const EquipmentDetailContainer = styled.div`
+  ${props => props.theme.FlexRow};
+  justify-content: space-between;
+  min-height: 30.625rem;
+`;
+
+const EquipmentLeftContainer = styled.div`
+  ${props => props.theme.FlexCol};
+  gap: 3.125rem;
+`;
+
+const Hr = styled.div`
+  height: 100%;
+  width: 1px;
+  background-color: ${props => props.theme.color.grey.brandColor2};
+  margin: 0 2.5rem;
+`;
+
+const SubminPostContainer = styled.div`
+  ${props => props.theme.FlexRow};
+  ${props => props.theme.FlexCenter};
+  padding-top: 2rem;
+  margin-bottom: 2rem;
+  width: 100%;
 `;
