@@ -22,7 +22,7 @@ export default function EquipmentListContainer({
   } = useSelector(state => state.equipmentStatus);
 
   const [page, setPage] = useState(1);
-  const [status, setStatus] = useState('ALL');
+  const [status, setStatus] = useState('');
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);
   const [categoryTitle, setCategoryTitle] = useState(categoryNameData);

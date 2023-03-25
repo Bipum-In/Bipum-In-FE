@@ -22,7 +22,7 @@ export default function EquipmentShow({
 }) {
   const selectBoxList = {
     name: ['전체 보기', '사용중', '재고', '수리중'],
-    type: ['ALL', 'USING', 'STOCK', 'REPAIRING'],
+    type: ['', 'USING', 'STOCK', 'REPAIRING'],
   };
   const headerList = [
     { name: '종류', width: '5.6875rem' },
