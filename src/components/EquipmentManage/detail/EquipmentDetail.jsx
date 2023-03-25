@@ -14,6 +14,7 @@ import SelectCategory from '../../common/SelectCategory';
 import Axios from '../../../api/axios';
 import SelectUser from '../../equipmentAdd/single/SelectUser';
 import SelectDate from '../../equipmentAdd/single/SelectDate';
+import { FormatDateToDot } from '../../../utils/formatDate';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const equipmentData = {
@@ -46,7 +47,7 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
   const { getDetail, isDetailError } = useSelector(
     state => state.equipmentStatus.equipmentDetail
   );
-
+  console.log(getDetail);
   useEffect(() => {
     dispatch(getEquipmentDetail(detailId));
     axios.get(`/api/dept`).then(res => setDept(res.data.data));
@@ -133,10 +134,7 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
           </DetailBodyTitle>
           <DetailBodyContainer>
             <ImgContainer>
-              <img
-                src="https://images.samsung.com/kdp/goods/2023/02/10/e5b514a3-a820-4187-a440-f2af65de7f2c.png?$PD_GALLERY_L_PNG$"
-                alt="detailImg"
-              />
+              <img src={getDetail.supplyDetail.image} alt="detailImg" />
             </ImgContainer>
             <div>
               <DetailInfoContainer>
@@ -260,11 +258,13 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
                     <span>내역</span>
                   </DetailUseHistoryHeader>
                   <InfiniteScroll>
-                    <DetailUseHistoryContent>
-                      <span>2023.02.03</span>
-                      <span>개발팀 / 김선중</span>
-                      <span>반납</span>
-                    </DetailUseHistoryContent>
+                    {getDetail.supplyHistory.map(item => (
+                      <DetailUseHistoryContent>
+                        <span>{FormatDateToDot(item.modifiedAt)}</span>
+                        <span>{`${item.deptName} / ${item.empName}`}</span>
+                        <span>{item.content}</span>
+                      </DetailUseHistoryContent>
+                    ))}
                     {/* <InfiniteScrollCheck /> */}
                   </InfiniteScroll>
                 </DetailUseHistory>
@@ -276,11 +276,13 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
                     <span>수리업체</span>
                   </DetailRepairHistoryHeader>
                   <InfiniteScroll>
-                    <DetailRepairHistoryContent>
-                      <span>2023.02.03</span>
-                      <span>개발팀 / 김선중</span>
-                      <span>os 모니터</span>
-                    </DetailRepairHistoryContent>
+                    {getDetail.supplyRepairHistory.map(item => (
+                      <DetailRepairHistoryContent>
+                        <span>{FormatDateToDot(item.modifiedAt)}</span>
+                        <span>{`${item.deptName} / ${item.empName}`}</span>
+                        <span>{item.partnersName}</span>
+                      </DetailRepairHistoryContent>
+                    ))}
                     {/* <InfiniteScrollCheck /> */}
                   </InfiniteScroll>
                 </DetailRepairHistory>
