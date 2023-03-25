@@ -40,8 +40,8 @@ const ButtonWrapper = styled.button`
     props.submit &&
     css`
       padding: 0rem 0.625rem;
-      font-size: 1rem;
-      width: 15rem;
+      font-size: ${props => (props.post === 'true' ? '1.375rem' : '1rem')};
+      width: ${props => (props.post ? '20.5em;' : '15rem')};
       height: 3.5rem;
       text-align: center;
       color: white;
