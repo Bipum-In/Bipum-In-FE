@@ -15,6 +15,7 @@ import Axios from '../../../api/axios';
 import SelectUser from '../../equipmentAdd/single/SelectUser';
 import SelectDate from '../../equipmentAdd/single/SelectDate';
 import { FormatDateToDot } from '../../../utils/formatDate';
+import DetailHeader from './DetailHeader';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const equipmentData = {
@@ -115,16 +116,7 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
     <>
       {getDetail && (
         <DetailWrapper>
-          <DetailHeader>
-            {edit ? (
-              <SaveButton>저장</SaveButton>
-            ) : (
-              <>
-                <DisposeButton>폐기</DisposeButton>
-                <EditButton onClick={handleEdit}>수정</EditButton>
-              </>
-            )}
-          </DetailHeader>
+          <DetailHeader edit={edit} onEdit={handleEdit} />
           <DetailBodyTitle>
             <span>{getDetail.supplyDetail.modelName}</span>
             <span>
@@ -299,29 +291,6 @@ const DetailWrapper = styled.main`
   ${props => props.theme.flexCol}
   padding: 0 6.375rem;
 `;
-
-const DetailHeader = styled.header`
-  display: flex;
-  justify-content: flex-end;
-  width: 100%;
-  margin: 2.25rem 0;
-  gap: 0.5rem;
-`;
-
-const DisposeButton = styled(Button)`
-  width: 3.9375rem;
-  height: 2.0625rem;
-  margin: 0;
-  color: #6d5517;
-  background-color: #efecd9;
-`;
-
-const SaveButton = styled(DisposeButton)`
-  color: white;
-  background-color: ${props => props.theme.color.blue.brandColor6};
-`;
-
-const EditButton = styled(SaveButton)``;
 
 const DetailBodyTitle = styled.div`
   display: flex;
