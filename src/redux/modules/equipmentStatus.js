@@ -29,7 +29,7 @@ export const getEquipmentList = Redux.asyncThunk(
   'EQUIPMENT',
   payload =>
     axios.get(
-      `/api/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
+      `/api/admin/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
     ),
   response => response.data.data
 );
