@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { v4 as uuidv4 } from 'uuid';
 import { ReactComponent as ArrowDown } from '../../../styles/commonIcon/arrowDown.svg';
 
 export default function Provide({
@@ -39,7 +40,7 @@ export default function Provide({
           <span>비품 사진</span>
           <ImageContainer>
             {image.map(img => (
-              <img src={img} alt="equipmentImg" />
+              <img key={uuidv4()} src={img} alt="equipmentImg" />
             ))}
           </ImageContainer>
         </EquipmentImageContainer>

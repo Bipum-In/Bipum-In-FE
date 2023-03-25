@@ -21,6 +21,7 @@ export default function EquipmentModal({
             category={category}
             largeCategory={largeCategory}
             detailId={showDetialModal.id}
+            isClose={handleDetailModal}
           />
         </EquipmentDetailWrapper>
       </Modal>

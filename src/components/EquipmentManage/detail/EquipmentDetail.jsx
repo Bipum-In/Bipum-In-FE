@@ -24,7 +24,12 @@ const equipmentData = {
   userId: null,
 };
 
-export default function EquipmentDetail({ category, largeCategory, detailId }) {
+export default function EquipmentDetail({
+  category,
+  largeCategory,
+  detailId,
+  isClose,
+}) {
   const dispatch = useDispatch();
   const [edit, setEdit] = useState(false);
   const [day, setDay] = useState(null);
@@ -52,6 +57,10 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
   }, [detailId, dispatch]);
 
   const handleEdit = () => setEdit(true);
+
+  const handleDispose = supplyId => {
+    axios.delete(`/api/supply/${supplyId}`).then(() => isClose());
+  };
 
   const handleChangeLargeCategory = e => {
     const { ko, eng } = JSON.parse(e.target.value);
@@ -113,7 +122,12 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
       {isDetailError && <div>에러가 발생했습니다.</div>}
       {getDetail && (
         <DetailWrapper>
-          <DetailHeader edit={edit} onEdit={handleEdit} />
+          <DetailHeader
+            edit={edit}
+            detail={getDetail}
+            onEdit={handleEdit}
+            onDispose={handleDispose}
+          />
           <DetailBodyTitle detail={getDetail} />
           <DetailBodyContainer>
             <ImgContainer>

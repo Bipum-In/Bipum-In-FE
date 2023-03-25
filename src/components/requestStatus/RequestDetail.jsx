@@ -36,7 +36,6 @@ export default function RequestDetail({ isClose, detail }) {
   const [stockList, setStockList] = useState({ data: null, check: false });
   const [declineComment, setDeclineComment] = useState('');
   const data = useRef({
-    requestId,
     acceptResult: '',
     supplyId: 0,
     comment: '',
@@ -90,7 +89,7 @@ export default function RequestDetail({ isClose, detail }) {
   };
 
   const putRequest = data => {
-    axios.put(`/api/admin/requests`, data).then(() => isClose());
+    axios.put(`/api/admin/requests/${requestId}`, data).then(() => isClose());
   };
 
   return (
