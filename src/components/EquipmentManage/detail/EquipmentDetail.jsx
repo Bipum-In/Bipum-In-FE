@@ -1,13 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentDetail } from '../../../redux/modules/equipmentStatus';
+import { v4 as uuidv4 } from 'uuid';
 
 import styled from 'styled-components';
-import STRING from '../../../constants/string';
-import Button from '../../../elements/Button';
-import Input from '../../../elements/Input';
-
-import SelectCategoryList from '../../equipmentAdd/single/SelectCategoryList';
 
 import useSetEquipmentAddDate from '../../../hooks/useSetEquipmentAddDate';
 import SelectCategory from '../../common/SelectCategory';
@@ -17,6 +13,7 @@ import SelectDate from '../../equipmentAdd/single/SelectDate';
 import { FormatDateToDot } from '../../../utils/formatDate';
 import DetailHeader from './DetailHeader';
 import DetailBodyTitle from './DetailBodyTitle';
+import DetailInfoProduct from './DetailInfoProduct';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const equipmentData = {
@@ -126,50 +123,20 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
             <div>
               <DetailInfoContainer>
                 <DetailInfo>
-                  <DetailInfoContent>
-                    <TextType>
-                      <span>비품 종류</span>
-                      {edit ? (
-                        <SelectCategoryList
-                          category={[parseLargeCategory, smallCategory]}
-                          optionName={['name', 'categoryName']}
-                          optionNullName={['대분류', '소분류']}
-                          optionKey={['name', 'categoryName']}
-                          optionValueKey={['name', 'categoryName']}
-                          onChangeCategory={[
-                            handleChangeLargeCategory,
-                            handleChangeSmallCategory,
-                          ]}
-                        />
-                      ) : (
-                        <span>하드 코딩부분 수정해야함</span>
-                      )}
-                    </TextType>
-                    <TextType>
-                      <span>제품명</span>
-                      {edit ? (
-                        <Input
-                          value={modelName}
-                          setState={handleChangeNameValue}
-                          placeholder="제품명을 기입해주세요"
-                        />
-                      ) : (
-                        <span>{getDetail.supplyDetail.modelName}</span>
-                      )}
-                    </TextType>
-                    <TextType>
-                      <span>시리얼 넘버</span>
-                      {edit ? (
-                        <Input
-                          value={serialNum}
-                          setState={handleChangeSerialValue}
-                          placeholder="시리얼넘버를 기입해주세요"
-                        />
-                      ) : (
-                        <span>{getDetail.supplyDetail.serialNum}</span>
-                      )}
-                    </TextType>
-                  </DetailInfoContent>
+                  <DetailInfoProduct
+                    edit={edit}
+                    value={[modelName, serialNum]}
+                    detail={getDetail}
+                    category={[parseLargeCategory, smallCategory]}
+                    onChangeCategory={[
+                      handleChangeLargeCategory,
+                      handleChangeSmallCategory,
+                    ]}
+                    onChangeValue={[
+                      handleChangeNameValue,
+                      handleChangeSerialValue,
+                    ]}
+                  />
                   <DetailInfoContent>
                     <TextType>
                       <span>등록 일자</span>
@@ -246,7 +213,7 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
                   </DetailUseHistoryHeader>
                   <InfiniteScroll>
                     {getDetail.supplyHistory.map(item => (
-                      <DetailUseHistoryContent>
+                      <DetailUseHistoryContent key={uuidv4()}>
                         <span>{FormatDateToDot(item.modifiedAt)}</span>
                         <span>{`${item.deptName} / ${item.empName}`}</span>
                         <span>{item.content}</span>
@@ -264,7 +231,7 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
                   </DetailRepairHistoryHeader>
                   <InfiniteScroll>
                     {getDetail.supplyRepairHistory.map(item => (
-                      <DetailRepairHistoryContent>
+                      <DetailRepairHistoryContent key={uuidv4()}>
                         <span>{FormatDateToDot(item.modifiedAt)}</span>
                         <span>{`${item.deptName} / ${item.empName}`}</span>
                         <span>{item.partnersName}</span>
