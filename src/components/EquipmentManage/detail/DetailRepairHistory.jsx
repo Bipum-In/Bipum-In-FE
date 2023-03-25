@@ -2,9 +2,8 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { FormatDateToDot } from '../../../utils/formatDate';
 
-export default function DetailRepairHistory({
-  detail: { supplyRepairHistory },
-}) {
+export default function DetailRepairHistory({ detail }) {
+  const { content } = detail.supplyRepairHistory;
   return (
     <DetailRepairHistoryContainer>
       <p>수리 내역</p>
@@ -14,7 +13,7 @@ export default function DetailRepairHistory({
         <span>수리업체</span>
       </DetailRepairHistoryHeader>
       <InfiniteScroll>
-        {supplyRepairHistory.map(item => (
+        {content.map(item => (
           <DetailRepairHistoryContent key={uuidv4()}>
             <span>{FormatDateToDot(item.modifiedAt)}</span>
             <span>{`${item.deptName} / ${item.empName}`}</span>

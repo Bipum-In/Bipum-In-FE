@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { FormatDateToDot } from '../../../utils/formatDate';
 
 export default function DetailUseHistory({ detail }) {
-  console.log(detail);
+  const { content } = detail.supplyUserHistory;
   return (
     <DetailUseHistoryContainer>
       <p>사용 내역</p>
@@ -13,11 +13,11 @@ export default function DetailUseHistory({ detail }) {
         <span>내역</span>
       </DetailUseHistoryHeader>
       <InfiniteScroll>
-        {detail.supplyHistory?.map(item => (
+        {content.map(item => (
           <DetailUseHistoryContent key={uuidv4()}>
             <span>{FormatDateToDot(item.modifiedAt)}</span>
             <span>{`${item.deptName} / ${item.empName}`}</span>
-            <span>{item.content}</span>
+            <span>{item.history}</span>
           </DetailUseHistoryContent>
         ))}
         {/* <InfiniteScrollCheck /> */}
