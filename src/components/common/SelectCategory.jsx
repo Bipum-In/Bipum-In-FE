@@ -11,8 +11,10 @@ export default function SelectCategory({
   onChangeCategory,
 }) {
   return (
-    <Select onChange={onChangeCategory}>
-      <option>{optionNullName}</option>
+    <Select onChange={onChangeCategory} defaultValue={optionNullName}>
+      <option value={optionNullName} disabled hidden>
+        {optionNullName}
+      </option>
       {category &&
         category.map(value =>
           typeof value === 'string' ? (
