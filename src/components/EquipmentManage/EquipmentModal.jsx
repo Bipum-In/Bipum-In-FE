@@ -17,7 +17,11 @@ export default function EquipmentModal({
       <Modal isOpen={showDetialModal.show}>
         <EquipmentDetailWrapper>
           <ModalHeader isClose={handleDetailModal} requestType={'비품 상세'} />
-          <EquipmentDetail detailId={showDetialModal.id} />
+          <EquipmentDetail
+            category={category}
+            largeCategory={largeCategory}
+            detailId={showDetialModal.id}
+          />
         </EquipmentDetailWrapper>
       </Modal>
       <Modal isOpen={showSingleModal}>
