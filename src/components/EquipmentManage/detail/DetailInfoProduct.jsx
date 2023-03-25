@@ -17,12 +17,12 @@ export default function DetailInfoProduct({
         <span>비품 종류</span>
         {edit ? (
           <SelectCategoryList
-            category={[category[0], category[1]]}
+            category={category}
             optionName={['name', 'categoryName']}
             optionNullName={['대분류', '소분류']}
             optionKey={['name', 'categoryName']}
             optionValueKey={['name', 'categoryName']}
-            onChangeCategory={[onChangeCategory[0], onChangeCategory[1]]}
+            onChangeCategory={onChangeCategory}
           />
         ) : (
           <span>하드 코딩부분 수정해야함</span>

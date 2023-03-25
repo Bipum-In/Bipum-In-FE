@@ -1,19 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentDetail } from '../../../redux/modules/equipmentStatus';
-import { v4 as uuidv4 } from 'uuid';
 
 import styled from 'styled-components';
-
-import useSetEquipmentAddDate from '../../../hooks/useSetEquipmentAddDate';
-import SelectCategory from '../../common/SelectCategory';
 import Axios from '../../../api/axios';
+import { v4 as uuidv4 } from 'uuid';
+import { FormatDateToDot } from '../../../utils/formatDate';
+
+import SelectCategory from '../../common/SelectCategory';
+import useSetEquipmentAddDate from '../../../hooks/useSetEquipmentAddDate';
+
 import SelectUser from '../../equipmentAdd/single/SelectUser';
 import SelectDate from '../../equipmentAdd/single/SelectDate';
-import { FormatDateToDot } from '../../../utils/formatDate';
+
 import DetailHeader from './DetailHeader';
 import DetailBodyTitle from './DetailBodyTitle';
 import DetailInfoProduct from './DetailInfoProduct';
+import DetailInfoRequester from './DetailInfoRequester';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const equipmentData = {
@@ -137,70 +140,25 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
                       handleChangeSerialValue,
                     ]}
                   />
-                  <DetailInfoContent>
-                    <TextType>
-                      <span>등록 일자</span>
-                      {edit ? (
-                        <Date>
-                          <SelectDate
-                            year={year}
-                            month={month}
-                            setSelect={[
-                              setSelectYear,
-                              setSelectMonth,
-                              setSelectDaysInMonth,
-                            ]}
-                            handleChange={[
-                              handleChangeYear,
-                              handleChangeMonth,
-                              handleChangeDay,
-                            ]}
-                          />
-                        </Date>
-                      ) : (
-                        <span>{getDetail.supplyDetail.createdAt}</span>
-                      )}
-                    </TextType>
-                    <TextType>
-                      <span>협력업체</span>
-                      {edit ? (
-                        <Partners>
-                          <SelectCategory
-                            category={partners}
-                            optionNullName="회사명"
-                            optionKey={'partnersName'}
-                            optionValueKey={'partnersId'}
-                            optionName={'partnersName'}
-                            onChangeCategory={handleChangePartners}
-                          />
-                        </Partners>
-                      ) : (
-                        <span>{getDetail.supplyDetail.partnersName}</span>
-                      )}
-                    </TextType>
-                    <TextType>
-                      <span>사용자</span>
-                      {edit ? (
-                        <DeptUser>
-                          <SelectUser
-                            category={[dept, user]}
-                            optionNullName={['부서명', '사원명']}
-                            optionKey={['deptName', 'empName']}
-                            optionValueKey={['deptId', 'userId']}
-                            optionName={['deptName', 'empName']}
-                            onChangeCategory={[
-                              handleChangeDept,
-                              handleChangeUser,
-                            ]}
-                          />
-                        </DeptUser>
-                      ) : (
-                        <span>
-                          {`${getDetail.supplyDetail.deptName} / ${getDetail.supplyDetail.empName}`}
-                        </span>
-                      )}
-                    </TextType>
-                  </DetailInfoContent>
+                  <DetailInfoRequester
+                    edit={edit}
+                    dateValue={[year, month]}
+                    deptValue={[dept, user]}
+                    detail={getDetail}
+                    partners={partners}
+                    setDateState={[
+                      setSelectYear,
+                      setSelectMonth,
+                      setSelectDaysInMonth,
+                    ]}
+                    onChangeDept={[handleChangeDept, handleChangeUser]}
+                    onChangeDate={[
+                      handleChangeYear,
+                      handleChangeMonth,
+                      handleChangeDay,
+                    ]}
+                    onChangePartners={handleChangePartners}
+                  />
                 </DetailInfo>
               </DetailInfoContainer>
               <History>
@@ -278,80 +236,6 @@ const DetailInfo = styled.div`
   display: flex;
   border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
   gap: 2.875rem;
-`;
-
-const DetailInfoContent = styled.div`
-  div:first-child {
-    padding: 0;
-    padding-bottom: 1.125rem;
-  }
-
-  div:last-child {
-    border-bottom: none;
-  }
-`;
-
-const TextType = styled.div`
-  display: flex;
-  align-items: center;
-  min-width: 13rem;
-  padding: 1.125rem 0;
-  border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
-
-  span {
-    font-weight: 500;
-    font-size: 0.8125rem;
-  }
-
-  span:first-child {
-    min-width: 6rem;
-    color: ${props => props.theme.color.blue.brandColor6};
-  }
-
-  select {
-    min-width: 4.5rem;
-    height: 2rem;
-    color: black;
-    padding: 0 0.5rem;
-    background-color: ${props => props.theme.color.grey.brandColor1};
-    font-weight: 500;
-    font-size: 13px;
-    margin-right: 0.5rem;
-  }
-
-  input {
-    height: 2rem;
-    color: black;
-    margin: 0;
-    background-color: ${props => props.theme.color.grey.brandColor1};
-    font-weight: 500;
-    font-size: 13px;
-  }
-`;
-
-const Date = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  div:first-child {
-    padding: 0;
-  }
-
-  div {
-    width: 100%;
-    height: 100%;
-  }
-`;
-
-const Partners = styled.div`
-  min-width: 5rem;
-`;
-
-const DeptUser = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 `;
 
 const History = styled.div`
