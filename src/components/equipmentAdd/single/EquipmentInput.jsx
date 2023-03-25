@@ -2,7 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 import Input from '../../../elements/Input';
 
-export default function EquipmentInput({ value, setValue }) {
+export default function EquipmentInput({ value, setValue, onCrawling }) {
   return (
     <>
       <TypeBox>
@@ -12,6 +12,7 @@ export default function EquipmentInput({ value, setValue }) {
           setState={setValue[0]}
           placeholder="제품명을 기입해주세요"
         />
+        <button onClick={onCrawling}>크롤링</button>
       </TypeBox>
       <TypeBox>
         <TypeTitle requiredinput="true">시리얼 넘버</TypeTitle>
