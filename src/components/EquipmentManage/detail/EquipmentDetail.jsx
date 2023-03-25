@@ -4,19 +4,14 @@ import { getEquipmentDetail } from '../../../redux/modules/equipmentStatus';
 
 import styled from 'styled-components';
 import Axios from '../../../api/axios';
-import { v4 as uuidv4 } from 'uuid';
-import { FormatDateToDot } from '../../../utils/formatDate';
-
-import SelectCategory from '../../common/SelectCategory';
 import useSetEquipmentAddDate from '../../../hooks/useSetEquipmentAddDate';
-
-import SelectUser from '../../equipmentAdd/single/SelectUser';
-import SelectDate from '../../equipmentAdd/single/SelectDate';
 
 import DetailHeader from './DetailHeader';
 import DetailBodyTitle from './DetailBodyTitle';
 import DetailInfoProduct from './DetailInfoProduct';
 import DetailInfoRequester from './DetailInfoRequester';
+import DetailUseHistory from './DetailUseHistory';
+import DetailRepairHistory from './DetailRepairHistory';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const equipmentData = {
@@ -49,7 +44,7 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
   const { getDetail, isDetailError } = useSelector(
     state => state.equipmentStatus.equipmentDetail
   );
-  console.log(getDetail);
+
   useEffect(() => {
     dispatch(getEquipmentDetail(detailId));
     axios.get(`/api/dept`).then(res => setDept(res.data.data));
@@ -115,6 +110,7 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
 
   return (
     <>
+      {isDetailError && <div>에러가 발생했습니다.</div>}
       {getDetail && (
         <DetailWrapper>
           <DetailHeader edit={edit} onEdit={handleEdit} />
@@ -162,42 +158,8 @@ export default function EquipmentDetail({ category, largeCategory, detailId }) {
                 </DetailInfo>
               </DetailInfoContainer>
               <History>
-                <DetailUseHistory>
-                  <p>사용 내역</p>
-                  <DetailUseHistoryHeader>
-                    <span>처리 완료일</span>
-                    <span>사용자</span>
-                    <span>내역</span>
-                  </DetailUseHistoryHeader>
-                  <InfiniteScroll>
-                    {getDetail.supplyHistory.map(item => (
-                      <DetailUseHistoryContent key={uuidv4()}>
-                        <span>{FormatDateToDot(item.modifiedAt)}</span>
-                        <span>{`${item.deptName} / ${item.empName}`}</span>
-                        <span>{item.content}</span>
-                      </DetailUseHistoryContent>
-                    ))}
-                    {/* <InfiniteScrollCheck /> */}
-                  </InfiniteScroll>
-                </DetailUseHistory>
-                <DetailRepairHistory>
-                  <p>수리 내역</p>
-                  <DetailRepairHistoryHeader>
-                    <span>수리 완료일</span>
-                    <span>신청자</span>
-                    <span>수리업체</span>
-                  </DetailRepairHistoryHeader>
-                  <InfiniteScroll>
-                    {getDetail.supplyRepairHistory.map(item => (
-                      <DetailRepairHistoryContent key={uuidv4()}>
-                        <span>{FormatDateToDot(item.modifiedAt)}</span>
-                        <span>{`${item.deptName} / ${item.empName}`}</span>
-                        <span>{item.partnersName}</span>
-                      </DetailRepairHistoryContent>
-                    ))}
-                    {/* <InfiniteScrollCheck /> */}
-                  </InfiniteScroll>
-                </DetailRepairHistory>
+                <DetailUseHistory detail={getDetail} />
+                <DetailRepairHistory detail={getDetail} />
               </History>
             </div>
           </DetailBodyContainer>
@@ -243,85 +205,8 @@ const History = styled.div`
   gap: 3.125rem;
 `;
 
-const InfiniteScroll = styled.div`
-  height: 15rem;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-thumb {
-    background-clip: padding-box;
-    border: 0 solid transparent;
-    border-radius: 0.5rem;
-    background-color: ${props => props.theme.color.blue.brandColor6};
-  }
-  ::-webkit-scrollbar-track {
-    background-color: ${props => props.theme.color.blue.brandColor1};
-  }
-`;
-
 // const InfiniteScrollCheck = styled.div`
 //   height: 2.5rem;
 //   background-color: ${props => props.theme.color.blue.brandColor1};
 //   border-radius: 0 0 0.5rem 0.5rem;
 // `;
-
-const DetailUseHistory = styled.div`
-  width: 20.4375rem;
-  height: 17.5rem;
-  margin: 1.6875rem 0;
-  border-radius: 0.5rem;
-
-  p {
-    color: ${props => props.theme.color.blue.brandColor6};
-    margin: 0;
-    margin-bottom: 0.5rem;
-    font-weight: 500;
-    font-size: 13px;
-  }
-`;
-
-const DetailUseHistoryHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 2.5rem;
-  color: white;
-  background-color: ${props => props.theme.color.blue.brandColor5};
-  font-weight: 600;
-  font-size: 13px;
-  border-radius: 0.5rem 0.5rem 0 0;
-  padding: 0 2rem;
-  gap: 2rem;
-
-  span:nth-child(1) {
-    min-width: 4.875rem;
-  }
-
-  span:nth-child(2) {
-    min-width: 6.25rem;
-  }
-
-  span:nth-child(3) {
-    min-width: 6.25rem;
-  }
-`;
-
-const DetailUseHistoryContent = styled(DetailUseHistoryHeader)`
-  color: black;
-  background-color: ${props => props.theme.color.blue.brandColor1};
-  border-radius: 0;
-  font-weight: 500;
-  font-size: 12px;
-`;
-
-const DetailRepairHistory = styled(DetailUseHistory)`
-  width: 100%;
-`;
-
-const DetailRepairHistoryHeader = styled(DetailUseHistoryHeader)``;
-
-const DetailRepairHistoryContent = styled(DetailUseHistoryContent)``;
