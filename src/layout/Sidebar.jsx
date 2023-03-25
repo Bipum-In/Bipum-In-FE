@@ -146,8 +146,7 @@ const SidebarWrapper = styled.aside`
   box-shadow: -0.3125rem 0 1.5625rem 0 rgba(0, 0, 0, 0.25);
   border-radius: 0 2.5rem 2.5rem 0;
   z-index: 1;
-  transform: ${({ isHidden }) =>
-    isHidden ? 'translateX(-100%)' : 'translateX(0)'};
+  transform: ${({ isHidden }) => (isHidden ? 'translateX(-100%)' : 'none')};
   transition: transform 0.3s ease-in-out;
 `;
 

@@ -13,21 +13,10 @@ export default function Modal({ isOpen, onClose, children }) {
   const modalVariants = {
     visible: {
       opacity: 1,
-      y: '0%',
       scale: 1,
-      transition: {
-        y: { type: 'spring', stiffness: 400, damping: 20 },
-        opacity: { duration: 0.2 },
-      },
+      transition: { duration: 0.1, ease: 'easeInOut' },
     },
-    hidden: {
-      opacity: 0,
-      y: '-50%',
-      transition: {
-        y: { duration: 0.2 },
-        opacity: { duration: 0.2 },
-      },
-    },
+    hidden: { opacity: 0, scale: 0.9 },
   };
 
   useEffect(() => {
@@ -110,6 +99,10 @@ const ModalContainer = styled(motion.div)`
   background-color: white;
   margin: auto; /* 추가 */
   border-radius: 1rem;
+  > div {
+    overflow: hidden;
+  }
+
   /* filter: drop-shadow(rgba(0, 0, 0, 0.8) 2px 2px 20px); */
 `;
 
