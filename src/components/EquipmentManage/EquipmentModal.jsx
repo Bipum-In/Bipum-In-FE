@@ -32,7 +32,7 @@ export default function EquipmentModal({
 
 const EquipmentDetailWrapper = styled.div`
   ${props => props.theme.flexCol}
-  width: 80vw;
+  width: 90.875rem;
   height: 80vh;
 `;
 
