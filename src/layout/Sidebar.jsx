@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useRef } from 'react';
+import styled, { useTheme } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 
 import {
@@ -13,6 +13,7 @@ import { ReactComponent as Dashboard } from '../styles/sidebarIcon/dashboard.svg
 import { ReactComponent as List } from '../styles/sidebarIcon/list.svg';
 import { ReactComponent as Management } from '../styles/sidebarIcon/management.svg';
 import { ReactComponent as Logout } from '../styles/sidebarIcon/logout.svg';
+import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg';
 
 import ROUTER from '../constants/routerConst';
 import STRING from '../constants/string';
@@ -22,9 +23,16 @@ import Storage from '../utils/localStorage';
 import { removeCookie } from '../utils/cookie';
 import { CustomModal } from '../elements/Modal';
 import { useModalState } from '../hooks/useModalState';
+import useOutsideClick from '../hooks/useOutsideClick';
 
-export default function Sidebar() {
+export default function Sidebar({
+  isSidebarHidden,
+  setIsSidebarHidden,
+  isMobileView,
+}) {
   const navigate = useNavigate();
+  const theme = useTheme();
+
   const { pathname } = useLocation();
   const [logoutModal, setLogoutModal] = useModalState();
   const categoryStyle = [
@@ -57,9 +65,23 @@ export default function Sidebar() {
   const handleModalShow = () => setLogoutModal();
   const handleModalClose = () => setLogoutModal(false);
 
+  const dropDownRef = useRef(null);
+
+  const desktopSize = window.innerWidth <= theme.screen.desktopSize;
+  useOutsideClick(
+    dropDownRef,
+    () => {
+      setIsSidebarHidden(true);
+    },
+    desktopSize
+  );
+
+  const handleSidebarToggle = () => setIsSidebarHidden(prev => !prev);
+
   return (
     <>
-      <SidebarWrapper>
+      <SidebarWrapper isHidden={isSidebarHidden} ref={dropDownRef}>
+        {isMobileView && <ArrowDownIcon onClick={handleSidebarToggle} />}
         <LogoContainer>
           <Logo />
         </LogoContainer>
@@ -124,6 +146,9 @@ const SidebarWrapper = styled.aside`
   box-shadow: -0.3125rem 0 1.5625rem 0 rgba(0, 0, 0, 0.25);
   border-radius: 0 2.5rem 2.5rem 0;
   z-index: 1;
+  transform: ${({ isHidden }) =>
+    isHidden ? 'translateX(-100%)' : 'translateX(0)'};
+  transition: transform 0.3s ease-in-out;
 `;
 
 const LogoContainer = styled.div`
@@ -153,4 +178,8 @@ const LogoutContainer = styled.div`
   width: 100%;
   margin-top: auto;
   margin-bottom: 3.625rem;
+`;
+
+const ArrowDownIcon = styled(ArrowDown)`
+  position: absolute;
 `;
