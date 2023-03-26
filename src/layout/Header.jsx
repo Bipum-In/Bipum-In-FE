@@ -122,7 +122,7 @@ const SearchInput = styled.input`
   border: none;
   width: 100%;
   line-height: 1.3125rem;
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: ${props => props.theme.color.grey.brandColor7};
 `;
 
@@ -162,13 +162,13 @@ const UserInfoDetailContainer = styled.div`
   gap: 0.25rem;
 `;
 const InfoCompanyTitle = styled.span`
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: ${props => props.theme.color.grey.brandColor6};
 `;
 
 const InfoUserName = styled.span`
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.3125rem;
 `;
 

@@ -66,6 +66,6 @@ const CategoryItemsContainer = styled.div`
 const ImtesTitle = styled.div`
   padding: 0 0.5rem;
   font-weight: bold;
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.3125rem;
 `;

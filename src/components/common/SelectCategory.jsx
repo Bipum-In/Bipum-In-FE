@@ -41,7 +41,7 @@ const Select = styled.select`
   border-radius: 0.375rem;
   border: 0.0625rem solid;
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.3125rem;
   padding: 0.5rem;
 

@@ -31,7 +31,7 @@ const ImageWrapper = styled.div`
   width: 23.75rem;
   height: 30.625rem;
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.3125rem;
 `;
 
@@ -53,14 +53,14 @@ const PreviewImage = styled.img`
 
 const ImageinputFile = styled.label`
   border: 0;
-  border-radius: 6px;
+  border-radius: 0.375rem;
   ${props => props.theme.FlexCol};
   ${props => props.theme.FlexCenter};
   color: ${props => props.theme.color.blue.brandColor6};
   width: 100%;
   height: 2.8125rem;
-  font-weight: 700;
-  font-size: 1.375rem;
+  font-weight: 600;
+  font-size: 1rem;
   background-color: #e4f0ff;
   cursor: pointer;
 
