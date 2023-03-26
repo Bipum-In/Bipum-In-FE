@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../../elements/Button';
+import { ErrorModal } from '../../elements/AlertModal';
+import { useModalState } from '../../hooks/useModalState';
+
 import Axios from '../../api/axios';
 import SelectCategory from '../common/SelectCategory';
 import SelectCategoryList from './single/SelectCategoryList';
@@ -22,6 +25,9 @@ const equipmentData = {
 };
 
 export default function AddSingleItem({ category, largeCategory }) {
+  const [isErrorModalOpen, toggleErrorModal, errorMessage, setErrorAndToggle] =
+    useModalState();
+
   const [year, setYear] = useState(null);
   const [month, setMonth] = useState(null);
   const [day, setDay] = useState(null);
@@ -31,6 +37,7 @@ export default function AddSingleItem({ category, largeCategory }) {
   const [nameValue, setNameValue] = useState('');
   const [serialValue, setSerialValue] = useState('');
   const [smallCategory, setSmallCategory] = useState(null);
+  const [checkSallCategory, setCheckSallCategory] = useState(false);
   const [formImage, setFormformImage] = useState(null);
   const [preview, setPreview] = useState('');
 
@@ -45,7 +52,6 @@ export default function AddSingleItem({ category, largeCategory }) {
   }, []);
 
   const handleChangeNameValue = e => {
-    console.log(e.target.value);
     setNameValue(e.target.value);
   };
 
@@ -57,12 +63,15 @@ export default function AddSingleItem({ category, largeCategory }) {
     const { ko, eng } = JSON.parse(e.target.value);
     equipmentData.largeCategory = eng;
     setSmallCategory(parseCategoryData(ko, category));
-    console.log(equipmentData);
+
+    console.log(equipmentData.largeCategory);
   };
 
   const handleChangeSmallCategory = e => {
     const { ko } = JSON.parse(e.target.value);
     equipmentData.categoryName = ko;
+    setCheckSallCategory(equipmentData.categoryName);
+    console.log(checkSallCategory);
   };
 
   const handleChangeYear = e => {
@@ -106,7 +115,6 @@ export default function AddSingleItem({ category, largeCategory }) {
   const onChangeimge = e => {
     const img = e.target.files[0];
     if (!img) return;
-
     setFormformImage(img);
     setPreviewImage(img);
   };
@@ -122,21 +130,24 @@ export default function AddSingleItem({ category, largeCategory }) {
   const setFormData = e => {
     e.preventDefault();
     const formData = new FormData();
-    equipmentData.createdAt = new Date();
     equipmentData.modelName = nameValue;
     equipmentData.serialNum = serialValue;
 
-    formData.append('largeCategory', equipmentData);
-    formData.append('categoryName', equipmentData);
-    formData.append('modelName', equipmentData);
-    formData.append('serialNum', equipmentData);
-    formData.append('createdAt', equipmentData);
-    formData.append('partnersId', equipmentData);
-    formData.append('userId', equipmentData);
+    formData.append('largeCategory', equipmentData.largeCategory);
+    formData.append('categoryName', equipmentData.categoryName);
+    formData.append('modelName', equipmentData.modelName);
+    formData.append('serialNum', equipmentData.serialNum);
+    formData.append('partnersId', equipmentData.partnersId);
+    formData.append('userId', equipmentData.userId);
 
-    formData.append('image', formImage);
-    console.log(equipmentData);
+    formData.append('multipartFile', formImage);
+
     sendFormData(formData);
+
+    // FormData 내용 확인
+    for (let value of formData) {
+      console.log(value);
+    }
   };
 
   const getUserData = deptId =>
@@ -144,17 +155,31 @@ export default function AddSingleItem({ category, largeCategory }) {
 
   const sendFormData = formData => axios.post(`/api/supply/`, formData);
 
-  const handleClickCrawling = e => {
-    e.preventDefault();
-    setPreview(getCrawlingData(nameValue));
+  const getCrawlingData = () => {
+    axios
+      .get(`/api/supply/search?modelName=${nameValue}`)
+      .then(res => {
+        setFormformImage(res.data.data.image);
+        setPreview(res.data.data.image);
+      })
+      .catch(err => {
+        setErrorAndToggle(err);
+      });
   };
 
-  const getCrawlingData = modelname => {
-    axios
-      .get(`/api/supply/search?modelName=${modelname}`)
-      .then(res => setPreview(res.data.data.image))
-      .catch(err => console.log(err));
+  const handleClickCrawling = e => {
+    e.preventDefault();
+    getCrawlingData();
   };
+
+  const isDisabled =
+    !dept ||
+    !serialValue ||
+    !nameValue ||
+    !equipmentData.largeCategory ||
+    !equipmentData.userId ||
+    !formImage ||
+    !checkSallCategory;
 
   return (
     <>
@@ -232,13 +257,19 @@ export default function AddSingleItem({ category, largeCategory }) {
               <ImageAdd preview={preview} onChangeimge={onChangeimge} />
             </EquipmentDetailContainer>
             <SubminPostContainer>
-              <Button submit post onClick={setFormData}>
+              <Button submit post onClick={setFormData} disabled={isDisabled}>
                 비품 등록 완료
               </Button>
             </SubminPostContainer>
           </AddEquipmentArticle>
         </AddEquipmentWrapper>
       )}
+      <ErrorModal
+        isOpen={isErrorModalOpen}
+        toggle={toggleErrorModal}
+        onClose={toggleErrorModal}
+        message={errorMessage}
+      />
     </>
   );
 }
@@ -255,7 +286,7 @@ const SelectCaregoryConteiner = styled.div`
   display: flex;
   gap: 0.5rem;
   select {
-    width: 5.25rem;
+    min-width: 5.25rem;
     height: 2.6rem;
 
     border-color: ${props => props.theme.color.blue.brandColor3};
@@ -265,7 +296,7 @@ const SelectCaregoryConteiner = styled.div`
 `;
 
 const PartnerCompany = styled.div`
-  width: 5.8125rem;
+  min-width: 5.8125rem;
   height: 2.5rem;
 `;
 
@@ -275,7 +306,7 @@ const AcquisitionContainer = styled.div`
 
 const TypeTitle = styled.span`
   font-size: 1.125rem;
-  width: 8.75rem;
+  min-width: 8.75rem;
   ${props =>
     props.requiredinput === 'true' &&
     css`
@@ -303,7 +334,8 @@ const TypeBox = styled.div`
 const AddEquipmentArticle = styled.form`
   ${props => props.theme.FlexCol};
   width: 100%;
-  padding: 7.5rem 8.75rem 0;
+  padding: 4.5rem 8.75rem;
+  justify-content: center;
 `;
 
 const EquipmentDetailContainer = styled.div`
@@ -327,7 +359,6 @@ const Hr = styled.div`
 const SubminPostContainer = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
-  padding-top: 2rem;
-  margin-bottom: 2rem;
+  padding-top: 1rem;
   width: 100%;
 `;
