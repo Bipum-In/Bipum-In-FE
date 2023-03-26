@@ -3,8 +3,9 @@ import styled from 'styled-components';
 //npm install framer-motion
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
+import ModalPortal from './ModalPortal';
 
-export default function Modal({ isOpen, onClose, children }) {
+export default function Modal({ isOpen, onClose, children, noBackground }) {
   const backdropVariants = {
     visible: { opacity: 1 },
     hidden: { opacity: 0 },
@@ -28,23 +29,26 @@ export default function Modal({ isOpen, onClose, children }) {
   return (
     <AnimatePresence>
       {isOpen && (
-        <Backdrop
-          variants={backdropVariants}
-          initial="hidden"
-          animate="visible"
-          exit="hidden"
-          onClick={onClose}
-        >
-          <ModalContainer
-            variants={modalVariants}
+        <ModalPortal>
+          <Backdrop
+            variants={backdropVariants}
             initial="hidden"
             animate="visible"
             exit="hidden"
-            onClick={e => e.stopPropagation()}
+            onClick={onClose}
+            noBackground={noBackground}
           >
-            {children}
-          </ModalContainer>
-        </Backdrop>
+            <ModalContainer
+              variants={modalVariants}
+              initial="hidden"
+              animate="visible"
+              exit="hidden"
+              onClick={e => e.stopPropagation()}
+            >
+              {children}
+            </ModalContainer>
+          </Backdrop>
+        </ModalPortal>
       )}
     </AnimatePresence>
   );
@@ -75,13 +79,6 @@ export function CustomModal({
   );
 }
 
-//useAge
-// const [someModal, toggleModal] = useModalState(false);
-// toggleModal(true);
-// const handleModalClose = () => {
-//   toggleModal(false);
-// };
-
 const Backdrop = styled(motion.div)`
   ${props => props.theme.FlexRow};
   position: fixed;
@@ -91,7 +88,8 @@ const Backdrop = styled(motion.div)`
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: ${({ noBackground }) =>
+    noBackground ? 'transparent' : 'rgba(0, 0, 0, 0.4)'};
   /* backdrop-filter: blur(2px); */
 `;
 

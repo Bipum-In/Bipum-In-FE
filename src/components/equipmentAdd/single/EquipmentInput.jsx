@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import Input from '../../../elements/Input';
+import Button from '../../../elements/Button';
 
 export default function EquipmentInput({ value, setValue, onCrawling }) {
   return (
@@ -12,7 +13,9 @@ export default function EquipmentInput({ value, setValue, onCrawling }) {
           setState={setValue[0]}
           placeholder="제품명을 기입해주세요"
         />
-        <button onClick={onCrawling}>크롤링</button>
+        <Button submit onClick={onCrawling} disabled={value[0].length < 2}>
+          크롤링
+        </Button>
       </TypeBox>
       <TypeBox>
         <TypeTitle requiredinput="true">시리얼 넘버</TypeTitle>
@@ -42,7 +45,7 @@ const TypeBox = styled.div`
 
 const TypeTitle = styled.span`
   font-size: 1.125rem;
-  width: 8.75rem;
+  min-width: 8.75rem;
   ${props =>
     props.requiredinput === 'true' &&
     css`

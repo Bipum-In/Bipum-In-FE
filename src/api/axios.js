@@ -19,8 +19,8 @@ export default class Axios {
         return response;
       },
       error => {
-        alert(error.response.data.result);
-        return Promise.reject(error);
+        const message = error.response.data.errorMessage;
+        return Promise.reject(message);
       }
     );
   }
