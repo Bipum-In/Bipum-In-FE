@@ -44,7 +44,7 @@ const TypeBox = styled.div`
 `;
 
 const TypeTitle = styled.span`
-  font-size: 1.125rem;
+  font-size: 1rem;
   min-width: 8.75rem;
   ${props =>
     props.requiredinput === 'true' &&

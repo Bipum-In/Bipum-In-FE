@@ -305,7 +305,7 @@ const AcquisitionContainer = styled.div`
 `;
 
 const TypeTitle = styled.span`
-  font-size: 1.125rem;
+  font-size: 1rem;
   min-width: 8.75rem;
   ${props =>
     props.requiredinput === 'true' &&
@@ -351,7 +351,7 @@ const EquipmentLeftContainer = styled.div`
 
 const Hr = styled.div`
   height: 100%;
-  width: 1px;
+  width: 0.0625rem;
   background-color: ${props => props.theme.color.grey.brandColor2};
   margin: 0 2.5rem;
 `;
