@@ -139,8 +139,8 @@ const SidebarWrapper = styled.aside`
   position: fixed;
   top: 0;
   left: 0;
-  min-width: 15.625rem;
-  max-width: 15.625rem;
+  min-width: 12.5rem;
+  width: 12.5rem;
   height: 100%;
   background-color: white;
   box-shadow: -0.3125rem 0 1.5625rem 0 rgba(0, 0, 0, 0.25);
