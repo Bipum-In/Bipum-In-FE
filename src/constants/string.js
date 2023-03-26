@@ -60,28 +60,28 @@ const EQUIPMENT_STATUS = {
 export const REQUEST_PAGES = {
   UNPROCESSED: {
     name: REQUEST_NAME.ALL,
-    type: REQUEST_TYPES.ALL,
+    type: '',
     status: REQUEST_STATUSES.UNPROCESSED,
   },
   SUPPLY: {
     name: REQUEST_NAME.SUPPLY,
     type: REQUEST_TYPES.SUPPLY,
-    status: REQUEST_STATUSES.ALL,
+    status: '',
   },
   REPAIR: {
     name: REQUEST_NAME.REPAIR,
     type: REQUEST_TYPES.REPAIR,
-    status: REQUEST_STATUSES.ALL,
+    status: '',
   },
   REPORT: {
     name: REQUEST_NAME.REPORT,
     type: REQUEST_TYPES.REPORT,
-    status: REQUEST_STATUSES.ALL,
+    status: '',
   },
   RETURN: {
     name: REQUEST_NAME.RETURN,
     type: REQUEST_TYPES.RETURN,
-    status: REQUEST_STATUSES.ALL,
+    status: '',
   },
 };
 
