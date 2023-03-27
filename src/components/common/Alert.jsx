@@ -1,4 +1,3 @@
-import ReactDOM from 'react-dom';
 import { useEffect } from 'react';
 import { ErrorModal } from '../../elements/AlertModal';
 import { useModalState } from '../../hooks/useModalState';
