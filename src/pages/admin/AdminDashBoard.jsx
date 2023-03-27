@@ -11,7 +11,7 @@ import CategoryStatus from '../../components/adminDashBoard/status/CategoryStatu
 
 export default function AdminDashBoard() {
   const dispatch = useDispatch();
-  const [status, setStatus] = useState('ALL');
+  const [status, setStatus] = useState('');
   const { getDashboard, isDashboardError } = useSelector(
     state => state.dashboardStatus.dashboardStatus
   );
