@@ -11,19 +11,31 @@ body {
   background-color: ${props => props.theme.color.blue.brandColor1};
 }
 
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background-clip: padding-box;
-      border: 0 solid transparent;
-      border-radius: 10px;
-      background-color: ${props => props.theme.color.blue.brandColor6};
-    }
-    ::-webkit-scrollbar-track {
-      background-color: transparent;
-    }
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background-clip: padding-box;
+  border: 0 solid transparent;
+  border-radius: 10px;
+  background-color: ${props => props.theme.color.blue.brandColor6};
+}
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+img {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+  -moz-user-drag: none;
+  -o-user-drag: none;
+}
 
 html,
 body,
