@@ -66,11 +66,11 @@ const LayoutWrapper = styled.div`
 `;
 
 const OutletContainer = styled.div`
-  width: calc(100% - 15.625rem);
+  width: calc(100% - 12.5rem);
   height: 100%;
   max-height: 100vh;
   margin-left: auto;
-  padding: 9.6875rem 3.25rem 3.75rem 3.25rem;
+  padding: 9.375rem 3.75rem 3.4375rem 3.75rem;
   background-color: ${props => props.theme.color.blue.brandColor1};
   @media (max-width: ${props => props.theme.screen.desktop}) {
     width: calc(100vw);
