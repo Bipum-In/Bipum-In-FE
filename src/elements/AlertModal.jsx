@@ -4,7 +4,12 @@ import styled, { keyframes } from 'styled-components';
 import { ReactComponent as Alert } from '../styles/commonIcon/alert.svg';
 import ModalPortal from './ModalPortal';
 
-export default function AlertModal({ isOpen, onClose, children }) {
+export default function AlertModal({
+  isOpen,
+  onClose,
+  progressBarDuration,
+  children,
+}) {
   const backdropVariants = {
     visible: { opacity: 1 },
   };
@@ -25,69 +30,57 @@ export default function AlertModal({ isOpen, onClose, children }) {
     },
   };
 
-  const progressBarDuration = 2500;
-
-  useEffect(() => {
-    if (isOpen) {
-      const progressBarTimer = setTimeout(() => {
-        requestAnimationFrame(() => {
-          onClose();
-        });
-      }, progressBarDuration);
-
-      return () => {
-        clearTimeout(progressBarTimer);
-      };
-    }
-  }, [isOpen, onClose]);
-
   return (
     <AnimatePresence>
       {isOpen && (
-        <ModalPortal>
-          <Backdrop
-            key="backdrop"
-            variants={backdropVariants}
+        <Backdrop
+          key="backdrop"
+          variants={backdropVariants}
+          initial="hidden"
+          animate="visible"
+          exit="hidden"
+        >
+          <ModalContainer
+            key="modal"
+            variants={modalVariants}
             initial="hidden"
             animate="visible"
             exit="hidden"
+            onClick={e => e.stopPropagation()}
           >
-            <ModalContainer
-              key="modal"
-              variants={modalVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
-              onClick={e => e.stopPropagation()}
-            >
-              {children}
-              {isOpen && (
-                <ProgressBar progressBarDuration={progressBarDuration} />
-              )}
-            </ModalContainer>
-          </Backdrop>
-        </ModalPortal>
+            {children}
+            {isOpen && (
+              <ProgressBar progressBarDuration={progressBarDuration} />
+            )}
+          </ModalContainer>
+        </Backdrop>
       )}
     </AnimatePresence>
   );
 }
 
-export const ErrorModal = React.memo(({ isOpen, toggle, message }) => {
-  return (
-    <>
-      <AlertModal isOpen={isOpen} onClose={toggle}>
-        <ModalMsgWrapper>
-          <AlertIcon>
-            <Alert />
-          </AlertIcon>
-          <MsgContainer>
-            <p>{message}</p>
-          </MsgContainer>
-        </ModalMsgWrapper>
-      </AlertModal>
-    </>
-  );
-});
+export const ErrorModal = React.memo(
+  ({ isOpen, toggle, message, progressBarDuration }) => {
+    return (
+      <>
+        <AlertModal
+          isOpen={isOpen}
+          onClose={toggle}
+          progressBarDuration={progressBarDuration}
+        >
+          <ModalMsgWrapper>
+            <AlertIcon>
+              <Alert />
+            </AlertIcon>
+            <MsgContainer>
+              <p>{message}</p>
+            </MsgContainer>
+          </ModalMsgWrapper>
+        </AlertModal>
+      </>
+    );
+  }
+);
 const shrink = keyframes`
   from {
     width: 100%;
@@ -106,7 +99,8 @@ const ProgressBar = styled.div`
 `;
 
 const Backdrop = styled(motion.div)`
-  ${props => props.theme.FlexRow};
+  display: flex;
+  align-items: center;
   position: fixed;
   z-index: 99999;
   /* right: 1rem;
@@ -125,17 +119,18 @@ const ModalContainer = styled(motion.div)`
 
 const ModalMsgWrapper = styled.div`
   position: relative;
-  ${props => props.theme.FlexRow};
+  display: flex;
   align-items: center;
   justify-content: flex-start;
   padding: 1rem 1rem 1rem 2.5rem;
-  color: ${props => props.theme.color.grey.brandColor7};
+  color: #5f5f5f;
   min-height: 64px;
 `;
 
 const AlertIcon = styled.div`
-  ${props => props.theme.FlexRow};
-  ${props => props.theme.FlexCenter};
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   top: 50%;
   left: 0px;

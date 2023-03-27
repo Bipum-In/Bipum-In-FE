@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import Button from '../../elements/Button';
-import { ErrorModal } from '../../elements/AlertModal';
-import { useModalState } from '../../hooks/useModalState';
 
 import Axios from '../../api/axios';
 import SelectCategory from '../common/SelectCategory';
 import SelectCategoryList from './single/SelectCategoryList';
-import SelectDate from './single/SelectDate';
 import EquipmentInput from './single/EquipmentInput';
 import SelectUser from './single/SelectUser';
 import ImageAdd from './single/ImageAdd';
-import useSetEquipmentAddDate from '../../hooks/useSetEquipmentAddDate';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const equipmentData = {
@@ -24,9 +20,6 @@ const equipmentData = {
 };
 
 export default function AddSingleItem({ category, largeCategory }) {
-  const [isErrorModalOpen, toggleErrorModal, errorMessage, setErrorAndToggle] =
-    useModalState();
-
   const [dept, setDept] = useState(null);
   const [user, setUser] = useState(null);
   const [partners, setPartners] = useState(null);
@@ -118,7 +111,8 @@ export default function AddSingleItem({ category, largeCategory }) {
     formData.append('partnersId', equipmentData.partnersId);
     formData.append('userId', equipmentData.userId);
     formData.append('image', crawlingImg);
-    if (formImage !== null) {
+
+    if (formImage) {
       formData.append('multipartFile', formImage);
     }
     sendFormData(formData);
@@ -135,16 +129,11 @@ export default function AddSingleItem({ category, largeCategory }) {
   const sendFormData = formData => axios.post(`/api/supply`, formData);
 
   const getCrawlingData = () => {
-    axios
-      .get(`/api/supply/search?modelName=${nameValue}`)
-      .then(res => {
-        setCrawlingImg(res.data.data.image);
-        setPreview(res.data.data.image);
-        setFormformImage('');
-      })
-      .catch(err => {
-        setErrorAndToggle(err);
-      });
+    axios.get(`/api/supply/search?modelName=${nameValue}`).then(res => {
+      setCrawlingImg(res.data.data.image);
+      setPreview(res.data.data.image);
+      setFormformImage('');
+    });
   };
 
   console.log(formImage);
@@ -228,12 +217,6 @@ export default function AddSingleItem({ category, largeCategory }) {
           </AddEquipmentArticle>
         </AddEquipmentWrapper>
       )}
-      <ErrorModal
-        isOpen={isErrorModalOpen}
-        toggle={toggleErrorModal}
-        onClose={toggleErrorModal}
-        message={errorMessage}
-      />
     </>
   );
 }
