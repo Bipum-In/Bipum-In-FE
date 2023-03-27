@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import ModalPortal from './ModalPortal';
 
-export default function Modal({ isOpen, onClose, children, noBackground }) {
+export default function Modal({ isOpen, onClose, children }) {
   const backdropVariants = {
     visible: { opacity: 1 },
     hidden: { opacity: 0 },
@@ -36,7 +36,6 @@ export default function Modal({ isOpen, onClose, children, noBackground }) {
             animate="visible"
             exit="hidden"
             onClick={onClose}
-            noBackground={noBackground}
           >
             <ModalContainer
               variants={modalVariants}
@@ -88,9 +87,7 @@ const Backdrop = styled(motion.div)`
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: ${({ noBackground }) =>
-    noBackground ? 'transparent' : 'rgba(0, 0, 0, 0.4)'};
-  /* backdrop-filter: blur(2px); */
+  background-color: rgba(0, 0, 0, 0.4);
 `;
 
 const ModalContainer = styled(motion.div)`
