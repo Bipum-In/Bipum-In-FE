@@ -74,7 +74,7 @@ const HeaderWrapper = styled.header`
 `;
 
 const HeaderContainer = styled.div`
-  width: calc(100vw - 15.625rem);
+  width: calc(100vw - 12.5rem);
   margin-left: auto;
   height: 100%;
   @media (max-width: ${props => props.theme.screen.desktop}) {
