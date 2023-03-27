@@ -18,7 +18,7 @@ export default function ImageAdd({ preview, onChangeimge }) {
         <input
           as={'input'}
           type="file"
-          accept="image/*"
+          accept=".png,.jpg,.jpeg,.gif"
           onChange={onChangeimge}
         />
       </ImageinputFile>

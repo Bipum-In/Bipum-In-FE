@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { __dashboardStatus } from '../../redux/modules/dashboardStatus';
 import { getCategoryList } from '../../redux/modules/equipmentStatus';
-import ScrollToTop from '../../hooks/useScrollToTop';
+import ScrollToTop from '../../components/common/ScrollToTop';
 import ManagementStatus from '../../components/adminDashBoard/status/ManagementStatus';
 import AlertStatus from '../../components/adminDashBoard/status/AlertStatus';
 import TestStatus from '../../components/adminDashBoard/status/TestStatus';
