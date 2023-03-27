@@ -19,7 +19,6 @@ const equipmentData = {
   categoryName: '',
   modelName: '',
   serialNum: '',
-  createdAt: '',
   partnersId: null,
   userId: null,
 };
@@ -28,9 +27,6 @@ export default function AddSingleItem({ category, largeCategory }) {
   const [isErrorModalOpen, toggleErrorModal, errorMessage, setErrorAndToggle] =
     useModalState();
 
-  const [year, setYear] = useState(null);
-  const [month, setMonth] = useState(null);
-  const [day, setDay] = useState(null);
   const [dept, setDept] = useState(null);
   const [user, setUser] = useState(null);
   const [partners, setPartners] = useState(null);
@@ -39,12 +35,12 @@ export default function AddSingleItem({ category, largeCategory }) {
   const [smallCategory, setSmallCategory] = useState(null);
   const [checkSallCategory, setCheckSallCategory] = useState(false);
   const [formImage, setFormformImage] = useState(null);
+  const [crawlingImg, setCrawlingImg] = useState(null);
+
   const [preview, setPreview] = useState('');
 
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
-
-  const [setSelectYear, setSelectMonth, setSelectDaysInMonth] =
-    useSetEquipmentAddDate();
+  console.log(largeCategory);
 
   useEffect(() => {
     axios.get(`/api/partners`).then(res => setPartners(res.data.data));
@@ -74,24 +70,6 @@ export default function AddSingleItem({ category, largeCategory }) {
     console.log(checkSallCategory);
   };
 
-  const handleChangeYear = e => {
-    const year = e.target.value;
-    const parseYear = Number(year.split('년')[0]);
-    setYear(parseYear);
-  };
-
-  const handleChangeMonth = e => {
-    const month = e.target.value;
-    const parseMonth = Number(month.split('월')[0]);
-    setMonth(parseMonth);
-  };
-
-  const handleChangeDay = e => {
-    const day = e.target.value;
-    const parseDay = Number(day.split('일')[0]);
-    setDay(parseDay);
-  };
-
   const handleChangePartners = e => {
     const { ko: partners } = JSON.parse(e.target.value);
     console.log(partners);
@@ -114,9 +92,9 @@ export default function AddSingleItem({ category, largeCategory }) {
 
   const onChangeimge = e => {
     const img = e.target.files[0];
-    if (!img) return;
     setFormformImage(img);
     setPreviewImage(img);
+    setCrawlingImg('');
   };
 
   const setPreviewImage = img => {
@@ -139,9 +117,10 @@ export default function AddSingleItem({ category, largeCategory }) {
     formData.append('serialNum', equipmentData.serialNum);
     formData.append('partnersId', equipmentData.partnersId);
     formData.append('userId', equipmentData.userId);
-
-    formData.append('multipartFile', formImage);
-
+    formData.append('image', crawlingImg);
+    if (formImage !== null) {
+      formData.append('multipartFile', formImage);
+    }
     sendFormData(formData);
 
     // FormData 내용 확인
@@ -153,19 +132,22 @@ export default function AddSingleItem({ category, largeCategory }) {
   const getUserData = deptId =>
     axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
 
-  const sendFormData = formData => axios.post(`/api/supply/`, formData);
+  const sendFormData = formData => axios.post(`/api/supply`, formData);
 
   const getCrawlingData = () => {
     axios
       .get(`/api/supply/search?modelName=${nameValue}`)
       .then(res => {
-        setFormformImage(res.data.data.image);
+        setCrawlingImg(res.data.data.image);
         setPreview(res.data.data.image);
+        setFormformImage('');
       })
       .catch(err => {
         setErrorAndToggle(err);
       });
   };
+
+  console.log(formImage);
 
   const handleClickCrawling = e => {
     e.preventDefault();
@@ -173,13 +155,13 @@ export default function AddSingleItem({ category, largeCategory }) {
   };
 
   const isDisabled =
-    !dept ||
     !serialValue ||
     !nameValue ||
     !equipmentData.largeCategory ||
-    !equipmentData.userId ||
-    !formImage ||
-    !checkSallCategory;
+    !checkSallCategory ||
+    // !preview;
+
+    console.log(formImage);
 
   return (
     <>
@@ -209,25 +191,7 @@ export default function AddSingleItem({ category, largeCategory }) {
                   setValue={[handleChangeNameValue, handleChangeSerialValue]}
                   onCrawling={handleClickCrawling}
                 />
-                <AcquisitionContainer>
-                  <TypeBox>
-                    <TypeTitle>취득일자</TypeTitle>
-                    <SelectDate
-                      year={year}
-                      month={month}
-                      setSelect={[
-                        setSelectYear,
-                        setSelectMonth,
-                        setSelectDaysInMonth,
-                      ]}
-                      handleChange={[
-                        handleChangeYear,
-                        handleChangeMonth,
-                        handleChangeDay,
-                      ]}
-                    />
-                  </TypeBox>
-                </AcquisitionContainer>
+
                 <TypeBox>
                   <TypeTitle>협력업체</TypeTitle>
                   <PartnerCompany>
@@ -297,10 +261,6 @@ const SelectCaregoryConteiner = styled.div`
 
 const PartnerCompany = styled.div`
   min-width: 5.8125rem;
-  height: 2.5rem;
-`;
-
-const AcquisitionContainer = styled.div`
   height: 2.5rem;
 `;
 
