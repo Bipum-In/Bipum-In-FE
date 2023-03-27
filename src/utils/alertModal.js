@@ -8,7 +8,7 @@ export default function alertModal(message, timeToSecond) {
   const timeSet = timeToSecond * 1000 || 2500;
   const alertComponent = <Alert message={message} duration={timeSet} />;
   if (!root) {
-    root = ReactDOM.createRoot(document.getElementById('modal-root'));
+    root = ReactDOM.createRoot(document.getElementById('alert-root'));
     root.render(alertComponent);
 
     const unmount = setTimeout(() => {
