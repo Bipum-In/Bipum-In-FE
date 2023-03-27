@@ -1,71 +1,132 @@
-import React from 'react';
-import styled from 'styled-components';
-import CategoryItem from '../components/layout/CategoryItem';
-import { useNavigate } from 'react-router-dom';
-import ROUTER from '../constants/routerConst';
+import React, { useRef } from 'react';
+import styled, { useTheme } from 'styled-components';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import {
+  CategoryItemLeft,
+  CategoryItemRight,
+} from '../components/layout/CategoryItem';
+
 import logo from '../styles/logo.svg';
 import { ReactComponent as Add } from '../styles/sidebarIcon/add.svg';
 import { ReactComponent as Dashboard } from '../styles/sidebarIcon/dashboard.svg';
 import { ReactComponent as List } from '../styles/sidebarIcon/list.svg';
 import { ReactComponent as Management } from '../styles/sidebarIcon/management.svg';
-import useSelectMenu from '../hooks/useSelectMenu';
+import { ReactComponent as Logout } from '../styles/sidebarIcon/logout.svg';
+import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg';
 
-export default function Sidebar() {
+import ROUTER from '../constants/routerConst';
+import STRING from '../constants/string';
+import QUERY from '../constants/query';
+
+import Storage from '../utils/localStorage';
+import { removeCookie } from '../utils/cookie';
+import { CustomModal } from '../elements/Modal';
+import { useModalState } from '../hooks/useModalState';
+import useOutsideClick from '../hooks/useOutsideClick';
+
+export default function Sidebar({
+  isSidebarHidden,
+  setIsSidebarHidden,
+  isMobileView,
+}) {
   const navigate = useNavigate();
-  const [menuStyle, handleClickMenu] = useSelectMenu(
-    [
-      { name: '대시보드', status: true },
-      { name: '요청 현황', status: false },
-      { name: '비품 관리', status: false },
-      { name: '비품 등록', status: false },
-    ],
-    'sideBarMenu'
-  );
+  const theme = useTheme();
+
+  const { pathname } = useLocation();
+  const [logoutModal, setLogoutModal] = useModalState();
+  const categoryStyle = [
+    pathname === ROUTER.PATH.ADMIN_DASHBOARD && true,
+    pathname === ROUTER.PATH.ADMIN_REQUEST_STATUS && true,
+    pathname === ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT && true,
+    pathname === ROUTER.PATH.ADMIN_EQUIPMENT_ADD && true,
+  ];
 
   const handleClickCategory = e => {
     const name = e.target.innerText;
-    handleClickMenu(e);
-    name === '대시보드' && navigate(ROUTER.PATH.ADMIN_DASHBOARD);
-    name === '요청 현황' && navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
-    name === '비품 관리' && navigate(ROUTER.PATH.MAIN);
-    name === '비품 등록' && navigate(ROUTER.PATH.ADMIN_EQUIPMENT_ADD);
+    name === STRING.SIDEBAR.DASHBOARD && navigate(ROUTER.PATH.ADMIN_DASHBOARD);
+    name === STRING.SIDEBAR.REQUEST_STATUS &&
+      navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
+    name === STRING.SIDEBAR.MANAGEMENT &&
+      navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT);
+    name === STRING.SIDEBAR.EQUIPMENT_ADD &&
+      navigate(ROUTER.PATH.ADMIN_EQUIPMENT_ADD);
   };
+
+  const cleanTokenNStorage = () => {
+    navigate('/');
+    setLogoutModal(true);
+    Storage.clearLocalStorage();
+  };
+
+  const handleLogoutBtn = () =>
+    removeCookie(QUERY.COOKIE.COOKIE_NAME, cleanTokenNStorage());
+
+  const handleModalShow = () => setLogoutModal();
+  const handleModalClose = () => setLogoutModal(false);
+
+  const dropDownRef = useRef(null);
+
+  const desktopSize = window.innerWidth <= theme.screen.desktopSize;
+  useOutsideClick(
+    dropDownRef,
+    () => {
+      setIsSidebarHidden(true);
+    },
+    desktopSize
+  );
+
+  const handleSidebarToggle = () => setIsSidebarHidden(prev => !prev);
 
   return (
     <>
-      <SidebarWrapper>
+      <SidebarWrapper isHidden={isSidebarHidden} ref={dropDownRef}>
+        {isMobileView && <ArrowDownIcon onClick={handleSidebarToggle} />}
         <LogoContainer>
           <Logo />
         </LogoContainer>
         <SidebarCategoryContainer>
-          <CategoryItem
+          <CategoryItemLeft
             onClick={handleClickCategory}
-            category={`${menuStyle[0].status}`}
-            title="대시보드"
+            category={`${categoryStyle[0]}`}
+            title={STRING.SIDEBAR.DASHBOARD}
           >
             <Dashboard />
-          </CategoryItem>
-          <CategoryItem
+          </CategoryItemLeft>
+          <CategoryItemLeft
             onClick={handleClickCategory}
-            category={`${menuStyle[1].status}`}
-            title="요청 현황"
+            category={`${categoryStyle[1]}`}
+            title={STRING.SIDEBAR.REQUEST_STATUS}
           >
             <List />
-          </CategoryItem>
-          <CategoryItem
+          </CategoryItemLeft>
+          <CategoryItemLeft
             onClick={handleClickCategory}
-            category={`${menuStyle[2].status}`}
-            title="비품 관리"
+            category={`${categoryStyle[2]}`}
+            title={STRING.SIDEBAR.MANAGEMENT}
           >
             <Management />
-          </CategoryItem>
-          <CategoryItem
+          </CategoryItemLeft>
+          <CategoryItemLeft
             onClick={handleClickCategory}
-            category={`${menuStyle[3].status}`}
-            title="비품 등록"
+            category={`${categoryStyle[3]}`}
+            title={STRING.SIDEBAR.EQUIPMENT_ADD}
           >
             <Add />
-          </CategoryItem>
+          </CategoryItemLeft>
+          <LogoutContainer>
+            <CategoryItemRight onClick={handleModalShow} title="로그아웃">
+              <Logout />
+            </CategoryItemRight>
+            <CustomModal
+              isOpen={logoutModal}
+              onClose={handleModalClose}
+              submit={handleLogoutBtn}
+              text={'로그아웃'}
+            >
+              정말 로그아웃 하시겠습니까?
+            </CustomModal>
+          </LogoutContainer>
         </SidebarCategoryContainer>
       </SidebarWrapper>
     </>
@@ -73,31 +134,51 @@ export default function Sidebar() {
 }
 
 const SidebarWrapper = styled.aside`
-  position: relative;
-  min-width: 15.625rem;
-  max-width: 15.625rem;
+  ${props => props.theme.FlexCol};
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  min-width: 12.5rem;
+  width: 12.5rem;
   height: 100%;
   background-color: white;
   box-shadow: -0.3125rem 0 1.5625rem 0 rgba(0, 0, 0, 0.25);
   border-radius: 0 2.5rem 2.5rem 0;
   z-index: 1;
+  transform: ${({ isHidden }) => (isHidden ? 'translateX(-100%)' : 'none')};
+  transition: transform 0.3s ease-in-out;
 `;
 
 const LogoContainer = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
-  padding-top: 2.625rem;
+  height: 6.25rem;
+  width: 100%;
+  margin: 1.875rem 0;
 `;
 
 const Logo = styled.div`
-  width: 5.375rem;
-  height: 2.3125rem;
-  background: url(${logo}) no-repeat center center / cover;
+  min-width: 7.25rem;
+  height: 1.9375rem;
+  background: url(${logo}) no-repeat;
 `;
 
 const SidebarCategoryContainer = styled.div`
   ${props => props.theme.FlexCol};
   ${props => props.theme.FlexCenter};
-  width: 6.4375rem;
-  margin: 5.9375rem auto;
+  height: 100%;
+  width: 100%;
+  gap: 0.9375rem;
+`;
+
+const LogoutContainer = styled.div`
+  ${props => props.theme.FlexRow}
+  width: 100%;
+  margin-top: auto;
+  margin-bottom: 3.625rem;
+`;
+
+const ArrowDownIcon = styled(ArrowDown)`
+  position: absolute;
 `;

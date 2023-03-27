@@ -1,103 +1,115 @@
-import Axios from '../../api/axios';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import RequestMenu from '../../components/requestStatus/RequestMenu';
+
+import StatusMenu from '../../components/common/status/StatusMenu';
 import RequestShow from '../../components/requestStatus/RequestShow';
+import RequestModal from '../../components/requestStatus/RequestModal';
+import Modal from '../../elements/Modal';
+
 import useSelectMenu from '../../hooks/useSelectMenu';
+import useSetStateChange from '../../hooks/useSetStateChange';
+import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { __requestStatus } from '../../redux/modules/requestStatus';
 
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
-
 export default function RequestStatus() {
   const dispatch = useDispatch();
-  const { getRequest, isStatusLoading, isStatusError } = useSelector(
-    state => state.requestStatus
-  );
-  const [menuStyle, clickMenu, setSelectName] = useSelectMenu(
-    [
-      { name: '전체', status: true },
-      { name: '비품 요청', status: false },
-      { name: '반납 요청', status: false },
-      { name: '수리 요청', status: false },
-    ],
-    'RequestStorgeKey'
-  );
+  const {
+    requestStatus: { getRequest, isStatusError },
+    requestData: { menu, menuType, selectStatus },
+  } = useSelector(state => state.requestStatus);
 
   const [page, setPage] = useState(1);
-  const [type, setType] = useState('ALL');
-  // const type = useRef('ALL');
-  const [status, setStatus] = useState('UNPROCESSED');
+  const [type, setType] = useState(menuType);
+  const [status, setStatus] = useState(selectStatus);
+  const [categoryTitle, setCategoryTitle] = useState('전체');
+  const [keyword, setKeyword] = useState('');
+  const [modal, setModal] = useState({ show: false, detailId: null });
+
+  const [menuStyle, clickMenu] = useSelectMenu(menu);
+  const [resizeRef, pageSize, firstPageSize, handleResize] =
+    useResizeGetPageSize();
 
   useEffect(() => {
-    dispatch(__requestStatus({ type, status, page }));
-  }, [dispatch, page, type, status]);
+    const size = pageSize || firstPageSize || handleResize();
+    dispatch(__requestStatus({ keyword, type, status, page, size }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dispatch,
+    keyword,
+    page,
+    type,
+    status,
+    pageSize,
+    handleResize,
+    modal.show,
+  ]);
+
+  const handleClickMenu = useSetStateChange(
+    ['전체', '비품 요청', '반납 요청', '수리 요청', '보고서 결재'],
+    ['', 'SUPPLY', 'RETURN', 'REPAIR', 'REPORT'],
+    setType,
+    e => {
+      clickMenu(e);
+      setPage(1);
+      setKeyword('');
+      setCategoryTitle(e.target.innerText);
+    }
+  );
+
+  const handleChangeState = e => {
+    setStatus(e.target.value);
+  };
+
+  const handleChangeKeyword = e => {
+    setKeyword(e.target.value);
+  };
+
+  const handleClickDetail = id => {
+    setModal({ show: true, detailId: id });
+  };
 
   const handlePage = e => {
     setPage(e);
   };
 
-  const handleClickMenu = e => {
-    const menuName = e.target.innerText;
-    clickMenu(e);
-    setPage(1);
-    menuName === '전체' && setType('ALL');
-    menuName === '비품 요청' && setType('SUPPLY');
-    menuName === '반납 요청' && setType('RETURN');
-    menuName === '수리 요청' && setType('REPAIR');
-  };
-
-  const handleChangeStatus = e => {
-    const selectName = e.target.value;
-    setStatus(e);
-    setPage(1);
-    selectName === '처리전' && setStatus('UNPROCESSED');
-    selectName === '처리중' && setStatus('REPAIRING');
-    selectName === '처리 완료' && setStatus('PROCESSED');
-  };
-
-  console.log(type.current);
-
-  // const handleKakaoLogin = () => {
-  //   window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=bad08c2762b0ad4460013109d47675f2&redirect_uri=https://bipum-in.shop/api/user/kakao/callback&response_type=code
-  //     `;
-
-  //   // axios.post('/api/user/loginadd').then(response => console.log(response));
-  // };
-
-  if (isStatusError) return <div>에러 발생</div>;
   return (
-    <RequestStatusWrapper>
-      {getRequest && (
-        <>
-          <RequestMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
-          <RequestShow
-            requestData={getRequest}
-            setSelectName={setSelectName}
-            page={page}
-            onPage={handlePage}
-            onChangeStatus={handleChangeStatus}
-          />
-        </>
-      )}
-      {/* <button onClick={handleKakaoLogin}>카카오</button> */}
-    </RequestStatusWrapper>
+    <>
+      {isStatusError && <div>에러 발생</div>}
+      <RequestStatusWrapper ref={resizeRef.containerRef}>
+        <StatusMenu
+          headerRef={resizeRef.headerRef}
+          menuStyle={menuStyle}
+          onClickMenu={handleClickMenu}
+        />
+        <RequestShow
+          requestData={getRequest}
+          setSelectName={categoryTitle}
+          page={page}
+          pageSize={pageSize || firstPageSize}
+          onPage={handlePage}
+          status={status}
+          setStatus={handleChangeState}
+          keyword={keyword}
+          setKeyword={handleChangeKeyword}
+          onClickDetail={handleClickDetail}
+          resizeRef={resizeRef}
+        />
+      </RequestStatusWrapper>
+      <Modal isOpen={modal.show}>
+        <RequestModal
+          isClose={() => setModal({ ...modal, show: false })}
+          detailId={modal.detailId}
+        />
+      </Modal>
+    </>
   );
 }
 
 const RequestStatusWrapper = styled.section`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  height: 100%;
-  background-color: ${props => props.theme.color.blue.brandColor1};
-  padding: 2.25rem 3.25rem 3.25rem 3.25rem;
-`;
-
-const Loading = styled.section`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   width: 100%;
   height: 100%;
 `;

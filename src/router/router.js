@@ -9,7 +9,9 @@ import AdminDashBoard from '../pages/admin/AdminDashBoard';
 import UserDashBoard from '../pages/user/UserDashBoard';
 import Rending from '../pages/Rending';
 
+import EquipmentAdd from '../pages/admin/EquipmentAdd';
 import RequestStatus from '../pages/admin/RequestStatus';
+import EquipmentManagement from '../pages/admin/EquipmentManagement';
 
 const router = createBrowserRouter([
   {
@@ -32,6 +34,14 @@ const router = createBrowserRouter([
             element: <RequestStatus />,
           },
           {
+            path: ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT,
+            element: <EquipmentManagement />,
+          },
+          {
+            path: ROUTER.PATH.ADMIN_EQUIPMENT_ADD,
+            element: <EquipmentAdd />,
+          },
+          {
             path: ROUTER.PATH.USER_DASHBOARD,
             element: <UserDashBoard />,
           },
@@ -45,6 +55,10 @@ const router = createBrowserRouter([
   },
   {
     path: ROUTER.PATH.LOGIN,
+    element: <Login />,
+  },
+  {
+    path: '/api/user/kakao/callback',
     element: <Login />,
   },
 ]);

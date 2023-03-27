@@ -1,15 +1,12 @@
 import { useState } from 'react';
-import Storage from '../utils/localStorage';
 
-export default function useSelectMenu(list, StorgeKey) {
-  const getStorage = Storage.getLocalStorageJSON(StorgeKey);
-  const [menuStyle, setMenuStyle] = useState(getStorage ? getStorage : list);
+export default function useSelectMenu(list) {
+  const [menuStyle, setMenuStyle] = useState(list);
 
   const handleClickMenu = e => {
     const menuName = e.target.innerText;
     const select = selectMenu(menuName);
 
-    Storage.setLocalStorageJSON(StorgeKey, select);
     setMenuStyle(select);
   };
 
@@ -25,5 +22,9 @@ export default function useSelectMenu(list, StorgeKey) {
     return menuStyle.filter(list => list.status)[0].name;
   };
 
-  return [menuStyle, handleClickMenu, setSelectName];
+  const setSelectType = () => {
+    return menuStyle.filter(value => value.status)[0].type;
+  };
+
+  return [menuStyle, handleClickMenu, setSelectName, setSelectType];
 }

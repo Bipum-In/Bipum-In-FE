@@ -1,5 +1,6 @@
 import axios from 'axios';
 import QUERY from '../constants/query';
+import alertModal from '../utils/alertModal';
 import { getCookie, setCookie } from '../utils/cookie';
 
 export default class Axios {
@@ -19,8 +20,10 @@ export default class Axios {
         return response;
       },
       error => {
-        alert(error.response.data.result);
-        return Promise.reject(error);
+        console.log(error);
+        const message = error.response.data.errorMessage;
+        message && alertModal(message, 2);
+        return Promise.reject(message);
       }
     );
   }

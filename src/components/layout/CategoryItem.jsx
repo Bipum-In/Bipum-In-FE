@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export default function CategoryItem({ children, title, category, onClick }) {
+export function CategoryItemLeft({ children, title, category, onClick }) {
   return (
     <CategoryItemsContainer active={category} onClick={onClick}>
       {children}
@@ -10,43 +10,62 @@ export default function CategoryItem({ children, title, category, onClick }) {
   );
 }
 
-const CategoryItemsContainer = styled.div`
-  ${props => props.theme.FlexRow}
-  justify-content: flex-start;
-  align-items: center;
-  margin-bottom: 3.125rem;
-  width: 6.1875rem;
-  height: 1.5rem;
-  color: ${props =>
-    props.active === 'true'
-      ? props.theme.color.blue.brandColor6
-      : props.theme.color.grey.brandColor4};
+export function CategoryItemRight({ children, title, category, onClick }) {
+  return (
+    <CategoryItemsContainer active={category} onClick={onClick}>
+      <ImtesTitle>{title}</ImtesTitle>
+      {children}
+    </CategoryItemsContainer>
+  );
+}
 
+const CategoryItemsContainer = styled.div`
+  position: relative;
+  ${props => props.theme.FlexRow}
+  ${props => props.theme.FlexCenter};
+  width: 100%;
+  height: 3.25rem;
   svg {
     width: 1.5rem;
     height: 1.5rem;
-    path {
-      stroke: ${props =>
-        props.active === 'true'
-          ? props.theme.color.blue.brandColor6
-          : props.theme.color.grey.brandColor4};
-    }
   }
-
-  :hover * {
-    color: ${props => props.theme.color.blue.brandColor6};
-    stroke: ${props => props.theme.color.blue.brandColor6};
-  }
-
   * {
     transition: 0.2s ease;
-    cursor: pointer;
+    ${props => props.theme.CursorActive};
+    stroke: ${props => props.theme.color.grey.brandColor4};
+  }
+  ${props =>
+    props.active === 'true'
+      ? css`
+          color: ${props.theme.color.blue.brandColor6};
+          background-color: ${props.theme.color.blue.brandColor1};
+          svg path {
+            stroke: ${props.theme.color.blue.brandColor6};
+          }
+        `
+      : css`
+          color: ${props.theme.color.grey.brandColor4};
+
+          :hover {
+            color: ${props.theme.color.blue.brandColor6};
+            background-color: ${props.theme.color.blue.brandColor1};
+            svg path {
+              stroke: ${props.theme.color.blue.brandColor6};
+            }
+          }
+        `};
+
+  &:before {
+    content: '';
+    ${props => props.theme.AbsoluteTL};
+    ${props => props.theme.wh100};
+    ${props => props.theme.CursorActive};
   }
 `;
 
 const ImtesTitle = styled.div`
-  padding-left: 0.5rem;
+  padding: 0 0.5rem;
   font-weight: bold;
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.3125rem;
 `;

@@ -4,8 +4,10 @@ import { ReactComponent as Search } from '../styles/commonIcon/search.svg';
 import { ReactComponent as Alaram } from '../styles/commonIcon/alarm.svg';
 import { ReactComponent as Settings } from '../styles/commonIcon/settings.svg';
 import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg';
+
 import useOutsideClick from '../hooks/useOutsideClick';
 import test from '../styles/test.png';
+
 export default function Header() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
@@ -60,20 +62,24 @@ export default function Header() {
     </HeaderWrapper>
   );
 }
+
 const HeaderWrapper = styled.header`
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
-  height: 7.5rem;
+  height: 6.25rem;
   z-index: 0;
   background-color: ${props => props.theme.color.blue.brandColor7};
 `;
 
 const HeaderContainer = styled.div`
-  width: calc(100vw - 250px);
+  width: calc(100vw - 12.5rem);
   margin-left: auto;
   height: 100%;
+  @media (max-width: ${props => props.theme.screen.desktop}) {
+    width: calc(100vw);
+  }
 `;
 
 const ItemContainer = styled.div`
@@ -116,7 +122,7 @@ const SearchInput = styled.input`
   border: none;
   width: 100%;
   line-height: 1.3125rem;
-  font-size: 1.125rem;
+  font-size: 1rem;
   color: ${props => props.theme.color.grey.brandColor7};
 `;
 
@@ -156,13 +162,13 @@ const UserInfoDetailContainer = styled.div`
   gap: 0.25rem;
 `;
 const InfoCompanyTitle = styled.span`
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   color: ${props => props.theme.color.grey.brandColor6};
 `;
 
 const InfoUserName = styled.span`
   font-weight: 600;
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.3125rem;
 `;
 
