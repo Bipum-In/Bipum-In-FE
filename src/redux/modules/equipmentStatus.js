@@ -36,7 +36,7 @@ export const getEquipmentList = Redux.asyncThunk(
 
 export const getEquipmentDetail = Redux.asyncThunk(
   'EQUIPMENT_DETAIL',
-  payload => axios.get(`/api/supply/${payload}`),
+  payload => axios.get(`/api/supply/${payload}?size=${1}`),
   response => response.data.data
 );
 
