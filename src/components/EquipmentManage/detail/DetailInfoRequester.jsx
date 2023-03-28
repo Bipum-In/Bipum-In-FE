@@ -1,16 +1,12 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import SelectCategory from '../../common/SelectCategory';
-import SelectDate from '../../equipmentAdd/single/SelectDate';
 import SelectUser from '../../equipmentAdd/single/SelectUser';
 
 export default function DetailInfoRequester({
   edit,
-  dateValue,
   deptValue,
   detail,
   partners,
-  setDateState,
-  onChangeDate,
   onChangeDept,
   onChangePartners,
 }) {
@@ -19,18 +15,7 @@ export default function DetailInfoRequester({
     <DetailInfoContentContainer>
       <TextType>
         <span>등록 일자</span>
-        {edit ? (
-          <Date>
-            <SelectDate
-              year={dateValue[0]}
-              month={dateValue[1]}
-              setSelect={setDateState}
-              handleChange={onChangeDate}
-            />
-          </Date>
-        ) : (
-          <span>{createdAt}</span>
-        )}
+        <CreatedAt edit={edit}>{createdAt}</CreatedAt>
       </TextType>
       <TextType>
         <span>협력업체</span>
@@ -119,19 +104,14 @@ const TextType = styled.div`
   }
 `;
 
-const Date = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-
-  div:first-child {
-    padding: 0;
-  }
-
-  div {
-    width: 100%;
-    height: 100%;
-  }
+const CreatedAt = styled.span`
+  ${props =>
+    props.edit &&
+    css`
+      display: flex;
+      align-items: center;
+      height: 2rem;
+    `}
 `;
 
 const Partners = styled.div`
@@ -142,4 +122,14 @@ const DeptUser = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+
+  div:first-child {
+    padding: 0;
+  }
+
+  div {
+    display: flex;
+    align-items: center;
+    height: 2rem;
+  }
 `;

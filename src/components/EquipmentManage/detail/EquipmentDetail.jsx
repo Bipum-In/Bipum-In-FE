@@ -4,7 +4,6 @@ import { getEquipmentDetail } from '../../../redux/modules/equipmentStatus';
 
 import styled from 'styled-components';
 import Axios from '../../../api/axios';
-import useSetEquipmentAddDate from '../../../hooks/useSetEquipmentAddDate';
 
 import DetailHeader from './DetailHeader';
 import DetailBodyTitle from './DetailBodyTitle';
@@ -19,9 +18,8 @@ const equipmentData = {
   categoryName: '',
   modelName: '',
   serialNum: '',
-  createdAt: '',
-  partnersId: null,
-  userId: null,
+  partnersId: '',
+  userId: '',
 };
 
 export default function EquipmentDetail({
@@ -32,9 +30,6 @@ export default function EquipmentDetail({
 }) {
   const dispatch = useDispatch();
   const [edit, setEdit] = useState(false);
-  const [day, setDay] = useState(null);
-  const [year, setYear] = useState(null);
-  const [month, setMonth] = useState(null);
   const [dept, setDept] = useState(null);
   const [user, setUser] = useState(null);
   const [partners, setPartners] = useState(null);
@@ -42,9 +37,6 @@ export default function EquipmentDetail({
   const [serialNum, setSerialNum] = useState('');
   const [smallCategory, setSmallCategory] = useState(null);
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
-
-  const [setSelectYear, setSelectMonth, setSelectDaysInMonth] =
-    useSetEquipmentAddDate();
 
   const { getDetail, isDetailError } = useSelector(
     state => state.equipmentStatus.equipmentDetail
@@ -76,24 +68,6 @@ export default function EquipmentDetail({
   const handleChangeNameValue = e => setModelName(e.target.value);
 
   const handleChangeSerialValue = e => setSerialNum(e.target.value);
-
-  const handleChangeYear = e => {
-    const year = e.target.value;
-    const parseYear = Number(year.split('년')[0]);
-    setYear(parseYear);
-  };
-
-  const handleChangeMonth = e => {
-    const month = e.target.value;
-    const parseMonth = Number(month.split('월')[0]);
-    setMonth(parseMonth);
-  };
-
-  const handleChangeDay = e => {
-    const day = e.target.value;
-    const parseDay = Number(day.split('일')[0]);
-    setDay(parseDay);
-  };
 
   const handleChangePartners = e => {
     const { ko: partners } = JSON.parse(e.target.value);
@@ -152,21 +126,10 @@ export default function EquipmentDetail({
                   />
                   <DetailInfoRequester
                     edit={edit}
-                    dateValue={[year, month]}
                     deptValue={[dept, user]}
                     detail={getDetail}
                     partners={partners}
-                    setDateState={[
-                      setSelectYear,
-                      setSelectMonth,
-                      setSelectDaysInMonth,
-                    ]}
                     onChangeDept={[handleChangeDept, handleChangeUser]}
-                    onChangeDate={[
-                      handleChangeYear,
-                      handleChangeMonth,
-                      handleChangeDay,
-                    ]}
                     onChangePartners={handleChangePartners}
                   />
                 </DetailInfo>
