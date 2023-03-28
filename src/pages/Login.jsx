@@ -10,6 +10,7 @@ import Button from '../elements/Button';
 import SelectCategory from '../components/common/SelectCategory';
 import KakaoUserInfo from '../styles/rendingIcon/kakaoUserInfo.svg';
 import { ReactComponent as Logo } from '../styles/logo.svg';
+import Storage from '../utils/localStorage';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -27,9 +28,11 @@ export default function Login() {
     const code = search.split('=')[1];
     if (code && !checkCode) {
       axios.post(`/api/user/login?code=${code}`).then(res => {
+        const userInfo = res.data.data;
+        Storage.setLocalStorageJSON('userData', userInfo);
+
         setWriteUser(res.data.data);
         setCheckCode(true);
-        console.log(res);
       });
 
       axios.get(`/api/dept`).then(res => setDepartmentList(res.data.data));
