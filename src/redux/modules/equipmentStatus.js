@@ -1,3 +1,4 @@
+import { current } from '@reduxjs/toolkit';
 import Axios from '../../api/axios';
 import NUMBER from '../../constants/number';
 import Redux from '../redux';
@@ -21,6 +22,14 @@ const initialState = {
   categoryData: {
     categoryIdData: '',
     categoryNameData: '전체',
+  },
+  supplyHistory: {
+    user: {
+      content: [],
+      lastPage: false,
+    },
+    isUserLoading: false,
+    isUserError: false,
   },
 };
 
@@ -50,6 +59,15 @@ export const getCategoryList = Redux.asyncThunk(
   }
 );
 
+export const getHistory = Redux.asyncThunk(
+  'HISTORY',
+  payload =>
+    axios.get(
+      `/api/supply/history/${payload.history}/${payload.supplyId}?page=${payload.page}&size=${payload.size}`
+    ),
+  response => response.data.data
+);
+
 const largeCategory = response => {
   return [{ largeCategory: '전체' }, ...response.data.data]
     .reduce((acc, cur) => {
@@ -74,8 +92,11 @@ const equipmentStatusSlice = Redux.slice(
   'Equipment',
   initialState,
   {
+    initHistory: (state, _) => {
+      state.supplyHistory.user = { content: [], lastPage: false };
+    },
     setCategoryData: (state, action) => {
-      state.categoryData.categoryIdData = action.payload.categoryId;
+      state.supplyHistory.categoryIdData = action.payload.categoryId;
       state.categoryData.categoryNameData = action.payload.categoryName;
     },
   },
@@ -104,8 +125,22 @@ const equipmentStatusSlice = Redux.slice(
       'getCategory',
       'isCategoryError'
     );
+    Redux.extraReducer(
+      bulider,
+      getHistory,
+      'supplyHistory',
+      'isUserLoading',
+      'user',
+      'isUserError',
+      (state, payload) => {
+        return {
+          content: [...state.content].concat(payload.content),
+          lastPage: payload.last,
+        };
+      }
+    );
   }
 );
 
-export const { setCategoryData } = equipmentStatusSlice.actions;
+export const { initHistory, setCategoryData } = equipmentStatusSlice.actions;
 export default equipmentStatusSlice.reducer;
