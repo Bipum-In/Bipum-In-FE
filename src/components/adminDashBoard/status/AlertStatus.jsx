@@ -1,14 +1,54 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import AnchorBtn from '../AnchorBtn';
 import { dashboardAlertData } from '../../../mock/dashboardAlertData';
 import { v4 as uuidv4 } from 'uuid';
 import { FormatKoreanTime } from '../../../utils/formatDate';
+import { EventSourcePolyfill } from 'event-source-polyfill';
+import { getCookie } from '../../../utils/cookie';
+import QUERY from '../../../constants/query';
+import Storage from '../../../utils/localStorage';
 
 export default function AlertStatus() {
+  const token = getCookie(QUERY.COOKIE.COOKIE_NAME);
+
   //mookdata
   const { alertDtos } = dashboardAlertData.data;
+
+  const [alarm, setAlarm] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const fetchData = async () => {
+    let eventSource;
+    try {
+      eventSource = new EventSourcePolyfill(
+        `${process.env.REACT_APP_SERVER_URL}/api/subscribe`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      eventSource.onmessage = async function (event) {
+        const alarmData = event.data;
+        const { userId } = Storage.getLocalStorageJSON(
+          QUERY.STORAGE.LOCAL_NAME
+        );
+        console.log(userId);
+        if (alarmData !== `EventStream Created. [userId=${userId}]`) {
+          setAlarm(true);
+        }
+      };
+    } catch (error) {
+      if (eventSource) eventSource.close();
+    }
+  };
 
   return (
     <>
@@ -16,6 +56,7 @@ export default function AlertStatus() {
         <styleds.EquipmentTopContainer col="true">
           <AnchorBtn onClick={() => {}}>알림</AnchorBtn>
           <styleds.AlertAndAddContainer>
+            {alarm && <LnbAlarmPoint />}
             {alertDtos.map(data => (
               <AlertListContainer key={uuidv4()}>
                 <AlertImgContainer>
@@ -81,4 +122,14 @@ const AlertTitle = styled.span`
 const AlertData = styled.span`
   font-size: 0.875rem;
   color: ${props => props.theme.color.grey.brandColor5};
+`;
+
+const LnbAlarmPoint = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  border-radius: 100%;
+  background-color: rgb(255, 153, 0);
 `;
