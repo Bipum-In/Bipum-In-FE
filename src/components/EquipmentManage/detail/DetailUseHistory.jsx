@@ -1,9 +1,11 @@
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { FormatDateToDot } from '../../../utils/formatDate';
+import { useInView } from 'react-intersection-observer';
 
 export default function DetailUseHistory({ detail }) {
-  const { content } = detail.supplyUserHistory;
+  const { content, first, last } = detail.supplyUserHistory;
+  const [inViewRef, inView] = useInView();
   return (
     <DetailUseHistoryContainer>
       <p>사용 내역</p>
@@ -20,7 +22,11 @@ export default function DetailUseHistory({ detail }) {
             <span>{item.history}</span>
           </DetailUseHistoryContent>
         ))}
-        {/* <InfiniteScrollCheck /> */}
+        {content.length >= 6 && (
+          <InfiniteScrollCheck ref={inViewRef}>
+            마지막 페이지 입니다.
+          </InfiniteScrollCheck>
+        )}
       </InfiniteScroll>
     </DetailUseHistoryContainer>
   );
@@ -93,4 +99,16 @@ const InfiniteScroll = styled.div`
   ::-webkit-scrollbar-track {
     background-color: ${props => props.theme.color.blue.brandColor1};
   }
+`;
+
+const InfiniteScrollCheck = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  color: ${props => props.theme.color.grey.brandColor5};
+  background-color: ${props => props.theme.color.blue.brandColor1};
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: 500;
+  font-size: 13px;
 `;
