@@ -21,12 +21,12 @@ export default function RendingHeader() {
   };
 
   const handleReturnDashboard = () => navigate(ROUTER.PATH.ADMIN_DASHBOARD);
-  const cleanTokenNStorage = () => {
+  const handleLogoutBtn = e => {
+    e.preventDefault();
     window.location.reload();
+    removeCookie(QUERY.COOKIE.COOKIE_NAME);
     Storage.clearLocalStorage();
   };
-  const handleLogoutBtn = () =>
-    removeCookie(QUERY.COOKIE.COOKIE_NAME, cleanTokenNStorage());
 
   return (
     <HeaderStyles>

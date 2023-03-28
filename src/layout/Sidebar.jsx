@@ -53,14 +53,12 @@ export default function Sidebar({
       navigate(ROUTER.PATH.ADMIN_EQUIPMENT_ADD);
   };
 
-  const cleanTokenNStorage = () => {
-    navigate('/');
-    setLogoutModal(true);
+  const handleLogoutBtn = e => {
+    e.preventDefault();
+    removeCookie(QUERY.COOKIE.COOKIE_NAME);
     Storage.clearLocalStorage();
+    navigate('/');
   };
-
-  const handleLogoutBtn = () =>
-    removeCookie(QUERY.COOKIE.COOKIE_NAME, cleanTokenNStorage());
 
   const handleModalShow = () => setLogoutModal();
   const handleModalClose = () => setLogoutModal(false);
