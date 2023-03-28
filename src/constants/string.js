@@ -3,14 +3,6 @@ const ADDMENUE = {
   ADDMULTIPLE: '단품 등록',
 };
 
-const LARGECATEGORY = {
-  컴퓨터: 'COMPUTER',
-  디지털: 'DIGITAL',
-  가전: 'ELECTRONICS',
-  가구: 'FURNITURE',
-  기타: 'FURNETCITURE',
-};
-
 const SIDEBAR = {
   DASHBOARD: '대시보드',
   REQUEST_STATUS: '요청 현황',
@@ -42,7 +34,7 @@ const REQUEST_NAME = {
 };
 
 const CATEGORY = {
-  전체: 'ALL',
+  전체: '',
   컴퓨터: 'COMPUTER',
   디지털: 'DIGITAL',
   가전제품: 'ELECTRONICS',
