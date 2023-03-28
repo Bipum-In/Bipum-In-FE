@@ -30,9 +30,14 @@ export default function Login() {
 
   useEffect(() => {
     const code = search.split('=')[1];
-    const { checkUser } = Storage.getLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME);
 
-    if (checkUser) navigate(ROUTER.PATH.ADMIN_DASHBOARD);
+    const localStorageData = Storage.getLocalStorageJSON(
+      QUERY.STORAGE.LOCAL_NAME
+    );
+
+    if (localStorageData && localStorageData.checkUser) {
+      navigate(ROUTER.PATH.ADMIN_DASHBOARD);
+    }
 
     if (code && !checkCode) {
       axios.post(`/api/user/login?code=${code}`).then(res => {
