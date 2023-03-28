@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import { styles } from '../common/commonStyled';
 import Button from '../../elements/Button';
 
 import Axios from '../../api/axios';
@@ -15,8 +16,8 @@ const equipmentData = {
   categoryName: '',
   modelName: '',
   serialNum: '',
-  partnersId: null,
-  userId: null,
+  partnersId: '',
+  userId: '',
 };
 
 export default function AddSingleItem({ category, largeCategory }) {
@@ -159,9 +160,11 @@ export default function AddSingleItem({ category, largeCategory }) {
           <AddEquipmentArticle>
             <EquipmentDetailContainer>
               <EquipmentLeftContainer>
-                <TypeBox>
-                  <TypeTitle requiredinput="true">비품종류</TypeTitle>
-                  <SelectCaregoryConteiner>
+                <styles.TypeBox>
+                  <styles.TypeTitle requiredinput="true">
+                    비품종류
+                  </styles.TypeTitle>
+                  <styles.SelectCaregoryConteiner>
                     <SelectCategoryList
                       category={[parseLargeCategory, smallCategory]}
                       optionName={['name', 'categoryName']}
@@ -173,16 +176,16 @@ export default function AddSingleItem({ category, largeCategory }) {
                         handleChangeSmallCategory,
                       ]}
                     />
-                  </SelectCaregoryConteiner>
-                </TypeBox>
+                  </styles.SelectCaregoryConteiner>
+                </styles.TypeBox>
                 <EquipmentInput
                   value={[nameValue, serialValue]}
                   setValue={[handleChangeNameValue, handleChangeSerialValue]}
                   onCrawling={handleClickCrawling}
                 />
 
-                <TypeBox>
-                  <TypeTitle>협력업체</TypeTitle>
+                <styles.TypeBox>
+                  <styles.TypeTitle>협력업체</styles.TypeTitle>
                   <PartnerCompany>
                     <SelectCategory
                       category={partners}
@@ -193,9 +196,9 @@ export default function AddSingleItem({ category, largeCategory }) {
                       onChangeCategory={handleChangePartners}
                     />
                   </PartnerCompany>
-                </TypeBox>
-                <TypeBox>
-                  <TypeTitle>사용자</TypeTitle>
+                </styles.TypeBox>
+                <styles.TypeBox>
+                  <styles.TypeTitle>사용자</styles.TypeTitle>
                   <SelectUser
                     category={[dept, user]}
                     optionNullName={['부서명', '사원명']}
@@ -204,7 +207,7 @@ export default function AddSingleItem({ category, largeCategory }) {
                     optionName={['deptName', 'empName']}
                     onChangeCategory={[handleChangeDept, handleChangeUser]}
                   />
-                </TypeBox>
+                </styles.TypeBox>
               </EquipmentLeftContainer>
               <Hr />
               <ImageAdd preview={preview} onChangeimge={onChangeimge} />
@@ -229,49 +232,9 @@ const AddEquipmentWrapper = styled.section`
   position: relative;
 `;
 
-const SelectCaregoryConteiner = styled.div`
-  display: flex;
-  gap: 0.5rem;
-  select {
-    min-width: 5.25rem;
-    height: 2.6rem;
-
-    border-color: ${props => props.theme.color.blue.brandColor3};
-    color: ${props => props.theme.color.blue.brandColor6};
-    background-color: ${props => props.theme.color.blue.brandColor1};
-  }
-`;
-
 const PartnerCompany = styled.div`
   min-width: 5.8125rem;
   height: 2.5rem;
-`;
-
-const TypeTitle = styled.span`
-  font-size: 1rem;
-  min-width: 8.75rem;
-  ${props =>
-    props.requiredinput === 'true' &&
-    css`
-      &::before {
-        content: '*';
-        color: red;
-        padding-right: 0.3125rem;
-      }
-    `}
-`;
-const TypeBox = styled.div`
-  ${props => props.theme.FlexRow};
-  align-items: center;
-  gap: 0.5rem;
-  width: 37rem;
-  height: 2.5rem;
-  Input {
-    width: 28.125rem;
-    height: 2.5rem;
-    background: ${props => props.theme.color.grey.brandColor1};
-    border-radius: 0.5rem;
-  }
 `;
 
 const AddEquipmentArticle = styled.form`
