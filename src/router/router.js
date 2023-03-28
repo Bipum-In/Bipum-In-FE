@@ -8,6 +8,7 @@ import Login from '../pages/Login';
 import AdminDashBoard from '../pages/admin/AdminDashBoard';
 import UserDashBoard from '../pages/user/UserDashBoard';
 import Rending from '../pages/Rending';
+import EmptyPage from '../pages/EmptyPage';
 
 import EquipmentAdd from '../pages/admin/EquipmentAdd';
 import RequestStatus from '../pages/admin/RequestStatus';
@@ -17,7 +18,7 @@ const router = createBrowserRouter([
   {
     path: ROUTER.PATH.MAIN,
     element: <App />,
-    errorElement: <div>404</div>,
+    errorElement: <EmptyPage />,
     children: [
       {
         index: true,
