@@ -43,10 +43,10 @@ export default function AdminDashBoard() {
 
 const AdminDashBoardWrapper = styled.div`
   ${props => props.theme.FlexCol};
-  height: calc(100vh - 100px);
+  height: calc(100vh - 6.25rem);
   overflow: auto;
-  margin: -3.25rem -3.25rem 0 0;
-  padding: 3.25rem 0;
+  margin: -3rem -3.75rem;
+  padding: 3.75rem 0px 3.75rem 3.75rem;
 `;
 
 const TopSideContainer = styled.div`

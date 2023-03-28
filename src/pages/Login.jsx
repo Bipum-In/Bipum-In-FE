@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { styles } from '../components/common/commonStyled';
+
 import Axios from '../api/axios';
 import Input from '../elements/Input';
+import Button from '../elements/Button';
+
 import SelectCategory from '../components/common/SelectCategory';
+import KakaoUserInfo from '../styles/rendingIcon/kakaoUserInfo.svg';
+import { ReactComponent as Logo } from '../styles/logo.svg';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -19,83 +25,160 @@ export default function Login() {
 
   useEffect(() => {
     const code = search.split('=')[1];
-
     if (code && !checkCode) {
       axios.post(`/api/user/login?code=${code}`).then(res => {
         setWriteUser(res.data.data);
         setCheckCode(true);
+        console.log(res);
       });
 
       axios.get(`/api/dept`).then(res => setDepartmentList(res.data.data));
     }
-
     writeUser && navigate('/admin-dashboard');
   }, [checkCode, navigate, search, writeUser]);
 
-  const handleKakaoLogin = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=bad08c2762b0ad4460013109d47675f2&redirect_uri=http://localhost:3000/api/user/kakao/callback&response_type=code`;
-  };
-
   const handleLoginInfoAdd = () => {
     const { ko: deptId } = JSON.parse(departmentId);
+    const stringToNumPrice = phone.replace(/-/g, '');
 
     if (!deptId || !empName || !phone) return alert('모든 정보를 입력해주세요');
 
     const loginadd = {
       departmentId: deptId,
       empName,
-      phone,
+      phone: stringToNumPrice,
     };
-
+    console.log(loginadd);
     axios
       .post(`/api/user/loginadd`, loginadd)
       .then(res => setWriteUser(res.data.data));
   };
 
   const handleChangeDepartmentId = e => setDepartmentId(e.target.value);
-  const handleChangeEmpName = e => setEmpName(e.target.value);
-  const handleChangePhone = e => setPhone(e.target.value);
+
+  function handleEmpNameBlur(event) {
+    const { value } = event.target;
+    const filteredValue = value.replace(/[^a-z|A-Z|ㄱ-ㅎ|가-힣]/g, '');
+    setEmpName(filteredValue);
+  }
+
+  function handleChangePhone(event) {
+    const { value } = event.target;
+    const formattedValue = value
+      .replace(/[^0-9]/g, '')
+      .replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    setPhone(formattedValue);
+  }
 
   return (
-    <LoginWrapper>
-      {!checkCode && <button onClick={handleKakaoLogin}>카카오 로그인</button>}
+    <LoginWrapper bg={KakaoUserInfo}>
       {!writeUser && checkCode && (
         <SetUserInfo>
-          <SelectCategory
-            category={departmentList}
-            optionName={'deptName'}
-            optionNullName={'팀을 선택해주세요'}
-            optionKey={'deptName'}
-            optionValueKey={'deptId'}
-            onChangeCategory={handleChangeDepartmentId}
-          />
-          <p>사용자 이름</p>
-          <Input value={empName} setState={handleChangeEmpName} />
-          <p>핸드폰 번호</p>
-          <Input value={phone} setState={handleChangePhone} />
-          <button onClick={handleLoginInfoAdd}>완료</button>
+          <Logo />
+          <SetUserInputContainer>
+            <styles.TypeBox>
+              <styles.TypeTitle kakao requiredinput="true">
+                부서선택
+              </styles.TypeTitle>
+              <styles.SelectCaregoryConteiner>
+                <SelectCategory
+                  category={departmentList}
+                  optionName={'deptName'}
+                  optionNullName={'팀을 선택해주세요'}
+                  optionKey={'deptName'}
+                  optionValueKey={'deptId'}
+                  onChangeCategory={handleChangeDepartmentId}
+                />
+              </styles.SelectCaregoryConteiner>
+            </styles.TypeBox>
+
+            <styles.TypeBox>
+              <styles.TypeTitle requiredinput="true">
+                사용자 이름
+              </styles.TypeTitle>
+              <Input
+                type="text"
+                value={empName}
+                setState={handleEmpNameBlur}
+                placeholder="이름을 입력해주세요"
+              />
+            </styles.TypeBox>
+
+            <styles.TypeBox>
+              <styles.TypeTitle requiredinput="true">
+                핸드폰 번호
+              </styles.TypeTitle>
+              <Input
+                value={phone}
+                setState={handleChangePhone}
+                placeholder="번호를 입력해 주세요"
+                maxLength="11"
+              />
+            </styles.TypeBox>
+          </SetUserInputContainer>
+          <SetUserSubmitContainer>
+            <Button
+              submit
+              onClick={handleLoginInfoAdd}
+              disabled={
+                !departmentId ||
+                empName.length < 2 ||
+                phone.replace(/-/g, '').length < 11
+              }
+            >
+              완료
+            </Button>
+          </SetUserSubmitContainer>
         </SetUserInfo>
       )}
     </LoginWrapper>
   );
 }
+console.log();
 
-const LoginWrapper = styled.main`
+const LoginWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  height: 100%;
-
-  button {
-    width: 10rem;
-    height: 3rem;
-    background-color: #ffea00;
+  width: 100vw;
+  height: 100vh;
+  ::before {
+    content: '';
+    background: url(${props => props.bg}) no-repeat center center/cover;
+    width: 100%;
+    height: 100%;
   }
 `;
 
 const SetUserInfo = styled.div`
-  input {
-    border: 1px solid black;
+  position: absolute;
+  ${props => props.theme.FlexCol};
+  ${props => props.theme.Boxshadow};
+  width: 30.375rem;
+  height: 36.9375rem;
+  background: white;
+  padding: 5rem 6.5625rem;
+  > svg {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 3rem;
+  }
+`;
+
+const SetUserInputContainer = styled.div`
+  ${props => props.theme.FlexCol};
+  align-items: flex-start;
+  margin-top: auto;
+  gap: 2.5rem;
+  padding-bottom: 4.5625rem;
+`;
+
+const SetUserSubmitContainer = styled.div`
+  ${props => props.theme.FlexRow};
+  ${props => props.theme.FlexCenter};
+  > button {
+    width: 5.25rem;
+    font-weight: bold;
   }
 `;
