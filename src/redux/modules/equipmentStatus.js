@@ -24,9 +24,9 @@ const initialState = {
     categoryNameData: '전체',
   },
   supplyHistory: {
-    user: {
-      content: [],
-      lastPage: false,
+    history: {
+      user: { content: [], lastPage: false },
+      repair: { content: [], lastPage: false },
     },
     isUserLoading: false,
     isUserError: false,
@@ -65,7 +65,10 @@ export const getHistory = Redux.asyncThunk(
     axios.get(
       `/api/supply/history/${payload.history}/${payload.supplyId}?page=${payload.page}&size=${payload.size}`
     ),
-  response => response.data.data
+  (response, payload) =>
+    payload.history === 'user'
+      ? { user: response.data.data }
+      : { repair: response.data.data }
 );
 
 const largeCategory = response => {
@@ -130,12 +133,18 @@ const equipmentStatusSlice = Redux.slice(
       getHistory,
       'supplyHistory',
       'isUserLoading',
-      'user',
+      'history',
       'isUserError',
       (state, payload) => {
+        const historyKey = Object.keys(payload)[0];
         return {
-          content: [...state.content].concat(payload.content),
-          lastPage: payload.last,
+          ...state,
+          [historyKey]: {
+            content: [...state[historyKey].content].concat(
+              payload[historyKey].content
+            ),
+            lastPage: payload[historyKey].last,
+          },
         };
       }
     );

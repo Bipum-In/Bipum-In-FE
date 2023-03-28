@@ -7,7 +7,7 @@ const Redux = {
         .then(response => {
           let fulfillData = null;
 
-          fulfillFn && (fulfillData = fulfillFn(response));
+          fulfillFn && (fulfillData = fulfillFn(response, payload));
 
           return thunkAPI.fulfillWithValue(
             fulfillData ? fulfillData : response.data

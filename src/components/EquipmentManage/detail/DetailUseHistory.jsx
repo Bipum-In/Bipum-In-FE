@@ -17,11 +17,11 @@ export default function DetailUseHistory({ detail }) {
 
   const { supplyId } = detail.supplyDetail;
   const { content: firstContent } = detail.supplyUserHistory;
-  const {
-    user: { content, lastPage },
-    isUserLoading,
-    isUserError,
-  } = useSelector(state => state.equipmentStatus.supplyHistory);
+  const { history, isUserLoading, isUserError } = useSelector(
+    state => state.equipmentStatus.supplyHistory
+  );
+
+  const { content, lastPage } = history.user;
 
   const page = useRef(2);
   const size = NUMBER.INT.SIX;
