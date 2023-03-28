@@ -1,4 +1,5 @@
 import Axios from '../../api/axios';
+import NUMBER from '../../constants/number';
 import Redux from '../redux';
 
 const initialState = {
@@ -36,7 +37,7 @@ export const getEquipmentList = Redux.asyncThunk(
 
 export const getEquipmentDetail = Redux.asyncThunk(
   'EQUIPMENT_DETAIL',
-  payload => axios.get(`/api/supply/${payload}?size=${1}`),
+  payload => axios.get(`/api/supply/${payload}?size=${NUMBER.INT.SIX}`),
   response => response.data.data
 );
 

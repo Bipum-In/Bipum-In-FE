@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { FormatDateToDot } from '../../../utils/formatDate';
 import { useInView } from 'react-intersection-observer';
+import NUMBER from '../../../constants/number';
 
 export default function DetailUseHistory({ detail }) {
   const { content, first, last } = detail.supplyUserHistory;
@@ -22,7 +23,7 @@ export default function DetailUseHistory({ detail }) {
             <span>{item.history}</span>
           </DetailUseHistoryContent>
         ))}
-        {content.length >= 6 && (
+        {content.length >= NUMBER.INT.SIX && (
           <InfiniteScrollCheck ref={inViewRef}>
             마지막 페이지 입니다.
           </InfiniteScrollCheck>
