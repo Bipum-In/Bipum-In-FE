@@ -4,16 +4,18 @@ import styled from 'styled-components';
 import { styles } from '../components/common/commonStyled';
 
 import Axios from '../api/axios';
-import Input from '../elements/Input';
-import Button from '../elements/Button';
-
-import SelectCategory from '../components/common/SelectCategory';
-import KakaoUserInfo from '../styles/rendingIcon/kakaoUserInfo.svg';
-import { ReactComponent as Logo } from '../styles/logo.svg';
+import ROUTER from '../constants/routerConst';
+import QUERY from '../constants/query';
 import Storage from '../utils/localStorage';
 
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import Input from '../elements/Input';
+import Button from '../elements/Button';
+import SelectCategory from '../components/common/SelectCategory';
 
+import KakaoUserInfo from '../styles/rendingIcon/kakaoUserInfo.svg';
+import { ReactComponent as Logo } from '../styles/logo.svg';
+
+const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 export default function Login() {
   const { search } = useLocation();
   const navigate = useNavigate();
@@ -23,21 +25,27 @@ export default function Login() {
   const [departmentId, setDepartmentId] = useState('');
   const [empName, setEmpName] = useState('');
   const [phone, setPhone] = useState('');
+  const [saveUserInfo, setSaveUserInfo] = useState(false);
+  const [departmentName, setDepartmentName] = useState('');
 
   useEffect(() => {
     const code = search.split('=')[1];
+    const { checkUser } = Storage.getLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME);
+
+    if (checkUser) navigate(ROUTER.PATH.ADMIN_DASHBOARD);
+
     if (code && !checkCode) {
       axios.post(`/api/user/login?code=${code}`).then(res => {
         const userInfo = res.data.data;
-        Storage.setLocalStorageJSON('userData', userInfo);
-
-        setWriteUser(res.data.data);
+        const { checkUser } = userInfo;
+        Storage.setLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME, userInfo);
+        setSaveUserInfo(userInfo);
+        setWriteUser(checkUser);
         setCheckCode(true);
       });
-
       axios.get(`/api/dept`).then(res => setDepartmentList(res.data.data));
     }
-    writeUser && navigate('/admin-dashboard');
+    writeUser && navigate(ROUTER.PATH.ADMIN_DASHBOARD);
   }, [checkCode, navigate, search, writeUser]);
 
   const handleLoginInfoAdd = () => {
@@ -51,13 +59,25 @@ export default function Login() {
       empName,
       phone: stringToNumPrice,
     };
-    console.log(loginadd);
+
+    Storage.setLocalStorageJSON('userData', {
+      ...saveUserInfo,
+      checkUser: true,
+      deptName: departmentName,
+      empName,
+    });
+
     axios
       .post(`/api/user/loginadd`, loginadd)
       .then(res => setWriteUser(res.data.data));
   };
 
-  const handleChangeDepartmentId = e => setDepartmentId(e.target.value);
+  const handleChangeDepartmentId = e => {
+    const { value } = e.target;
+    const departmentName = e.target.options[e.target.selectedIndex].innerText;
+    setDepartmentName(departmentName);
+    setDepartmentId(value);
+  };
 
   function handleEmpNameBlur(event) {
     const { value } = event.target;
@@ -74,70 +94,71 @@ export default function Login() {
   }
 
   return (
-    <LoginWrapper bg={KakaoUserInfo}>
+    <>
       {!writeUser && checkCode && (
-        <SetUserInfo>
-          <Logo />
-          <SetUserInputContainer>
-            <styles.TypeBox>
-              <styles.TypeTitle kakao requiredinput="true">
-                부서선택
-              </styles.TypeTitle>
-              <styles.SelectCaregoryConteiner>
-                <SelectCategory
-                  category={departmentList}
-                  optionName={'deptName'}
-                  optionNullName={'팀을 선택해주세요'}
-                  optionKey={'deptName'}
-                  optionValueKey={'deptId'}
-                  onChangeCategory={handleChangeDepartmentId}
+        <LoginWrapper bg={KakaoUserInfo}>
+          <SetUserInfo>
+            <Logo />
+            <SetUserInputContainer>
+              <styles.TypeBox>
+                <styles.TypeTitle kakao requiredinput="true">
+                  부서선택
+                </styles.TypeTitle>
+                <styles.SelectCaregoryConteiner>
+                  <SelectCategory
+                    category={departmentList}
+                    optionName={'deptName'}
+                    optionNullName={'팀을 선택해주세요'}
+                    optionKey={'deptName'}
+                    optionValueKey={'deptId'}
+                    onChangeCategory={handleChangeDepartmentId}
+                  />
+                </styles.SelectCaregoryConteiner>
+              </styles.TypeBox>
+
+              <styles.TypeBox>
+                <styles.TypeTitle requiredinput="true">
+                  사용자 이름
+                </styles.TypeTitle>
+                <Input
+                  type="text"
+                  value={empName}
+                  setState={handleEmpNameBlur}
+                  placeholder="이름을 입력해주세요"
                 />
-              </styles.SelectCaregoryConteiner>
-            </styles.TypeBox>
+              </styles.TypeBox>
 
-            <styles.TypeBox>
-              <styles.TypeTitle requiredinput="true">
-                사용자 이름
-              </styles.TypeTitle>
-              <Input
-                type="text"
-                value={empName}
-                setState={handleEmpNameBlur}
-                placeholder="이름을 입력해주세요"
-              />
-            </styles.TypeBox>
-
-            <styles.TypeBox>
-              <styles.TypeTitle requiredinput="true">
-                핸드폰 번호
-              </styles.TypeTitle>
-              <Input
-                value={phone}
-                setState={handleChangePhone}
-                placeholder="번호를 입력해 주세요"
-                maxLength="11"
-              />
-            </styles.TypeBox>
-          </SetUserInputContainer>
-          <SetUserSubmitContainer>
-            <Button
-              submit
-              onClick={handleLoginInfoAdd}
-              disabled={
-                !departmentId ||
-                empName.length < 2 ||
-                phone.replace(/-/g, '').length < 11
-              }
-            >
-              완료
-            </Button>
-          </SetUserSubmitContainer>
-        </SetUserInfo>
+              <styles.TypeBox>
+                <styles.TypeTitle requiredinput="true">
+                  핸드폰 번호
+                </styles.TypeTitle>
+                <Input
+                  value={phone}
+                  setState={handleChangePhone}
+                  placeholder="번호를 입력해 주세요"
+                  maxLength="11"
+                />
+              </styles.TypeBox>
+            </SetUserInputContainer>
+            <SetUserSubmitContainer>
+              <Button
+                submit
+                onClick={handleLoginInfoAdd}
+                disabled={
+                  !departmentId ||
+                  empName.length < 2 ||
+                  phone.replace(/-/g, '').length < 11
+                }
+              >
+                완료
+              </Button>
+            </SetUserSubmitContainer>
+          </SetUserInfo>
+        </LoginWrapper>
       )}
-    </LoginWrapper>
+    </>
   );
 }
-console.log();
 
 const LoginWrapper = styled.div`
   display: flex;
