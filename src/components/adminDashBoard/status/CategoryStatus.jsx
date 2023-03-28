@@ -1,5 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import AnchorBtn from '../AnchorBtn';
 import { v4 as uuidv4 } from 'uuid';
@@ -8,6 +9,7 @@ import CategoryItems from '../../common/CategoryItems';
 import DashboardCard from '../DashboardCard';
 import useSelectMenu from '../../../hooks/useSelectMenu';
 import STRING from '../../../constants/string';
+import ROUTER from '../../../constants/routerConst';
 
 export default function CategoryStatus({ getDashboard, setStatus }) {
   const { getCategory, isCategoryError } = useSelector(
@@ -28,12 +30,23 @@ export default function CategoryStatus({ getDashboard, setStatus }) {
     return categoryList.filter(list => list.name === name);
   };
 
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleCategoryClick = () => {
+    navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT);
+  };
+
   return (
     <>
       {isCategoryError && <div>에러 발생</div>}
       {getCategory && (
         <>
-          <AnchorBtn onClick={() => {}}>
+          <AnchorBtn
+            onClick={() => {
+              navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT);
+            }}
+          >
             비품 목록
             <ArrowIcon />
           </AnchorBtn>
@@ -44,6 +57,7 @@ export default function CategoryStatus({ getDashboard, setStatus }) {
           <EquipmentBottomContainer>
             {supplyCountDtos.map(card => (
               <DashboardCard
+                // onClick={() => handleCategoryClick()}
                 key={uuidv4()}
                 totalCount={card.totalCount}
                 categoryName={card.categoryName}
