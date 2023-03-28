@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import AnchorBtn from '../AnchorBtn';
@@ -21,7 +21,7 @@ export default function CategoryStatus({ getDashboard, setStatus }) {
     const name = e.target.innerText;
     getCategoryList(name, largeCategory);
     clickMenu(e);
-    setStatus(STRING.LARGECATEGORY[name] || 'ALL');
+    setStatus(STRING.CATEGORY[name] || '');
   };
 
   const getCategoryList = (name, categoryList) => {
