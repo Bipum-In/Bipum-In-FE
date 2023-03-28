@@ -5,7 +5,7 @@ const setCookie = (name, value, option) => {
   const expires = new Date();
 
   name === QUERY.COOKIE.COOKIE_NAME
-    ? expires.setTime(expires.getTime() + 24 * 60 * 60 * 1000)
+    ? expires.setTime(expires.getTime() + 365 * 24 * 60 * 60 * 1000)
     : expires.setTime(expires.getTime() + 31 * 24 * 60 * 60 * 1000);
   return Cookies.set(name, value, {
     path: '/',
