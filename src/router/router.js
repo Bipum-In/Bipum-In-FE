@@ -54,7 +54,7 @@ const router = createBrowserRouter([
             element: <UserRequest />,
           },
           {
-            path: '/user-stockview',
+            path: ROUTER.PATH.USER_STOCK_VIEW,
             element: <UserStockView />,
           },
         ],
