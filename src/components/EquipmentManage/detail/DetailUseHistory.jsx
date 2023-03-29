@@ -1,9 +1,44 @@
 import styled from 'styled-components';
-import { v4 as uuidv4 } from 'uuid';
 import { FormatDateToDot } from '../../../utils/formatDate';
 
+import { useInView } from 'react-intersection-observer';
+
+import NUMBER from '../../../constants/number';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef } from 'react';
+import {
+  getHistory,
+  initHistory,
+} from '../../../redux/modules/equipmentStatus';
+
 export default function DetailUseHistory({ detail }) {
-  const { content } = detail.supplyUserHistory;
+  const dispatch = useDispatch();
+  const [ref, inView] = useInView({ threshold: 0 });
+
+  const { supplyId } = detail.supplyDetail;
+  const { content: firstContent } = detail.supplyUserHistory;
+  const { history, isUserLoading, isUserError } = useSelector(
+    state => state.equipmentStatus.supplyHistory
+  );
+
+  const { content, lastPage } = history.user;
+
+  const page = useRef(2);
+  const size = NUMBER.INT.SIX;
+
+  useEffect(() => {
+    dispatch(initHistory());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!lastPage && inView) {
+      dispatch(
+        getHistory({ history: 'user', supplyId, page: page.current, size })
+      );
+      page.current += 1;
+    }
+  }, [dispatch, inView, lastPage, size, supplyId]);
+
   return (
     <DetailUseHistoryContainer>
       <p>사용 내역</p>
@@ -12,16 +47,29 @@ export default function DetailUseHistory({ detail }) {
         <span>사용자</span>
         <span>내역</span>
       </DetailUseHistoryHeader>
-      <InfiniteScroll>
-        {content.map(item => (
-          <DetailUseHistoryContent key={uuidv4()}>
-            <span>{FormatDateToDot(item.modifiedAt)}</span>
-            <span>{`${item.deptName} / ${item.empName}`}</span>
-            <span>{item.history}</span>
-          </DetailUseHistoryContent>
-        ))}
-        {/* <InfiniteScrollCheck /> */}
-      </InfiniteScroll>
+      {isUserError ? (
+        <div>에러 발생</div>
+      ) : (
+        <InfiniteScroll>
+          {firstContent.map(item => (
+            <DetailUseHistoryContent key={item.requestId}>
+              <span>{FormatDateToDot(item.modifiedAt)}</span>
+              <span>{`${item.deptName} / ${item.empName}`}</span>
+              <span>{item.history}</span>
+            </DetailUseHistoryContent>
+          ))}
+          {content.map(item => (
+            <DetailUseHistoryContent key={item.requestId}>
+              <span>{FormatDateToDot(item.modifiedAt)}</span>
+              <span>{`${item.deptName} / ${item.empName}`}</span>
+              <span>{item.history}</span>
+            </DetailUseHistoryContent>
+          ))}
+          <InfiniteScrollCheck ref={ref}>
+            {isUserLoading ? <InfiniteCross /> : '마지막 페이지 입니다.'}
+          </InfiniteScrollCheck>
+        </InfiniteScroll>
+      )}
     </DetailUseHistoryContainer>
   );
 }
@@ -68,6 +116,7 @@ const DetailUseHistoryHeader = styled.div`
 `;
 
 const DetailUseHistoryContent = styled(DetailUseHistoryHeader)`
+  height: 2.5rem;
   color: black;
   background-color: ${props => props.theme.color.blue.brandColor1};
   border-radius: 0;
@@ -92,5 +141,42 @@ const InfiniteScroll = styled.div`
   }
   ::-webkit-scrollbar-track {
     background-color: ${props => props.theme.color.blue.brandColor1};
+  }
+`;
+
+const InfiniteScrollCheck = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  color: ${props => props.theme.color.grey.brandColor5};
+  background-color: ${props => props.theme.color.blue.brandColor1};
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: 500;
+  font-size: 13px;
+`;
+
+const InfiniteCross = styled.div`
+  display: inline-block;
+
+  :after {
+    content: ' ';
+    display: block;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    border: 3px solid;
+    border-color: ${props => props.theme.color.blue.brandColor5} transparent
+      ${props => props.theme.color.blue.brandColor5} transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 `;

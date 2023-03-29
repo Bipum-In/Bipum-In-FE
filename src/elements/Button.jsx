@@ -2,11 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 
 export default function Button(props) {
-  return (
-    <ButtonWrapper {...props}>
-      <BtnContainer>{props.children}</BtnContainer>
-    </ButtonWrapper>
-  );
+  return <ButtonWrapper {...props}>{props.children}</ButtonWrapper>;
 }
 Button.defaultProps = {
   padding: '.5rem',
@@ -121,8 +117,4 @@ ${props =>
   &:hover {
     opacity: 0.9;
   }
-`;
-
-const BtnContainer = styled.div`
-  ${props => props.theme.FlexRow};
 `;

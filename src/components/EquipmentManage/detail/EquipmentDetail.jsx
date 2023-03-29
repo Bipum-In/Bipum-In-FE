@@ -1,30 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentDetail } from '../../../redux/modules/equipmentStatus';
-
 import styled from 'styled-components';
 import Axios from '../../../api/axios';
-import useSetEquipmentAddDate from '../../../hooks/useSetEquipmentAddDate';
+import STRING from '../../../constants/string';
 
+import DetailImage from './DetailImage';
 import DetailHeader from './DetailHeader';
 import DetailBodyTitle from './DetailBodyTitle';
-import DetailInfoProduct from './DetailInfoProduct';
-import DetailInfoRequester from './DetailInfoRequester';
 import DetailUseHistory from './DetailUseHistory';
+import DetailInfoProduct from './DetailInfoProduct';
 import DetailRepairHistory from './DetailRepairHistory';
+import DetailInfoRequester from './DetailInfoRequester';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
-const equipmentData = {
-  largeCategory: '',
-  categoryName: '',
-  modelName: '',
-  serialNum: '',
-  createdAt: '',
-  partnersId: null,
-  userId: null,
-};
 
 export default function EquipmentDetail({
+  isAdmin,
   category,
   largeCategory,
   detailId,
@@ -32,31 +24,74 @@ export default function EquipmentDetail({
 }) {
   const dispatch = useDispatch();
   const [edit, setEdit] = useState(false);
-  const [day, setDay] = useState(null);
-  const [year, setYear] = useState(null);
-  const [month, setMonth] = useState(null);
+  const [editRequester, setEditRequester] = useState({
+    category: false,
+    partners: false,
+    deptUser: false,
+  });
   const [dept, setDept] = useState(null);
   const [user, setUser] = useState(null);
+  const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState('');
   const [partners, setPartners] = useState(null);
   const [modelName, setModelName] = useState('');
   const [serialNum, setSerialNum] = useState('');
   const [smallCategory, setSmallCategory] = useState(null);
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
 
-  const [setSelectYear, setSelectMonth, setSelectDaysInMonth] =
-    useSetEquipmentAddDate();
-
   const { getDetail, isDetailError } = useSelector(
     state => state.equipmentStatus.equipmentDetail
   );
 
+  const detailData = {
+    largeCategory: '',
+    categoryName: '',
+    modelName: '',
+    serialNum: '',
+    partnersId: '',
+    userId: '',
+    image,
+  };
+
   useEffect(() => {
-    dispatch(getEquipmentDetail(detailId));
+    const path = isAdmin ? '/admin' : '';
+    dispatch(getEquipmentDetail({ path, supplyId: detailId }));
+
     axios.get(`/api/dept`).then(res => setDept(res.data.data));
     axios.get(`/api/partners`).then(res => setPartners(res.data.data));
   }, [detailId, dispatch]);
 
+  useEffect(() => {
+    if (edit) {
+      const { modelName, serialNum } = getDetail.supplyDetail;
+      setModelName(modelName);
+      setSerialNum(serialNum);
+    }
+  }, [edit]);
+
   const handleEdit = () => setEdit(true);
+
+  const handleEditRequester = e => {
+    const value = e.target.value;
+    setEditRequester({ ...editRequester, [value]: !editRequester[value] });
+  };
+
+  const handleSave = supplyId => {
+    const { largeCategory, category, partnersId, userId, image } =
+      getDetail.supplyDetail;
+
+    const constLargeCategory = STRING.CATEGORY[largeCategory];
+    detailData.largeCategory || (detailData.largeCategory = constLargeCategory);
+    detailData.categoryName || (detailData.categoryName = category);
+
+    detailData.modelName = modelName;
+    detailData.serialNum = serialNum;
+    detailData.partnersId || (detailData.partnersId = partnersId);
+    detailData.userId || (detailData.userId = userId);
+    detailData.image || (detailData.image = image);
+
+    sendFormData(supplyId);
+  };
 
   const handleDispose = supplyId => {
     axios.delete(`/api/supply/${supplyId}`).then(() => isClose());
@@ -64,40 +99,22 @@ export default function EquipmentDetail({
 
   const handleChangeLargeCategory = e => {
     const { ko, eng } = JSON.parse(e.target.value);
-    equipmentData.largeCategory = eng;
+    detailData.largeCategory = eng;
     setSmallCategory(parseCategoryData(ko, category));
   };
 
   const handleChangeSmallCategory = e => {
     const { ko } = JSON.parse(e.target.value);
-    equipmentData.categoryName = ko;
+    detailData.categoryName = ko;
   };
 
   const handleChangeNameValue = e => setModelName(e.target.value);
 
   const handleChangeSerialValue = e => setSerialNum(e.target.value);
 
-  const handleChangeYear = e => {
-    const year = e.target.value;
-    const parseYear = Number(year.split('년')[0]);
-    setYear(parseYear);
-  };
-
-  const handleChangeMonth = e => {
-    const month = e.target.value;
-    const parseMonth = Number(month.split('월')[0]);
-    setMonth(parseMonth);
-  };
-
-  const handleChangeDay = e => {
-    const day = e.target.value;
-    const parseDay = Number(day.split('일')[0]);
-    setDay(parseDay);
-  };
-
   const handleChangePartners = e => {
     const { ko: partners } = JSON.parse(e.target.value);
-    equipmentData.partnersId = partners;
+    detailData.partnersId = partners;
   };
 
   const handleChangeDept = e => {
@@ -107,7 +124,8 @@ export default function EquipmentDetail({
 
   const handleChangeUser = e => {
     const { ko: user } = JSON.parse(e.target.value);
-    equipmentData.userId = user;
+    console.log(user);
+    detailData.userId = user;
   };
 
   const parseCategoryData = (name, getCategory) => {
@@ -116,6 +134,40 @@ export default function EquipmentDetail({
 
   const getUserData = deptId =>
     axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
+
+  const sendFormData = supplyId => {
+    const formData = new FormData();
+    console.log(detailData);
+    formData.append('largeCategory', detailData.largeCategory);
+    formData.append('categoryName', detailData.categoryName);
+    formData.append('modelName', detailData.modelName);
+    formData.append('serialNum', detailData.serialNum);
+    formData.append('partnersId', detailData.partnersId);
+    formData.append('userId', detailData.userId);
+    // formData.append('image', detailData.image);
+
+    if (image) {
+      formData.append('multipartFile', image);
+    }
+    sendEditData(supplyId, formData);
+  };
+
+  const sendEditData = (supplyId, formData) =>
+    axios.put(`/api/supply/${supplyId}`, formData);
+
+  const handleChangeimge = e => {
+    const img = e.target.files[0];
+    setImage(img);
+    setPreviewImage(img);
+  };
+
+  const setPreviewImage = img => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result);
+    };
+    reader.readAsDataURL(img);
+  };
 
   return (
     <>
@@ -126,13 +178,16 @@ export default function EquipmentDetail({
             edit={edit}
             detail={getDetail}
             onEdit={handleEdit}
+            onSave={handleSave}
             onDispose={handleDispose}
           />
           <DetailBodyTitle detail={getDetail} />
           <DetailBodyContainer>
-            <ImgContainer>
-              <img src={getDetail.supplyDetail.image} alt="detailImg" />
-            </ImgContainer>
+            <DetailImage
+              detail={getDetail}
+              preview={preview}
+              onChangeImage={handleChangeimge}
+            />
             <div>
               <DetailInfoContainer>
                 <DetailInfo>
@@ -140,11 +195,6 @@ export default function EquipmentDetail({
                     edit={edit}
                     value={[modelName, serialNum]}
                     detail={getDetail}
-                    category={[parseLargeCategory, smallCategory]}
-                    onChangeCategory={[
-                      handleChangeLargeCategory,
-                      handleChangeSmallCategory,
-                    ]}
                     onChangeValue={[
                       handleChangeNameValue,
                       handleChangeSerialValue,
@@ -152,22 +202,18 @@ export default function EquipmentDetail({
                   />
                   <DetailInfoRequester
                     edit={edit}
-                    dateValue={[year, month]}
+                    editRequester={editRequester}
                     deptValue={[dept, user]}
                     detail={getDetail}
                     partners={partners}
-                    setDateState={[
-                      setSelectYear,
-                      setSelectMonth,
-                      setSelectDaysInMonth,
+                    category={[parseLargeCategory, smallCategory]}
+                    onChangeCategory={[
+                      handleChangeLargeCategory,
+                      handleChangeSmallCategory,
                     ]}
                     onChangeDept={[handleChangeDept, handleChangeUser]}
-                    onChangeDate={[
-                      handleChangeYear,
-                      handleChangeMonth,
-                      handleChangeDay,
-                    ]}
                     onChangePartners={handleChangePartners}
+                    onEditRequester={handleEditRequester}
                   />
                 </DetailInfo>
               </DetailInfoContainer>
@@ -192,18 +238,6 @@ const DetailBodyContainer = styled.section`
   display: flex;
 `;
 
-const ImgContainer = styled.div`
-  display: flex;
-  margin-right: 5.9375rem;
-
-  img {
-    width: 23.25rem;
-    height: 23.25rem;
-    border: 1px solid ${props => props.theme.color.grey.brandColor2};
-    border-radius: 0.375rem;
-  }
-`;
-
 const DetailInfoContainer = styled.div`
   display: flex;
 `;
@@ -218,9 +252,3 @@ const History = styled.div`
   display: flex;
   gap: 3.125rem;
 `;
-
-// const InfiniteScrollCheck = styled.div`
-//   height: 2.5rem;
-//   background-color: ${props => props.theme.color.blue.brandColor1};
-//   border-radius: 0 0 0.5rem 0.5rem;
-// `;

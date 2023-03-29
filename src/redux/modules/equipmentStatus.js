@@ -1,4 +1,6 @@
+import { current } from '@reduxjs/toolkit';
 import Axios from '../../api/axios';
+import NUMBER from '../../constants/number';
 import Redux from '../redux';
 
 const initialState = {
@@ -21,6 +23,14 @@ const initialState = {
     categoryIdData: '',
     categoryNameData: '전체',
   },
+  supplyHistory: {
+    history: {
+      user: { content: [], lastPage: false },
+      repair: { content: [], lastPage: false },
+    },
+    isUserLoading: false,
+    isUserError: false,
+  },
 };
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
@@ -29,14 +39,17 @@ export const getEquipmentList = Redux.asyncThunk(
   'EQUIPMENT',
   payload =>
     axios.get(
-      `/api/admin/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
+      `/api${payload.path}/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
     ),
   response => response.data.data
 );
 
 export const getEquipmentDetail = Redux.asyncThunk(
   'EQUIPMENT_DETAIL',
-  payload => axios.get(`/api/supply/${payload}`),
+  payload =>
+    axios.get(
+      `/api${payload.path}/supply/${payload.supplyId}?size=${NUMBER.INT.SIX}`
+    ),
   response => response.data.data
 );
 
@@ -47,6 +60,18 @@ export const getCategoryList = Redux.asyncThunk(
     const parseLargeCategory = largeCategory(response);
     return { largeCategory: parseLargeCategory, category: response.data.data };
   }
+);
+
+export const getHistory = Redux.asyncThunk(
+  'HISTORY',
+  payload =>
+    axios.get(
+      `/api/supply/history/${payload.history}/${payload.supplyId}?page=${payload.page}&size=${payload.size}`
+    ),
+  (response, payload) =>
+    payload.history === 'user'
+      ? { user: response.data.data }
+      : { repair: response.data.data }
 );
 
 const largeCategory = response => {
@@ -73,8 +98,11 @@ const equipmentStatusSlice = Redux.slice(
   'Equipment',
   initialState,
   {
+    initHistory: (state, _) => {
+      state.supplyHistory.user = { content: [], lastPage: false };
+    },
     setCategoryData: (state, action) => {
-      state.categoryData.categoryIdData = action.payload.categoryId;
+      state.supplyHistory.categoryIdData = action.payload.categoryId;
       state.categoryData.categoryNameData = action.payload.categoryName;
     },
   },
@@ -103,8 +131,28 @@ const equipmentStatusSlice = Redux.slice(
       'getCategory',
       'isCategoryError'
     );
+    Redux.extraReducer(
+      bulider,
+      getHistory,
+      'supplyHistory',
+      'isUserLoading',
+      'history',
+      'isUserError',
+      (state, payload) => {
+        const historyKey = Object.keys(payload)[0];
+        return {
+          ...state,
+          [historyKey]: {
+            content: [...state[historyKey].content].concat(
+              payload[historyKey].content
+            ),
+            lastPage: payload[historyKey].last,
+          },
+        };
+      }
+    );
   }
 );
 
-export const { setCategoryData } = equipmentStatusSlice.actions;
+export const { initHistory, setCategoryData } = equipmentStatusSlice.actions;
 export default equipmentStatusSlice.reducer;

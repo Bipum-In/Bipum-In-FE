@@ -1,9 +1,44 @@
 import styled from 'styled-components';
-import { v4 as uuidv4 } from 'uuid';
 import { FormatDateToDot } from '../../../utils/formatDate';
 
+import { useInView } from 'react-intersection-observer';
+
+import NUMBER from '../../../constants/number';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect, useRef } from 'react';
+import {
+  getHistory,
+  initHistory,
+} from '../../../redux/modules/equipmentStatus';
+
 export default function DetailRepairHistory({ detail }) {
-  const { content } = detail.supplyRepairHistory;
+  const dispatch = useDispatch();
+  const [ref, inView] = useInView({ threshold: 0 });
+
+  const { supplyId } = detail.supplyDetail;
+  const { content: firstContent } = detail.supplyRepairHistory;
+  const { history, isUserLoading, isUserError } = useSelector(
+    state => state.equipmentStatus.supplyHistory
+  );
+
+  const { content, lastPage } = history.repair;
+
+  const page = useRef(2);
+  const size = NUMBER.INT.SIX;
+
+  useEffect(() => {
+    dispatch(initHistory());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (!lastPage && inView) {
+      dispatch(
+        getHistory({ history: 'repair', supplyId, page: page.current, size })
+      );
+      page.current += 1;
+    }
+  }, [dispatch, inView, lastPage, size, supplyId]);
+
   return (
     <DetailRepairHistoryContainer>
       <p>수리 내역</p>
@@ -13,14 +48,29 @@ export default function DetailRepairHistory({ detail }) {
         <span>수리업체</span>
       </DetailRepairHistoryHeader>
       <InfiniteScroll>
-        {content.map(item => (
-          <DetailRepairHistoryContent key={uuidv4()}>
-            <span>{FormatDateToDot(item.modifiedAt)}</span>
-            <span>{`${item.deptName} / ${item.empName}`}</span>
-            <span>{item.partnersName}</span>
-          </DetailRepairHistoryContent>
-        ))}
-        {/* <InfiniteScrollCheck /> */}
+        {isUserError ? (
+          <div>에러 발생</div>
+        ) : (
+          <InfiniteScroll>
+            {firstContent.map(item => (
+              <DetailRepairHistoryContent key={item.requestId}>
+                <span>{FormatDateToDot(item.modifiedAt)}</span>
+                <span>{`${item.deptName} / ${item.empName}`}</span>
+                <span>{item.partnersName}</span>
+              </DetailRepairHistoryContent>
+            ))}
+            {content.map(item => (
+              <DetailRepairHistoryContent key={item.requestId}>
+                <span>{FormatDateToDot(item.modifiedAt)}</span>
+                <span>{`${item.deptName} / ${item.empName}`}</span>
+                <span>{item.partnersName}</span>
+              </DetailRepairHistoryContent>
+            ))}
+            <InfiniteScrollCheck ref={ref}>
+              {isUserLoading ? <InfiniteCross /> : '마지막 페이지 입니다.'}
+            </InfiniteScrollCheck>
+          </InfiniteScroll>
+        )}
       </InfiniteScroll>
     </DetailRepairHistoryContainer>
   );
@@ -92,5 +142,42 @@ const InfiniteScroll = styled.div`
   }
   ::-webkit-scrollbar-track {
     background-color: ${props => props.theme.color.blue.brandColor1};
+  }
+`;
+
+const InfiniteScrollCheck = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 2.5rem;
+  color: ${props => props.theme.color.grey.brandColor5};
+  background-color: ${props => props.theme.color.blue.brandColor1};
+  border-radius: 0 0 0.5rem 0.5rem;
+  font-weight: 500;
+  font-size: 13px;
+`;
+
+const InfiniteCross = styled.div`
+  display: inline-block;
+
+  :after {
+    content: ' ';
+    display: block;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    border: 3px solid;
+    border-color: ${props => props.theme.color.blue.brandColor5} transparent
+      ${props => props.theme.color.blue.brandColor5} transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
   }
 `;

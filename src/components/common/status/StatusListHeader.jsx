@@ -32,18 +32,20 @@ export default function StatusListHeader({
             placeholder="검색어를 입력해주세요 (신청자,담당부서 등)"
           />
         </SearchContainer>
-        <SelectWrapper>
-          <Select value={status} onChange={setStatus}>
-            {selectBoxList.name.map((value, index) => (
-              <option key={value} value={selectBoxList.type[index]}>
-                {value}
-              </option>
-            ))}
-          </Select>
-          <SelectArrow>
-            <ArrowDown />
-          </SelectArrow>
-        </SelectWrapper>
+        {setStatus && (
+          <SelectWrapper>
+            <Select value={status} onChange={setStatus}>
+              {selectBoxList.name.map((value, index) => (
+                <option key={value} value={selectBoxList.type[index]}>
+                  {value}
+                </option>
+              ))}
+            </Select>
+            <SelectArrow>
+              <ArrowDown />
+            </SelectArrow>
+          </SelectWrapper>
+        )}
       </SearchSelect>
     </RequestShowTitle>
   );
