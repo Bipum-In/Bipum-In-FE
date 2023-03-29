@@ -16,7 +16,12 @@ export default function DetailInfoRequester({
   onChangePartners,
   onEditRequester,
 }) {
-  const { partnersName, deptName, empName } = detail.supplyDetail;
+  const {
+    partnersName,
+    deptName,
+    empName,
+    category: smallCategory,
+  } = detail.supplyDetail;
   return (
     <DetailInfoContentContainer>
       <CategoryContainer>
@@ -32,7 +37,7 @@ export default function DetailInfoRequester({
               onChangeCategory={onChangeCategory}
             />
           ) : (
-            <span>하드 코딩부분 수정해야함</span>
+            <span>{smallCategory}</span>
           )}
         </TextType>
         {edit && (

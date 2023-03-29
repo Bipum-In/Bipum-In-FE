@@ -5,12 +5,13 @@ import styled from 'styled-components';
 import Axios from '../../../api/axios';
 import STRING from '../../../constants/string';
 
+import DetailImage from './DetailImage';
 import DetailHeader from './DetailHeader';
 import DetailBodyTitle from './DetailBodyTitle';
-import DetailInfoProduct from './DetailInfoProduct';
-import DetailInfoRequester from './DetailInfoRequester';
 import DetailUseHistory from './DetailUseHistory';
+import DetailInfoProduct from './DetailInfoProduct';
 import DetailRepairHistory from './DetailRepairHistory';
+import DetailInfoRequester from './DetailInfoRequester';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -30,6 +31,7 @@ export default function EquipmentDetail({
   const [dept, setDept] = useState(null);
   const [user, setUser] = useState(null);
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState('');
   const [partners, setPartners] = useState(null);
   const [modelName, setModelName] = useState('');
   const [serialNum, setSerialNum] = useState('');
@@ -47,6 +49,7 @@ export default function EquipmentDetail({
     serialNum: '',
     partnersId: '',
     userId: '',
+    image,
   };
 
   useEffect(() => {
@@ -71,29 +74,20 @@ export default function EquipmentDetail({
   };
   // console.log(getDetail.supplyDetail);
   const handleSave = supplyId => {
-    const {
-      largeCategory,
-      category,
-      modelName,
-      serialNum,
-      partnersId,
-      userId,
-    } = getDetail.supplyDetail;
+    const { largeCategory, category, partnersId, userId, image } =
+      getDetail.supplyDetail;
 
     const constLargeCategory = STRING.CATEGORY[largeCategory];
-
     detailData.largeCategory || (detailData.largeCategory = constLargeCategory);
     detailData.categoryName || (detailData.categoryName = category);
 
-    detailData.modelName || (detailData.modelName = modelName);
-    detailData.serialNum || (detailData.serialNum = serialNum);
+    detailData.modelName = modelName;
+    detailData.serialNum = serialNum;
     detailData.partnersId || (detailData.partnersId = partnersId);
     detailData.userId || (detailData.userId = userId);
+    detailData.image || (detailData.image = image);
 
-    console.log(detailData, supplyId);
-    // axios
-    //   .delete(`/api/supply/${supplyId}`, detailData)
-    //   .then(() => isClose());
+    sendFormData(supplyId);
   };
 
   const handleDispose = supplyId => {
@@ -138,6 +132,40 @@ export default function EquipmentDetail({
   const getUserData = deptId =>
     axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
 
+  const sendFormData = supplyId => {
+    const formData = new FormData();
+    console.log(detailData);
+    formData.append('largeCategory', detailData.largeCategory);
+    formData.append('categoryName', detailData.categoryName);
+    formData.append('modelName', detailData.modelName);
+    formData.append('serialNum', detailData.serialNum);
+    formData.append('partnersId', detailData.partnersId);
+    formData.append('userId', detailData.userId);
+    // formData.append('image', detailData.image);
+
+    if (image) {
+      formData.append('multipartFile', image);
+    }
+    sendEditData(supplyId, formData);
+  };
+
+  const sendEditData = (supplyId, formData) =>
+    axios.put(`/api/supply/${supplyId}`, formData);
+
+  const handleChangeimge = e => {
+    const img = e.target.files[0];
+    setImage(img);
+    setPreviewImage(img);
+  };
+
+  const setPreviewImage = img => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result);
+    };
+    reader.readAsDataURL(img);
+  };
+
   return (
     <>
       {isDetailError && <div>에러가 발생했습니다.</div>}
@@ -152,9 +180,11 @@ export default function EquipmentDetail({
           />
           <DetailBodyTitle detail={getDetail} />
           <DetailBodyContainer>
-            <ImgContainer>
-              <img src={getDetail.supplyDetail.image} alt="detailImg" />
-            </ImgContainer>
+            <DetailImage
+              detail={getDetail}
+              preview={preview}
+              onChangeImage={handleChangeimge}
+            />
             <div>
               <DetailInfoContainer>
                 <DetailInfo>
@@ -203,18 +233,6 @@ const DetailWrapper = styled.main`
 
 const DetailBodyContainer = styled.section`
   display: flex;
-`;
-
-const ImgContainer = styled.div`
-  display: flex;
-  margin-right: 5.9375rem;
-
-  img {
-    width: 23.25rem;
-    height: 23.25rem;
-    border: 1px solid ${props => props.theme.color.grey.brandColor2};
-    border-radius: 0.375rem;
-  }
 `;
 
 const DetailInfoContainer = styled.div`
