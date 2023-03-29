@@ -8,10 +8,15 @@ export default function UserDashboardCard({
   supplyId,
   supplyName,
   categoryName,
+  onDetailModal,
 }) {
   return (
     <>
-      <CardWrapper>
+      <CardWrapper
+        onClick={() => {
+          onDetailModal(supplyId);
+        }}
+      >
         <CategoryTitle>
           <span>{categoryName}</span>
           <span>
@@ -40,6 +45,7 @@ const CardWrapper = styled.div`
   background-color: white;
   border: 0.0625rem solid ${props => props.theme.color.grey.brandColor2};
   ${props => props.theme.Boxshadow};
+  cursor: pointer;
 `;
 
 const CategoryContainer = styled.div`

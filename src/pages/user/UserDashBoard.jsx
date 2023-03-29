@@ -8,11 +8,16 @@ import ManagementStatus from '../../components/adminDashBoard/status/ManagementS
 import AlertStatus from '../../components/adminDashBoard/status/AlertStatus';
 import TestStatus from '../../components/adminDashBoard/status/TestStatus';
 import CategoryStatus from '../../components/adminDashBoard/status/CategoryStatus';
+import UserDashboardDetailModal from '../../components/adminDashBoard/UserDashboardDetailModal';
 
 export default function UserDashBoard() {
   const isAdmin = false;
   const dispatch = useDispatch();
   const [status, setStatus] = useState('');
+  const [showDetailModal, setShowDetailModal] = useState({
+    show: false,
+    id: null,
+  });
   const { getDashboard, isDashboardError } = useSelector(
     state => state.dashboardStatus.dashboardStatus
   );
@@ -21,6 +26,9 @@ export default function UserDashBoard() {
     dispatch(__dashboardStatus({ path: '', status }));
     dispatch(getCategoryList());
   }, [dispatch, status]);
+
+  const handleDetailModal = id =>
+    setShowDetailModal(state => ({ show: !state.show, id: id }));
 
   return (
     <>
@@ -37,11 +45,17 @@ export default function UserDashBoard() {
               isAdmin={isAdmin}
               setStatus={setStatus}
               getDashboard={getDashboard}
+              onDetailModal={handleDetailModal}
             />
           </BottomSideContainer>
           <ScrollToTop targetSelector="#scrollable-div" />
         </UserDashBoardWrapper>
       )}
+      <UserDashboardDetailModal
+        isAdmin={isAdmin}
+        showDetailModal={showDetailModal}
+        onDetailModal={handleDetailModal}
+      />
     </>
   );
 }

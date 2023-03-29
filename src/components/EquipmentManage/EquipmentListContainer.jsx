@@ -131,7 +131,7 @@ export default function EquipmentListContainer({
         />
       </EquipmentListWrapper>
       <EquipmentModal
-        showDetialModal={showDetailModal}
+        showDetailModal={showDetailModal}
         showSingleModal={showSingleModal}
         handleDetailModal={handleDetailModal}
         handleSingleModal={handleSingleModal}

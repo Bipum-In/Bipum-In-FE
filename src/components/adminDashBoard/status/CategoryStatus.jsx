@@ -12,7 +12,12 @@ import STRING from '../../../constants/string';
 import ROUTER from '../../../constants/routerConst';
 import UserDashboardCard from '../UserDashboardCard';
 
-export default function CategoryStatus({ isAdmin, getDashboard, setStatus }) {
+export default function CategoryStatus({
+  isAdmin,
+  getDashboard,
+  setStatus,
+  onDetailModal,
+}) {
   const { getCategory, isCategoryError } = useSelector(
     state => state.equipmentStatus.category
   );
@@ -78,6 +83,7 @@ export default function CategoryStatus({ isAdmin, getDashboard, setStatus }) {
                   supplyId={card.supplyId}
                   supplyName={card.supplyName}
                   categoryName={card.categoryName}
+                  onDetailModal={onDetailModal}
                 />
               )
             )}

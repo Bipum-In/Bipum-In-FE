@@ -16,6 +16,7 @@ import DetailInfoRequester from './DetailInfoRequester';
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function EquipmentDetail({
+  isAdmin,
   category,
   largeCategory,
   detailId,
@@ -53,7 +54,9 @@ export default function EquipmentDetail({
   };
 
   useEffect(() => {
-    dispatch(getEquipmentDetail({ path: '/admin', supplyId: detailId }));
+    const path = isAdmin ? '/admin' : '';
+    dispatch(getEquipmentDetail({ path, supplyId: detailId }));
+
     axios.get(`/api/dept`).then(res => setDept(res.data.data));
     axios.get(`/api/partners`).then(res => setPartners(res.data.data));
   }, [detailId, dispatch]);
