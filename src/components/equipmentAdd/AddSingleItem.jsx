@@ -84,7 +84,13 @@ export default function AddSingleItem({ category, largeCategory }) {
     return getCategory.filter(item => item.largeCategory === name);
   };
 
+  const handleDeleteImage = e => {
+    setFormformImage(null);
+    setPreview(null);
+  };
+
   const onChangeimge = e => {
+    console.log(e);
     const img = e.target.files[0];
     setFormformImage(img);
     setPreviewImage(img);
@@ -137,8 +143,6 @@ export default function AddSingleItem({ category, largeCategory }) {
     });
   };
 
-  console.log(formImage);
-
   const handleClickCrawling = e => {
     e.preventDefault();
     getCrawlingData();
@@ -148,10 +152,9 @@ export default function AddSingleItem({ category, largeCategory }) {
     !serialValue ||
     !nameValue ||
     !equipmentData.largeCategory ||
-    !checkSallCategory ||
-    // !preview;
+    !checkSallCategory;
 
-    console.log(formImage);
+  // || !preview;
 
   return (
     <>
@@ -210,7 +213,11 @@ export default function AddSingleItem({ category, largeCategory }) {
                 </styles.TypeBox>
               </EquipmentLeftContainer>
               <Hr />
-              <ImageAdd preview={preview} onChangeimge={onChangeimge} />
+              <ImageAdd
+                preview={preview}
+                onChangeimge={onChangeimge}
+                onDeleteImage={handleDeleteImage}
+              />
             </EquipmentDetailContainer>
             <SubminPostContainer>
               <Button submit post onClick={setFormData} disabled={isDisabled}>

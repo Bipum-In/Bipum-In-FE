@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as DefaultImage } from '../../../styles/commonIcon/defaultImage.svg';
 import ImageCarousel from '../../common/ImageCarousel';
-import { ReactComponent as DeleteImg } from '../../../styles/commonIcon/deleteImg.svg';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function ImageAdd({
   preview,
@@ -25,6 +25,7 @@ export default function ImageAdd({
         파일 선택하기
         <input
           as={'input'}
+          key={uuidv4()}
           type="file"
           accept=".png,.jpg,.jpeg,.gif"
           onChange={onChangeimge}
