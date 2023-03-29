@@ -13,6 +13,7 @@ import EmptyPage from '../pages/EmptyPage';
 import EquipmentAdd from '../pages/admin/EquipmentAdd';
 import RequestStatus from '../pages/admin/RequestStatus';
 import EquipmentManagement from '../pages/admin/EquipmentManagement';
+import UserStockView from '../pages/user/UserStockView';
 
 const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
           {
             path: ROUTER.PATH.USER_DASHBOARD,
             element: <UserDashBoard />,
+          },
+          {
+            path: '/user-stockview',
+            element: <UserStockView />,
           },
         ],
       },

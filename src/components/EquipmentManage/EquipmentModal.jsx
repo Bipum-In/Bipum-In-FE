@@ -5,7 +5,8 @@ import AddSingleItem from '../equipmentAdd/AddSingleItem';
 import EquipmentDetail from './detail/EquipmentDetail';
 
 export default function EquipmentModal({
-  showDetialModal,
+  isAdmin,
+  showDetailModal,
   showSingleModal,
   handleDetailModal,
   handleSingleModal,
@@ -14,13 +15,14 @@ export default function EquipmentModal({
 }) {
   return (
     <>
-      <Modal isOpen={showDetialModal.show}>
+      <Modal isOpen={showDetailModal.show}>
         <EquipmentDetailWrapper>
           <ModalHeader isClose={handleDetailModal} requestType={'비품 상세'} />
           <EquipmentDetail
+            isAdmin={isAdmin}
             category={category}
             largeCategory={largeCategory}
-            detailId={showDetialModal.id}
+            detailId={showDetailModal.id}
             isClose={handleDetailModal}
           />
         </EquipmentDetailWrapper>

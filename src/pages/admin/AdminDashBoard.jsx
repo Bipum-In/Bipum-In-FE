@@ -10,6 +10,7 @@ import TestStatus from '../../components/adminDashBoard/status/TestStatus';
 import CategoryStatus from '../../components/adminDashBoard/status/CategoryStatus';
 
 export default function AdminDashBoard() {
+  const isAdmin = true;
   const dispatch = useDispatch();
   const [status, setStatus] = useState('');
   const { getDashboard, isDashboardError } = useSelector(
@@ -17,7 +18,7 @@ export default function AdminDashBoard() {
   );
 
   useEffect(() => {
-    dispatch(__dashboardStatus({ status }));
+    dispatch(__dashboardStatus({ path: '/admin', status }));
     dispatch(getCategoryList());
   }, [dispatch, status]);
 
@@ -27,12 +28,16 @@ export default function AdminDashBoard() {
       {getDashboard && (
         <AdminDashBoardWrapper id="scrollable-div">
           <TopSideContainer>
-            <ManagementStatus getDashboard={getDashboard} />
+            <ManagementStatus isAdmin={isAdmin} getDashboard={getDashboard} />
             <AlertStatus />
             <TestStatus />
           </TopSideContainer>
           <BottomSideContainer>
-            <CategoryStatus setStatus={setStatus} getDashboard={getDashboard} />
+            <CategoryStatus
+              isAdmin={isAdmin}
+              setStatus={setStatus}
+              getDashboard={getDashboard}
+            />
           </BottomSideContainer>
           <ScrollToTop targetSelector="#scrollable-div" />
         </AdminDashBoardWrapper>

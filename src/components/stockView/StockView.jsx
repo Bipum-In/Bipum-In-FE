@@ -2,28 +2,25 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import CategoryItems from '../../components/common/CategoryItems';
-import EquipmentShow from '../../components/EquipmentManage/EquipmentShow';
+import CategoryItems from '../common/CategoryItems';
+import EquipmentShow from '../EquipmentManage/EquipmentShow';
 
 import useSelectMenu from '../../hooks/useSelectMenu';
-import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
-import EquipmentModal from './EquipmentModal';
+import EquipmentModal from '../EquipmentManage/EquipmentModal';
+import StockViewShow from './StockViewShow';
 
-export default function EquipmentListContainer({
-  category: { category, largeCategory },
-}) {
+export default function StockView({ category: { category, largeCategory } }) {
   const dispatch = useDispatch();
   const {
     equipmentStatus: { getEquipment, isEquipmentError },
     categoryData: { categoryIdData, categoryNameData },
   } = useSelector(state => state.equipmentStatus);
 
-  const isAdmin = true;
+  const isAdmin = false;
   const [page, setPage] = useState(1);
-  const [status, setStatus] = useState('');
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);
   const [categoryTitle, setCategoryTitle] = useState(categoryNameData);
@@ -31,31 +28,27 @@ export default function EquipmentListContainer({
     show: false,
     id: null,
   });
-  const [showSingleModal, setShowSingleModal] = useState(false);
-  const [showMultipleModal, setShowMultipleModal] = useState(false);
+
   const [categoryList, setCategoryList] = useState({
     show: false,
     list: [category],
   });
 
   const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
-  const [resizeRef, pageSize, firstPageSize, handleResize] =
-    useResizeGetPageSize();
 
   useEffect(() => {
-    const size = pageSize || firstPageSize || handleResize();
     dispatch(
       getEquipmentList({
-        path: '/admin',
+        path: '',
         keyword,
         categoryId,
-        status,
+        status: '',
         page,
-        size,
+        size: 12,
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, keyword, categoryId, page, status, pageSize, handleResize]);
+  }, [dispatch, keyword, categoryId, page]);
 
   const handleClickMenu = e => {
     const name = e.target.innerText;
@@ -87,20 +80,14 @@ export default function EquipmentListContainer({
     setPage(e);
   };
 
-  const handleChangeState = e => {
-    setStatus(e.target.value);
-  };
-
   const handleChangeKeyword = e => {
     setKeyword(e.target.value);
   };
 
-  const handleDetailModal = id =>
+  const handleDetailModal = id => {
+    console.log(id);
     setShowDetailModal(state => ({ show: !state.show, id: id }));
-
-  const handleSingleModal = () => setShowSingleModal(state => !state);
-
-  const handleMultipleModal = () => setShowMultipleModal(state => !state);
+  };
 
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.largeCategory === name);
@@ -115,40 +102,36 @@ export default function EquipmentListContainer({
   return (
     <>
       {isEquipmentError && <div>에러 발생</div>}
-      <EquipmentListWrapper ref={resizeRef.containerRef}>
-        <CategoryContainer ref={resizeRef.headerRef}>
-          <CategoryItems
-            getCategory={menuStyle}
-            getSmallCategory={categoryList}
-            onClickMenu={handleClickMenu}
-            onClickCategory={handleClickCategory}
+      {getEquipment && (
+        <>
+          <EquipmentListWrapper>
+            <CategoryContainer>
+              <CategoryItems
+                getCategory={menuStyle}
+                getSmallCategory={categoryList}
+                onClickMenu={handleClickMenu}
+                onClickCategory={handleClickCategory}
+              />
+            </CategoryContainer>
+            <StockViewShow
+              requestData={getEquipment}
+              setSelectName={categoryTitle}
+              page={page}
+              onPage={handlePage}
+              keyword={keyword}
+              setKeyword={handleChangeKeyword}
+              onClickDetail={handleDetailModal}
+            />
+          </EquipmentListWrapper>
+          <EquipmentModal
+            isAdmin={isAdmin}
+            showDetailModal={showDetailModal}
+            handleDetailModal={handleDetailModal}
+            category={category}
+            largeCategory={largeCategory}
           />
-        </CategoryContainer>
-        <EquipmentShow
-          requestData={getEquipment}
-          setSelectName={categoryTitle}
-          page={page}
-          pageSize={pageSize || firstPageSize}
-          onPage={handlePage}
-          status={status}
-          setStatus={handleChangeState}
-          keyword={keyword}
-          setKeyword={handleChangeKeyword}
-          onClickDetail={handleDetailModal}
-          onClickSingleModal={handleSingleModal}
-          onClickMultiModal={handleMultipleModal}
-          resizeRef={resizeRef}
-        />
-      </EquipmentListWrapper>
-      <EquipmentModal
-        isAdmin={isAdmin}
-        showDetailModal={showDetailModal}
-        showSingleModal={showSingleModal}
-        handleDetailModal={handleDetailModal}
-        handleSingleModal={handleSingleModal}
-        category={category}
-        largeCategory={largeCategory}
-      />
+        </>
+      )}
     </>
   );
 }

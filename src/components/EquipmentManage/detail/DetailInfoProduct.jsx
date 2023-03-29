@@ -1,32 +1,18 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Input from '../../../elements/Input';
-import SelectCategoryList from '../../equipmentAdd/single/SelectCategoryList';
 
 export default function DetailInfoProduct({
   edit,
   value,
   detail,
-  category,
-  onChangeCategory,
   onChangeValue,
 }) {
-  const { modelName, serialNum } = detail.supplyDetail;
+  const { createdAt, modelName, serialNum } = detail.supplyDetail;
   return (
     <DetailInfoContentContainer>
       <TextType>
-        <span>비품 종류</span>
-        {edit ? (
-          <SelectCategoryList
-            category={category}
-            optionName={['name', 'categoryName']}
-            optionNullName={['대분류', '소분류']}
-            optionKey={['name', 'categoryName']}
-            optionValueKey={['name', 'categoryName']}
-            onChangeCategory={onChangeCategory}
-          />
-        ) : (
-          <span>하드 코딩부분 수정해야함</span>
-        )}
+        <span>등록 일자</span>
+        <CreatedAt edit={edit}>{createdAt}</CreatedAt>
       </TextType>
       <TextType>
         <span>제품명</span>
@@ -103,4 +89,14 @@ const TextType = styled.div`
     font-weight: 500;
     font-size: 13px;
   }
+`;
+
+const CreatedAt = styled.span`
+  ${props =>
+    props.edit &&
+    css`
+      display: flex;
+      align-items: center;
+      height: 2rem;
+    `}
 `;

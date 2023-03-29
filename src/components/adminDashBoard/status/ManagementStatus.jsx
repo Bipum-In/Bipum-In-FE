@@ -5,16 +5,17 @@ import { useNavigate } from 'react-router-dom';
 import AnchorBtn from '../AnchorBtn';
 import { ReactComponent as RequestIcon } from '../../../styles/commonIcon/requestIcon.svg';
 import { ReactComponent as ArrowIcon } from '../../../styles/commonIcon/arrowDown.svg';
+import { ReactComponent as List } from '../../../styles/commonIcon/list.svg';
 import { ManagementCards } from '../ManagementCard';
 import ROUTER from '../../../constants/routerConst';
 import { REQUEST_PAGES } from '../../../constants/string';
 import { useDispatch } from 'react-redux';
 import { setRequestData } from '../../../redux/modules/requestStatus';
 
-export default function ManagementStatus({ getDashboard }) {
+export default function ManagementStatus({ isAdmin, getDashboard }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { requestsCountDto } = getDashboard.data;
+  const dto = isAdmin ? getDashboard.data.requestsCountDto : getDashboard.data;
 
   const moveToUnprocessed = () => {
     dispatch(setRequestData(REQUEST_PAGES.UNPROCESSED));
@@ -23,7 +24,7 @@ export default function ManagementStatus({ getDashboard }) {
 
   return (
     <>
-      {requestsCountDto && (
+      {dto && (
         <styleds.EquipmentTopContainer col="true">
           <AnchorBtn
             onClick={() => navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT)}
@@ -33,17 +34,37 @@ export default function ManagementStatus({ getDashboard }) {
           <ManagementWrapper>
             <ManagementAlertTopContainer>
               <NewAlertContainer onClick={moveToUnprocessed}>
-                <RequestIcon />
-                <NewAlertTitle>처리대기 요청</NewAlertTitle>
+                {isAdmin ? <RequestIcon /> : <List />}
+                <NewAlertTitle>
+                  {isAdmin ? '처리대기 요청' : '전체 요청 내역'}
+                </NewAlertTitle>
                 <NewAlertNum>
-                  {requestsCountDto.countMap.UnProcessedRequests}건
+                  {isAdmin
+                    ? dto.countMap.UnProcessedRequests
+                    : dto.userCountMap.UnProcessedUserRequests}
+                  건
                 </NewAlertNum>
               </NewAlertContainer>
             </ManagementAlertTopContainer>
             <ManagementAlertBottomContainer>
               <ManagementCards
-                requestsCountData={requestsCountDto.countMap}
-                requestsDate={requestsCountDto.modifiedAtMap}
+                requestsCountData={isAdmin ? dto.countMap : dto.userCountMap}
+                requestsDate={isAdmin ? dto.modifiedAtMap : ''}
+                requestKey={
+                  isAdmin
+                    ? [
+                        'supplyRequests',
+                        'returnRequests',
+                        'repairRequests',
+                        'ReportRequests',
+                      ]
+                    : [
+                        'userCountSupply',
+                        'userCountReturn',
+                        'userCountRepair',
+                        'userCountReport',
+                      ]
+                }
               />
             </ManagementAlertBottomContainer>
           </ManagementWrapper>
