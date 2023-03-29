@@ -8,37 +8,41 @@ export default function DetailHeader({
   onEdit,
   onDispose,
 }) {
-  const { supplyId, isAdmin } = detail.supplyDetail;
+  const { supplyId, isAdmin, isMySupply } = detail.supplyDetail;
   return (
     <DetailHeaderContainer>
-      {isAdmin ? (
+      {isMySupply && (
         <>
-          {edit ? (
-            <SaveButton
-              onClick={() => {
-                onSave(supplyId);
-              }}
-            >
-              저장
-            </SaveButton>
+          {isAdmin ? (
+            <>
+              {edit ? (
+                <SaveButton
+                  onClick={() => {
+                    onSave(supplyId);
+                  }}
+                >
+                  저장
+                </SaveButton>
+              ) : (
+                <>
+                  <DisposeButton
+                    onClick={() => {
+                      onDispose(supplyId);
+                    }}
+                  >
+                    폐기
+                  </DisposeButton>
+                  <EditButton onClick={onEdit}>수정</EditButton>
+                </>
+              )}
+            </>
           ) : (
             <>
-              <DisposeButton
-                onClick={() => {
-                  onDispose(supplyId);
-                }}
-              >
-                폐기
-              </DisposeButton>
-              <EditButton onClick={onEdit}>수정</EditButton>
+              <ReportButton>보고서 작성</ReportButton>
+              <ReturnButton>반납요청</ReturnButton>
+              <RepairButton>수리요청</RepairButton>
             </>
           )}
-        </>
-      ) : (
-        <>
-          <ReportButton>보고서 작성</ReportButton>
-          <ReturnButton>반납요청</ReturnButton>
-          <RepairButton>수리요청</RepairButton>
         </>
       )}
     </DetailHeaderContainer>

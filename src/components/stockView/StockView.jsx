@@ -19,6 +19,7 @@ export default function StockView({ category: { category, largeCategory } }) {
     categoryData: { categoryIdData, categoryNameData },
   } = useSelector(state => state.equipmentStatus);
 
+  const isAdmin = false;
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);
@@ -83,8 +84,10 @@ export default function StockView({ category: { category, largeCategory } }) {
     setKeyword(e.target.value);
   };
 
-  const handleDetailModal = id =>
+  const handleDetailModal = id => {
+    console.log(id);
     setShowDetailModal(state => ({ show: !state.show, id: id }));
+  };
 
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.largeCategory === name);
@@ -121,6 +124,7 @@ export default function StockView({ category: { category, largeCategory } }) {
             />
           </EquipmentListWrapper>
           <EquipmentModal
+            isAdmin={isAdmin}
             showDetailModal={showDetailModal}
             handleDetailModal={handleDetailModal}
             category={category}

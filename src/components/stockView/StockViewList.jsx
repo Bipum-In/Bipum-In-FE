@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function StockViewList({ requestData, onClickDetail }) {
-  const { content, supplyId } = requestData;
+  const { content } = requestData;
 
   return (
     <StockWrapper>
@@ -12,7 +12,7 @@ export default function StockViewList({ requestData, onClickDetail }) {
           <Card
             key={uuidv4()}
             onClick={() => {
-              onClickDetail(supplyId);
+              onClickDetail(item.supplyId);
             }}
           >
             <img src={item.image} alt="" />

@@ -5,6 +5,7 @@ import AddSingleItem from '../equipmentAdd/AddSingleItem';
 import EquipmentDetail from './detail/EquipmentDetail';
 
 export default function EquipmentModal({
+  isAdmin,
   showDetailModal,
   showSingleModal,
   handleDetailModal,
@@ -12,7 +13,6 @@ export default function EquipmentModal({
   category,
   largeCategory,
 }) {
-  const isAdmin = true;
   return (
     <>
       <Modal isOpen={showDetailModal.show}>

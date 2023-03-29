@@ -21,6 +21,7 @@ export default function EquipmentListContainer({
     categoryData: { categoryIdData, categoryNameData },
   } = useSelector(state => state.equipmentStatus);
 
+  const isAdmin = true;
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('');
   const [keyword, setKeyword] = useState('');
@@ -140,6 +141,7 @@ export default function EquipmentListContainer({
         />
       </EquipmentListWrapper>
       <EquipmentModal
+        isAdmin={isAdmin}
         showDetailModal={showDetailModal}
         showSingleModal={showSingleModal}
         handleDetailModal={handleDetailModal}
