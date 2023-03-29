@@ -1,12 +1,24 @@
 import styled from 'styled-components';
 import Button from '../../../elements/Button';
 
-export default function DetailHeader({ edit, detail, onEdit, onDispose }) {
+export default function DetailHeader({
+  edit,
+  onSave,
+  detail,
+  onEdit,
+  onDispose,
+}) {
   const { supplyId } = detail.supplyDetail;
   return (
     <DetailHeaderContainer>
       {edit ? (
-        <SaveButton>저장</SaveButton>
+        <SaveButton
+          onClick={() => {
+            onSave(supplyId);
+          }}
+        >
+          저장
+        </SaveButton>
       ) : (
         <>
           <DisposeButton
