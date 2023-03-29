@@ -7,6 +7,7 @@ import Singup from '../pages/Singup';
 import Login from '../pages/Login';
 import AdminDashBoard from '../pages/admin/AdminDashBoard';
 import UserDashBoard from '../pages/user/UserDashBoard';
+import UserRequest from '../pages/user/UserRequest';
 import Rending from '../pages/Rending';
 import EmptyPage from '../pages/EmptyPage';
 
@@ -46,6 +47,11 @@ const router = createBrowserRouter([
           {
             path: ROUTER.PATH.USER_DASHBOARD,
             element: <UserDashBoard />,
+          },
+
+          {
+            path: ROUTER.PATH.USER_REQUEST,
+            element: <UserRequest />,
           },
         ],
       },
