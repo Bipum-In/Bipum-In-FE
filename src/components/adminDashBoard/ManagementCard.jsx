@@ -29,7 +29,11 @@ export function ManagementCard({
   );
 }
 
-export function ManagementCards({ requestsCountData, requestsDate }) {
+export function ManagementCards({
+  requestsCountData,
+  requestsDate,
+  requestKey,
+}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -62,25 +66,25 @@ export function ManagementCards({ requestsCountData, requestsDate }) {
       <ManagementCard
         onClick={moveToSupply}
         statusTitle={STRING.REQUEST_NAME.SUPPLY}
-        statusCount={requestsCountData.supplyRequests}
+        statusCount={requestsCountData[requestKey[0]]}
         statusDate={FormatDateToDot(requestsDate.supplyModifiedAt)}
       />
       <ManagementCard
         onClick={moveToRepair}
         statusTitle={STRING.REQUEST_NAME.REPAIR}
-        statusCount={requestsCountData.returnRequests}
+        statusCount={requestsCountData[requestKey[1]]}
         statusDate={FormatDateToDot(requestsDate.returnModifiedAt)}
       />
       <ManagementCard
         onClick={moveToReturn}
         statusTitle={STRING.REQUEST_NAME.RETURN}
-        statusCount={requestsCountData.repairRequests}
+        statusCount={requestsCountData[requestKey[2]]}
         statusDate={FormatDateToDot(requestsDate.repairModifiedAt)}
       />
       <ManagementCard
         onClick={moveToReport}
         statusTitle={STRING.REQUEST_NAME.REPORT}
-        statusCount={requestsCountData.ReportRequests}
+        statusCount={requestsCountData[requestKey[3]]}
         statusDate={FormatDateToDot(requestsDate.ReportRequests)}
       />
     </>

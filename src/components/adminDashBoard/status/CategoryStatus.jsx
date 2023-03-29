@@ -10,13 +10,17 @@ import DashboardCard from '../DashboardCard';
 import useSelectMenu from '../../../hooks/useSelectMenu';
 import STRING from '../../../constants/string';
 import ROUTER from '../../../constants/routerConst';
+import UserDashboardCard from '../UserDashboardCard';
 
-export default function CategoryStatus({ getDashboard, setStatus }) {
+export default function CategoryStatus({ isAdmin, getDashboard, setStatus }) {
   const { getCategory, isCategoryError } = useSelector(
     state => state.equipmentStatus.category
   );
   const { largeCategory } = getCategory;
-  const { supplyCountDtos } = getDashboard.data;
+  const supplyDtos = isAdmin
+    ? getDashboard.data.supplyCountDtos
+    : getDashboard.data.userSupplyDtos;
+
   const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
 
   const handleClickMenue = e => {
@@ -55,17 +59,28 @@ export default function CategoryStatus({ getDashboard, setStatus }) {
             onClickMenu={handleClickMenue}
           />
           <EquipmentBottomContainer>
-            {supplyCountDtos.map(card => (
-              <DashboardCard
-                // onClick={() => handleCategoryClick()}
-                key={uuidv4()}
-                totalCount={card.totalCount}
-                categoryName={card.categoryName}
-                useCount={card.useCount}
-                repairCount={card.repairCount}
-                stockCount={card.stockCount}
-              />
-            ))}
+            {supplyDtos.map(card =>
+              isAdmin ? (
+                <DashboardCard
+                  // onClick={() => handleCategoryClick()}
+                  key={uuidv4()}
+                  totalCount={card.totalCount}
+                  categoryName={card.categoryName}
+                  useCount={card.useCount}
+                  repairCount={card.repairCount}
+                  stockCount={card.stockCount}
+                />
+              ) : (
+                <UserDashboardCard
+                  key={uuidv4()}
+                  image={card.image}
+                  status={card.status}
+                  supplyId={card.supplyId}
+                  supplyName={card.supplyName}
+                  categoryName={card.categoryName}
+                />
+              )
+            )}
           </EquipmentBottomContainer>
         </>
       )}
