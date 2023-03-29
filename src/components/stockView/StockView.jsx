@@ -10,6 +10,7 @@ import useSelectMenu from '../../hooks/useSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
 import EquipmentModal from '../EquipmentManage/EquipmentModal';
+import StockViewShow from './StockViewShow';
 
 export default function StockView({ category: { category, largeCategory } }) {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export default function StockView({ category: { category, largeCategory } }) {
     equipmentStatus: { getEquipment, isEquipmentError },
     categoryData: { categoryIdData, categoryNameData },
   } = useSelector(state => state.equipmentStatus);
-
+  console.log(getEquipment);
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);
@@ -35,7 +36,16 @@ export default function StockView({ category: { category, largeCategory } }) {
   const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
 
   useEffect(() => {
-    dispatch(getEquipmentList({ keyword, categoryId, page, size: 12 }));
+    dispatch(
+      getEquipmentList({
+        path: '',
+        keyword,
+        categoryId,
+        status: '',
+        page,
+        size: 12,
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, keyword, categoryId, page]);
 
@@ -98,7 +108,7 @@ export default function StockView({ category: { category, largeCategory } }) {
             onClickCategory={handleClickCategory}
           />
         </CategoryContainer>
-        <EquipmentShow
+        <StockViewShow
           requestData={getEquipment}
           setSelectName={categoryTitle}
           page={page}

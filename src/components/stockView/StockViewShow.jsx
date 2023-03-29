@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import StatusListHeader from '../common/status/StatusListHeader';
 import StatusList from '../common/status/StatusList';
 import PaginationList from '../common/PaginationList';
+import StockViewList from './StockViewList';
 
 export default function StockViewShow({
   requestData,
@@ -43,28 +44,26 @@ export default function StockViewShow({
       <StatusListHeader
         setSelectName={setSelectName}
         selectBoxList={selectBoxList}
-        containerHeaderRef={resizeRef.containerHeaderRef}
-        status={status}
-        setStatus={setStatus}
         keyword={keyword}
         setKeyword={setKeyword}
       ></StatusListHeader>
-      <StatusList
+      <StockViewList content={requestData} />
+      {/* <StatusList
         headerList={headerList}
         listHeaderRef={resizeRef.listHeaderRef}
         listRef={resizeRef.listRef}
         content={requestData}
         contentKeyArr={contentKeyArr}
         onDetail={onClickDetail}
-      />
-      {requestData && (
+      /> */}
+      {/* {requestData && (
         <PaginationList
           page={page}
           pageSize={pageSize}
           requestData={requestData}
           onPage={onPage}
         />
-      )}
+      )} */}
     </RequestShowContainer>
   );
 }

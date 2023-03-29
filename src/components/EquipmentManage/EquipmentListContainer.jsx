@@ -43,7 +43,16 @@ export default function EquipmentListContainer({
 
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
-    dispatch(getEquipmentList({ keyword, categoryId, status, page, size }));
+    dispatch(
+      getEquipmentList({
+        path: '/admin',
+        keyword,
+        categoryId,
+        status,
+        page,
+        size,
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, keyword, categoryId, page, status, pageSize, handleResize]);
 
