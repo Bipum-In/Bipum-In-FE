@@ -7,6 +7,8 @@ const PATH = {
   ADMIN_EQUIPMENT_MANAGEMENT: '/equipment-management',
   ADMIN_EQUIPMENT_ADD: '/equipment-add',
   USER_DASHBOARD: '/user-dashboard',
+  USER_REQUEST: '/user-request',
+  USER_STOCK_VIEW: '/user-stockview',
   RENDING: '/rending',
   BACK: -1,
   FRONT: 1,

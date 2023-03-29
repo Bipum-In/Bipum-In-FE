@@ -7,6 +7,7 @@ import Singup from '../pages/Singup';
 import Login from '../pages/Login';
 import AdminDashBoard from '../pages/admin/AdminDashBoard';
 import UserDashBoard from '../pages/user/UserDashBoard';
+import UserRequest from '../pages/user/UserRequest';
 import Rending from '../pages/Rending';
 import EmptyPage from '../pages/EmptyPage';
 
@@ -49,7 +50,11 @@ const router = createBrowserRouter([
             element: <UserDashBoard />,
           },
           {
-            path: '/user-stockview',
+            path: ROUTER.PATH.USER_REQUEST,
+            element: <UserRequest />,
+          },
+          {
+            path: ROUTER.PATH.USER_STOCK_VIEW,
             element: <UserStockView />,
           },
         ],

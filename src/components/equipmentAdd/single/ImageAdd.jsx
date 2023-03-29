@@ -1,17 +1,25 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as DefaultImage } from '../../../styles/commonIcon/defaultImage.svg';
+import ImageCarousel from '../../common/ImageCarousel';
+import { ReactComponent as DeleteImg } from '../../../styles/commonIcon/deleteImg.svg';
 
-export default function ImageAdd({ preview, onChangeimge }) {
+export default function ImageAdd({
+  preview,
+  onChangeimge,
+  onDeleteImage,
+  children,
+}) {
   return (
     <ImageWrapper>
-      사진첨부
+      {children}
       <ImageContainer>
         {preview ? (
-          <PreviewImage src={preview} alt="preview" />
+          <ImageCarousel imageUrlList={preview} onDeleteImage={onDeleteImage} />
         ) : (
           <DefaultImage />
         )}
+        {/* <PreviewImage src={preview} alt="preview" /> */}
       </ImageContainer>
       <ImageinputFile>
         파일 선택하기
@@ -20,13 +28,14 @@ export default function ImageAdd({ preview, onChangeimge }) {
           type="file"
           accept=".png,.jpg,.jpeg,.gif"
           onChange={onChangeimge}
+          multiple
         />
       </ImageinputFile>
     </ImageWrapper>
   );
 }
 
-const ImageWrapper = styled.div`
+const ImageWrapper = styled.section`
   ${props => props.theme.FlexCol};
   width: 23.75rem;
   height: 30.625rem;
@@ -35,7 +44,8 @@ const ImageWrapper = styled.div`
   line-height: 1.3125rem;
 `;
 
-const ImageContainer = styled.div`
+const ImageContainer = styled.article`
+  position: relative;
   display: flex;
   align-items: center;
   width: 100%;
