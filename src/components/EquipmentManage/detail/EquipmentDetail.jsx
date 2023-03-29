@@ -53,7 +53,7 @@ export default function EquipmentDetail({
   };
 
   useEffect(() => {
-    dispatch(getEquipmentDetail(detailId));
+    dispatch(getEquipmentDetail({ path: '/admin', supplyId: detailId }));
     axios.get(`/api/dept`).then(res => setDept(res.data.data));
     axios.get(`/api/partners`).then(res => setPartners(res.data.data));
   }, [detailId, dispatch]);
@@ -72,7 +72,7 @@ export default function EquipmentDetail({
     const value = e.target.value;
     setEditRequester({ ...editRequester, [value]: !editRequester[value] });
   };
-  // console.log(getDetail.supplyDetail);
+
   const handleSave = supplyId => {
     const { largeCategory, category, partnersId, userId, image } =
       getDetail.supplyDetail;

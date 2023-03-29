@@ -8,27 +8,37 @@ export default function DetailHeader({
   onEdit,
   onDispose,
 }) {
-  const { supplyId } = detail.supplyDetail;
+  const { supplyId, isAdmin } = detail.supplyDetail;
   return (
     <DetailHeaderContainer>
-      {edit ? (
-        <SaveButton
-          onClick={() => {
-            onSave(supplyId);
-          }}
-        >
-          저장
-        </SaveButton>
+      {isAdmin ? (
+        <>
+          {edit ? (
+            <SaveButton
+              onClick={() => {
+                onSave(supplyId);
+              }}
+            >
+              저장
+            </SaveButton>
+          ) : (
+            <>
+              <DisposeButton
+                onClick={() => {
+                  onDispose(supplyId);
+                }}
+              >
+                폐기
+              </DisposeButton>
+              <EditButton onClick={onEdit}>수정</EditButton>
+            </>
+          )}
+        </>
       ) : (
         <>
-          <DisposeButton
-            onClick={() => {
-              onDispose(supplyId);
-            }}
-          >
-            폐기
-          </DisposeButton>
-          <EditButton onClick={onEdit}>수정</EditButton>
+          <ReportButton>보고서 작성</ReportButton>
+          <ReturnButton>반납요청</ReturnButton>
+          <RepairButton>수리요청</RepairButton>
         </>
       )}
     </DetailHeaderContainer>
@@ -57,3 +67,22 @@ const SaveButton = styled(DisposeButton)`
 `;
 
 const EditButton = styled(SaveButton)``;
+
+const ReportButton = styled(Button)`
+  width: 6.375rem;
+  height: 2.0625rem;
+  margin: 0;
+  color: ${props => props.theme.color.grey.brandColor6};
+  border: 1px solid ${props => props.theme.color.grey.brandColor6}; ;
+`;
+
+const ReturnButton = styled(ReportButton)`
+  color: ${props => props.theme.color.blue.brandColor6};
+  border: 1px solid ${props => props.theme.color.blue.brandColor6}; ;
+`;
+
+const RepairButton = styled(ReportButton)`
+  color: white;
+  background-color: ${props => props.theme.color.blue.brandColor6};
+  border: 1px solid ${props => props.theme.color.blue.brandColor6}; ;
+`;
