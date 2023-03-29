@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Button from '../../elements/Button';
 import { styles } from '../common/commonStyled';
@@ -6,6 +6,7 @@ import SelectCategoryList from '../equipmentAdd/single/SelectCategoryList';
 import Axios from '../../api/axios';
 import STRING from '../../constants/string';
 import ImageAdd from '../equipmentAdd/single/ImageAdd';
+import SelectCategory from '../common/SelectCategory';
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const requestData = {
   supplyId: '',
@@ -21,13 +22,27 @@ export default function UserEquipmentRequest({
   category,
   largeCategory,
 }) {
+  const [preview, setPreview] = useState(null);
+  const [formImage, setFormformImage] = useState(null);
   const [messageValue, setMessageValue] = useState('');
   const [checkSallCategory, setCheckSallCategory] = useState(false);
   const [smallCategory, setSmallCategory] = useState(null);
+  const [mySupply, setMysupply] = useState(null);
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
+
+  useEffect(() => {
+    if (type !== 'SUPPLY') {
+      axios.get('/api/supply/mysupply').then(res => setMysupply(res.data.data));
+    }
+  }, [type]);
 
   const parseCategoryData = (name, getCategory) => {
     return getCategory.filter(item => item.largeCategory === name);
+  };
+
+  const handleChangeMySupply = e => {
+    const { ko, eng } = JSON.parse(e.target.value);
+    requestData.supplyId = ko;
   };
 
   const handleChangeLargeCategory = e => {
@@ -57,25 +72,40 @@ export default function UserEquipmentRequest({
     requestData.content = messageValue;
 
     const formData = new FormData();
+
+    if (formImage) {
+      formImage.forEach(img => {
+        formData.append('multipartFile', img);
+      });
+    }
+
     formDataKeyArray.forEach(formDataKey => {
       formData.append(formDataKey, requestData[formDataKey]);
     });
-
     sendFormData(formData);
   };
 
   const sendFormData = formData => axios.post(`/api/requests`, formData);
 
-  const [preview, setPreview] = useState('');
-  const [formImage, setFormformImage] = useState(null);
-
   const handleChangeimge = e => {
-    const img = e.target.files;
+    const img = [...e.target.files];
     setFormformImage(img);
     setPreviewImage(img);
   };
 
-  const handleDeleteImage = e => {};
+  const handleDeleteImage = imgPage => {
+    const absImgPage = Math.abs(imgPage);
+    if (Array.isArray(preview) && preview.length > 1) {
+      const deletePreview = preview.filter((_, index) => index !== absImgPage);
+      const deleteform = formImage.filter((_, index) => index !== absImgPage);
+      setPreview(deletePreview);
+      setFormformImage(deleteform);
+      return;
+    }
+
+    setPreview(null);
+    setFormformImage(null);
+  };
 
   const setPreviewImage = images => {
     const previewArray = [];
@@ -84,6 +114,8 @@ export default function UserEquipmentRequest({
       const reader = new FileReader();
 
       reader.onloadend = () => {
+        if (images.length === 1) return setPreview(reader.result);
+
         previewArray.push(reader.result);
 
         if (previewArray.length === images.length) {
@@ -121,6 +153,21 @@ export default function UserEquipmentRequest({
                 </styles.TypeBox>
                 <styles.TypeBox>
                   <styles.TypeTitle requiredinput="true">
+                    제품명
+                  </styles.TypeTitle>
+                  <styles.SelectCaregoryConteiner>
+                    <SelectCategory
+                      category={mySupply}
+                      optionName={'modelName'}
+                      optionNullName={'선택'}
+                      optionKey={'supplyId'}
+                      optionValueKey={'supplyId'}
+                      onChangeCategory={handleChangeMySupply}
+                    />
+                  </styles.SelectCaregoryConteiner>
+                </styles.TypeBox>
+                <styles.TypeBox>
+                  <styles.TypeTitle requiredinput="true">
                     {type === 'SUPPLY' ? '요청 메시지' : '요청 사유'}
                   </styles.TypeTitle>
                   <TextArea
@@ -135,9 +182,7 @@ export default function UserEquipmentRequest({
                   onChangeimge={handleChangeimge}
                   onDeleteImage={handleDeleteImage}
                 >
-                  <styles.TypeTitle requiredinput="true">
-                    사진 첨부
-                  </styles.TypeTitle>
+                  <styles.TypeTitle>사진 첨부</styles.TypeTitle>
                 </ImageAdd>
               </ImageContainer>
             </EquipmentDetailContainer>
