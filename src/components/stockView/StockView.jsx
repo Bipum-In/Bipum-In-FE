@@ -18,7 +18,7 @@ export default function StockView({ category: { category, largeCategory } }) {
     equipmentStatus: { getEquipment, isEquipmentError },
     categoryData: { categoryIdData, categoryNameData },
   } = useSelector(state => state.equipmentStatus);
-  console.log(getEquipment);
+
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);
@@ -99,31 +99,35 @@ export default function StockView({ category: { category, largeCategory } }) {
   return (
     <>
       {isEquipmentError && <div>에러 발생</div>}
-      <EquipmentListWrapper>
-        <CategoryContainer>
-          <CategoryItems
-            getCategory={menuStyle}
-            getSmallCategory={categoryList}
-            onClickMenu={handleClickMenu}
-            onClickCategory={handleClickCategory}
+      {getEquipment && (
+        <>
+          <EquipmentListWrapper>
+            <CategoryContainer>
+              <CategoryItems
+                getCategory={menuStyle}
+                getSmallCategory={categoryList}
+                onClickMenu={handleClickMenu}
+                onClickCategory={handleClickCategory}
+              />
+            </CategoryContainer>
+            <StockViewShow
+              requestData={getEquipment}
+              setSelectName={categoryTitle}
+              page={page}
+              onPage={handlePage}
+              keyword={keyword}
+              setKeyword={handleChangeKeyword}
+              onClickDetail={handleDetailModal}
+            />
+          </EquipmentListWrapper>
+          <EquipmentModal
+            showDetailModal={showDetailModal}
+            handleDetailModal={handleDetailModal}
+            category={category}
+            largeCategory={largeCategory}
           />
-        </CategoryContainer>
-        <StockViewShow
-          requestData={getEquipment}
-          setSelectName={categoryTitle}
-          page={page}
-          onPage={handlePage}
-          keyword={keyword}
-          setKeyword={handleChangeKeyword}
-          onClickDetail={handleDetailModal}
-        />
-      </EquipmentListWrapper>
-      <EquipmentModal
-        showDetailModal={showDetailModal}
-        handleDetailModal={handleDetailModal}
-        category={category}
-        largeCategory={largeCategory}
-      />
+        </>
+      )}
     </>
   );
 }
