@@ -60,8 +60,8 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
                       ]
                     : [
                         'userCountSupply',
-                        'userCountReturn',
                         'userCountRepair',
+                        'userCountReturn',
                         'userCountReport',
                       ]
                 }
