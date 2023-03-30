@@ -118,7 +118,7 @@ const AlertStatusContainer = styled.div`
   border-radius: 0.3125rem;
 `;
 
-const Status = styled.td`
+const Status = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
