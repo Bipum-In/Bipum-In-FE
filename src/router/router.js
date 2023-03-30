@@ -30,31 +30,31 @@ const router = createBrowserRouter([
         element: <Layout />,
         children: [
           {
-            path: ROUTER.PATH.ADMIN_DASHBOARD,
+            path: ROUTER.PATH.ADMIN.DASHBOARD,
             element: <AdminDashBoard />,
           },
           {
-            path: ROUTER.PATH.ADMIN_REQUEST_STATUS,
+            path: ROUTER.PATH.ADMIN.REQUEST_STATUS,
             element: <RequestStatus />,
           },
           {
-            path: ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT,
+            path: ROUTER.PATH.ADMIN.EQUIPMENT_MANAGEMENT,
             element: <EquipmentManagement />,
           },
           {
-            path: ROUTER.PATH.ADMIN_EQUIPMENT_ADD,
+            path: ROUTER.PATH.ADMIN.EQUIPMENT_ADD,
             element: <EquipmentAdd />,
           },
           {
-            path: ROUTER.PATH.USER_DASHBOARD,
+            path: ROUTER.PATH.USER.DASHBOARD,
             element: <UserDashBoard />,
           },
           {
-            path: ROUTER.PATH.USER_REQUEST,
+            path: ROUTER.PATH.USER.REQUEST,
             element: <UserRequest />,
           },
           {
-            path: ROUTER.PATH.USER_STOCK_VIEW,
+            path: ROUTER.PATH.USER.STOCK_VIEW,
             element: <UserStockView />,
           },
         ],

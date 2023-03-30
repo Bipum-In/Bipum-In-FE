@@ -2,15 +2,19 @@ const PATH = {
   MAIN: '/',
   SIGNUP: '/signup',
   LOGIN: '/login',
-  ADMIN_DASHBOARD: '/admin-dashboard',
-  ADMIN_REQUEST_STATUS: '/request-status',
-  ADMIN_EQUIPMENT_MANAGEMENT: '/equipment-management',
-  ADMIN_EQUIPMENT_ADD: '/equipment-add',
-  USER_DASHBOARD: '/user-dashboard',
-  USER_REQUEST: '/user-request',
-  USER_STOCK_VIEW: '/user-stockview',
   BACK: -1,
   FRONT: 1,
+  ADMIN: {
+    DASHBOARD: '/admin-dashboard',
+    REQUEST_STATUS: '/request-status',
+    EQUIPMENT_MANAGEMENT: '/equipment-management',
+    EQUIPMENT_ADD: '/equipment-add',
+  },
+  USER: {
+    DASHBOARD: '/user-dashboard',
+    REQUEST: '/user-request',
+    STOCK_VIEW: '/user-stockview',
+  },
 };
 
 const NAME = {

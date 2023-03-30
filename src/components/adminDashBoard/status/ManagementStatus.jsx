@@ -19,7 +19,7 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
 
   const moveToUnprocessed = () => {
     dispatch(setRequestData(REQUEST_PAGES.UNPROCESSED));
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
+    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
   };
 
   return (
@@ -27,7 +27,7 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
       {dto && (
         <styleds.EquipmentTopContainer col="true" manage>
           <AnchorBtn
-            onClick={() => navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT)}
+            onClick={() => navigate(ROUTER.PATH.ADMIN.EQUIPMENT_MANAGEMENT)}
           >
             관리 현황 <ArrowIcon />
           </AnchorBtn>

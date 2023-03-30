@@ -40,25 +40,25 @@ export function ManagementCards({
   const moveToSupply = () => {
     dispatch(initRequest());
     dispatch(setRequestData(REQUEST_PAGES.SUPPLY));
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
+    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
   };
 
   const moveToRepair = () => {
     dispatch(initRequest());
     dispatch(setRequestData(REQUEST_PAGES.REPAIR));
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
+    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
   };
 
   const moveToReturn = () => {
     dispatch(initRequest());
     dispatch(setRequestData(REQUEST_PAGES.RETURN));
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
+    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
   };
 
   const moveToReport = () => {
     dispatch(initRequest());
     dispatch(setRequestData(REQUEST_PAGES.REPORT));
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
+    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
   };
 
   return (

@@ -36,7 +36,7 @@ export default function Login() {
     );
 
     if (localStorageData && localStorageData.checkUser) {
-      navigate(ROUTER.PATH.ADMIN_DASHBOARD);
+      navigate(ROUTER.PATH.ADMIN.DASHBOARD);
     }
 
     if (code && !checkCode) {
@@ -50,7 +50,7 @@ export default function Login() {
       });
       axios.get(`/api/dept`).then(res => setDepartmentList(res.data.data));
     }
-    writeUser && navigate(ROUTER.PATH.ADMIN_DASHBOARD);
+    writeUser && navigate(ROUTER.PATH.ADMIN.DASHBOARD);
   }, [checkCode, navigate, search, writeUser]);
 
   const handleLoginInfoAdd = () => {
