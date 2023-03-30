@@ -54,6 +54,10 @@ const router = createBrowserRouter([
             element: <UserRequest />,
           },
           {
+            path: ROUTER.PATH.USER.REQUEST_LIST,
+            element: <RequestStatus />,
+          },
+          {
             path: ROUTER.PATH.USER.STOCK_VIEW,
             element: <UserStockView />,
           },

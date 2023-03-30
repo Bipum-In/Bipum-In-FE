@@ -11,9 +11,10 @@ const PATH = {
     EQUIPMENT_ADD: '/equipment-add',
   },
   USER: {
-    DASHBOARD: '/user-dashboard',
-    REQUEST: '/user-request',
-    STOCK_VIEW: '/user-stockview',
+    DASHBOARD: '/dashboard',
+    REQUEST: '/request',
+    REQUEST_LIST: '/request-list',
+    STOCK_VIEW: '/stockview',
   },
 };
 
