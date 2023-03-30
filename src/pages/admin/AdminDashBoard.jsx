@@ -30,7 +30,7 @@ export default function AdminDashBoard() {
           <TopSideContainer>
             <ManagementStatus isAdmin={isAdmin} getDashboard={getDashboard} />
             <AlertAndUseagesConteinr>
-              <AlertStatus getDashboard={getDashboard} />
+              <AlertStatus isAdmin={isAdmin} getDashboard={getDashboard} />
               <UseageCard />
             </AlertAndUseagesConteinr>
           </TopSideContainer>

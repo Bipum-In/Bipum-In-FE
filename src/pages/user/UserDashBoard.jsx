@@ -37,7 +37,7 @@ export default function UserDashBoard() {
         <UserDashBoardWrapper id="scrollable-div">
           <TopSideContainer>
             <ManagementStatus isAdmin={isAdmin} getDashboard={getDashboard} />
-            <AlertStatus />
+            <AlertStatus isAdmin={isAdmin} getDashboard={getDashboard} />
             <TestStatus />
           </TopSideContainer>
           <BottomSideContainer>

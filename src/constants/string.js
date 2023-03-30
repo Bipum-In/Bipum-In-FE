@@ -55,6 +55,12 @@ const HEADER_DROPDOWN = {
   PAYINFO: '결제정보',
   SETTINGS: '설정',
 };
+const REQUEST_STATUS = {
+  ACCEPT: '승인',
+  DECLINE: '거절',
+  DISPOSE: '폐기',
+};
+
 const IS_ADMIN = isAdmin => (isAdmin ? 'ADMIN' : 'USER');
 
 export const REQUEST_PAGES = {
@@ -94,6 +100,7 @@ const STRING = {
   CATEGORY,
   EQUIPMENT_STATUS,
   HEADER_DROPDOWN,
+  REQUEST_STATUS,
   IS_ADMIN,
 };
 
