@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { __dashboardStatus } from '../../redux/modules/dashboardStatus';
+import { adminDashboardStatus } from '../../redux/modules/dashboardStatus';
 import { getCategoryList } from '../../redux/modules/equipmentStatus';
 import ScrollToTop from '../../components/common/ScrollToTop';
 import ManagementStatus from '../../components/adminDashBoard/status/ManagementStatus';
@@ -13,12 +13,12 @@ export default function AdminDashBoard() {
   const isAdmin = true;
   const dispatch = useDispatch();
   const [status, setStatus] = useState('');
-  const { getDashboard, isDashboardError } = useSelector(
-    state => state.dashboardStatus.dashboardStatus
+  const { getDashboard, isDashboardLoading, isDashboardError } = useSelector(
+    state => state.dashboardStatus.adminDashboard
   );
 
   useEffect(() => {
-    dispatch(__dashboardStatus({ path: '/admin', status }));
+    dispatch(adminDashboardStatus({ path: '/admin', status }));
     dispatch(getCategoryList());
   }, [dispatch, status]);
 
