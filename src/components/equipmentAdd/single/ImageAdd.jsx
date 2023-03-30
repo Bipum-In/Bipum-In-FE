@@ -87,7 +87,6 @@ export default function ImageAdd({
 
 const ImageWrapper = styled.section`
   ${props => props.theme.FlexCol};
-  ${props => props.theme.FlexCenter};
   width: 23.75rem;
   height: 30.625rem;
   font-weight: 600;
@@ -99,7 +98,7 @@ const ImageContainer = styled.label`
   display: flex;
   ${props => props.theme.FlexCenter};
   width: 100%;
-  height: ${props => (props.preview ? 'auto' : '23.75rem;')};
+  height: 23.75rem;
   border-radius: 0.5rem;
   margin: 1.375rem 0;
   background-color: ${props =>

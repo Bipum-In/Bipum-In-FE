@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function ImageCarousel({ imageUrlList, onDeleteImage }) {
   const [imgPage, setImgPage] = useState(0);
+
   const handleImgNext = () =>
     setImgPage(state =>
       Math.abs(state) === imageUrlList.length - 1 ? 0 : state - 1
@@ -21,11 +22,15 @@ export default function ImageCarousel({ imageUrlList, onDeleteImage }) {
 
   const handleDotClick = index => setImgPage(-index);
 
+  const deleteSetImgPage = () =>
+    setImgPage(state => (Math.abs(state) ? state + 1 : state));
+
   return (
     <ImgContainer>
       <DeleteImgContainer
         onClick={() => {
           onDeleteImage(imgPage);
+          deleteSetImgPage();
         }}
       >
         <DeleteImg />
@@ -114,7 +119,7 @@ const Dots = styled.ul`
   width: 100%;
 
   li:nth-child(${props => props.pageNum}) {
-    background-color: grey;
+    background-color: ${props => props.theme.color.blue.brandColor7};
   }
 `;
 
@@ -123,7 +128,7 @@ const Dot = styled.li`
   height: 10px;
   margin: 0 0.5rem;
   border-radius: 50%;
-  background-color: blue;
+  background-color: ${props => props.theme.color.blue.brandColor3};
   :hover {
     transform: scale(1.3);
   }
