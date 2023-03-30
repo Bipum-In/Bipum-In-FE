@@ -6,7 +6,7 @@ import { getCategoryList } from '../../redux/modules/equipmentStatus';
 import ScrollToTop from '../../components/common/ScrollToTop';
 import ManagementStatus from '../../components/adminDashBoard/status/ManagementStatus';
 import AlertStatus from '../../components/adminDashBoard/status/AlertStatus';
-import TestStatus from '../../components/adminDashBoard/status/TestStatus';
+import UseageCard from '../../components/adminDashBoard/status/UseageCard';
 import CategoryStatus from '../../components/adminDashBoard/status/CategoryStatus';
 
 export default function AdminDashBoard() {
@@ -29,8 +29,10 @@ export default function AdminDashBoard() {
         <AdminDashBoardWrapper id="scrollable-div">
           <TopSideContainer>
             <ManagementStatus isAdmin={isAdmin} getDashboard={getDashboard} />
-            <AlertStatus />
-            <TestStatus />
+            <AlertAndUseagesConteinr>
+              <AlertStatus />
+              <UseageCard />
+            </AlertAndUseagesConteinr>
           </TopSideContainer>
           <BottomSideContainer>
             <CategoryStatus
@@ -59,12 +61,9 @@ const TopSideContainer = styled.div`
   width: 100%;
   padding: 0 3.25rem 2.5rem 0;
   gap: 3.5rem;
-  @media (max-width: ${props => props.theme.screen.dashboardFullWidth}) {
-    ${props => props.theme.FlexRow};
-    flex-wrap: wrap;
-  }
-  @media (max-width: ${props => props.theme.screen.fullWideDesktop}) {
+  @media (max-width: ${props => props.theme.screen.dashboardDesktopMaxWidth}) {
     ${props => props.theme.FlexCol};
+    flex-wrap: wrap;
   }
 `;
 
@@ -74,4 +73,9 @@ const BottomSideContainer = styled.div`
   align-items: flex-start;
   width: 100%;
   padding-right: 3.25rem;
+`;
+
+const AlertAndUseagesConteinr = styled.div`
+  ${props => props.theme.FlexRow};
+  gap: 2.625rem;
 `;
