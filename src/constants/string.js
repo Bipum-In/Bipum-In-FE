@@ -55,6 +55,7 @@ const HEADER_DROPDOWN = {
   PAYINFO: '결제정보',
   SETTINGS: '설정',
 };
+const IS_ADMIN = isAdmin => (isAdmin ? 'ADMIN' : 'USER');
 
 export const REQUEST_PAGES = {
   UNPROCESSED: {
@@ -93,6 +94,7 @@ const STRING = {
   CATEGORY,
   EQUIPMENT_STATUS,
   HEADER_DROPDOWN,
+  IS_ADMIN,
 };
 
 export default STRING;
