@@ -9,6 +9,7 @@ import {
 } from '../components/layout/CategoryItem';
 
 import logo from '../styles/logo.svg';
+import { ReactComponent as Eye } from '../styles/sidebarIcon/eye.svg';
 import { ReactComponent as Add } from '../styles/sidebarIcon/add.svg';
 import { ReactComponent as Dashboard } from '../styles/sidebarIcon/dashboard.svg';
 import { ReactComponent as List } from '../styles/sidebarIcon/list.svg';
@@ -32,20 +33,23 @@ export default function Sidebar({
   setIsSidebarHidden,
   isMobileView,
 }) {
-  const isAdmin = true;
+  const isAdmin = false;
+  const isAdminStr = STRING.IS_ADMIN(isAdmin);
+
   const navigate = useNavigate();
   const theme = useTheme();
-  const categoryIcons = [<Dashboard />, <List />, <Management />, <Add />];
+  const categoryIcons = isAdmin
+    ? [<Dashboard />, <List />, <Management />, <Add />]
+    : [<Dashboard />, <Add />, <List />, <Eye />];
 
   const { pathname } = useLocation();
   const [logoutModal, setLogoutModal] = useModalState();
 
   const handleClickCategory = e => {
     const name = e.target.innerText;
-    const isAdminStr = STRING.IS_ADMIN(isAdmin);
     const routerPathArray = Object.values(ROUTER.PATH[isAdminStr]);
-
-    Object.values(STRING.SIDEBAR).forEach((sidebarName, index) => {
+    console.log(routerPathArray);
+    Object.values(STRING.SIDEBAR[isAdminStr]).forEach((sidebarName, index) => {
       if (sidebarName === name) {
         navigate(routerPathArray[index]);
       }
@@ -83,18 +87,20 @@ export default function Sidebar({
           <Logo />
         </LogoContainer>
         <SidebarCategoryContainer>
-          {Object.values(STRING.SIDEBAR).map((sidebarName, index) => (
-            <CategoryItemLeft
-              key={uuidv4()}
-              onClick={handleClickCategory}
-              category={`${
-                ARRAY.SIDEBAR.SIDEBAR_STYLE(pathname, isAdmin)[index]
-              }`}
-              title={sidebarName}
-            >
-              {categoryIcons[index]}
-            </CategoryItemLeft>
-          ))}
+          {Object.values(STRING.SIDEBAR[isAdminStr]).map(
+            (sidebarName, index) => (
+              <CategoryItemLeft
+                key={uuidv4()}
+                onClick={handleClickCategory}
+                category={`${
+                  ARRAY.SIDEBAR.SIDEBAR_STYLE(pathname, isAdmin)[index]
+                }`}
+                title={sidebarName}
+              >
+                {categoryIcons[index]}
+              </CategoryItemLeft>
+            )
+          )}
           <LogoutContainer>
             <CategoryItemRight onClick={handleModalShow} title="로그아웃">
               <Logout />
