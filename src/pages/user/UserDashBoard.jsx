@@ -37,8 +37,10 @@ export default function UserDashBoard() {
         <UserDashBoardWrapper id="scrollable-div">
           <TopSideContainer>
             <ManagementStatus isAdmin={isAdmin} getDashboard={getDashboard} />
-            <AlertStatus isAdmin={isAdmin} getDashboard={getDashboard} />
-            <TestStatus />
+            <AlertAndUseagesConteinr>
+              <AlertStatus isAdmin={isAdmin} getDashboard={getDashboard} />
+              <TestStatus />
+            </AlertAndUseagesConteinr>
           </TopSideContainer>
           <BottomSideContainer>
             <CategoryStatus
@@ -86,4 +88,9 @@ const BottomSideContainer = styled.div`
   align-items: flex-start;
   width: 100%;
   padding-right: 3.25rem;
+`;
+
+const AlertAndUseagesConteinr = styled.div`
+  ${props => props.theme.FlexRow};
+  gap: 2.625rem;
 `;

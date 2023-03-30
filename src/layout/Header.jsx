@@ -4,16 +4,18 @@ import { ReactComponent as Search } from '../styles/commonIcon/search.svg';
 import { ReactComponent as Alaram } from '../styles/commonIcon/alarm.svg';
 import { ReactComponent as Rotate } from '../styles/headerIcon/rotate.svg';
 import { ReactComponent as Useinfo } from '../styles/headerIcon/useinfo.svg';
+import { ReactComponent as Manage } from '../styles/headerIcon/manage.svg';
+
 import { ReactComponent as Pay } from '../styles/headerIcon/pay.svg';
 import { ReactComponent as Setting } from '../styles/headerIcon/setting.svg';
 import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg';
 import QUERY from '../constants/query';
 import STRING from '../constants/string';
 import { v4 as uuidv4 } from 'uuid';
-
 import Storage from '../utils/localStorage';
 import useOutsideClick from '../hooks/useOutsideClick';
 import { useNavigate } from 'react-router-dom';
+import ROUTER from '../constants/routerConst';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -25,6 +27,7 @@ export default function Header() {
 
   const local = Storage.getLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME);
   const { empName, deptName, image, isAdmin } = local;
+
   const headerData = [
     {
       icon: <Useinfo />,
@@ -32,14 +35,37 @@ export default function Header() {
       path: '',
     },
     {
-      icon: <Rotate />,
-      text: STRING.HEADER_DROPDOWN.ADMINMODE,
-      isAdmin: isAdmin,
+      icon: <Manage />,
+      text: STRING.HEADER_DROPDOWN.MANAGE,
       path: '',
     },
-    { icon: <Pay />, text: STRING.HEADER_DROPDOWN.PAYINFO, path: '' },
-    { icon: <Setting />, text: STRING.HEADER_DROPDOWN.SETTINGS, path: '' },
-  ].filter(({ isAdmin }) => isAdmin !== false);
+    {
+      icon: <Rotate />,
+      text: isAdmin
+        ? STRING.HEADER_DROPDOWN.USERMODE
+        : STRING.HEADER_DROPDOWN.ADMINMODE,
+
+      click: () => {
+        Storage.setLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME, {
+          ...local,
+          isAdmin: !isAdmin,
+        });
+        navigate(
+          isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
+        );
+      },
+    },
+    {
+      icon: <Pay />,
+      text: STRING.HEADER_DROPDOWN.PAYINFO,
+      path: '',
+    },
+    {
+      icon: <Setting />,
+      text: STRING.HEADER_DROPDOWN.SETTINGS,
+      path: '',
+    },
+  ];
 
   return (
     <HeaderWrapper>
@@ -80,7 +106,7 @@ export default function Header() {
                   {headerData.map(item => (
                     <DropdownList
                       key={uuidv4()}
-                      onClick={() => navigate(item.path)}
+                      onClick={item.click || (() => navigate(item.path))}
                     >
                       {item.icon}
                       {item.text}
@@ -121,7 +147,7 @@ const HeaderWrapper = styled.header`
   left: 0;
   width: 100vw;
   height: 6.25rem;
-  z-index: 0;
+  z-index: 99;
   background-color: ${props => props.theme.color.blue.brandColor7};
 `;
 
@@ -191,6 +217,7 @@ const LoginUserInfoDropDown = styled.div`
   align-items: center;
   padding: 0 0.375rem;
   width: 100%;
+  min-width: 11.25rem;
   height: 3.75rem;
   gap: 0.375rem;
   background-color: white;
@@ -212,9 +239,11 @@ const UserInfoDetailContainer = styled.div`
   align-items: flex-start;
   justify-content: center;
   gap: 0.25rem;
+  min-width: 5.625rem;
 `;
 const InfoCompanyTitle = styled.span`
   font-size: 0.875rem;
+  padding-top: 0.1875rem;
   color: ${props => props.theme.color.grey.brandColor6};
 `;
 
@@ -227,6 +256,7 @@ const InfoUserName = styled.span`
 const UserDropDown = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
+  margin-left: auto;
   width: 1.5rem;
   height: 1.5rem;
   transform: ${({ isRotated }) =>
@@ -246,12 +276,13 @@ const DropdownContainer = styled.div`
   border-radius: 0.25rem;
   padding: 1rem;
   z-index: 10;
-
+  visibility: hidden;
   opacity: 0;
   transform: translateY(-1.25rem);
   transition: opacity 0.3s ease, transform 0.3s ease;
   ${LoginUserInfoDropDown}.visible & {
     opacity: 1;
     transform: translateY(0);
+    visibility: visible;
   }
 `;
