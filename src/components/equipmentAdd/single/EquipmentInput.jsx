@@ -1,7 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+
 import Input from '../../../elements/Input';
 import Button from '../../../elements/Button';
+
+import { ReactComponent as AddImgIcon } from '../../../styles/commonIcon/addImg.svg';
 
 export default function EquipmentInput({ value, setValue, onCrawling }) {
   return (
@@ -13,8 +16,14 @@ export default function EquipmentInput({ value, setValue, onCrawling }) {
           setState={setValue[0]}
           placeholder="제품명을 기입해주세요"
         />
-        <Button submit onClick={onCrawling} disabled={value[0].length < 2}>
-          크롤링
+        <Button
+          submit
+          crawling
+          onClick={onCrawling}
+          disabled={value[0].length < 2}
+        >
+          <AddImgIcon />
+          사진 자동 첨부
         </Button>
       </TypeBox>
       <TypeBox>
