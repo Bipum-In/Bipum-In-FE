@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import { KEYFRAME } from '../../../styles/keyframes';
 
@@ -92,20 +92,4 @@ const UseageBtnContainer = styled.div`
       content: '';
     }
   }
-`;
-
-const Star = styled.div`
-  position: absolute;
-  width: 5px;
-  height: 5px;
-  top: 0;
-  left: 0;
-  background: white;
-  border-radius: 50%;
-  animation: ${KEYFRAME.starAnimation}
-    ${({ animationDuration }) => animationDuration || '4s'} linear both infinite;
-  ${({ size }) => size && `width: ${size}px; height: ${size}px;`}
-  ${({ bgColor }) => bgColor && `background: ${bgColor};`}
-  ${({ positionLeft }) => positionLeft && `left: ${positionLeft}px;`}
-  ${({ opacity }) => opacity && `opacity: ${opacity};`}
 `;
