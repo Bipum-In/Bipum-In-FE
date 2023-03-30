@@ -11,14 +11,12 @@ import CreatedAtFormatDate from './detail/CreatedAtFormatDate';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export default function RequestDetail({ isClose, detail }) {
+export default function RequestDetail({ isClose, detail, isAdmin }) {
   const {
     categoryId,
     requestId,
-    isAdmin,
     requestType,
     requestStatus,
-    acceptResult,
     categoryName,
     modelName,
     serialNum,

@@ -1,6 +1,8 @@
 import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as DefaultImage } from '../../../styles/commonIcon/addImgIcon2.svg';
+import { ReactComponent as DragIcon } from '../../../styles/commonIcon/drag.svg';
+
 import ImageCarousel from '../../common/ImageCarousel';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -14,6 +16,7 @@ export default function ImageAdd({
   const [invalidFile, setInvalidFile] = useState(false);
   const inputRef = useRef(null);
 
+  const handlerInputFile = () => inputRef.current.click();
   const handleDragOver = useCallback(e => e.preventDefault(), []);
   const handleDragLeave = useCallback(() => setIsCurrent(''), []);
   const handleDragEnterOrDrop = useCallback(
@@ -56,20 +59,25 @@ export default function ImageAdd({
         onDrop={handleDragEnterOrDrop}
         isCurrent={isCurrent}
       >
+        {!preview && (
+          <DragAndDropIcon>
+            <DragIcon />
+          </DragAndDropIcon>
+        )}
         {preview ? (
           <ImageCarousel imageUrlList={preview} onDeleteImage={onDeleteImage} />
         ) : (
-          <DefaultImgWrapper onClick={() => inputRef.current.click()}>
+          <DefaultImgWrapper onClick={handlerInputFile}>
             <DefaultImage />
             <DefulatDesc>
               {invalidFile
                 ? '형식에 맞지 않은 파일입니다'
-                : '클릭하여 사진을 추가해주세요.'}
+                : '클릭또는 드래그해\n사진을 추가해주세요.'}
             </DefulatDesc>
           </DefaultImgWrapper>
         )}
       </ImageContainer>
-      <ImageinputFile>
+      <ImageinputFile onClick={handlerInputFile}>
         파일 선택하기
         <input
           ref={inputRef}
@@ -85,6 +93,17 @@ export default function ImageAdd({
   );
 }
 
+const DragAndDropIcon = styled.div`
+  position: absolute;
+  bottom: -10%;
+  left: -10%;
+  transition: transform 0.7s;
+  ${props => props.theme.CursorActive};
+  svg {
+    width: 4.375rem;
+  }
+`;
+
 const ImageWrapper = styled.section`
   ${props => props.theme.FlexCol};
   width: 23.75rem;
@@ -92,7 +111,14 @@ const ImageWrapper = styled.section`
   font-weight: 600;
   font-size: 1rem;
   line-height: 1.3125rem;
+
+  @media screen and (min-width: 738px) and (any-hover: hover) {
+    &:hover ${DragAndDropIcon} {
+      transform: translate3d(50px, -20px, 0);
+    }
+  }
 `;
+
 const ImageContainer = styled.label`
   position: relative;
   display: flex;
@@ -103,7 +129,6 @@ const ImageContainer = styled.label`
   margin: 1.375rem 0;
   background-color: ${props =>
     props.preview ? 'transperant' : props.theme.color.grey.brandColor1};
-  overflow: hidden;
   border: ${({ isCurrent }) => {
     if (isCurrent === '') return 'none';
     return `2px dashed ${isCurrent ? 'green' : 'red'}`;
@@ -124,6 +149,8 @@ const DefaultImgWrapper = styled.div`
 const DefulatDesc = styled.span`
   font-size: 1.125rem;
   padding-top: 1.125rem;
+  white-space: pre-line;
+  text-align: center;
   color: ${props => props.theme.color.grey.brandColor4};
 `;
 

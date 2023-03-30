@@ -15,33 +15,54 @@ export default function RequestShow({
   setKeyword,
   onClickDetail,
   resizeRef,
+  isAdmin,
 }) {
   const selectBoxList = {
     name: ['전체 보기', '처리전', '처리중', '처리 완료'],
     type: ['', 'UNPROCESSED', 'PROCESSING', 'PROCESSED'],
   };
 
-  const headerList = [
-    { name: '요청구분', width: '5rem' },
-    { name: '종류', width: '4.375rem' },
-    { name: '제품명', width: '18rem' },
-    { name: '신청자', width: '4.375rem' },
-    { name: '담당부서', width: '7.5rem' },
-    { name: '신청일', width: '13.75rem' },
-    { name: '상태', width: '6rem' },
-    { name: '결과', width: '2.8125rem' },
-  ];
+  const headerList = isAdmin
+    ? [
+        { name: '요청구분', width: '5rem' },
+        { name: '종류', width: '4.375rem' },
+        { name: '제품명', width: '18rem' },
+        { name: '신청자', width: '4.375rem' },
+        { name: '담당부서', width: '7.5rem' },
+        { name: '신청일', width: '13.75rem' },
+        { name: '상태', width: '6rem' },
+        { name: '결과', width: '2.8125rem' },
+      ]
+    : [
+        { name: '요청구분', width: '5.75rem' },
+        { name: '종류', width: '7.4375rem' },
+        { name: '제품명', width: '21.875rem' },
+        { name: '신청일', width: '11.4375rem' },
+        { name: '담당자', width: '3.1875rem' },
+        { name: '상태', width: '3.1875rem' },
+        { name: '결과', width: '2.8125rem' },
+      ];
 
-  const contentKeyArr = [
-    'requestType',
-    'categoryName',
-    'modelName',
-    'empName',
-    'deptName',
-    'createdAt',
-    'status',
-    'acceptResult',
-  ];
+  const contentKeyArr = isAdmin
+    ? [
+        'requestType',
+        'categoryName',
+        'modelName',
+        'empName',
+        'deptName',
+        'createdAt',
+        'status',
+        'acceptResult',
+      ]
+    : [
+        'requestType',
+        'categoryName',
+        'modelName',
+        'createdAt',
+        'empName',
+        'status',
+        'acceptResult',
+      ];
 
   return (
     <RequestShowContainer>
@@ -55,6 +76,7 @@ export default function RequestShow({
         setKeyword={setKeyword}
       />
       <StatusList
+        isAdmin={isAdmin}
         headerList={headerList}
         listHeaderRef={resizeRef.listHeaderRef}
         listRef={resizeRef.listRef}

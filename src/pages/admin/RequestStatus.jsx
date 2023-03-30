@@ -31,9 +31,12 @@ export default function RequestStatus() {
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
+  const isAdmin = false;
+  const path = isAdmin ? '/admin' : '';
+
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
-    dispatch(__requestStatus({ keyword, type, status, page, size }));
+    dispatch(__requestStatus({ path, keyword, type, status, page, size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,
@@ -84,6 +87,7 @@ export default function RequestStatus() {
           onClickMenu={handleClickMenu}
         />
         <RequestShow
+          isAdmin={isAdmin}
           requestData={getRequest}
           setSelectName={categoryTitle}
           page={page}
@@ -101,6 +105,8 @@ export default function RequestStatus() {
         <RequestModal
           isClose={() => setModal({ ...modal, show: false })}
           detailId={modal.detailId}
+          path={path}
+          isAdmin={isAdmin}
         />
       </Modal>
     </>

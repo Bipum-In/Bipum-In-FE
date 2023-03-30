@@ -9,6 +9,7 @@ export default function StatusList({
   content,
   contentKeyArr,
   onDetail,
+  isAdmin,
 }) {
   return (
     <RequestShowBody>
@@ -22,7 +23,11 @@ export default function StatusList({
             <FourTh width={headerList[4].width}>{headerList[4].name}</FourTh>
             <FiveTh width={headerList[5].width}>{headerList[5].name}</FiveTh>
             <SixTh width={headerList[6].width}>{headerList[6].name}</SixTh>
-            <SevenTh width={headerList[7].width}>{headerList[7].name}</SevenTh>
+            {isAdmin && (
+              <SevenTh width={headerList[7].width}>
+                {headerList[7].name}
+              </SevenTh>
+            )}
           </tr>
         </RequestShowListTitle>
       </table>
@@ -43,51 +48,77 @@ export default function StatusList({
                 <Two width={headerList[2].width}>
                   {list[contentKeyArr[2]] || '-'}
                 </Two>
-                {headerList[3].name === '등록일자' ? (
-                  <Three width={headerList[3].width}>
-                    {FormatDateToDot(list[contentKeyArr[3]]) || '-'}
-                  </Three>
+                {isAdmin ? (
+                  <>
+                    {' '}
+                    {headerList[3].name === '등록일자' ? (
+                      <Three width={headerList[3].width}>
+                        {FormatDateToDot(list[contentKeyArr[3]]) || '-'}
+                      </Three>
+                    ) : (
+                      <Three width={headerList[3].width}>
+                        {list[contentKeyArr[3]] || '-'}
+                      </Three>
+                    )}
+                  </>
                 ) : (
                   <Three width={headerList[3].width}>
-                    {list[contentKeyArr[3]] || '-'}
+                    {FormatDateToDot(list[contentKeyArr[3]] || '-')}
                   </Three>
                 )}
                 <Four width={headerList[4].width}>
                   {list[contentKeyArr[4]] || '-'}
                 </Four>
-                {headerList[5].name === '사용자' ? (
+                {isAdmin ? (
+                  <>
+                    {' '}
+                    {headerList[5].name === '사용자' ? (
+                      <Five width={headerList[5].width}>
+                        {list[contentKeyArr[5]] || '-'}
+                      </Five>
+                    ) : (
+                      <Five width={headerList[5].width}>
+                        {FormatKoreanTime(list[contentKeyArr[5]]) || '-'}
+                      </Five>
+                    )}
+                  </>
+                ) : (
                   <Five width={headerList[5].width}>
                     {list[contentKeyArr[5]] || '-'}
                   </Five>
-                ) : (
-                  <Five width={headerList[5].width}>
-                    {FormatKoreanTime(list[contentKeyArr[5]]) || '-'}
-                  </Five>
                 )}
-                {headerList[7].name === '상태' ? (
+                {isAdmin ? (
                   <>
-                    <Six width={headerList[6].width}>
-                      {list[contentKeyArr[6]] || '-'}
-                    </Six>
-                    <Seven width={headerList[7].width}>
-                      <Status>
-                        <StatusColor status={list[contentKeyArr[7]]} />
-                        {list[contentKeyArr[7]] || '-'}
-                      </Status>
-                    </Seven>
+                    {headerList[7].name === '상태' ? (
+                      <>
+                        <Six width={headerList[6].width}>
+                          {list[contentKeyArr[6]] || '-'}
+                        </Six>
+                        <Seven width={headerList[7].width}>
+                          <Status>
+                            <StatusColor status={list[contentKeyArr[7]]} />
+                            {list[contentKeyArr[7]] || '-'}
+                          </Status>
+                        </Seven>
+                      </>
+                    ) : (
+                      <>
+                        <Six width={headerList[6].width}>
+                          {list[contentKeyArr[6]] || '-'}
+                        </Six>
+                        <RequsetSeven
+                          width={headerList[7].width}
+                          status={list[contentKeyArr[7]]}
+                        >
+                          {list[contentKeyArr[7]] || '-'}
+                        </RequsetSeven>
+                      </>
+                    )}
                   </>
                 ) : (
-                  <>
-                    <Six width={headerList[6].width}>
-                      {list[contentKeyArr[6]] || '-'}
-                    </Six>
-                    <RequsetSeven
-                      width={headerList[7].width}
-                      status={list[contentKeyArr[7]]}
-                    >
-                      {list[contentKeyArr[7]] || '-'}
-                    </RequsetSeven>
-                  </>
+                  <Six width={headerList[6].width}>
+                    {list[contentKeyArr[6]] || '-'}
+                  </Six>
                 )}
               </tr>
             </RequestShowList>

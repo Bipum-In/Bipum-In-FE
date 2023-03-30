@@ -32,14 +32,14 @@ export const __requestStatus = Redux.asyncThunk(
   'REQUEST',
   payload =>
     axios.get(
-      `/api/admin/requests?keyword=${payload.keyword}&type=${payload.type}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
+      `/api${payload.path}/requests?keyword=${payload.keyword}&type=${payload.type}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
     ),
   response => response.data.data
 );
 
 export const requestDetail = Redux.asyncThunk(
   'DETAIL',
-  payload => axios.get(`/api/admin/requests/${payload}`),
+  payload => axios.get(`/api${payload.path}/requests/${payload.detailId}`),
   response => response.data.data
 );
 
