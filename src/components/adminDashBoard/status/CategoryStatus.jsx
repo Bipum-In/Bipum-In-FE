@@ -11,6 +11,7 @@ import useSelectMenu from '../../../hooks/useSelectMenu';
 import STRING from '../../../constants/string';
 import ROUTER from '../../../constants/routerConst';
 import UserDashboardCard from '../UserDashboardCard';
+import { setCategoryData } from '../../../redux/modules/equipmentStatus';
 
 export default function CategoryStatus({
   isAdmin,
@@ -18,6 +19,9 @@ export default function CategoryStatus({
   setStatus,
   onDetailModal,
 }) {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { getCategory, isCategoryError } = useSelector(
     state => state.equipmentStatus.category
   );
@@ -39,10 +43,8 @@ export default function CategoryStatus({
     return categoryList.filter(list => list.name === name);
   };
 
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const handleCategoryClick = () => {
+  const handleCategoryClick = (id, name) => {
+    dispatch(setCategoryData({ categoryId: id, categoryName: name }));
     navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT);
   };
 
@@ -67,7 +69,8 @@ export default function CategoryStatus({
             {supplyDtos.map(card =>
               isAdmin ? (
                 <DashboardCard
-                  // onClick={() => handleCategoryClick()}
+                  handleCategoryClick={handleCategoryClick}
+                  categoryId={card.categoryId}
                   key={uuidv4()}
                   totalCount={card.totalCount}
                   categoryName={card.categoryName}
