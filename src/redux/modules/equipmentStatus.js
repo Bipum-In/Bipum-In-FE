@@ -102,7 +102,7 @@ const equipmentStatusSlice = Redux.slice(
       state.supplyHistory.user = { content: [], lastPage: false };
     },
     setCategoryData: (state, action) => {
-      state.supplyHistory.categoryIdData = action.payload.categoryId;
+      state.categoryData.categoryIdData = action.payload.categoryId;
       state.categoryData.categoryNameData = action.payload.categoryName;
     },
   },
