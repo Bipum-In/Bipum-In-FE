@@ -48,7 +48,6 @@ export default function Sidebar({
   const handleClickCategory = e => {
     const name = e.target.innerText;
     const routerPathArray = Object.values(ROUTER.PATH[isAdminStr]);
-    console.log(routerPathArray);
     Object.values(STRING.SIDEBAR[isAdminStr]).forEach((sidebarName, index) => {
       if (sidebarName === name) {
         navigate(routerPathArray[index]);
@@ -132,7 +131,7 @@ const SidebarWrapper = styled.aside`
   background-color: white;
   box-shadow: -0.3125rem 0 1.5625rem 0 rgba(0, 0, 0, 0.25);
   border-radius: 0 2.5rem 2.5rem 0;
-  z-index: 1;
+  z-index: 100;
   transform: ${({ isHidden }) => (isHidden ? 'translateX(-100%)' : 'none')};
   transition: transform 0.3s ease-in-out;
 `;
