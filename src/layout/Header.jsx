@@ -2,23 +2,44 @@ import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
 import { ReactComponent as Search } from '../styles/commonIcon/search.svg';
 import { ReactComponent as Alaram } from '../styles/commonIcon/alarm.svg';
-import { ReactComponent as Settings } from '../styles/commonIcon/settings.svg';
+import { ReactComponent as Rotate } from '../styles/headerIcon/rotate.svg';
+import { ReactComponent as Useinfo } from '../styles/headerIcon/useinfo.svg';
+import { ReactComponent as Pay } from '../styles/headerIcon/pay.svg';
+import { ReactComponent as Setting } from '../styles/headerIcon/setting.svg';
 import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg';
+import QUERY from '../constants/query';
+import STRING from '../constants/string';
+import { v4 as uuidv4 } from 'uuid';
 
+import Storage from '../utils/localStorage';
 import useOutsideClick from '../hooks/useOutsideClick';
-import test from '../styles/test.png';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header() {
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
-  const toggleDropdown = () => {
-    setIsDropdownVisible(!isDropdownVisible);
-  };
-
+  const navigate = useNavigate();
   const dropDownRef = useRef(null);
-  useOutsideClick(dropDownRef, () => {
-    setIsDropdownVisible(false);
-  });
+
+  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
+  const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
+  useOutsideClick(dropDownRef, () => setIsDropdownVisible(false));
+
+  const local = Storage.getLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME);
+  const { empName, deptName, image, isAdmin } = local;
+  const headerData = [
+    {
+      icon: <Useinfo />,
+      text: STRING.HEADER_DROPDOWN.USERINFO,
+      path: '',
+    },
+    {
+      icon: <Rotate />,
+      text: STRING.HEADER_DROPDOWN.ADMINMODE,
+      isAdmin: isAdmin,
+      path: '',
+    },
+    { icon: <Pay />, text: STRING.HEADER_DROPDOWN.PAYINFO, path: '' },
+    { icon: <Setting />, text: STRING.HEADER_DROPDOWN.SETTINGS, path: '' },
+  ].filter(({ isAdmin }) => isAdmin !== false);
 
   return (
     <HeaderWrapper>
@@ -36,25 +57,37 @@ export default function Header() {
             <IconContainer>
               <Alaram />
             </IconContainer>
-            <IconContainer>
-              <Settings />
-            </IconContainer>
             {/* 드롭다운 컨테이너 */}
             <LoginUserInfoDropDown
               onClick={toggleDropdown}
               className={isDropdownVisible ? 'visible' : ''}
               ref={dropDownRef}
             >
-              <UserImgContainer />
+              <UserImgContainer userImg={image} />
               <UserInfoDetailContainer>
-                <InfoCompanyTitle>AP코퍼레이션</InfoCompanyTitle>
-                <InfoUserName>김선중 관리자님</InfoUserName>
+                <InfoCompanyTitle>{deptName}</InfoCompanyTitle>
+                <InfoUserName>
+                  {empName} {isAdmin && '관리자'}님
+                </InfoUserName>
               </UserInfoDetailContainer>
               <UserDropDown isRotated={isDropdownVisible}>
                 <ArrowDown />
               </UserDropDown>
               {/* 드롭다운 디테일 */}
-              <DropdownContainer></DropdownContainer>
+
+              <DropdownContainer>
+                <DropdownBox>
+                  {headerData.map(item => (
+                    <DropdownList
+                      key={uuidv4()}
+                      onClick={() => navigate(item.path)}
+                    >
+                      {item.icon}
+                      {item.text}
+                    </DropdownList>
+                  ))}
+                </DropdownBox>
+              </DropdownContainer>
             </LoginUserInfoDropDown>
           </HeaderRightContainer>
         </ItemContainer>
@@ -62,6 +95,25 @@ export default function Header() {
     </HeaderWrapper>
   );
 }
+
+const DropdownBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+
+  * svg {
+    cursor: pointer;
+    width: 1.25rem;
+    height: 1.125rem;
+  }
+`;
+
+const DropdownList = styled.div`
+  display: flex;
+  height: 100%;
+  gap: 1rem;
+`;
 
 const HeaderWrapper = styled.header`
   position: fixed;
@@ -151,7 +203,7 @@ const UserImgContainer = styled.div`
   width: 3rem;
   height: 3rem;
   border-radius: 0.375rem;
-  background: url(${test}) no-repeat center center / cover,
+  background: url(${props => props.userImg}) no-repeat center center / cover,
     ${props => props.theme.color.grey.brandColor2};
 `;
 
