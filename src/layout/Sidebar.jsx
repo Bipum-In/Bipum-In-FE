@@ -42,13 +42,14 @@ export default function Sidebar({
 
   const handleClickCategory = e => {
     const name = e.target.innerText;
-    name === STRING.SIDEBAR.DASHBOARD && navigate(ROUTER.PATH.ADMIN_DASHBOARD);
-    name === STRING.SIDEBAR.REQUEST_STATUS &&
-      navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
-    name === STRING.SIDEBAR.MANAGEMENT &&
-      navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT);
-    name === STRING.SIDEBAR.EQUIPMENT_ADD &&
-      navigate(ROUTER.PATH.ADMIN_EQUIPMENT_ADD);
+    const isAdminStr = STRING.IS_ADMIN(isAdmin);
+    const routerPathArray = Object.values(ROUTER.PATH[isAdminStr]);
+
+    Object.values(STRING.SIDEBAR).forEach((sidebarName, index) => {
+      if (sidebarName === name) {
+        navigate(routerPathArray[index]);
+      }
+    });
   };
 
   const handleLogoutBtn = e => {
