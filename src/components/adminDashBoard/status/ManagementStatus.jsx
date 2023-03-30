@@ -15,19 +15,21 @@ import { setRequestData } from '../../../redux/modules/requestStatus';
 export default function ManagementStatus({ isAdmin, getDashboard }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const dto = isAdmin ? getDashboard.data.requestsCountDto : getDashboard.data;
+  const {
+    requestsCountDto: { countMap, modifiedAtMap },
+  } = getDashboard.data;
 
   const moveToUnprocessed = () => {
     dispatch(setRequestData(REQUEST_PAGES.UNPROCESSED));
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
+    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
   };
 
   return (
     <>
-      {dto && (
+      {getDashboard && (
         <styleds.EquipmentTopContainer col="true" manage>
           <AnchorBtn
-            onClick={() => navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT)}
+            onClick={() => navigate(ROUTER.PATH.ADMIN.EQUIPMENT_MANAGEMENT)}
           >
             관리 현황 <ArrowIcon />
           </AnchorBtn>
@@ -40,16 +42,16 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
                 </NewAlertTitle>
                 <NewAlertNum>
                   {isAdmin
-                    ? dto.countMap.UnProcessedRequests
-                    : dto.userCountMap.UnProcessedUserRequests}
+                    ? countMap.UnProcessedRequests
+                    : countMap.UnProcessedUserRequests}
                   건
                 </NewAlertNum>
               </NewAlertContainer>
             </ManagementAlertTopContainer>
             <ManagementAlertBottomContainer>
               <ManagementCards
-                requestsCountData={isAdmin ? dto.countMap : dto.userCountMap}
-                requestsDate={isAdmin ? dto.modifiedAtMap : ''}
+                requestsCountData={countMap}
+                requestsDate={modifiedAtMap}
                 requestKey={
                   isAdmin
                     ? [
@@ -60,8 +62,8 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
                       ]
                     : [
                         'userCountSupply',
-                        'userCountReturn',
                         'userCountRepair',
+                        'userCountReturn',
                         'userCountReport',
                       ]
                 }

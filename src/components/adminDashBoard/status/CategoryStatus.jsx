@@ -45,7 +45,7 @@ export default function CategoryStatus({
 
   const handleCategoryClick = (id, name) => {
     dispatch(setCategoryData({ categoryId: id, categoryName: name }));
-    navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT);
+    navigate(ROUTER.PATH.ADMIN.EQUIPMENT_MANAGEMENT);
   };
 
   return (
@@ -55,7 +55,7 @@ export default function CategoryStatus({
         <>
           <AnchorBtn
             onClick={() => {
-              navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT);
+              navigate(ROUTER.PATH.ADMIN.EQUIPMENT_MANAGEMENT);
             }}
           >
             비품 목록

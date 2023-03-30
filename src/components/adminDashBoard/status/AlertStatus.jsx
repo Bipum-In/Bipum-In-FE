@@ -1,22 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import AnchorBtn from '../AnchorBtn';
-import { dashboardAlertData } from '../../../mock/dashboardAlertData';
 import { v4 as uuidv4 } from 'uuid';
 import { FormatKoreanTime } from '../../../utils/formatDate';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import { getCookie } from '../../../utils/cookie';
 import QUERY from '../../../constants/query';
 import Storage from '../../../utils/localStorage';
+import STRING from '../../../constants/string';
 
-export default function AlertStatus() {
-  const token = getCookie(QUERY.COOKIE.COOKIE_NAME);
-
-  //mookdata
-  const { alertDtos } = dashboardAlertData.data;
-
+export default function AlertStatus({ isAdmin, getDashboard }) {
   const [alarm, setAlarm] = useState(false);
+  const token = getCookie(QUERY.COOKIE.COOKIE_NAME);
+  const { notifications } = getDashboard.data;
 
   useEffect(() => {
     fetchData();
@@ -32,6 +29,7 @@ export default function AlertStatus() {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          heartbeatTimeout: 20 * 60 * 1000,
         }
       );
 
@@ -40,7 +38,6 @@ export default function AlertStatus() {
         const { userId } = Storage.getLocalStorageJSON(
           QUERY.STORAGE.LOCAL_NAME
         );
-        console.log(userId);
         if (alarmData !== `EventStream Created. [userId=${userId}]`) {
           setAlarm(true);
         }
@@ -52,21 +49,27 @@ export default function AlertStatus() {
 
   return (
     <>
-      {alertDtos && (
+      {notifications && (
         <styleds.EquipmentTopContainer col="true">
           <AnchorBtn onClick={() => {}}>알림</AnchorBtn>
           <styleds.AlertAndAddContainer>
             {alarm && <LnbAlarmPoint />}
-            {alertDtos.map(data => (
+            {notifications.map(data => (
               <AlertListContainer key={uuidv4()}>
-                <AlertImgContainer>
-                  <AlertImg src={data.alertImg} alt="" />
-                </AlertImgContainer>
+                {isAdmin ? (
+                  <AlertImgContainer>
+                    <AlertImg src={data.image} alt="" />
+                  </AlertImgContainer>
+                ) : (
+                  <AlertStatusContainer>
+                    <Status status={STRING.REQUEST_STATUS[data.accept_result]}>
+                      {STRING.REQUEST_STATUS[data.accept_result]}
+                    </Status>
+                  </AlertStatusContainer>
+                )}
                 <AlertDetailContainer>
-                  <AlertTitle>{data.alertTitle}</AlertTitle>
-                  <AlertData>
-                    {FormatKoreanTime(data.alertModifiedAt)}
-                  </AlertData>
+                  <AlertTitle>{data.content}</AlertTitle>
+                  <AlertData>{FormatKoreanTime(data.created_At)}</AlertData>
                 </AlertDetailContainer>
               </AlertListContainer>
             ))}
@@ -105,9 +108,52 @@ const AlertImgContainer = styled.div`
   height: 2.5rem;
   border-radius: 0.3125rem;
 `;
+
+const AlertStatusContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0.3125rem;
+`;
+
+const Status = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: ${props => props.width};
+  min-width: ${props => props.width};
+  border-radius: 0.25rem;
+  width: 2.5rem;
+  height: 1.8125rem;
+
+  ${props =>
+    props.status === '승인' &&
+    css`
+      color: #285818;
+      background-color: #e0ffd6;
+    `}
+
+  ${props =>
+    props.status === '거절' &&
+    css`
+      color: #e02121;
+      background-color: #ffe8e8;
+    `}
+
+    ${props =>
+    props.status === '폐기' &&
+    css`
+      color: #6d5517;
+      background-color: #efecd9;
+    `}
+`;
+
 const AlertImg = styled.img`
   object-fit: cover;
   ${props => props.theme.wh100};
+  border-radius: 0.25rem;
 `;
 
 const AlertDetailContainer = styled.div`

@@ -23,7 +23,7 @@ export default function RendingHeader() {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_LOCALHOST_URL}/api/user/kakao/callback&response_type=code`;
   };
 
-  const handleReturnDashboard = () => navigate(ROUTER.PATH.ADMIN_DASHBOARD);
+  const handleReturnDashboard = () => navigate(ROUTER.PATH.ADMIN.DASHBOARD);
   const handleLogoutBtn = e => {
     e.preventDefault();
     window.location.reload();

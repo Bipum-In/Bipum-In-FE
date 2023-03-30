@@ -50,7 +50,6 @@ export default function StatusList({
                 </Two>
                 {isAdmin ? (
                   <>
-                    {' '}
                     {headerList[3].name === '등록일자' ? (
                       <Three width={headerList[3].width}>
                         {FormatDateToDot(list[contentKeyArr[3]]) || '-'}
@@ -71,7 +70,6 @@ export default function StatusList({
                 </Four>
                 {isAdmin ? (
                   <>
-                    {' '}
                     {headerList[5].name === '사용자' ? (
                       <Five width={headerList[5].width}>
                         {list[contentKeyArr[5]] || '-'}

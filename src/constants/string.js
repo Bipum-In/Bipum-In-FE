@@ -4,10 +4,18 @@ const ADDMENUE = {
 };
 
 const SIDEBAR = {
-  DASHBOARD: '대시보드',
-  REQUEST_STATUS: '요청 현황',
-  MANAGEMENT: '비품 관리',
-  EQUIPMENT_ADD: '비품 등록',
+  ADMIN: {
+    DASHBOARD: '대시보드',
+    REQUEST_STATUS: '요청 현황',
+    MANAGEMENT: '비품 관리',
+    EQUIPMENT_ADD: '비품 등록',
+  },
+  USER: {
+    DASHBOARD: '대시보드',
+    REQUEST: '요청 하기',
+    REQUEST_LIST: '요청 내역',
+    STOCK_VIEW: '재고 보기',
+  },
 };
 
 const REQUEST_TYPES = {
@@ -55,6 +63,13 @@ const HEADER_DROPDOWN = {
   PAYINFO: '결제정보',
   SETTINGS: '설정',
 };
+const REQUEST_STATUS = {
+  ACCEPT: '승인',
+  DECLINE: '거절',
+  DISPOSE: '폐기',
+};
+
+const IS_ADMIN = isAdmin => (isAdmin ? 'ADMIN' : 'USER');
 
 export const REQUEST_PAGES = {
   UNPROCESSED: {
@@ -93,6 +108,8 @@ const STRING = {
   CATEGORY,
   EQUIPMENT_STATUS,
   HEADER_DROPDOWN,
+  REQUEST_STATUS,
+  IS_ADMIN,
 };
 
 export default STRING;
