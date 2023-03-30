@@ -49,6 +49,13 @@ const EQUIPMENT_STATUS = {
   REPAIRING: '수리중',
 };
 
+const HEADER_DROPDOWN = {
+  USERINFO: '내 정보',
+  ADMINMODE: '관리자 모드 전환',
+  PAYINFO: '결제정보',
+  SETTINGS: '설정',
+};
+
 export const REQUEST_PAGES = {
   UNPROCESSED: {
     name: REQUEST_NAME.ALL,
@@ -85,6 +92,7 @@ const STRING = {
   REQUEST_NAME,
   CATEGORY,
   EQUIPMENT_STATUS,
+  HEADER_DROPDOWN,
 };
 
 export default STRING;
