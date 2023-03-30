@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import AnchorBtn from '../AnchorBtn';
-import { dashboardAlertData } from '../../../mock/dashboardAlertData';
 import { v4 as uuidv4 } from 'uuid';
 import { FormatKoreanTime } from '../../../utils/formatDate';
 import { EventSourcePolyfill } from 'event-source-polyfill';
@@ -10,13 +9,10 @@ import { getCookie } from '../../../utils/cookie';
 import QUERY from '../../../constants/query';
 import Storage from '../../../utils/localStorage';
 
-export default function AlertStatus() {
-  const token = getCookie(QUERY.COOKIE.COOKIE_NAME);
-
-  //mookdata
-  const { alertDtos } = dashboardAlertData.data;
-
+export default function AlertStatus({ getDashboard }) {
   const [alarm, setAlarm] = useState(false);
+  const token = getCookie(QUERY.COOKIE.COOKIE_NAME);
+  const { notifications } = getDashboard.data;
 
   useEffect(() => {
     fetchData();
@@ -52,21 +48,19 @@ export default function AlertStatus() {
 
   return (
     <>
-      {alertDtos && (
+      {notifications && (
         <styleds.EquipmentTopContainer col="true">
           <AnchorBtn onClick={() => {}}>알림</AnchorBtn>
           <styleds.AlertAndAddContainer>
             {alarm && <LnbAlarmPoint />}
-            {alertDtos.map(data => (
+            {notifications.map(data => (
               <AlertListContainer key={uuidv4()}>
                 <AlertImgContainer>
-                  <AlertImg src={data.alertImg} alt="" />
+                  <AlertImg src={data.image} alt="" />
                 </AlertImgContainer>
                 <AlertDetailContainer>
-                  <AlertTitle>{data.alertTitle}</AlertTitle>
-                  <AlertData>
-                    {FormatKoreanTime(data.alertModifiedAt)}
-                  </AlertData>
+                  <AlertTitle>{data.content}</AlertTitle>
+                  <AlertData>{FormatKoreanTime(data.created_At)}</AlertData>
                 </AlertDetailContainer>
               </AlertListContainer>
             ))}
@@ -108,6 +102,7 @@ const AlertImgContainer = styled.div`
 const AlertImg = styled.img`
   object-fit: cover;
   ${props => props.theme.wh100};
+  border-radius: 0.25rem;
 `;
 
 const AlertDetailContainer = styled.div`
