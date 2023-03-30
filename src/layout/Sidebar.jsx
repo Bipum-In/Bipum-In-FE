@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
 
 import {
   CategoryItemLeft,
@@ -18,6 +19,7 @@ import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg'
 import ROUTER from '../constants/routerConst';
 import STRING from '../constants/string';
 import QUERY from '../constants/query';
+import ARRAY from '../constants/array';
 
 import Storage from '../utils/localStorage';
 import { removeCookie } from '../utils/cookie';
@@ -30,17 +32,13 @@ export default function Sidebar({
   setIsSidebarHidden,
   isMobileView,
 }) {
+  const isAdmin = true;
   const navigate = useNavigate();
   const theme = useTheme();
+  const categoryIcons = [<Dashboard />, <List />, <Management />, <Add />];
 
   const { pathname } = useLocation();
   const [logoutModal, setLogoutModal] = useModalState();
-  const categoryStyle = [
-    pathname === ROUTER.PATH.ADMIN_DASHBOARD && true,
-    pathname === ROUTER.PATH.ADMIN_REQUEST_STATUS && true,
-    pathname === ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT && true,
-    pathname === ROUTER.PATH.ADMIN_EQUIPMENT_ADD && true,
-  ];
 
   const handleClickCategory = e => {
     const name = e.target.innerText;
@@ -84,34 +82,18 @@ export default function Sidebar({
           <Logo />
         </LogoContainer>
         <SidebarCategoryContainer>
-          <CategoryItemLeft
-            onClick={handleClickCategory}
-            category={`${categoryStyle[0]}`}
-            title={STRING.SIDEBAR.DASHBOARD}
-          >
-            <Dashboard />
-          </CategoryItemLeft>
-          <CategoryItemLeft
-            onClick={handleClickCategory}
-            category={`${categoryStyle[1]}`}
-            title={STRING.SIDEBAR.REQUEST_STATUS}
-          >
-            <List />
-          </CategoryItemLeft>
-          <CategoryItemLeft
-            onClick={handleClickCategory}
-            category={`${categoryStyle[2]}`}
-            title={STRING.SIDEBAR.MANAGEMENT}
-          >
-            <Management />
-          </CategoryItemLeft>
-          <CategoryItemLeft
-            onClick={handleClickCategory}
-            category={`${categoryStyle[3]}`}
-            title={STRING.SIDEBAR.EQUIPMENT_ADD}
-          >
-            <Add />
-          </CategoryItemLeft>
+          {Object.values(STRING.SIDEBAR).map((sidebarName, index) => (
+            <CategoryItemLeft
+              key={uuidv4()}
+              onClick={handleClickCategory}
+              category={`${
+                ARRAY.SIDEBAR.SIDEBAR_STYLE(pathname, isAdmin)[index]
+              }`}
+              title={sidebarName}
+            >
+              {categoryIcons[index]}
+            </CategoryItemLeft>
+          ))}
           <LogoutContainer>
             <CategoryItemRight onClick={handleModalShow} title="로그아웃">
               <Logout />
