@@ -15,7 +15,9 @@ import { setRequestData } from '../../../redux/modules/requestStatus';
 export default function ManagementStatus({ isAdmin, getDashboard }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const dto = isAdmin ? getDashboard.data.requestsCountDto : getDashboard.data;
+  const {
+    requestsCountDto: { countMap, modifiedAtMap },
+  } = getDashboard.data;
 
   const moveToUnprocessed = () => {
     dispatch(setRequestData(REQUEST_PAGES.UNPROCESSED));
@@ -24,7 +26,7 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
 
   return (
     <>
-      {dto && (
+      {getDashboard && (
         <styleds.EquipmentTopContainer col="true" manage>
           <AnchorBtn
             onClick={() => navigate(ROUTER.PATH.ADMIN.EQUIPMENT_MANAGEMENT)}
@@ -40,16 +42,16 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
                 </NewAlertTitle>
                 <NewAlertNum>
                   {isAdmin
-                    ? dto.countMap.UnProcessedRequests
-                    : dto.userCountMap.UnProcessedUserRequests}
+                    ? countMap.UnProcessedRequests
+                    : countMap.UnProcessedUserRequests}
                   건
                 </NewAlertNum>
               </NewAlertContainer>
             </ManagementAlertTopContainer>
             <ManagementAlertBottomContainer>
               <ManagementCards
-                requestsCountData={isAdmin ? dto.countMap : dto.userCountMap}
-                requestsDate={isAdmin ? dto.modifiedAtMap : ''}
+                requestsCountData={countMap}
+                requestsDate={modifiedAtMap}
                 requestKey={
                   isAdmin
                     ? [
