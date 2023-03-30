@@ -2,8 +2,10 @@ import styled from 'styled-components';
 
 export const EquipmentTopContainer = styled.div`
   ${props => props.theme.FlexCol};
-  @media (max-width: ${props => props.theme.screen.fullWideDesktop}) {
+  justify-content: ${props => (props.useage ? 'flex-end' : 'unset')};
+  @media (max-width: ${props => props.theme.screen.dashboardDesktopMaxWidth}) {
     width: 100%;
+    min-width: ${props => (props.manage ? '100%' : '260px;')};
   }
 `;
 
@@ -14,7 +16,13 @@ const AlertAndAddContainer = styled.div`
   background-color: white;
   padding: 1.5625rem;
   width: 28.25rem;
-  min-height: 19.5rem;
+  height: 100%;
+  min-height: 17.0625rem;
+  overflow: hidden;
+  @media (max-width: ${props => props.theme.screen.dashboardDesktopMaxWidth}) {
+    width: 100%;
+    min-width: 19.90625;
+  }
 `;
 
 export const styleds = {

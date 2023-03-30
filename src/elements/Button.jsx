@@ -20,6 +20,7 @@ const ButtonWrapper = styled.button`
   width: ${props => props.w};
   height: ${props => props.h};
   font-size: ${props => props.size};
+  gap: 4px;
 
   //기본 값
   padding: ${props => props.padding};
@@ -38,7 +39,9 @@ const ButtonWrapper = styled.button`
       padding: 0rem 0.625rem;
       font-size: ${props => (props.post === 'true' ? '1.375rem' : '1rem')};
       width: ${props => (props.post ? '20.5em;' : '15rem')};
-      height: 3.5rem;
+      height: ${props => (props.crawling ? '100%' : '3.5rem;')};
+      gap: ${props => (props.crawling ? '.25rem' : 'unset')};
+      font-weight: bold;
       text-align: center;
       color: white;
       background: ${props =>

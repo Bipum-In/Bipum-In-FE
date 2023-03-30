@@ -5,6 +5,7 @@ import equipmentStatus from '../modules/equipmentStatus';
 import partnersList from '../modules/partnersList';
 import deptList from '../modules/deptList';
 import deptUserList from '../modules/deptUserList';
+import authReducer from '../modules/authSlice';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     requestStatus,
     dashboardStatus,
     equipmentStatus,
+    authReducer,
   },
 });
 

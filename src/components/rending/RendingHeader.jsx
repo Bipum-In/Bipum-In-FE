@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from '../../styles/logo.svg';
 import Button from '../../elements/Button';
-import isLogin from '../../utils/isLogin';
 import { removeCookie } from '../../utils/cookie';
 import Storage from '../../utils/localStorage';
+
+import { useIsLoggedIn } from '../../hooks/useIsLoggedIn';
 
 import ROUTER from '../../constants/routerConst';
 import QUERY from '../../constants/query';
@@ -15,6 +17,7 @@ import { ReactComponent as ReturnIcon } from '../../styles/commonIcon/return.svg
 
 export default function RendingHeader() {
   const navigate = useNavigate();
+  const isLoggedIn = useIsLoggedIn();
 
   const handleKakaoLogin = () => {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_LOCALHOST_URL}/api/user/kakao/callback&response_type=code`;
@@ -37,7 +40,7 @@ export default function RendingHeader() {
           </Link>
         </HeaderLogoContainer>
         <LoginContainer>
-          {!isLogin ? (
+          {!isLoggedIn ? (
             <KakaoLoginBtn onClick={handleKakaoLogin}>
               <KakaoIcon />
               카카오 로그인
@@ -61,7 +64,7 @@ const HeaderStyles = styled.header`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 10.25rem;
+  height: 164px;
   position: fixed;
   top: 0;
   left: 0;
@@ -73,7 +76,7 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0px 5rem;
+  padding: 0rem 80px;
   width: 100%;
 `;
 
@@ -85,33 +88,33 @@ const HeaderLogoContainer = styled.div`
   flex: 0 0 auto;
 `;
 const LogoImg = styled.img`
-  height: 1.9375rem;
-  width: 7.25rem;
+  height: 31px;
+  width: 116px;
   display: block;
 `;
 
 const HeaderBtnStyle = styled(Button)`
   justify-content: center;
-  padding: 1rem 1.5rem;
-  border-radius: 0.3125rem;
+  padding: 16px 24px;
+  border-radius: 5px;
   > div {
     align-items: center;
-    gap: 0.7rem;
+    gap: 11.2px;
   }
 `;
 const KakaoLoginBtn = styled(HeaderBtnStyle)`
   background-color: #fae64d;
-  height: 3.3125rem;
+  height: 53px;
 `;
 
 const ReturnDashboardBtn = styled(HeaderBtnStyle)`
   background-color: ${props => props.theme.color.blue.brandColor6};
   color: white;
-  height: 2.8125rem;
+  height: 45px;
 `;
 
 const LogoutBtn = styled(HeaderBtnStyle)`
-  border: 1px solid ${props => props.theme.color.blue.brandColor6};
+  border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
   color: ${props => props.theme.color.blue.brandColor6};
-  height: 2.8125rem;
+  height: 45px;
 `;

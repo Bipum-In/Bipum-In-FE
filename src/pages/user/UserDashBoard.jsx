@@ -6,7 +6,7 @@ import { getCategoryList } from '../../redux/modules/equipmentStatus';
 import ScrollToTop from '../../components/common/ScrollToTop';
 import ManagementStatus from '../../components/adminDashBoard/status/ManagementStatus';
 import AlertStatus from '../../components/adminDashBoard/status/AlertStatus';
-import TestStatus from '../../components/adminDashBoard/status/TestStatus';
+import TestStatus from '../../components/adminDashBoard/status/UseageCard';
 import CategoryStatus from '../../components/adminDashBoard/status/CategoryStatus';
 import UserDashboardDetailModal from '../../components/adminDashBoard/UserDashboardDetailModal';
 
@@ -73,12 +73,10 @@ const TopSideContainer = styled.div`
   width: 100%;
   padding: 0 3.25rem 2.5rem 0;
   gap: 3.5rem;
-  @media (max-width: ${props => props.theme.screen.dashboardFullWidth}) {
-    ${props => props.theme.FlexRow};
-    flex-wrap: wrap;
-  }
-  @media (max-width: ${props => props.theme.screen.fullWideDesktop}) {
+
+  @media (max-width: ${props => props.theme.screen.dashboardDesktopMaxWidth}) {
     ${props => props.theme.FlexCol};
+    flex-wrap: wrap;
   }
 `;
 

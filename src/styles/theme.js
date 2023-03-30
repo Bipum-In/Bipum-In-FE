@@ -33,7 +33,8 @@ const fontWeight = {
 };
 
 const screen = {
-  dashboardFullWidth: '2458px',
+  dashboardMaxWidth: '2458px',
+  dashboardDesktopMaxWidth: '1960px',
   fullWideDesktop: '1630px',
   wide_desktop: '1400px',
   desktop: '1280px',

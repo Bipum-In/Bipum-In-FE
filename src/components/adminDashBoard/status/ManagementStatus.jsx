@@ -25,7 +25,7 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
   return (
     <>
       {dto && (
-        <styleds.EquipmentTopContainer col="true">
+        <styleds.EquipmentTopContainer col="true" manage>
           <AnchorBtn
             onClick={() => navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT)}
           >
