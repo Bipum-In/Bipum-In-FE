@@ -114,14 +114,12 @@ export default function StatusList({
                     )}
                   </>
                 ) : (
-                  <Six width={headerList[6].width}>
-                    <RequsetSeven
-                      width={headerList[6].width}
-                      status={list[contentKeyArr[6]]}
-                    >
-                      {list[contentKeyArr[6]] || '-'}
-                    </RequsetSeven>
-                  </Six>
+                  <RequsetSeven
+                    width={headerList[6].width}
+                    status={list[contentKeyArr[6]]}
+                  >
+                    {list[contentKeyArr[6]] || '-'}
+                  </RequsetSeven>
                 )}
               </tr>
             </RequestShowList>
