@@ -4,10 +4,18 @@ const ADDMENUE = {
 };
 
 const SIDEBAR = {
-  DASHBOARD: '대시보드',
-  REQUEST_STATUS: '요청 현황',
-  MANAGEMENT: '비품 관리',
-  EQUIPMENT_ADD: '비품 등록',
+  ADMIN: {
+    DASHBOARD: '대시보드',
+    REQUEST_STATUS: '요청 현황',
+    MANAGEMENT: '비품 관리',
+    EQUIPMENT_ADD: '비품 등록',
+  },
+  USER: {
+    DASHBOARD: '대시보드',
+    REQUEST: '요청 하기',
+    REQUEST_LIST: '요청 내역',
+    STOCK_VIEW: '재고 보기',
+  },
 };
 
 const REQUEST_TYPES = {
