@@ -28,6 +28,7 @@ export default function AlertStatus({ getDashboard }) {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+          heartbeatTimeout: 20 * 60 * 1000,
         }
       );
 
@@ -36,7 +37,6 @@ export default function AlertStatus({ getDashboard }) {
         const { userId } = Storage.getLocalStorageJSON(
           QUERY.STORAGE.LOCAL_NAME
         );
-        console.log(userId);
         if (alarmData !== `EventStream Created. [userId=${userId}]`) {
           setAlarm(true);
         }
