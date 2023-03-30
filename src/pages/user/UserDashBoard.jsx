@@ -18,7 +18,7 @@ export default function UserDashBoard() {
     show: false,
     id: null,
   });
-  const { getDashboard, isDashboardLoading, isDashboardError } = useSelector(
+  const { getDashboard, isDashboardError } = useSelector(
     state => state.dashboardStatus.userDashboard
   );
 
@@ -33,7 +33,7 @@ export default function UserDashBoard() {
   return (
     <>
       {isDashboardError && <div>에러 발생</div>}
-      {getDashboard && !isDashboardLoading && (
+      {getDashboard && (
         <UserDashBoardWrapper id="scrollable-div">
           <TopSideContainer>
             <ManagementStatus isAdmin={isAdmin} getDashboard={getDashboard} />
