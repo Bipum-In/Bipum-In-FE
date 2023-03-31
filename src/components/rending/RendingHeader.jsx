@@ -1,5 +1,5 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Logo from '../../styles/logo.svg';
@@ -8,6 +8,7 @@ import { removeCookie } from '../../utils/cookie';
 import Storage from '../../utils/localStorage';
 
 import { useIsLoggedIn } from '../../hooks/useIsLoggedIn';
+import { logoutSuccess } from '../../redux/modules/authSlice';
 
 import ROUTER from '../../constants/routerConst';
 import QUERY from '../../constants/query';
@@ -16,6 +17,7 @@ import { ReactComponent as KakaoIcon } from '../../styles/commonIcon/kakao.svg';
 import { ReactComponent as ReturnIcon } from '../../styles/commonIcon/return.svg';
 
 export default function RendingHeader() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useIsLoggedIn();
 
@@ -23,11 +25,18 @@ export default function RendingHeader() {
     window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_LOCALHOST_URL}/api/user/kakao/callback&response_type=code`;
   };
 
-  const handleReturnDashboard = () => navigate(ROUTER.PATH.ADMIN.DASHBOARD);
+  const handleReturnDashboard = () => {
+    const targetPath = isLoggedIn
+      ? ROUTER.PATH.ADMIN.DASHBOARD
+      : ROUTER.PATH.USER.DASHBOARD;
+    navigate(targetPath);
+  };
+
   const handleLogoutBtn = e => {
     e.preventDefault();
     removeCookie(QUERY.COOKIE.COOKIE_NAME);
     Storage.clearLocalStorage();
+    dispatch(logoutSuccess());
   };
 
   return (
