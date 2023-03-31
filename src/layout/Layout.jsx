@@ -4,6 +4,7 @@ import styled, { useTheme, keyframes, css } from 'styled-components';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import { ReactComponent as Alaram } from '../styles/commonIcon/alarm.svg';
+import { ReactComponent as Hamburger } from '../styles/sidebarIcon/hamburger.svg';
 import { ReactComponent as Close } from '../styles/commonIcon/close.svg';
 
 export default function DashBoardLayout() {
@@ -80,7 +81,10 @@ const OutletContainer = styled.div`
 const SidebarBtnContainer = styled.div`
   position: relative;
   display: flex;
+  align-items: center;
+  height: 6.25rem;
   z-index: 900;
+  margin-left: 1rem;
 `;
 
 const fadeIn = keyframes`
@@ -95,23 +99,27 @@ const fadeIn = keyframes`
 `;
 
 const IconAnimation = condition => css`
-  position: absolute;
   animation: ${({ $isHidden }) => (condition($isHidden) ? fadeIn : 'none')} 0.2s
     linear;
   opacity: ${({ $isHidden }) => (condition($isHidden) ? 1 : 0)};
   transition: opacity 0.3s linear;
+  ${props => props.theme.CursorActive};
 `;
 
-const AlaramIcon = styled(Alaram)`
+const AlaramIcon = styled(Hamburger)`
   ${IconAnimation($isHidden => $isHidden)}
-  margin-left: .625rem;
-  margin-top: 2.0625rem;
+  animation: 0.2s linear 0s 1 normal none running crbsY;
+  opacity: 1;
+  transition: opacity 0.3s linear 0s;
+  path {
+    stroke: white;
+  }
+  ${props => props.theme.CursorActive};
 `;
 
 const ArrowDownIcon = styled(Close)`
   position: absolute;
   top: 1rem;
-  left: 1rem;
   path {
     stroke: black;
   }
