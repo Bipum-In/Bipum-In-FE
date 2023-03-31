@@ -26,7 +26,6 @@ export default function RendingHeader() {
   const handleReturnDashboard = () => navigate(ROUTER.PATH.ADMIN.DASHBOARD);
   const handleLogoutBtn = e => {
     e.preventDefault();
-    window.location.reload();
     removeCookie(QUERY.COOKIE.COOKIE_NAME);
     Storage.clearLocalStorage();
   };
