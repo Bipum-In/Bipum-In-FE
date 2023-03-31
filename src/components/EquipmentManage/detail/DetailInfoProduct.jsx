@@ -1,12 +1,7 @@
 import styled, { css } from 'styled-components';
 import Input from 'elements/Input';
 
-export default function DetailInfoProduct({
-  edit,
-  value,
-  detail,
-  onChangeValue,
-}) {
+export default function DetailInfoProduct({ edit, detail }) {
   const { createdAt, modelName, serialNum } = detail.supplyDetail;
   return (
     <DetailInfoContentContainer>
@@ -16,27 +11,11 @@ export default function DetailInfoProduct({
       </TextType>
       <TextType>
         <span>제품명</span>
-        {edit ? (
-          <Input
-            value={value[0]}
-            setState={onChangeValue[0]}
-            placeholder="제품명을 기입해주세요"
-          />
-        ) : (
-          <span>{modelName}</span>
-        )}
+        <ModelName edit={edit}>{modelName}</ModelName>
       </TextType>
       <TextType>
         <span>시리얼 넘버</span>
-        {edit ? (
-          <Input
-            value={value[1]}
-            setState={onChangeValue[1]}
-            placeholder="시리얼넘버를 기입해주세요"
-          />
-        ) : (
-          <span>{serialNum}</span>
-        )}
+        <SerialNum edit={edit}>{serialNum}</SerialNum>
       </TextType>
     </DetailInfoContentContainer>
   );
@@ -92,6 +71,25 @@ const TextType = styled.div`
 `;
 
 const CreatedAt = styled.span`
+  ${props =>
+    props.edit &&
+    css`
+      display: flex;
+      align-items: center;
+      height: 2rem;
+    `}
+`;
+
+const ModelName = styled.span`
+  ${props =>
+    props.edit &&
+    css`
+      display: flex;
+      align-items: center;
+      height: 2rem;
+    `}
+`;
+const SerialNum = styled.span`
   ${props =>
     props.edit &&
     css`
