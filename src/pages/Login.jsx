@@ -16,6 +16,7 @@ import SelectCategory from 'components/common/SelectCategory';
 import KakaoUserInfo from 'styles/rendingIcon/kakaoUserInfo.svg';
 import { ReactComponent as Logo } from 'styles/logo.svg';
 import { getEncryptionStorage } from '../utils/encryptionStorage';
+import STRING from 'constants/string';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -37,9 +38,8 @@ export default function Login() {
     const { checkUser, isAdmin } = getEncryptionStorage();
 
     if (getEncryptionStorage() && checkUser) {
-      const targetPath = isAdmin
-        ? ROUTER.PATH.ADMIN.DASHBOARD
-        : ROUTER.PATH.USER.DASHBOARD;
+      const targetPath = ROUTER.PATH[STRING.IS_ADMIN(isAdmin)].DASHBOARD;
+
       navigate(targetPath);
     }
 
@@ -62,9 +62,7 @@ export default function Login() {
       axios.get(`/api/dept`).then(res => setDepartmentList(res.data.data));
     }
     if (writeUser) {
-      const targetPath = isAdmin
-        ? ROUTER.PATH.ADMIN.DASHBOARD
-        : ROUTER.PATH.USER.DASHBOARD;
+      const targetPath = ROUTER.PATH[STRING.IS_ADMIN(isAdmin)].DASHBOARD;
       navigate(targetPath);
     }
   }, [checkCode, navigate, search, writeUser]);
