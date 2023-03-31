@@ -125,6 +125,7 @@ export default function EquipmentListContainer({
           />
         </CategoryContainer>
         <EquipmentShow
+          isAdmin={isAdmin}
           requestData={getEquipment}
           setSelectName={categoryTitle}
           page={page}
