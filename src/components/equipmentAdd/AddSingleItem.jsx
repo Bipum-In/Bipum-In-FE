@@ -117,10 +117,11 @@ export default function AddSingleItem({ category, largeCategory }) {
     formData.append('serialNum', equipmentData.serialNum);
     formData.append('partnersId', equipmentData.partnersId);
     formData.append('userId', equipmentData.userId);
-    formData.append('image', crawlingImg);
 
     if (formImage) {
       formData.append('multipartFile', formImage);
+    } else {
+      formData.append('image', crawlingImg);
     }
     sendFormData(formData);
 
