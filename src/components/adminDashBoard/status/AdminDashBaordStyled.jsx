@@ -10,6 +10,7 @@ export const EquipmentTopContainer = styled.div`
 `;
 
 const AlertAndAddContainer = styled.div`
+  position: relative;
   ${props => props.theme.FlexCol};
   ${props => props.theme.Boxshadow};
   border: 0.0625rem solid ${props => props.theme.color.grey.brandColor2};
