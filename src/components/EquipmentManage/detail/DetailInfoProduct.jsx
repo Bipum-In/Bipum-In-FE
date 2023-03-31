@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
-import Input from 'elements/Input';
+import Input from '../../../elements/Input';
+import { FormatDateToKoShort } from '../../../utils/formatDate';
 
 export default function DetailInfoProduct({ edit, detail }) {
   const { createdAt, modelName, serialNum } = detail.supplyDetail;
@@ -7,7 +8,7 @@ export default function DetailInfoProduct({ edit, detail }) {
     <DetailInfoContentContainer>
       <TextType>
         <span>등록 일자</span>
-        <CreatedAt edit={edit}>{createdAt}</CreatedAt>
+        <CreatedAt edit={edit}>{FormatDateToKoShort(createdAt)}</CreatedAt>
       </TextType>
       <TextType>
         <span>제품명</span>
