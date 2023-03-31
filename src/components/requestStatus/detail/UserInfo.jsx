@@ -100,8 +100,10 @@ const UserName = styled.div`
 `;
 
 const Img = styled.img`
-  width: 8.25rem;
-  height: 8.25rem;
+  max-width: 8.25rem;
+  min-width: 8.25rem;
+  min-height: 8.25rem;
+  max-width: 8.25rem;
   border-radius: 50%;
   margin-right: 2.25rem;
 `;

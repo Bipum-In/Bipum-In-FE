@@ -9,7 +9,7 @@ const ScrollToTop = ({ targetSelector }) => {
   const toggleVisibility = () => {
     const target = targetRef.current;
 
-    if (target && target.scrollTop > 300) {
+    if (target && target.scrollTop > 50) {
       setVisible(true);
     } else {
       setVisible(false);

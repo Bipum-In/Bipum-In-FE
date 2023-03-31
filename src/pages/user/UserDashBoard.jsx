@@ -66,9 +66,9 @@ export default function UserDashBoard() {
 
 const UserDashBoardWrapper = styled.div`
   ${props => props.theme.FlexCol};
-  height: calc(100vh - 6.25rem);
+  height: calc(100vh - 5.4rem);
   overflow: auto;
-  margin: -3rem -3.75rem;
+  margin: -4.1rem -3.75rem;
   padding: 3.75rem 0px 3.75rem 3.75rem;
 `;
 

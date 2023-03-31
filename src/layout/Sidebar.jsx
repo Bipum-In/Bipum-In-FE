@@ -34,7 +34,7 @@ export default function Sidebar({
   isMobileView,
 }) {
   // const isAdmin = false;
-  const isAdmin = Storage.getLocalStorageJSON('userData').isAdmin;
+  const isAdmin = Storage.getLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME).isAdmin;
   const isAdminStr = STRING.IS_ADMIN(isAdmin);
 
   const navigate = useNavigate();
@@ -79,11 +79,18 @@ export default function Sidebar({
 
   const handleSidebarToggle = () => setIsSidebarHidden(prev => !prev);
 
+  const handleLogoClick = () => {
+    const targetPath = isAdmin
+      ? ROUTER.PATH.ADMIN.DASHBOARD
+      : ROUTER.PATH.USER.DASHBOARD;
+    navigate(targetPath);
+  };
+
   return (
     <>
       <SidebarWrapper isHidden={isSidebarHidden} ref={dropDownRef}>
         {isMobileView && <ArrowDownIcon onClick={handleSidebarToggle} />}
-        <LogoContainer>
+        <LogoContainer onClick={handleLogoClick}>
           <Logo />
         </LogoContainer>
         <SidebarCategoryContainer>
@@ -143,6 +150,7 @@ const LogoContainer = styled.div`
   height: 6.25rem;
   width: 100%;
   margin: 1.875rem 0;
+  ${props => props.theme.CursorActive};
 `;
 
 const Logo = styled.div`

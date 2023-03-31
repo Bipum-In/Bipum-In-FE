@@ -100,7 +100,6 @@ export default function Header() {
                 <ArrowDown />
               </UserDropDown>
               {/* 드롭다운 디테일 */}
-
               <DropdownContainer>
                 <DropdownBox>
                   {headerData.map(item => (
@@ -126,8 +125,6 @@ const DropdownBox = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  gap: 1rem;
-
   * svg {
     cursor: pointer;
     width: 1.25rem;
@@ -136,9 +133,14 @@ const DropdownBox = styled.div`
 `;
 
 const DropdownList = styled.div`
+  position: relative;
   display: flex;
   height: 100%;
+  padding: 0.5rem 1rem;
   gap: 1rem;
+  &:hover {
+    background-color: ${props => props.theme.color.grey.brandColor1};
+  }
 `;
 
 const HeaderWrapper = styled.header`
@@ -271,18 +273,18 @@ const DropdownContainer = styled.div`
   top: 110%;
   right: 0;
   width: 100%;
+  padding: 0.5rem 0;
   background-color: white;
   box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.15);
   border-radius: 0.25rem;
-  padding: 1rem;
   z-index: 10;
-  visibility: hidden;
   opacity: 0;
   transform: translateY(-1.25rem);
   transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
   ${LoginUserInfoDropDown}.visible & {
     opacity: 1;
     transform: translateY(0);
-    visibility: visible;
+    pointer-events: auto;
   }
 `;

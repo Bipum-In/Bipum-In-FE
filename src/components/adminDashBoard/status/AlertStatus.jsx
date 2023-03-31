@@ -4,10 +4,9 @@ import { styleds } from './AdminDashBaordStyled';
 import AnchorBtn from '../AnchorBtn';
 import { v4 as uuidv4 } from 'uuid';
 import { FormatKoreanTime } from '../../../utils/formatDate';
-import { EventSourcePolyfill } from 'event-source-polyfill';
-import { getCookie } from '../../../utils/cookie';
-import QUERY from '../../../constants/query';
-import Storage from '../../../utils/localStorage';
+
+import EmptyAlarm from './EmptyAlarm';
+
 import STRING from '../../../constants/string';
 import SSE from '../../../api/sse';
 
@@ -38,6 +37,7 @@ export default function AlertStatus({ isAdmin, getDashboard }) {
           <AnchorBtn onClick={() => {}}>알림</AnchorBtn>
           <styleds.AlertAndAddContainer>
             {alarm && <LnbAlarmPoint />}
+            {notifications.length === 0 && <EmptyAlarm />}
             {notifications.map(data => (
               <AlertListContainer key={uuidv4()}>
                 {isAdmin ? (
