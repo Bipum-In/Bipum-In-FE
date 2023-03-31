@@ -8,20 +8,23 @@ import { ReactComponent as ArrowIcon } from '../../../styles/commonIcon/arrowDow
 import { ReactComponent as List } from '../../../styles/commonIcon/list.svg';
 import { ManagementCards } from '../ManagementCard';
 import ROUTER from '../../../constants/routerConst';
-import { REQUEST_PAGES } from '../../../constants/string';
+import STRING, { REQUEST_PAGES } from '../../../constants/string';
 import { useDispatch } from 'react-redux';
 import { setRequestData } from '../../../redux/modules/requestStatus';
 
 export default function ManagementStatus({ isAdmin, getDashboard }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const isAdminStr = STRING.IS_ADMIN(isAdmin);
   const {
     requestsCountDto: { countMap, modifiedAtMap },
   } = getDashboard.data;
 
   const moveToUnprocessed = () => {
     dispatch(setRequestData(REQUEST_PAGES.UNPROCESSED));
-    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
+    navigate(
+      ROUTER.PATH[isAdminStr][isAdmin ? 'REQUEST_STATUS' : 'REQUEST_LIST']
+    );
   };
 
   return (
@@ -29,9 +32,16 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
       {getDashboard && (
         <styleds.EquipmentTopContainer col="true" manage>
           <AnchorBtn
-            onClick={() => navigate(ROUTER.PATH.ADMIN.EQUIPMENT_MANAGEMENT)}
+            onClick={() =>
+              navigate(
+                ROUTER.PATH[isAdminStr][
+                  isAdmin ? 'EQUIPMENT_MANAGEMENT' : 'REQUEST_LIST'
+                ]
+              )
+            }
           >
-            관리 현황 <ArrowIcon />
+            {isAdmin ? '관리 현황' : '요청 내역'}
+            <ArrowIcon />
           </AnchorBtn>
           <ManagementWrapper>
             <ManagementAlertTopContainer>
@@ -65,6 +75,21 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
                         'userCountRepair',
                         'userCountReturn',
                         'userCountReport',
+                      ]
+                }
+                modifiedAtKey={
+                  isAdmin
+                    ? [
+                        'supplyModifiedAt',
+                        'returnModifiedAt',
+                        'repairModifiedAt',
+                        'ReportModifiedAt',
+                      ]
+                    : [
+                        'supplyModifiedAt',
+                        'returnModifiedAt',
+                        'repairModifiedAt',
+                        'ReportUserModifiedAt',
                       ]
                 }
               />

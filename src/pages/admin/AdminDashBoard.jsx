@@ -8,9 +8,11 @@ import ManagementStatus from '../../components/adminDashBoard/status/ManagementS
 import AlertStatus from '../../components/adminDashBoard/status/AlertStatus';
 import UseageCard from '../../components/adminDashBoard/status/UseageCard';
 import CategoryStatus from '../../components/adminDashBoard/status/CategoryStatus';
+import Storage from '../../utils/localStorage';
 
 export default function AdminDashBoard() {
-  const isAdmin = true;
+  // const isAdmin = true;
+  const isAdmin = Storage.getLocalStorageJSON('userData').isAdmin;
   const dispatch = useDispatch();
   const [status, setStatus] = useState('');
   const { getDashboard, isDashboardLoading, isDashboardError } = useSelector(

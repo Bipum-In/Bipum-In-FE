@@ -33,7 +33,8 @@ export default function Sidebar({
   setIsSidebarHidden,
   isMobileView,
 }) {
-  const isAdmin = false;
+  // const isAdmin = false;
+  const isAdmin = Storage.getLocalStorageJSON('userData').isAdmin;
   const isAdminStr = STRING.IS_ADMIN(isAdmin);
 
   const navigate = useNavigate();

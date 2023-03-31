@@ -29,17 +29,51 @@ export default function AddSingleItem({ category, largeCategory }) {
   const [smallCategory, setSmallCategory] = useState(null);
   const [checkSallCategory, setCheckSallCategory] = useState(false);
   const [formImage, setFormformImage] = useState(null);
-  const [crawlingImg, setCrawlingImg] = useState(null);
-
   const [preview, setPreview] = useState('');
+  const [crawlingImg, setCrawlingImg] = useState(null);
+  const [optionNullList, setOptionNullList] = useState({
+    largeCategory: '대분류',
+    smallCategory: '소분류',
+    partners: '회사명',
+    dept: '부서명',
+    user: '사원명',
+  });
 
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
-  console.log(largeCategory);
 
   useEffect(() => {
-    axios.get(`/api/partners`).then(res => setPartners(res.data.data));
-    axios.get(`/api/dept`).then(res => setDept(res.data.data));
+    axios
+      .get(`/api/partners`)
+      .then(res =>
+        setPartners([
+          { partnersId: '', partnersName: '선택 안함' },
+          ...res.data.data,
+        ])
+      );
+    axios
+      .get(`/api/dept`)
+      .then(res =>
+        setDept([{ deptId: '', deptName: '선택 안함' }, ...res.data.data])
+      );
   }, []);
+
+  const initData = () => {
+    setNameValue('');
+    setSerialValue('');
+    setUser(null);
+    setPreview(null);
+    setCrawlingImg(null);
+    setFormformImage(null);
+    setSmallCategory(null);
+    setCheckSallCategory(null);
+    setOptionNullList({
+      largeCategory: '대분류',
+      smallCategory: '소분류',
+      partners: '회사명',
+      dept: '부서명',
+      user: '사원명',
+    });
+  };
 
   const handleChangeNameValue = e => {
     setNameValue(e.target.value);
@@ -51,32 +85,43 @@ export default function AddSingleItem({ category, largeCategory }) {
 
   const handleChangeLargeCategory = e => {
     const { ko, eng } = JSON.parse(e.target.value);
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, largeCategory: text }));
+
     equipmentData.largeCategory = eng;
     setSmallCategory(parseCategoryData(ko, category));
-
-    console.log(equipmentData.largeCategory);
   };
 
   const handleChangeSmallCategory = e => {
     const { ko } = JSON.parse(e.target.value);
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, smallCategory: text }));
+
     equipmentData.categoryName = ko;
     setCheckSallCategory(equipmentData.categoryName);
-    console.log(checkSallCategory);
   };
 
   const handleChangePartners = e => {
     const { ko: partners } = JSON.parse(e.target.value);
-    console.log(partners);
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, partners: text }));
+
     equipmentData.partnersId = partners;
   };
 
   const handleChangeDept = e => {
     const { ko: dept } = JSON.parse(e.target.value);
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, dept: text }));
+
     getUserData(dept);
   };
 
   const handleChangeUser = e => {
     const { ko: user } = JSON.parse(e.target.value);
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, user: text }));
+
     equipmentData.userId = user;
   };
 
@@ -90,7 +135,6 @@ export default function AddSingleItem({ category, largeCategory }) {
   };
 
   const onChangeimge = e => {
-    console.log(e);
     const img = e.target.files[0];
     setFormformImage(img);
     setPreviewImage(img);
@@ -117,17 +161,15 @@ export default function AddSingleItem({ category, largeCategory }) {
     formData.append('serialNum', equipmentData.serialNum);
     formData.append('partnersId', equipmentData.partnersId);
     formData.append('userId', equipmentData.userId);
-    formData.append('image', crawlingImg);
 
     if (formImage) {
       formData.append('multipartFile', formImage);
+    } else {
+      formData.append('image', crawlingImg);
     }
-    sendFormData(formData);
 
-    // FormData 내용 확인
-    for (let value of formData) {
-      console.log(value);
-    }
+    sendFormData(formData);
+    initData();
   };
 
   const getUserData = deptId =>
@@ -171,7 +213,10 @@ export default function AddSingleItem({ category, largeCategory }) {
                     <SelectCategoryList
                       category={[parseLargeCategory, smallCategory]}
                       optionName={['name', 'categoryName']}
-                      optionNullName={['대분류', '소분류']}
+                      optionNullName={[
+                        optionNullList.largeCategory,
+                        optionNullList.smallCategory,
+                      ]}
                       optionKey={['name', 'categoryName']}
                       optionValueKey={['name', 'categoryName']}
                       onChangeCategory={[
@@ -192,7 +237,7 @@ export default function AddSingleItem({ category, largeCategory }) {
                   <PartnerCompany>
                     <SelectCategory
                       category={partners}
-                      optionNullName="회사명"
+                      optionNullName={optionNullList.partners}
                       optionKey={'partnersName'}
                       optionValueKey={'partnersId'}
                       optionName={'partnersName'}
@@ -204,7 +249,7 @@ export default function AddSingleItem({ category, largeCategory }) {
                   <styles.TypeTitle>사용자</styles.TypeTitle>
                   <SelectUser
                     category={[dept, user]}
-                    optionNullName={['부서명', '사원명']}
+                    optionNullName={[optionNullList.dept, optionNullList.user]}
                     optionKey={['deptName', 'empName']}
                     optionValueKey={['deptId', 'userId']}
                     optionName={['deptName', 'empName']}

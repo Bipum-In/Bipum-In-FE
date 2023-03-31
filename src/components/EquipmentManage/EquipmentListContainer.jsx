@@ -11,6 +11,7 @@ import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
 import EquipmentModal from './EquipmentModal';
+import Storage from '../../utils/localStorage';
 
 export default function EquipmentListContainer({
   category: { category, largeCategory },
@@ -21,7 +22,8 @@ export default function EquipmentListContainer({
     categoryData: { categoryIdData, categoryNameData },
   } = useSelector(state => state.equipmentStatus);
 
-  const isAdmin = true;
+  // const isAdmin = true;
+  const isAdmin = Storage.getLocalStorageJSON('userData').isAdmin;
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('');
   const [keyword, setKeyword] = useState('');
@@ -125,6 +127,7 @@ export default function EquipmentListContainer({
           />
         </CategoryContainer>
         <EquipmentShow
+          isAdmin={isAdmin}
           requestData={getEquipment}
           setSelectName={categoryTitle}
           page={page}

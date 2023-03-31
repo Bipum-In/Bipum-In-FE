@@ -6,6 +6,7 @@ import { ReactComponent as Plus } from '../../styles/commonIcon/plus.svg';
 import Button from '../../elements/Button';
 
 export default function EquipmentShow({
+  isAdmin,
   requestData,
   setSelectName,
   page,
@@ -69,6 +70,7 @@ export default function EquipmentShow({
         </EquipmentAddConatiner>
       </StatusListHeader>
       <StatusList
+        isAdmin={isAdmin}
         headerList={headerList}
         listHeaderRef={resizeRef.listHeaderRef}
         listRef={resizeRef.listRef}

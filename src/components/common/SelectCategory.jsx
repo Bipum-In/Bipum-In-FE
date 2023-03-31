@@ -11,7 +11,7 @@ export default function SelectCategory({
   onChangeCategory,
 }) {
   return (
-    <Select onChange={onChangeCategory} defaultValue={optionNullName}>
+    <Select onChange={onChangeCategory} value={optionNullName}>
       <option value={optionNullName} disabled hidden>
         {optionNullName}
       </option>

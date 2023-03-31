@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from '../../redux/modules/equipmentStatus';
 import EquipmentModal from '../EquipmentManage/EquipmentModal';
 import StockViewShow from './StockViewShow';
+import Storage from '../../utils/localStorage';
 
 export default function StockView({ category: { category, largeCategory } }) {
   const dispatch = useDispatch();
@@ -19,7 +20,8 @@ export default function StockView({ category: { category, largeCategory } }) {
     categoryData: { categoryIdData, categoryNameData },
   } = useSelector(state => state.equipmentStatus);
 
-  const isAdmin = false;
+  // const isAdmin = false;
+  const isAdmin = Storage.getLocalStorageJSON('userData').isAdmin;
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);

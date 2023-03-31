@@ -9,6 +9,7 @@ import ImageAdd from '../equipmentAdd/single/ImageAdd';
 import SelectCategory from '../common/SelectCategory';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+
 const requestData = {
   supplyId: '',
   categoryId: '',
@@ -24,12 +25,31 @@ export default function UserEquipmentRequest({
   largeCategory,
 }) {
   const [preview, setPreview] = useState(null);
+  const [mySupply, setMysupply] = useState(null);
   const [formImage, setFormformImage] = useState(null);
   const [messageValue, setMessageValue] = useState('');
-  const [checkSallCategory, setCheckSallCategory] = useState(false);
   const [smallCategory, setSmallCategory] = useState(null);
-  const [mySupply, setMysupply] = useState(null);
+  const [checkSallCategory, setCheckSallCategory] = useState(false);
+  const [optionNullList, setOptionNullList] = useState({
+    largeCategory: '대분류',
+    smallCategory: '소분류',
+    supply: '선택',
+  });
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
+
+  const initData = () => {
+    setPreview(null);
+    setMysupply(null);
+    setMessageValue('');
+    setFormformImage(null);
+    setSmallCategory(null);
+    setCheckSallCategory(null);
+    setOptionNullList({
+      largeCategory: '대분류',
+      smallCategory: '소분류',
+      supply: '선택',
+    });
+  };
 
   const parseCategoryData = (name, getCategory) => {
     return getCategory.filter(item => item.largeCategory === name);
@@ -37,17 +57,27 @@ export default function UserEquipmentRequest({
 
   const handleChangeMySupply = e => {
     const { ko } = JSON.parse(e.target.value);
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, supply: text }));
+
     requestData.supplyId = ko;
   };
 
   const handleChangeLargeCategory = e => {
     const { ko } = JSON.parse(e.target.value);
-    setSmallCategory(parseCategoryData(ko, category));
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    const smallCatagory = parseCategoryData(ko, category);
+    setOptionNullList(state => ({ ...state, largeCategory: text }));
+
+    requestData.categoryId = smallCatagory[0].categoryId;
+    setSmallCategory(smallCatagory);
   };
 
   const handleChangeSmallCategory = e => {
     const { ko: categoryId } = JSON.parse(e.target.value);
     requestData.categoryId = categoryId;
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, smallCategory: text }));
 
     type !== 'SUPPLY' && setMySupply(categoryId);
     setCheckSallCategory(requestData.categoryName);
@@ -79,7 +109,9 @@ export default function UserEquipmentRequest({
     formDataKeyArray.forEach(formDataKey => {
       formData.append(formDataKey, requestData[formDataKey]);
     });
+
     sendFormData(formData);
+    initData();
   };
 
   const handleChangeimge = e => {
@@ -96,7 +128,6 @@ export default function UserEquipmentRequest({
       setPreview(deletePreview);
       setFormformImage(deleteform);
 
-      console.log(absImgPage, deletePreview, deleteform);
       return;
     }
 
@@ -147,7 +178,10 @@ export default function UserEquipmentRequest({
                     <SelectCategoryList
                       category={[parseLargeCategory, smallCategory]}
                       optionName={['name', 'categoryName']}
-                      optionNullName={['대분류', '소분류']}
+                      optionNullName={[
+                        optionNullList.largeCategory,
+                        optionNullList.smallCategory,
+                      ]}
                       optionKey={['name', 'categoryName']}
                       optionValueKey={['name', 'categoryId']}
                       onChangeCategory={[
@@ -165,7 +199,7 @@ export default function UserEquipmentRequest({
                     <styles.SelectCaregoryConteiner>
                       <SelectCategory
                         category={mySupply}
-                        optionName={'modelName'}
+                        optionName={optionNullList.supply}
                         optionNullName={'선택'}
                         optionKey={'supplyId'}
                         optionValueKey={'supplyId'}
@@ -227,11 +261,6 @@ const ImageContainer = styled.div`
     width: 23.75rem;
     height: 17.8125rem;
   }
-
-  /* svg {
-    width: 23.75rem;
-    height: 17.8125rem;
-  } */
 `;
 
 const TextArea = styled.textarea`

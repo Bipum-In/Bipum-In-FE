@@ -9,43 +9,27 @@ import { getCookie } from '../../../utils/cookie';
 import QUERY from '../../../constants/query';
 import Storage from '../../../utils/localStorage';
 import STRING from '../../../constants/string';
+import SSE from '../../../api/sse';
 
 export default function AlertStatus({ isAdmin, getDashboard }) {
   const [alarm, setAlarm] = useState(false);
-  const token = getCookie(QUERY.COOKIE.COOKIE_NAME);
   const { notifications } = getDashboard.data;
 
   useEffect(() => {
-    fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const url = `${process.env.REACT_APP_SERVER_URL}/api/subscribe`;
+    const sse = new SSE(url, 20);
+
+    sse.onMessage(event => {
+      const checkJSON = event.data.split(' ')[0];
+      const data = checkJSON !== 'EventStream' && JSON.parse(event.data);
+      console.log(data);
+    });
+
+    return () => {
+      sse.close();
+      console.log('close');
+    };
   }, []);
-
-  const fetchData = async () => {
-    let eventSource;
-    try {
-      eventSource = new EventSourcePolyfill(
-        `${process.env.REACT_APP_SERVER_URL}/api/subscribe`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          heartbeatTimeout: 20 * 60 * 1000,
-        }
-      );
-
-      eventSource.onmessage = async function (event) {
-        const alarmData = event.data;
-        const { userId } = Storage.getLocalStorageJSON(
-          QUERY.STORAGE.LOCAL_NAME
-        );
-        if (alarmData !== `EventStream Created. [userId=${userId}]`) {
-          setAlarm(true);
-        }
-      };
-    } catch (error) {
-      if (eventSource) eventSource.close();
-    }
-  };
 
   return (
     <>
