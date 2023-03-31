@@ -4,7 +4,7 @@ import styled, { useTheme, keyframes, css } from 'styled-components';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import { ReactComponent as Alaram } from '../styles/commonIcon/alarm.svg';
-import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg';
+import { ReactComponent as Close } from '../styles/commonIcon/close.svg';
 
 export default function DashBoardLayout() {
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
@@ -80,7 +80,7 @@ const OutletContainer = styled.div`
 const SidebarBtnContainer = styled.div`
   position: relative;
   display: flex;
-  z-index: 2;
+  z-index: 900;
 `;
 
 const fadeIn = keyframes`
@@ -104,8 +104,16 @@ const IconAnimation = condition => css`
 
 const AlaramIcon = styled(Alaram)`
   ${IconAnimation($isHidden => $isHidden)}
+  margin-left: .625rem;
+  margin-top: 2.0625rem;
 `;
 
-const ArrowDownIcon = styled(ArrowDown)`
-  ${IconAnimation($isHidden => !$isHidden)}
+const ArrowDownIcon = styled(Close)`
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  path {
+    stroke: black;
+  }
+  ${IconAnimation($isHidden => !$isHidden)};
 `;

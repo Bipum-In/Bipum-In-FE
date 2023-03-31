@@ -147,7 +147,7 @@ const HeaderWrapper = styled.header`
   left: 0;
   width: 100vw;
   height: 6.25rem;
-  z-index: 99;
+  z-index: 1;
   background-color: ${props => props.theme.color.blue.brandColor7};
 `;
 
