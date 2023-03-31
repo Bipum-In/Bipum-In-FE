@@ -87,7 +87,6 @@ export default function StockView({ category: { category, largeCategory } }) {
   };
 
   const handleDetailModal = id => {
-    console.log(id);
     setShowDetailModal(state => ({ show: !state.show, id: id }));
   };
 

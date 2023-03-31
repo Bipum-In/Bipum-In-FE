@@ -52,7 +52,6 @@ export default function RequestDetail({ isClose, detail, isAdmin }) {
   const handleChangeSelect = e => {
     const { value } = e.target;
     data.supplyId = value;
-    console.log(data);
   };
 
   const handleAccept = () => {
@@ -145,7 +144,6 @@ export default function RequestDetail({ isClose, detail, isAdmin }) {
 const DetailContainer = styled.main`
   ${props => props.theme.FlexCol};
   ${props => props.theme.FlexCenter};
-  margin-bottom: 1.875rem;
 `;
 
 const ContentContainer = styled.div`
