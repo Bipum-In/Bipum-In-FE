@@ -3,8 +3,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { initDetail, requestDetail } from '../../redux/modules/requestStatus';
 import AdminRequestDetail from './AdminRequestDetail';
+import UserRequestDetail from './UserRequestDetail';
 
-export default function RequestModal({ isClose, detailId, path }) {
+export default function RequestModal({ isClose, detailId, path, isAdmin }) {
   const dispatch = useDispatch();
   const { getDetail, isDetailError } = useSelector(
     state => state.requestStatus.requestDetail
@@ -18,7 +19,12 @@ export default function RequestModal({ isClose, detailId, path }) {
   return (
     <RequestModalWrapper>
       {isDetailError && <div>에러</div>}
-      {getDetail && <AdminRequestDetail isClose={isClose} detail={getDetail} />}
+      {getDetail && isAdmin && (
+        <AdminRequestDetail isClose={isClose} detail={getDetail} />
+      )}
+      {getDetail && !isAdmin && (
+        <UserRequestDetail isClose={isClose} detail={getDetail} />
+      )}
     </RequestModalWrapper>
   );
 }
