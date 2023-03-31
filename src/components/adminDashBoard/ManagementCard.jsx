@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
+import { v4 as uuidv4 } from 'uuid';
 import { FormatDateToDot } from '../../utils/formatDate';
 
-import { useNavigate } from 'react-router-dom';
 import ROUTER from '../../constants/routerConst';
-
 import STRING, { REQUEST_PAGES } from '../../constants/string';
 
 import { useDispatch } from 'react-redux';
@@ -33,60 +34,33 @@ export function ManagementCards({
   requestsCountData,
   requestsDate,
   requestKey,
+  modifiedAtKey,
 }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const moveToSupply = () => {
+  const requestTypeKey = useRef(
+    Object.values(STRING.REQUEST_TYPES).filter(item => item !== 'ALL')
+  ).current;
+
+  const moveToRequset = key => {
     dispatch(initRequest());
-    dispatch(setRequestData(REQUEST_PAGES.SUPPLY));
+    dispatch(setRequestData(REQUEST_PAGES[key]));
     navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
   };
-
-  const moveToRepair = () => {
-    dispatch(initRequest());
-    dispatch(setRequestData(REQUEST_PAGES.REPAIR));
-    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
-  };
-
-  const moveToReturn = () => {
-    dispatch(initRequest());
-    dispatch(setRequestData(REQUEST_PAGES.RETURN));
-    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
-  };
-
-  const moveToReport = () => {
-    dispatch(initRequest());
-    dispatch(setRequestData(REQUEST_PAGES.REPORT));
-    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
-  };
-
   return (
     <>
-      <ManagementCard
-        onClick={moveToSupply}
-        statusTitle={STRING.REQUEST_NAME.SUPPLY}
-        statusCount={requestsCountData[requestKey[0]]}
-        statusDate={FormatDateToDot(requestsDate.supplyModifiedAt)}
-      />
-      <ManagementCard
-        onClick={moveToRepair}
-        statusTitle={STRING.REQUEST_NAME.REPAIR}
-        statusCount={requestsCountData[requestKey[1]]}
-        statusDate={FormatDateToDot(requestsDate.returnModifiedAt)}
-      />
-      <ManagementCard
-        onClick={moveToReturn}
-        statusTitle={STRING.REQUEST_NAME.RETURN}
-        statusCount={requestsCountData[requestKey[2]]}
-        statusDate={FormatDateToDot(requestsDate.repairModifiedAt)}
-      />
-      <ManagementCard
-        onClick={moveToReport}
-        statusTitle={STRING.REQUEST_NAME.REPORT}
-        statusCount={requestsCountData[requestKey[3]]}
-        statusDate={FormatDateToDot(requestsDate.ReportRequests)}
-      />
+      {requestTypeKey.map((key, index) => (
+        <ManagementCard
+          key={uuidv4()}
+          onClick={() => {
+            moveToRequset(key);
+          }}
+          statusTitle={STRING.REQUEST_NAME[key]}
+          statusCount={requestsCountData[requestKey[index]]}
+          statusDate={FormatDateToDot(requestsDate[modifiedAtKey[index]])}
+        />
+      ))}
     </>
   );
 }
