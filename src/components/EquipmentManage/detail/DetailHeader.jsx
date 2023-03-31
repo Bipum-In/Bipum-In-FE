@@ -11,32 +11,32 @@ export default function DetailHeader({
   const { supplyId, isAdmin, isMySupply } = detail.supplyDetail;
   return (
     <DetailHeaderContainer>
-      {isMySupply && (
+      {isAdmin ? (
         <>
-          {isAdmin ? (
-            <>
-              {edit ? (
-                <SaveButton
-                  onClick={() => {
-                    onSave(supplyId);
-                  }}
-                >
-                  저장
-                </SaveButton>
-              ) : (
-                <>
-                  <DisposeButton
-                    onClick={() => {
-                      onDispose(supplyId);
-                    }}
-                  >
-                    폐기
-                  </DisposeButton>
-                  <EditButton onClick={onEdit}>수정</EditButton>
-                </>
-              )}
-            </>
+          {edit ? (
+            <SaveButton
+              onClick={() => {
+                onSave(supplyId);
+              }}
+            >
+              저장
+            </SaveButton>
           ) : (
+            <>
+              <DisposeButton
+                onClick={() => {
+                  onDispose(supplyId);
+                }}
+              >
+                폐기
+              </DisposeButton>
+              <EditButton onClick={onEdit}>수정</EditButton>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          {isMySupply && (
             <>
               <ReportButton>보고서 작성</ReportButton>
               <ReturnButton>반납요청</ReturnButton>
