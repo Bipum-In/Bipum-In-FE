@@ -42,7 +42,7 @@ export default function RequestDetail({ isClose, detail }) {
 
   const data = useRef({
     acceptResult: '',
-    supplyId: 0,
+    supplyId: '',
     comment: '',
   }).current;
 
