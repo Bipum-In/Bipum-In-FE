@@ -15,6 +15,16 @@ import DetailInfoRequester from './DetailInfoRequester';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
+const detailData = {
+  largeCategory: '',
+  categoryName: '',
+  modelName: '',
+  serialNum: '',
+  partnersId: '',
+  userId: '',
+  image: '',
+};
+
 export default function EquipmentDetail({
   isAdmin,
   category,
@@ -30,46 +40,40 @@ export default function EquipmentDetail({
     deptUser: false,
   });
   const [dept, setDept] = useState(null);
-  const [user, setUser] = useState(null);
-  const [image, setImage] = useState(null);
+  const [user, setUser] = useState('');
+  const [imageForm, setImageForm] = useState(null);
   const [preview, setPreview] = useState('');
-  const [partners, setPartners] = useState(null);
-  const [modelName, setModelName] = useState('');
-  const [serialNum, setSerialNum] = useState('');
+  const [partners, setPartners] = useState('');
   const [smallCategory, setSmallCategory] = useState(null);
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
+  const [optionNullList, setOptionNullList] = useState({
+    partners: '회사명',
+    dept: '부서명',
+    user: '사원명',
+  });
 
   const { getDetail, isDetailError } = useSelector(
     state => state.equipmentStatus.equipmentDetail
   );
 
-  const detailData = {
-    largeCategory: '',
-    categoryName: '',
-    modelName: '',
-    serialNum: '',
-    partnersId: '',
-    userId: '',
-    image,
-  };
-
   useEffect(() => {
     const path = isAdmin ? '/admin' : '';
     dispatch(getEquipmentDetail({ path, supplyId: detailId }));
 
-    axios.get(`/api/dept`).then(res => setDept(res.data.data));
-    axios.get(`/api/partners`).then(res => setPartners(res.data.data));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    axios
+      .get(`/api/dept`)
+      .then(res =>
+        setDept([{ deptId: '', deptName: '선택 안함' }, ...res.data.data])
+      );
+    axios
+      .get(`/api/partners`)
+      .then(res =>
+        setPartners([
+          { partnersId: 'null', partnersName: '선택 안함' },
+          ...res.data.data,
+        ])
+      );
   }, [detailId, dispatch]);
-
-  useEffect(() => {
-    if (edit) {
-      const { modelName, serialNum } = getDetail.supplyDetail;
-      setModelName(modelName);
-      setSerialNum(serialNum);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [edit]);
 
   const handleEdit = () => setEdit(true);
 
@@ -79,20 +83,36 @@ export default function EquipmentDetail({
   };
 
   const handleSave = supplyId => {
-    const { largeCategory, category, partnersId, userId, image } =
-      getDetail.supplyDetail;
+    const {
+      largeCategory,
+      category,
+      partnersId,
+      userId,
+      image,
+      modelName,
+      serialNum,
+    } = getDetail.supplyDetail;
 
-    const constLargeCategory = STRING.CATEGORY[largeCategory];
-    detailData.largeCategory || (detailData.largeCategory = constLargeCategory);
-    detailData.categoryName || (detailData.categoryName = category);
-
+    detailData.largeCategory = STRING.CATEGORY[largeCategory];
+    detailData.categoryName = category;
     detailData.modelName = modelName;
     detailData.serialNum = serialNum;
-    detailData.partnersId || (detailData.partnersId = partnersId);
-    detailData.userId || (detailData.userId = userId);
-    detailData.image || (detailData.image = image);
 
-    sendFormData(supplyId);
+    if (detailData.partnersId === 'null') {
+      detailData.partnersId = '';
+    } else {
+      detailData.partnersId || (detailData.partnersId = partnersId || '');
+    }
+
+    if (detailData.userId) {
+      detailData.userId === '선택 안함' && (detailData.userId = '');
+    } else {
+      detailData.userId = userId || '';
+    }
+
+    detailData.image || (detailData.image = image);
+    console.log(detailData);
+    sendFormData(supplyId, image);
   };
 
   const handleDispose = supplyId => {
@@ -110,23 +130,30 @@ export default function EquipmentDetail({
     detailData.categoryName = ko;
   };
 
-  const handleChangeNameValue = e => setModelName(e.target.value);
-
-  const handleChangeSerialValue = e => setSerialNum(e.target.value);
-
   const handleChangePartners = e => {
     const { ko: partners } = JSON.parse(e.target.value);
+    const text = e.target.options[e.target.selectedIndex].innerText;
+
+    setOptionNullList(state => ({ ...state, partners: text }));
     detailData.partnersId = partners;
   };
 
   const handleChangeDept = e => {
     const { ko: dept } = JSON.parse(e.target.value);
-    getUserData(dept);
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, dept: text, user: '사원명' }));
+
+    dept && getUserData(dept);
+    detailData.userId = text;
   };
 
   const handleChangeUser = e => {
     const { ko: user } = JSON.parse(e.target.value);
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, user: text }));
+
     detailData.userId = user;
+    console.log(detailData, user);
   };
 
   const parseCategoryData = (name, getCategory) => {
@@ -136,7 +163,7 @@ export default function EquipmentDetail({
   const getUserData = deptId =>
     axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
 
-  const sendFormData = supplyId => {
+  const sendFormData = (supplyId, image) => {
     const formData = new FormData();
     formData.append('largeCategory', detailData.largeCategory);
     formData.append('categoryName', detailData.categoryName);
@@ -145,18 +172,20 @@ export default function EquipmentDetail({
     formData.append('partnersId', detailData.partnersId);
     formData.append('userId', detailData.userId);
 
-    if (image) {
-      formData.append('multipartFile', image);
+    if (imageForm) {
+      formData.append('multipartFile', imageForm);
+    } else {
+      formData.append('image', image);
     }
     sendEditData(supplyId, formData);
   };
 
   const sendEditData = (supplyId, formData) =>
-    axios.put(`/api/supply/${supplyId}`, formData);
+    axios.put(`/api/supply/${supplyId}`, formData).then(() => isClose());
 
   const handleChangeimge = e => {
     const img = e.target.files[0];
-    setImage(img);
+    setImageForm(img);
     setPreviewImage(img);
   };
 
@@ -190,26 +219,14 @@ export default function EquipmentDetail({
             <div>
               <DetailInfoContainer>
                 <DetailInfo>
-                  <DetailInfoProduct
-                    edit={edit}
-                    value={[modelName, serialNum]}
-                    detail={getDetail}
-                    onChangeValue={[
-                      handleChangeNameValue,
-                      handleChangeSerialValue,
-                    ]}
-                  />
+                  <DetailInfoProduct edit={edit} detail={getDetail} />
                   <DetailInfoRequester
                     edit={edit}
+                    optionNullList={optionNullList}
                     editRequester={editRequester}
                     deptValue={[dept, user]}
                     detail={getDetail}
                     partners={partners}
-                    category={[parseLargeCategory, smallCategory]}
-                    onChangeCategory={[
-                      handleChangeLargeCategory,
-                      handleChangeSmallCategory,
-                    ]}
                     onChangeDept={[handleChangeDept, handleChangeUser]}
                     onChangePartners={handleChangePartners}
                     onEditRequester={handleEditRequester}
