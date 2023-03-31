@@ -41,6 +41,12 @@ const REQUEST_NAME = {
   REPORT: '보고서 결재',
 };
 
+const REQUEST_NAME_ENG = {
+  '비품 요청': 'SUPPLY',
+  '수리 요청': 'REPAIR',
+  '반납 요청': 'RETURN',
+  '보고서 결재': 'REPORT',
+};
 const CATEGORY = {
   전체: '',
   컴퓨터: 'COMPUTER',
@@ -112,6 +118,7 @@ const STRING = {
   HEADER_DROPDOWN,
   REQUEST_STATUS,
   IS_ADMIN,
+  REQUEST_NAME_ENG,
 };
 
 export default STRING;

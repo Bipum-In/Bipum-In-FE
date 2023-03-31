@@ -124,7 +124,6 @@ export default function EquipmentDetail({
 
   const handleChangeUser = e => {
     const { ko: user } = JSON.parse(e.target.value);
-    console.log(user);
     detailData.userId = user;
   };
 
@@ -137,14 +136,12 @@ export default function EquipmentDetail({
 
   const sendFormData = supplyId => {
     const formData = new FormData();
-    console.log(detailData);
     formData.append('largeCategory', detailData.largeCategory);
     formData.append('categoryName', detailData.categoryName);
     formData.append('modelName', detailData.modelName);
     formData.append('serialNum', detailData.serialNum);
     formData.append('partnersId', detailData.partnersId);
     formData.append('userId', detailData.userId);
-    // formData.append('image', detailData.image);
 
     if (image) {
       formData.append('multipartFile', image);

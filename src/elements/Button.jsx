@@ -34,6 +34,28 @@ const ButtonWrapper = styled.button`
   white-space: nowrap;
 
   ${props =>
+    (props.mainBtn === 'border' || props.mainBtn === 'fill') &&
+    css`
+      padding: 0.5rem 1.0625rem;
+    `}
+
+  ${props =>
+    props.mainBtn === 'border' &&
+    css`
+      color: ${props => props.theme.color.blue.brandColor6};
+      border: 1px solid ${props => props.theme.color.blue.brandColor6};
+    `}
+
+${props =>
+    props.mainBtn === 'fill' &&
+    css`
+      color: white;
+      background-color: ${props => props.theme.color.blue.brandColor6};
+      font-weight: 400;
+    `}
+
+
+  ${props =>
     props.submit &&
     css`
       padding: 0rem 0.625rem;

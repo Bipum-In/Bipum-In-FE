@@ -1,9 +1,16 @@
 import styled from 'styled-components';
 
-export default function UserInfo({ userImage, deptName, empName, username }) {
+export default function UserInfo({
+  userImage,
+  deptName,
+  empName,
+  username,
+  phoneNum,
+  isAdmin,
+}) {
   return (
     <UserInfoWrapper>
-      <UserInfoTitle>신청자 정보</UserInfoTitle>
+      <UserInfoTitle>요청자 정보</UserInfoTitle>
       <UserInfoContainer>
         <Img src={userImage} alt="userImage" />
         <UserInfoContent>
@@ -18,8 +25,17 @@ export default function UserInfo({ userImage, deptName, empName, username }) {
             </EmpName>
           </UserInfoDeptAndName>
           <UserName>
-            <span>이메일</span>
-            {username}
+            {isAdmin ? (
+              <>
+                <span>이메일</span>
+                {username}
+              </>
+            ) : (
+              <>
+                <span>전화번호</span>
+                {phoneNum}
+              </>
+            )}
           </UserName>
         </UserInfoContent>
       </UserInfoContainer>
@@ -29,7 +45,8 @@ export default function UserInfo({ userImage, deptName, empName, username }) {
 
 const UserInfoWrapper = styled.div`
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
+  border-bottom: ${props =>
+    props.isAdmin ? `1px solid ${props.theme.color.grey.brandColor2}` : 'none'};
 `;
 
 const UserInfoTitle = styled.div`
@@ -52,7 +69,7 @@ const UserInfoContent = styled.div`
 
   span {
     color: ${props => props.theme.color.grey.brandColor5};
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
 `;
 
@@ -63,21 +80,21 @@ const UserInfoDeptAndName = styled.div`
 
 const DeptName = styled.div`
   ${props => props.theme.FlexCol};
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 500;
   gap: 0.375rem;
 `;
 
 const EmpName = styled.div`
   ${props => props.theme.FlexCol};
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 500;
   gap: 0.375rem;
 `;
 
 const UserName = styled.div`
   ${props => props.theme.FlexCol};
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 500;
   gap: 0.375rem;
 `;
