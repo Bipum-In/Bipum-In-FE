@@ -24,6 +24,9 @@ const color = {
   blue,
   grey,
   trans: 'transparent',
+  accpet: '#2b9936',
+  reject: '#C73939',
+  remove: '#746336',
 };
 
 const fontWeight = {
