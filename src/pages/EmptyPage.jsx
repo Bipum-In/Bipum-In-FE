@@ -11,10 +11,14 @@ export default function EmptyPage() {
   const { isAdmin } = getEncryptionStorage();
 
   const handleReturnDashboard = () => {
-    const targetPath = isAdmin
-      ? ROUTER.PATH.ADMIN.DASHBOARD
-      : ROUTER.PATH.USER.DASHBOARD;
-    navigate(targetPath);
+    const local = Storage.getLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME);
+    if (local) {
+      const { isAdmin } = local;
+      const targetPath = isAdmin
+        ? ROUTER.PATH.ADMIN.DASHBOARD
+        : ROUTER.PATH.USER.DASHBOARD;
+      navigate(targetPath);
+    }
   };
 
   return (
