@@ -115,22 +115,22 @@ const Status = styled.div`
   ${props =>
     props.status === '승인' &&
     css`
-      color: #285818;
-      background-color: #e0ffd6;
+      color: ${props => props.theme.color.accpet};
+      border: 1px solid ${props => props.theme.color.accpet};
     `}
 
   ${props =>
     props.status === '거절' &&
     css`
-      color: #e02121;
-      background-color: #ffe8e8;
+      color: ${props => props.theme.color.reject};
+      border: 1px solid ${props => props.theme.color.reject};
     `}
 
     ${props =>
     props.status === '폐기' &&
     css`
-      color: #6d5517;
-      background-color: #efecd9;
+      color: ${props => props.theme.color.remove};
+      border: 1px solid ${props => props.theme.color.remove};
     `}
 `;
 

@@ -262,8 +262,10 @@ const Hr = styled.div`
 `;
 
 const AllocatedImg = styled.img`
-  width: 8.25rem;
-  height: 8.25rem;
+  max-width: 8.25rem;
+  min-width: 8.25rem;
+  min-height: 8.25rem;
+  max-height: 8.25rem;
 `;
 // TODO: AdminRequestDetail이랑 스타일 중복
 const DetailContainer = styled.main`

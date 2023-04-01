@@ -80,7 +80,7 @@ const EquipmentImageContainer = styled.div`
     max-width: 8.25rem;
     min-width: 8.25rem;
     min-height: 8.25rem;
-    max-width: 8.25rem;
+    max-height: 8.25rem;
     border-radius: 0.375rem;
     margin-top: 1.5rem;
   }
