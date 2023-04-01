@@ -58,6 +58,7 @@ export default function EquipmentDetail({
 
   useEffect(() => {
     const path = isAdmin ? '/admin' : '';
+    dispatch(initEquipmentDetail());
     dispatch(getEquipmentDetail({ path, supplyId: detailId }));
 
     axios
