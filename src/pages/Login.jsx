@@ -30,7 +30,7 @@ export default function Login() {
   const [empName, setEmpName] = useState('');
   const [phone, setPhone] = useState('');
   const [saveUserInfo, setSaveUserInfo] = useState(false);
-  const [departmentName, setDepartmentName] = useState('');
+  const [departmentName, setDepartmentName] = useState('팀을 선택해주세요');
 
   useEffect(() => {
     const code = search.split('=')[1];
@@ -130,7 +130,7 @@ export default function Login() {
                   <SelectCategory
                     category={departmentList}
                     optionName={'deptName'}
-                    optionNullName={'팀을 선택해주세요'}
+                    optionNullName={departmentName}
                     optionKey={'deptName'}
                     optionValueKey={'deptId'}
                     onChangeCategory={handleChangeDepartmentId}
