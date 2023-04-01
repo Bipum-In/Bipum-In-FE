@@ -32,7 +32,7 @@ export default function StatusList({
         </RequestShowListTitle>
       </table>
       <table ref={listRef}>
-        {content ? (
+        {content?.content?.length ? (
           content.content.map(list => (
             <RequestShowList
               key={uuidv4()}
