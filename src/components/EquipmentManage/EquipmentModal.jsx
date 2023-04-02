@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Modal from '../../elements/Modal';
+import Modal from 'elements/Modal';
 import ModalHeader from '../common/ModalHeader';
 import AddSingleItem from '../equipmentAdd/AddSingleItem';
 import EquipmentDetail from './detail/EquipmentDetail';

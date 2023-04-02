@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as ScrollUp } from '../../../styles/commonIcon/scrollUp.svg';
+import { ReactComponent as ScrollUp } from 'styles/commonIcon/scrollUp.svg';
 import SecondPage from './SecondPage';
 import FirstPage from './FirstPage';
 

@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
 
 import CategoryItems from '../common/CategoryItems';
-import EquipmentShow from '../EquipmentManage/EquipmentShow';
-
-import useSelectMenu from '../../hooks/useSelectMenu';
-
-import { useDispatch, useSelector } from 'react-redux';
-import { getEquipmentList } from '../../redux/modules/equipmentStatus';
-import EquipmentModal from '../EquipmentManage/EquipmentModal';
 import StockViewShow from './StockViewShow';
-import Storage from '../../utils/localStorage';
+import useSelectMenu from 'hooks/useSelectMenu';
+import EquipmentModal from '../EquipmentManage/EquipmentModal';
+
+import { getEquipmentList } from 'redux/modules/equipmentStatus';
+import Storage from 'utils/localStorage';
 
 export default function StockView({ category: { category, largeCategory } }) {
   const dispatch = useDispatch();

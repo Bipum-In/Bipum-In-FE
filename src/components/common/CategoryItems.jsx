@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import Button from '../../elements/Button';
+import Button from 'elements/Button';
 
 export default function CategoryItems({
   getCategory,
@@ -82,7 +82,7 @@ const CategoryWrapper = styled.div`
           opacity: 0;
         `}
 
-  z-index: 1000;
+  z-index: 2;
   transition: all 0.3s ease;
 `;
 

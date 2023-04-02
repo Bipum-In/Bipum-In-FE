@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
-import AddSingleItem from '../../components/equipmentAdd/AddSingleItem';
-import StatusMenu from '../../components/common/status/StatusMenu';
+import AddSingleItem from 'components/equipmentAdd/AddSingleItem';
+import StatusMenu from 'components/common/status/StatusMenu';
 
-import useSelectMenu from '../../hooks/useSelectMenu';
-import STRING from '../../constants/string';
+import useSelectMenu from 'hooks/useSelectMenu';
+import STRING from 'constants/string';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryList } from '../../redux/modules/equipmentStatus';
+import { getCategoryList } from 'redux/modules/equipmentStatus';
 
 export default function EquipmentAdd() {
   const dispatch = useDispatch();

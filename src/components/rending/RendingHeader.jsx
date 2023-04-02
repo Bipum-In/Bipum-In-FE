@@ -2,19 +2,19 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Logo from '../../styles/logo.svg';
-import Button from '../../elements/Button';
-import { removeCookie } from '../../utils/cookie';
-import Storage from '../../utils/localStorage';
+import Logo from 'styles/logo.svg';
+import Button from 'elements/Button';
+import { removeCookie } from 'utils/cookie';
+import Storage from 'utils/localStorage';
 
-import { useIsLoggedIn } from '../../hooks/useIsLoggedIn';
-import { logoutSuccess } from '../../redux/modules/authSlice';
+import { useIsLoggedIn } from 'hooks/useIsLoggedIn';
+import { logoutSuccess } from 'redux/modules/authSlice';
 
-import ROUTER from '../../constants/routerConst';
-import QUERY from '../../constants/query';
+import ROUTER from 'constants/routerConst';
+import QUERY from 'constants/query';
 
-import { ReactComponent as KakaoIcon } from '../../styles/commonIcon/kakao.svg';
-import { ReactComponent as ReturnIcon } from '../../styles/commonIcon/return.svg';
+import { ReactComponent as KakaoIcon } from 'styles/commonIcon/kakao.svg';
+import { ReactComponent as ReturnIcon } from 'styles/commonIcon/return.svg';
 
 export default function RendingHeader() {
   const dispatch = useDispatch();

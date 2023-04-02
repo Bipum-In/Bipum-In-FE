@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import AnchorBtn from '../AnchorBtn';
 import { v4 as uuidv4 } from 'uuid';
-import { ReactComponent as ArrowIcon } from '../../../styles/commonIcon/arrowDown.svg';
+import { ReactComponent as ArrowIcon } from 'styles/commonIcon/arrowDown.svg';
 import CategoryItems from '../../common/CategoryItems';
 import DashboardCard from '../DashboardCard';
-import useSelectMenu from '../../../hooks/useSelectMenu';
-import STRING from '../../../constants/string';
-import ROUTER from '../../../constants/routerConst';
+import useSelectMenu from 'hooks/useSelectMenu';
+import STRING from 'constants/string';
+import ROUTER from 'constants/routerConst';
 import UserDashboardCard from '../UserDashboardCard';
-import { setCategoryData } from '../../../redux/modules/equipmentStatus';
+import { setCategoryData } from 'redux/modules/equipmentStatus';
 
 export default function CategoryStatus({
   isAdmin,
@@ -25,7 +25,9 @@ export default function CategoryStatus({
   const { getCategory, isCategoryError } = useSelector(
     state => state.equipmentStatus.category
   );
-  const { largeCategory } = getCategory;
+
+  const largeCategory = getCategory?.largeCategory;
+
   const supplyDtos = isAdmin
     ? getDashboard.data.supplyCountDtos
     : getDashboard.data.userSupplyDtos;

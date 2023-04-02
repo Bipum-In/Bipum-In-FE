@@ -1,6 +1,5 @@
-import { current } from '@reduxjs/toolkit';
-import Axios from '../../api/axios';
-import NUMBER from '../../constants/number';
+import Axios from 'api/axios';
+import NUMBER from 'constants/number';
 import Redux from '../redux';
 
 const initialState = {

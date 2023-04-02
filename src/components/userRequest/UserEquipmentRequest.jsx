@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
-import Button from '../../elements/Button';
+import Button from 'elements/Button';
 import { styles } from '../common/commonStyled';
 import SelectCategoryList from '../equipmentAdd/single/SelectCategoryList';
-import Axios from '../../api/axios';
-import STRING from '../../constants/string';
+import Axios from 'api/axios';
+import STRING from 'constants/string';
 import ImageAdd from '../equipmentAdd/single/ImageAdd';
 import SelectCategory from '../common/SelectCategory';
 

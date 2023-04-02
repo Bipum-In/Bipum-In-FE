@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
-import { KEYFRAME } from '../../../styles/keyframes';
+import { KEYFRAME } from 'styles/keyframes';
 
-import useageImg from '../../../styles/commonIcon/useage.svg';
-import Button from '../../../elements/Button';
+import useageImg from 'styles/commonIcon/useage.svg';
+import Button from 'elements/Button';
 import AnchorBtn from '../AnchorBtn';
-import ROUTER from '../../../constants/routerConst';
+import ROUTER from 'constants/routerConst';
 import UseageStar from '../UseageStar';
 
 export default function UseageCard() {

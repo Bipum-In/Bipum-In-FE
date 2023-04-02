@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import { FormatDateToDot, FormatKoreanTime } from '../../../utils/formatDate';
+import { FormatDateToDot, FormatKoreanTime } from 'utils/formatDate';
 
 export default function StatusList({
   headerList,

@@ -2,16 +2,16 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import CategoryItems from '../../components/common/CategoryItems';
-import EquipmentShow from '../../components/EquipmentManage/EquipmentShow';
+import CategoryItems from 'components/common/CategoryItems';
+import EquipmentShow from 'components/EquipmentManage/EquipmentShow';
 
-import useSelectMenu from '../../hooks/useSelectMenu';
-import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
+import useSelectMenu from 'hooks/useSelectMenu';
+import useResizeGetPageSize from 'hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getEquipmentList } from '../../redux/modules/equipmentStatus';
+import { getEquipmentList } from 'redux/modules/equipmentStatus';
 import EquipmentModal from './EquipmentModal';
-import Storage from '../../utils/localStorage';
+import Storage from 'utils/localStorage';
 
 export default function EquipmentListContainer({
   category: { category, largeCategory },

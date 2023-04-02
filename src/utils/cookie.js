@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie';
-import QUERY from '../constants/query';
+import QUERY from 'constants/query';
 
 const setCookie = (name, value, option) => {
   const expires = new Date();

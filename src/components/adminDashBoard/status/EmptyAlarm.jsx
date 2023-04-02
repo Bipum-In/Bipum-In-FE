@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as Bell } from '../../../styles/commonIcon/bellRinging.svg';
+import { ReactComponent as Bell } from 'styles/commonIcon/bellRinging.svg';
 
 export default function EmptyAlarm() {
   return (

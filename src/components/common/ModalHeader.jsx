@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Button from '../../elements/Button';
-import { ReactComponent as XClose } from '../../styles/commonIcon/close.svg';
+import Button from 'elements/Button';
+import { ReactComponent as XClose } from 'styles/commonIcon/close.svg';
 
 export default function ModalHeader({ isClose, requestType }) {
   return (
@@ -34,12 +34,6 @@ const Title = styled.div``;
 const Type = styled.div`
   font-size: 1.0625rem;
   font-weight: 700;
-`;
-
-const Status = styled.div`
-  color: ${props => props.theme.color.grey.brandColor7};
-  font-size: 0.875rem;
-  font-weight: 600;
 `;
 
 const Close = styled.div`

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import Axios from '../../api/axios';
+import Axios from 'api/axios';
 
 import ModalHeader from '../common/ModalHeader';
 import Provide from './detail/Provide';

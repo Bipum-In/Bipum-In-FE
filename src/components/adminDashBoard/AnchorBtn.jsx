@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import Button from '../../elements/Button';
+import Button from 'elements/Button';
 
 export default function AnchorBtn({ onClick, children }) {
   return (

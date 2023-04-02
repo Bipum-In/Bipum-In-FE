@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import QUERY from '../../constants/query';
+import QUERY from 'constants/query';
 
 const initialState = {
   isLoggedIn: !!localStorage.getItem(QUERY.STORAGE.LOCAL_NAME),

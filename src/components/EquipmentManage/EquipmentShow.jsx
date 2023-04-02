@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import StatusListHeader from '../common/status/StatusListHeader';
 import StatusList from '../common/status/StatusList';
 import PaginationList from '../common/PaginationList';
-import { ReactComponent as Plus } from '../../styles/commonIcon/plus.svg';
-import Button from '../../elements/Button';
+import { ReactComponent as Plus } from 'styles/commonIcon/plus.svg';
+import Button from 'elements/Button';
 
 export default function EquipmentShow({
   isAdmin,

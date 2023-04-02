@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
-import { ErrorModal } from '../../elements/AlertModal';
-import { useModalState } from '../../hooks/useModalState';
+import { ErrorModal } from 'elements/AlertModal';
+import { useModalState } from 'hooks/useModalState';
 
 export default function Alert({ message, duration }) {
   const [isErrorModalOpen, toggleErrorModal] = useModalState(true);

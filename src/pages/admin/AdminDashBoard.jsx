@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { adminDashboardStatus } from '../../redux/modules/dashboardStatus';
-import { getCategoryList } from '../../redux/modules/equipmentStatus';
-import ScrollToTop from '../../components/common/ScrollToTop';
-import ManagementStatus from '../../components/adminDashBoard/status/ManagementStatus';
-import AlertStatus from '../../components/adminDashBoard/status/AlertStatus';
-import UseageCard from '../../components/adminDashBoard/status/UseageCard';
-import CategoryStatus from '../../components/adminDashBoard/status/CategoryStatus';
-import Storage from '../../utils/localStorage';
+import { adminDashboardStatus } from 'redux/modules/dashboardStatus';
+import { getCategoryList } from 'redux/modules/equipmentStatus';
+import ScrollToTop from 'components/common/ScrollToTop';
+import ManagementStatus from 'components/adminDashBoard/status/ManagementStatus';
+import AlertStatus from 'components/adminDashBoard/status/AlertStatus';
+import UseageCard from 'components/adminDashBoard/status/UseageCard';
+import CategoryStatus from 'components/adminDashBoard/status/CategoryStatus';
+import Storage from 'utils/localStorage';
 
 export default function AdminDashBoard() {
   // const isAdmin = true;

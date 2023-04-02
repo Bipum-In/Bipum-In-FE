@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { styles } from './RendingPageStyled';
-import Rending01 from '../../../styles/rendingIcon/rendingFirstImg.svg';
-import Button from '../../../elements/Button';
+import Rending01 from 'styles/rendingIcon/rendingFirstImg.svg';
+import Button from 'elements/Button';
 
 export default function FirstPage() {
   return (

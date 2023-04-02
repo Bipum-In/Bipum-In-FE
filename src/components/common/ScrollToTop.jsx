@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ReactComponent as ScrollUp } from '../../styles/commonIcon/scrollUp.svg';
+import { ReactComponent as ScrollUp } from 'styles/commonIcon/scrollUp.svg';
 import styled from 'styled-components';
 
 const ScrollToTop = ({ targetSelector }) => {

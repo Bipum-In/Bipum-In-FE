@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { styles } from './RendingPageStyled';
-import RendingImg from '../../../styles/rendingIcon/rendingSecImg.svg';
+import RendingImg from 'styles/rendingIcon/rendingSecImg.svg';
 
 export default function SecondPage() {
   return (

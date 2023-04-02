@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEquipmentDetail } from '../../../redux/modules/equipmentStatus';
+import { getEquipmentDetail } from 'redux/modules/equipmentStatus';
 import styled from 'styled-components';
-import Axios from '../../../api/axios';
-import STRING from '../../../constants/string';
+import Axios from 'api/axios';
+import STRING from 'constants/string';
 
 import DetailImage from './DetailImage';
 import DetailHeader from './DetailHeader';
@@ -59,6 +59,7 @@ export default function EquipmentDetail({
 
     axios.get(`/api/dept`).then(res => setDept(res.data.data));
     axios.get(`/api/partners`).then(res => setPartners(res.data.data));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [detailId, dispatch]);
 
   useEffect(() => {
@@ -67,6 +68,7 @@ export default function EquipmentDetail({
       setModelName(modelName);
       setSerialNum(serialNum);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [edit]);
 
   const handleEdit = () => setEdit(true);

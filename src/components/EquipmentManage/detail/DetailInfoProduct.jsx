@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import Input from '../../../elements/Input';
+import Input from 'elements/Input';
 
 export default function DetailInfoProduct({
   edit,

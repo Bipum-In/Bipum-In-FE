@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as DefaultImage } from '../../../styles/commonIcon/addImgIcon2.svg';
-import { ReactComponent as DragIcon } from '../../../styles/commonIcon/drag.svg';
+import { ReactComponent as DefaultImage } from 'styles/commonIcon/addImgIcon2.svg';
+import { ReactComponent as DragIcon } from 'styles/commonIcon/drag.svg';
 
 import ImageCarousel from '../../common/ImageCarousel';
 import { v4 as uuidv4 } from 'uuid';

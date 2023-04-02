@@ -1,11 +1,11 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-import { ReactComponent as NotFound } from '../styles/rendingIcon/NotFound.svg';
-import Button from '../elements/Button';
-import ROUTER from '../constants/routerConst';
+import styled from 'styled-components';
+import { ReactComponent as NotFound } from 'styles/rendingIcon/NotFound.svg';
+import Button from 'elements/Button';
+import ROUTER from 'constants/routerConst';
 import { useNavigate } from 'react-router-dom';
-import QUERY from '../constants/query';
-import Storage from '../utils/localStorage';
+import QUERY from 'constants/query';
+import Storage from 'utils/localStorage';
 
 export default function EmptyPage() {
   const navigate = useNavigate();
