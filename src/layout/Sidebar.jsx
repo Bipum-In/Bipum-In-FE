@@ -27,14 +27,14 @@ import { removeCookie } from 'utils/cookie';
 import { CustomModal } from 'elements/Modal';
 import { useModalState } from 'hooks/useModalState';
 import useOutsideClick from 'hooks/useOutsideClick';
+import { getEncryptionStorage } from '../utils/encryptionStorage';
 
 export default function Sidebar({
   isSidebarHidden,
   setIsSidebarHidden,
   isMobileView,
 }) {
-  // const isAdmin = false;
-  const isAdmin = Storage.getLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME).isAdmin;
+  const { isAdmin } = getEncryptionStorage();
   const isAdminStr = STRING.IS_ADMIN(isAdmin);
 
   const navigate = useNavigate();

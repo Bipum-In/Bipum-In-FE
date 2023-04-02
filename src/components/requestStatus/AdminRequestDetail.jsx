@@ -14,7 +14,7 @@ import { useModalState } from 'hooks/useModalState';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export default function RequestDetail({ isClose, detail, isAdmin }) {
+export default function RequestDetail({ isClose, detail }) {
   const {
     categoryId,
     requestId,

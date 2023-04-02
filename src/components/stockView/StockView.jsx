@@ -9,7 +9,7 @@ import useSelectMenu from 'hooks/useSelectMenu';
 import EquipmentModal from '../EquipmentManage/EquipmentModal';
 
 import { getEquipmentList } from 'redux/modules/equipmentStatus';
-import Storage from 'utils/localStorage';
+import { getEncryptionStorage } from '../../utils/encryptionStorage';
 
 export default function StockView({ category: { category, largeCategory } }) {
   const dispatch = useDispatch();
@@ -18,8 +18,7 @@ export default function StockView({ category: { category, largeCategory } }) {
     categoryData: { categoryIdData, categoryNameData },
   } = useSelector(state => state.equipmentStatus);
 
-  // const isAdmin = false;
-  const isAdmin = Storage.getLocalStorageJSON('userData').isAdmin;
+  const { isAdmin } = getEncryptionStorage();
   const [page, setPage] = useState(1);
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);

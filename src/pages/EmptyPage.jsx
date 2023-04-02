@@ -4,15 +4,11 @@ import { ReactComponent as NotFound } from 'styles/rendingIcon/NotFound.svg';
 import Button from 'elements/Button';
 import ROUTER from 'constants/routerConst';
 import { useNavigate } from 'react-router-dom';
-import QUERY from 'constants/query';
-import Storage from 'utils/localStorage';
+import { getEncryptionStorage } from '../utils/encryptionStorage';
 
 export default function EmptyPage() {
   const navigate = useNavigate();
-
-  const local = Storage.getLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME);
-  console.log(local);
-  const { isAdmin } = local;
+  const { isAdmin } = getEncryptionStorage();
 
   const handleReturnDashboard = () => {
     const targetPath = isAdmin

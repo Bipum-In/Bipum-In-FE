@@ -8,14 +8,14 @@ import ManagementStatus from 'components/adminDashBoard/status/ManagementStatus'
 import AlertStatus from 'components/adminDashBoard/status/AlertStatus';
 import UseageCard from 'components/adminDashBoard/status/UseageCard';
 import CategoryStatus from 'components/adminDashBoard/status/CategoryStatus';
-import Storage from 'utils/localStorage';
+import { getEncryptionStorage } from '../../utils/encryptionStorage';
 
 export default function AdminDashBoard() {
-  // const isAdmin = true;
-  const isAdmin = Storage.getLocalStorageJSON('userData').isAdmin;
   const dispatch = useDispatch();
   const [status, setStatus] = useState('');
-  const { getDashboard, isDashboardLoading, isDashboardError } = useSelector(
+
+  const { isAdmin } = getEncryptionStorage();
+  const { getDashboard, isDashboardError } = useSelector(
     state => state.dashboardStatus.adminDashboard
   );
 

@@ -9,13 +9,15 @@ import { ReactComponent as Manage } from 'styles/headerIcon/manage.svg';
 import { ReactComponent as Pay } from 'styles/headerIcon/pay.svg';
 import { ReactComponent as Setting } from 'styles/headerIcon/setting.svg';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
-import QUERY from 'constants/query';
 import STRING from 'constants/string';
 import { v4 as uuidv4 } from 'uuid';
-import Storage from 'utils/localStorage';
 import useOutsideClick from 'hooks/useOutsideClick';
 import { useNavigate } from 'react-router-dom';
 import ROUTER from 'constants/routerConst';
+import {
+  getEncryptionStorage,
+  updateEncryptionStorage,
+} from 'utils/encryptionStorage';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -25,8 +27,7 @@ export default function Header() {
   const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
   useOutsideClick(dropDownRef, () => setIsDropdownVisible(false));
 
-  const local = Storage.getLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME);
-  const { empName, deptName, image, isAdmin } = local;
+  const { empName, deptName, image, isAdmin } = getEncryptionStorage();
 
   const headerData = [
     {
@@ -44,12 +45,8 @@ export default function Header() {
       text: isAdmin
         ? STRING.HEADER_DROPDOWN.USERMODE
         : STRING.HEADER_DROPDOWN.ADMINMODE,
-
       click: () => {
-        Storage.setLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME, {
-          ...local,
-          isAdmin: !isAdmin,
-        });
+        updateEncryptionStorage('isAdmin', !isAdmin);
         navigate(
           isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
         );
