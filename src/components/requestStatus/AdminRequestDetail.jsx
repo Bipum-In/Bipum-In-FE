@@ -9,6 +9,9 @@ import UserContent from './detail/UserContent';
 import ProcessButton from './detail/ProcessButton';
 import CreatedAtFormatDate from './detail/CreatedAtFormatDate';
 
+import { CustomModal } from 'elements/Modal';
+import { useModalState } from 'hooks/useModalState';
+
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function RequestDetail({ isClose, detail, isAdmin }) {
@@ -33,6 +36,10 @@ export default function RequestDetail({ isClose, detail, isAdmin }) {
 
   const [stockList, setStockList] = useState({ data: null, check: false });
   const [declineComment, setDeclineComment] = useState('');
+
+  const [disposeModal, setDisposeModal] = useModalState();
+  const [repairModal, setRepairModal] = useModalState();
+
   const data = useRef({
     acceptResult: '',
     supplyId: 0,
@@ -89,6 +96,10 @@ export default function RequestDetail({ isClose, detail, isAdmin }) {
     axios.put(`/api/admin/requests/${requestId}`, data).then(() => isClose());
   };
 
+  const handleModalShow = () => setDisposeModal();
+  const handleModalClose = () => setDisposeModal(false);
+  const handleRepairModalShow = () => setRepairModal();
+  const handleRepairClose = () => setRepairModal(false);
   return (
     <>
       {stockList.check && (
@@ -122,13 +133,29 @@ export default function RequestDetail({ isClose, detail, isAdmin }) {
               handleChangeSelect={handleChangeSelect}
             />
           </ContentContainer>
+          <CustomModal
+            isOpen={disposeModal}
+            onClose={handleModalClose}
+            submit={handleDispose}
+            text={'페기'}
+          >
+            비품을 폐기하시겠습니까?
+          </CustomModal>
+          <CustomModal
+            isOpen={repairModal}
+            onClose={handleRepairClose}
+            submit={handleRepairComplete}
+            text={'완료'}
+          >
+            수리가 완료된 비품입니까?
+          </CustomModal>
           <ProcessButton
             requestType={requestType}
             requestStatus={requestStatus}
             handleAccept={handleAccept}
             handleDecline={handleDecline}
-            handleDispose={handleDispose}
-            handleRepairComplete={handleRepairComplete}
+            handleModalShow={handleModalShow}
+            handleRepairModalShow={handleRepairModalShow}
           />
           <CreatedAtFormatDate
             createdAt={createdAt}
@@ -144,6 +171,7 @@ export default function RequestDetail({ isClose, detail, isAdmin }) {
 const DetailContainer = styled.main`
   ${props => props.theme.FlexCol};
   ${props => props.theme.FlexCenter};
+  padding-bottom: 1rem;
 `;
 
 const ContentContainer = styled.div`
