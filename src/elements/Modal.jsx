@@ -63,17 +63,22 @@ export function CustomModal({
 }) {
   return (
     <Modal isOpen={isOpen}>
-      <ModalMsgContainer width={'500px'}>{children}</ModalMsgContainer>
-      <CloseContainer>
-        <CloseButtonContainer>
-          <Button onClick={submit} submit type="button" disabled={disabled}>
+      <ModalMsgContainer width={'313px'}>
+        {children}
+        <CloseContainer>
+          <Button
+            onClick={submit}
+            mainBtn="fill"
+            type="button"
+            disabled={disabled}
+          >
             {text}
           </Button>
-          <Button onClick={onClose} cancel type="button">
+          <Button onClick={onClose} mainBtn="border" type="button">
             취소
           </Button>
-        </CloseButtonContainer>
-      </CloseContainer>
+        </CloseContainer>
+      </ModalMsgContainer>
     </Modal>
   );
 }
@@ -92,43 +97,32 @@ const Backdrop = styled(motion.div)`
 
 const ModalContainer = styled(motion.div)`
   background-color: white;
-  margin: auto; /* 추가 */
+  margin: auto;
   border-radius: 1rem;
   > div {
     overflow: hidden;
   }
-
-  /* filter: drop-shadow(rgba(0, 0, 0, 0.8) 2px 2px 20px); */
 `;
 
 const CloseContainer = styled.div`
   display: flex;
-  justify-content: flex-start;
-  border-bottom-left-radius: 0.375rem;
-  border-bottom-right-radius: 0.375rem;
-  border-top: 0.0625rem solid rgb(247, 247, 247);
-  min-height: 3.5rem;
-  padding: ${props => props.padding};
-  margin-top: 0;
+  justify-content: center;
+  margin-top: 25px;
   align-items: center;
+  gap: 1rem;
+
+  button {
+    width: 80px;
+    height: 40px;
+  }
 `;
 
 const ModalMsgContainer = styled.div`
+  ${props => props.theme.FlexCol};
   font-size: 1rem;
-  padding: 2.5rem 1.875rem;
+  padding: 3.125rem 4.0625rem;
   text-align: center;
   letter-spacing: -0.5px;
   white-space: pre-line;
-  line-height: 1.3125rem;
-  font-weight: bold;
   min-width: ${props => props.width};
-  color: #333333;
-`;
-
-const CloseButtonContainer = styled.div`
-  margin: 1rem;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
 `;
