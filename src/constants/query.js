@@ -4,7 +4,7 @@ const COOKIE = {
 };
 
 const STORAGE = {
-  LOCAL_NAME: 'userData',
+  LOCAL_NAME: 'userEncriptData',
 };
 
 const AXIOS_PATH = {
