@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import Alert from '../components/common/Alert';
+import Alert from 'components/common/Alert';
 
 let root = null;
 

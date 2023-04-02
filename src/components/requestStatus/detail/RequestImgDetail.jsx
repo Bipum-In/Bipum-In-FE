@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import { ReactComponent as DeleteIcon } from '../../../styles/commonIcon/deleteImg.svg';
-import emptyImg from '../../../styles/commonIcon/emptyImg.svg';
+import { ReactComponent as DeleteIcon } from 'styles/commonIcon/deleteImg.svg';
+import emptyImg from 'styles/commonIcon/emptyImg.svg';
 
 export default function RequestImgDetail({
   text,

@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import SelectCategory from '../../common/SelectCategory';
 import SelectUser from '../../equipmentAdd/single/SelectUser';
 import SelectCategoryList from '../../equipmentAdd/single/SelectCategoryList';
-import Button from '../../../elements/Button';
+import Button from 'elements/Button';
 
 export default function DetailInfoRequester({
   edit,

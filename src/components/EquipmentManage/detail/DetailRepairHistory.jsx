@@ -1,15 +1,12 @@
 import styled from 'styled-components';
-import { FormatDateToDot } from '../../../utils/formatDate';
+import { FormatDateToDot } from 'utils/formatDate';
 
 import { useInView } from 'react-intersection-observer';
 
-import NUMBER from '../../../constants/number';
+import NUMBER from 'constants/number';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
-import {
-  getHistory,
-  initHistory,
-} from '../../../redux/modules/equipmentStatus';
+import { getHistory, initHistory } from 'redux/modules/equipmentStatus';
 
 export default function DetailRepairHistory({ detail }) {
   const dispatch = useDispatch();

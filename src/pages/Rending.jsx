@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import RendingHeader from '../components/rending/RendingHeader';
-import RendingDots from '../components/rending/RendingDots';
-import RendingScrollPage from '../components/rending/pages/RendingScrollPage';
+import RendingHeader from 'components/rending/RendingHeader';
+import RendingDots from 'components/rending/RendingDots';
+import RendingScrollPage from 'components/rending/pages/RendingScrollPage';
 
 export default function Rending() {
   const [pageIndex, setPageIndex] = useState(0);

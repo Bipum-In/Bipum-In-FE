@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function useSetEquipmentAdd() {
   const setSelectYear = () => {
     const date = new Date();

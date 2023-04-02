@@ -3,9 +3,8 @@ import { Outlet } from 'react-router-dom';
 import styled, { useTheme, keyframes, css } from 'styled-components';
 import Header from './Header';
 import Sidebar from './Sidebar';
-import { ReactComponent as Alaram } from '../styles/commonIcon/alarm.svg';
-import { ReactComponent as Hamburger } from '../styles/sidebarIcon/hamburger.svg';
-import { ReactComponent as Close } from '../styles/commonIcon/close.svg';
+import { ReactComponent as Hamburger } from 'styles/sidebarIcon/hamburger.svg';
+import { ReactComponent as Close } from 'styles/commonIcon/close.svg';
 
 export default function DashBoardLayout() {
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
@@ -83,7 +82,7 @@ const SidebarBtnContainer = styled.div`
   display: flex;
   align-items: center;
   height: 6.25rem;
-  z-index: 900;
+  z-index: 1001;
   margin-left: 1rem;
 `;
 

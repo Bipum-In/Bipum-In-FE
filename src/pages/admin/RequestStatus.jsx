@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import StatusMenu from '../../components/common/status/StatusMenu';
-import RequestShow from '../../components/requestStatus/RequestShow';
-import RequestModal from '../../components/requestStatus/RequestModal';
-import Modal from '../../elements/Modal';
+import StatusMenu from 'components/common/status/StatusMenu';
+import RequestShow from 'components/requestStatus/RequestShow';
+import RequestModal from 'components/requestStatus/RequestModal';
+import Modal from 'elements/Modal';
 
-import useSelectMenu from '../../hooks/useSelectMenu';
-import useSetStateChange from '../../hooks/useSetStateChange';
-import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
+import useSelectMenu from 'hooks/useSelectMenu';
+import useSetStateChange from 'hooks/useSetStateChange';
+import useResizeGetPageSize from 'hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { __requestStatus } from '../../redux/modules/requestStatus';
-import Storage from '../../utils/localStorage';
+import { __requestStatus } from 'redux/modules/requestStatus';
+import Storage from 'utils/localStorage';
 
 export default function RequestStatus() {
   const dispatch = useDispatch();

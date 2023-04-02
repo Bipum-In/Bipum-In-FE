@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { FormatKoreanTime } from '../../../utils/formatDate';
+import { FormatKoreanTime } from 'utils/formatDate';
 
 export default function CreatedAtFormatDate({
   requestStatus,

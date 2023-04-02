@@ -1,20 +1,20 @@
 import { createBrowserRouter } from 'react-router-dom';
 
-import App from '../App';
-import ROUTER from '../constants/routerConst';
-import Layout from '../layout/Layout';
-import Singup from '../pages/Singup';
-import Login from '../pages/Login';
-import AdminDashBoard from '../pages/admin/AdminDashBoard';
-import UserDashBoard from '../pages/user/UserDashBoard';
-import UserRequest from '../pages/user/UserRequest';
-import Rending from '../pages/Rending';
-import EmptyPage from '../pages/EmptyPage';
+import App from 'App';
+import ROUTER from 'constants/routerConst';
+import Layout from 'layout/Layout';
+import Singup from 'pages/Singup';
+import Login from 'pages/Login';
+import AdminDashBoard from 'pages/admin/AdminDashBoard';
+import UserDashBoard from 'pages/user/UserDashBoard';
+import UserRequest from 'pages/user/UserRequest';
+import Rending from 'pages/Rending';
+import EmptyPage from 'pages/EmptyPage';
 
-import EquipmentAdd from '../pages/admin/EquipmentAdd';
-import RequestStatus from '../pages/admin/RequestStatus';
-import EquipmentManagement from '../pages/admin/EquipmentManagement';
-import UserStockView from '../pages/user/UserStockView';
+import EquipmentAdd from 'pages/admin/EquipmentAdd';
+import RequestStatus from 'pages/admin/RequestStatus';
+import EquipmentManagement from 'pages/admin/EquipmentManagement';
+import UserStockView from 'pages/user/UserStockView';
 
 const router = createBrowserRouter([
   {

@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import STRING from '../../constants/string';
+import STRING from 'constants/string';
 
 export default function UserDashboardCard({
   image,

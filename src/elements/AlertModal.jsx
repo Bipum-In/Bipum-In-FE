@@ -1,8 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled, { keyframes } from 'styled-components';
-import { ReactComponent as Alert } from '../styles/commonIcon/alert.svg';
-import ModalPortal from './ModalPortal';
+import { ReactComponent as Alert } from 'styles/commonIcon/alert.svg';
 
 export default function AlertModal({
   isOpen,

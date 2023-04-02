@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
+
 import styled, { css } from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import AnchorBtn from '../AnchorBtn';
+
 import { v4 as uuidv4 } from 'uuid';
-import { FormatKoreanTime } from '../../../utils/formatDate';
+import { FormatKoreanTime } from 'utils/formatDate';
 
 import EmptyAlarm from './EmptyAlarm';
 
-import STRING from '../../../constants/string';
-import SSE from '../../../api/sse';
+import STRING from 'constants/string';
+import SSE from 'api/sse';
 
 export default function AlertStatus({ isAdmin, getDashboard }) {
   const [alarm, setAlarm] = useState(false);

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
-import Modal from '../../elements/Modal';
+import Modal from 'elements/Modal';
 import ModalHeader from '../common/ModalHeader';
 import EquipmentDetail from '../EquipmentManage/detail/EquipmentDetail';
 
@@ -10,9 +10,7 @@ export default function UserDashboardDetailModal({
   showDetailModal,
   onDetailModal,
 }) {
-  const { getCategory, isCategoryError } = useSelector(
-    state => state.equipmentStatus.category
-  );
+  const { getCategory } = useSelector(state => state.equipmentStatus.category);
 
   return (
     <Modal isOpen={showDetailModal.show}>

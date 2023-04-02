@@ -6,27 +6,27 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   CategoryItemLeft,
   CategoryItemRight,
-} from '../components/layout/CategoryItem';
+} from 'components/layout/CategoryItem';
 
-import logo from '../styles/logo.svg';
-import { ReactComponent as Eye } from '../styles/sidebarIcon/eye.svg';
-import { ReactComponent as Add } from '../styles/sidebarIcon/add.svg';
-import { ReactComponent as Dashboard } from '../styles/sidebarIcon/dashboard.svg';
-import { ReactComponent as List } from '../styles/sidebarIcon/list.svg';
-import { ReactComponent as Management } from '../styles/sidebarIcon/management.svg';
-import { ReactComponent as Logout } from '../styles/sidebarIcon/logout.svg';
-import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg';
+import logo from 'styles/logo.svg';
+import { ReactComponent as Eye } from 'styles/sidebarIcon/eye.svg';
+import { ReactComponent as Add } from 'styles/sidebarIcon/add.svg';
+import { ReactComponent as Dashboard } from 'styles/sidebarIcon/dashboard.svg';
+import { ReactComponent as List } from 'styles/sidebarIcon/list.svg';
+import { ReactComponent as Management } from 'styles/sidebarIcon/management.svg';
+import { ReactComponent as Logout } from 'styles/sidebarIcon/logout.svg';
+import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 
-import ROUTER from '../constants/routerConst';
-import STRING from '../constants/string';
-import QUERY from '../constants/query';
-import ARRAY from '../constants/array';
+import ROUTER from 'constants/routerConst';
+import STRING from 'constants/string';
+import QUERY from 'constants/query';
+import ARRAY from 'constants/array';
 
-import Storage from '../utils/localStorage';
-import { removeCookie } from '../utils/cookie';
-import { CustomModal } from '../elements/Modal';
-import { useModalState } from '../hooks/useModalState';
-import useOutsideClick from '../hooks/useOutsideClick';
+import Storage from 'utils/localStorage';
+import { removeCookie } from 'utils/cookie';
+import { CustomModal } from 'elements/Modal';
+import { useModalState } from 'hooks/useModalState';
+import useOutsideClick from 'hooks/useOutsideClick';
 
 export default function Sidebar({
   isSidebarHidden,
@@ -139,7 +139,7 @@ const SidebarWrapper = styled.aside`
   background-color: white;
   box-shadow: -0.3125rem 0 1.5625rem 0 rgba(0, 0, 0, 0.25);
   border-radius: 0 2.5rem 2.5rem 0;
-  z-index: 2;
+  z-index: 1000;
   transform: ${({ isHidden }) => (isHidden ? 'translateX(-100%)' : 'none')};
   transition: transform 0.3s ease-in-out;
 `;

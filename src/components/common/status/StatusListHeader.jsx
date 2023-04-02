@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as Search } from '../../../styles/commonIcon/search.svg';
-import { ReactComponent as ArrowDown } from '../../../styles/commonIcon/arrowDown.svg';
-import Input from '../../../elements/Input';
-import Button from '../../../elements/Button';
+import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
+import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
+import Input from 'elements/Input';
+import Button from 'elements/Button';
 
 export default function StatusListHeader({
   setSelectName,

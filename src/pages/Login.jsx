@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { styles } from '../components/common/commonStyled';
+import { styles } from 'components/common/commonStyled';
 
-import Axios from '../api/axios';
-import ROUTER from '../constants/routerConst';
-import QUERY from '../constants/query';
-import Storage from '../utils/localStorage';
+import Axios from 'api/axios';
+import ROUTER from 'constants/routerConst';
+import QUERY from 'constants/query';
+import Storage from 'utils/localStorage';
 
-import Input from '../elements/Input';
-import Button from '../elements/Button';
-import SelectCategory from '../components/common/SelectCategory';
+import Input from 'elements/Input';
+import Button from 'elements/Button';
+import SelectCategory from 'components/common/SelectCategory';
 
-import KakaoUserInfo from '../styles/rendingIcon/kakaoUserInfo.svg';
-import { ReactComponent as Logo } from '../styles/logo.svg';
+import KakaoUserInfo from 'styles/rendingIcon/kakaoUserInfo.svg';
+import { ReactComponent as Logo } from 'styles/logo.svg';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 export default function Login() {

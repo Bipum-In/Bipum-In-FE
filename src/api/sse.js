@@ -1,5 +1,5 @@
-import QUERY from '../constants/query';
-import { getCookie } from '../utils/cookie';
+import QUERY from 'constants/query';
+import { getCookie } from 'utils/cookie';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 
 export default class SSE {

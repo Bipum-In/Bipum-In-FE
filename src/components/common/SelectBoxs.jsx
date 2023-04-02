@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { ReactComponent as ArrowDown } from '../../styles/commonIcon/arrowDown.svg';
+import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 
 export default function SelectBoxs({
   seleteValue,

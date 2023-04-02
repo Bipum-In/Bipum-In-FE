@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { initDetail, requestDetail } from '../../redux/modules/requestStatus';
+import { initDetail, requestDetail } from 'redux/modules/requestStatus';
 import AdminRequestDetail from './AdminRequestDetail';
 import UserRequestDetail from './UserRequestDetail';
 

@@ -1,21 +1,21 @@
 import React, { useState, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { ReactComponent as Search } from '../styles/commonIcon/search.svg';
-import { ReactComponent as Alaram } from '../styles/commonIcon/alarm.svg';
-import { ReactComponent as Rotate } from '../styles/headerIcon/rotate.svg';
-import { ReactComponent as Useinfo } from '../styles/headerIcon/useinfo.svg';
-import { ReactComponent as Manage } from '../styles/headerIcon/manage.svg';
+import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
+import { ReactComponent as Alaram } from 'styles/commonIcon/alarm.svg';
+import { ReactComponent as Rotate } from 'styles/headerIcon/rotate.svg';
+import { ReactComponent as Useinfo } from 'styles/headerIcon/useinfo.svg';
+import { ReactComponent as Manage } from 'styles/headerIcon/manage.svg';
 
-import { ReactComponent as Pay } from '../styles/headerIcon/pay.svg';
-import { ReactComponent as Setting } from '../styles/headerIcon/setting.svg';
-import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg';
-import QUERY from '../constants/query';
-import STRING from '../constants/string';
+import { ReactComponent as Pay } from 'styles/headerIcon/pay.svg';
+import { ReactComponent as Setting } from 'styles/headerIcon/setting.svg';
+import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
+import QUERY from 'constants/query';
+import STRING from 'constants/string';
 import { v4 as uuidv4 } from 'uuid';
-import Storage from '../utils/localStorage';
-import useOutsideClick from '../hooks/useOutsideClick';
+import Storage from 'utils/localStorage';
+import useOutsideClick from 'hooks/useOutsideClick';
 import { useNavigate } from 'react-router-dom';
-import ROUTER from '../constants/routerConst';
+import ROUTER from 'constants/routerConst';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -120,6 +120,15 @@ export default function Header() {
     </HeaderWrapper>
   );
 }
+const HeaderWrapper = styled.header`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 6.25rem;
+  z-index: 999;
+  background-color: ${props => props.theme.color.blue.brandColor7};
+`;
 
 const DropdownBox = styled.div`
   display: flex;
@@ -141,16 +150,6 @@ const DropdownList = styled.div`
   &:hover {
     background-color: ${props => props.theme.color.grey.brandColor1};
   }
-`;
-
-const HeaderWrapper = styled.header`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 6.25rem;
-  z-index: 1;
-  background-color: ${props => props.theme.color.blue.brandColor7};
 `;
 
 const HeaderContainer = styled.div`

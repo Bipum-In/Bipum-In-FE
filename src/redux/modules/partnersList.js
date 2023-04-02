@@ -1,4 +1,4 @@
-import Axios from '../../api/axios';
+import Axios from 'api/axios';
 import Redux from '../redux';
 
 const initialState = {

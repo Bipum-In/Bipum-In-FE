@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Input from '../elements/Input';
-import Button from '../elements/Button';
+import Input from 'elements/Input';
+import Button from 'elements/Button';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 

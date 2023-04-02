@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-//npm install framer-motion
+
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import ModalPortal from './ModalPortal';

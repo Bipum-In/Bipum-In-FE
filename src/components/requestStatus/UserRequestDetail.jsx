@@ -1,12 +1,12 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import Axios from '../../api/axios';
+import Axios from 'api/axios';
 
 import ModalHeader from '../common/ModalHeader';
-import Button from '../../elements/Button';
+import Button from 'elements/Button';
 
-import { FormatKoreanTime } from '../../utils/formatDate';
-import STRING from '../../constants/string';
+import { FormatKoreanTime } from 'utils/formatDate';
+import STRING from 'constants/string';
 
 import UserInfo from './detail/UserInfo';
 import UserPutButton from './ userDetail/UserPutButton';

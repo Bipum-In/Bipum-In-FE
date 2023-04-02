@@ -1,17 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import StatusMenu from '../../components/common/status/StatusMenu';
-import useSelectMenu from '../../hooks/useSelectMenu';
-import STRING from '../../constants/string';
+import StatusMenu from 'components/common/status/StatusMenu';
+import useSelectMenu from 'hooks/useSelectMenu';
 import { useDispatch, useSelector } from 'react-redux';
-import { getCategoryList } from '../../redux/modules/equipmentStatus';
-import useSetStateChange from '../../hooks/useSetStateChange';
-import { __requestStatus } from '../../redux/modules/requestStatus';
-import UserEquipmentRequest from '../../components/userRequest/UserEquipmentRequest';
+import { getCategoryList } from 'redux/modules/equipmentStatus';
+import useSetStateChange from 'hooks/useSetStateChange';
+import UserEquipmentRequest from 'components/userRequest/UserEquipmentRequest';
 export default function UserRequest() {
   const {
-    requestStatus: { getRequest, isStatusError },
-    requestData: { menu, menuType, selectStatus },
+    requestData: { menu },
   } = useSelector(state => state.requestStatus);
 
   const deleteAllMenu = useRef(
@@ -24,7 +21,6 @@ export default function UserRequest() {
 
   const [menuStyle, clickMenu] = useSelectMenu(deleteAllMenu);
   const [type, setType] = useState('SUPPLY');
-  const [categoryTitle, setCategoryTitle] = useState('비품 요청');
 
   const handleClickMenu = useSetStateChange(
     ['비품 요청', '반납 요청', '수리 요청', '보고서 결재'],

@@ -3,13 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { v4 as uuidv4 } from 'uuid';
-import { FormatDateToDot } from '../../utils/formatDate';
+import { FormatDateToDot } from 'utils/formatDate';
 
-import ROUTER from '../../constants/routerConst';
-import STRING, { REQUEST_PAGES } from '../../constants/string';
+import ROUTER from 'constants/routerConst';
+import STRING, { REQUEST_PAGES } from 'constants/string';
 
 import { useDispatch } from 'react-redux';
-import { initRequest, setRequestData } from '../../redux/modules/requestStatus';
+import { initRequest, setRequestData } from 'redux/modules/requestStatus';
 
 export function ManagementCard({
   statusTitle,

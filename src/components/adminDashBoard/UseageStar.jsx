@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { KEYFRAME } from '../../styles/keyframes';
+import { KEYFRAME } from 'styles/keyframes';
 
 export default function UseageStar() {
   return (

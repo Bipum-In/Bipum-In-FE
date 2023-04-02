@@ -3,14 +3,14 @@ import styled from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import { useNavigate } from 'react-router-dom';
 import AnchorBtn from '../AnchorBtn';
-import { ReactComponent as RequestIcon } from '../../../styles/commonIcon/requestIcon.svg';
-import { ReactComponent as ArrowIcon } from '../../../styles/commonIcon/arrowDown.svg';
-import { ReactComponent as List } from '../../../styles/commonIcon/list.svg';
+import { ReactComponent as RequestIcon } from 'styles/commonIcon/requestIcon.svg';
+import { ReactComponent as ArrowIcon } from 'styles/commonIcon/arrowDown.svg';
+import { ReactComponent as List } from 'styles/commonIcon/list.svg';
 import { ManagementCards } from '../ManagementCard';
-import ROUTER from '../../../constants/routerConst';
-import STRING, { REQUEST_PAGES } from '../../../constants/string';
+import ROUTER from 'constants/routerConst';
+import STRING, { REQUEST_PAGES } from 'constants/string';
 import { useDispatch } from 'react-redux';
-import { setRequestData } from '../../../redux/modules/requestStatus';
+import { setRequestData } from 'redux/modules/requestStatus';
 
 export default function ManagementStatus({ isAdmin, getDashboard }) {
   const navigate = useNavigate();

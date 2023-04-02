@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { styles } from '../common/commonStyled';
-import Button from '../../elements/Button';
+import Button from 'elements/Button';
 
-import Axios from '../../api/axios';
+import Axios from 'api/axios';
 import SelectCategory from '../common/SelectCategory';
 import SelectCategoryList from './single/SelectCategoryList';
 import EquipmentInput from './single/EquipmentInput';

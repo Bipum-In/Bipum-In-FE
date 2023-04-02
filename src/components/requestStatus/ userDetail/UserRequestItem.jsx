@@ -7,8 +7,8 @@ import {
   TypeDetailTitle,
 } from './Styled';
 
-import STRING from '../../../constants/string';
-import Input from '../../../elements/Input';
+import STRING from 'constants/string';
+import Input from 'elements/Input';
 
 export default function UserRequestItem({
   editMode,

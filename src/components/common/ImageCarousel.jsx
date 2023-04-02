@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
-import { ReactComponent as LeftBtn } from '../../styles/commonIcon/leftBtn.svg';
-import { ReactComponent as RightBtn } from '../../styles/commonIcon/rightBtn.svg';
-import { ReactComponent as DeleteImg } from '../../styles/commonIcon/deleteImg.svg';
+import { ReactComponent as LeftBtn } from 'styles/commonIcon/leftBtn.svg';
+import { ReactComponent as RightBtn } from 'styles/commonIcon/rightBtn.svg';
+import { ReactComponent as DeleteImg } from 'styles/commonIcon/deleteImg.svg';
 
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';

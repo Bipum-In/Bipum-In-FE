@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import {} from '../../redux/modules/requestStatus';
-import EquipmentListContainer from '../../components/EquipmentManage/EquipmentListContainer';
-import { getCategoryList } from '../../redux/modules/equipmentStatus';
+import {} from 'redux/modules/requestStatus';
+import EquipmentListContainer from 'components/EquipmentManage/EquipmentListContainer';
+import { getCategoryList } from 'redux/modules/equipmentStatus';
 
 export default function EquipmentManagement() {
   const dispatch = useDispatch();

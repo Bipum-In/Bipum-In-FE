@@ -1,7 +1,7 @@
 import axios from 'axios';
-import QUERY from '../constants/query';
-import alertModal from '../utils/alertModal';
-import { getCookie, setCookie } from '../utils/cookie';
+import QUERY from 'constants/query';
+import alertModal from 'utils/alertModal';
+import { getCookie, setCookie } from 'utils/cookie';
 
 export default class Axios {
   constructor(url) {

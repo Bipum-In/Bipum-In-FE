@@ -1,10 +1,10 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-import Input from '../../../elements/Input';
-import Button from '../../../elements/Button';
+import Input from 'elements/Input';
+import Button from 'elements/Button';
 
-import { ReactComponent as AddImgIcon } from '../../../styles/commonIcon/addImg.svg';
+import { ReactComponent as AddImgIcon } from 'styles/commonIcon/addImg.svg';
 
 export default function EquipmentInput({ value, setValue, onCrawling }) {
   return (
