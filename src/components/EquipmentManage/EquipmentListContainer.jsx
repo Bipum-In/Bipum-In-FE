@@ -11,7 +11,7 @@ import useResizeGetPageSize from 'hooks/useResizeGetPageSize';
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from 'redux/modules/equipmentStatus';
 import EquipmentModal from './EquipmentModal';
-import Storage from 'utils/localStorage';
+import { getEncryptionStorage } from '../../utils/encryptionStorage';
 
 export default function EquipmentListContainer({
   category: { category, largeCategory },
@@ -22,8 +22,7 @@ export default function EquipmentListContainer({
     categoryData: { categoryIdData, categoryNameData },
   } = useSelector(state => state.equipmentStatus);
 
-  // const isAdmin = true;
-  const isAdmin = Storage.getLocalStorageJSON('userData').isAdmin;
+  const { isAdmin } = getEncryptionStorage();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('');
   const [keyword, setKeyword] = useState('');

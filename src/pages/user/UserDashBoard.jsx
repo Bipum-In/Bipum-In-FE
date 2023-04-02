@@ -9,12 +9,12 @@ import AlertStatus from 'components/adminDashBoard/status/AlertStatus';
 import TestStatus from 'components/adminDashBoard/status/UseageCard';
 import CategoryStatus from 'components/adminDashBoard/status/CategoryStatus';
 import UserDashboardDetailModal from 'components/adminDashBoard/UserDashboardDetailModal';
-import Storage from 'utils/localStorage';
+import { getEncryptionStorage } from '../../utils/encryptionStorage';
 
 export default function UserDashBoard() {
-  // const isAdmin = false;
-  const isAdmin = Storage.getLocalStorageJSON('userData').isAdmin;
   const dispatch = useDispatch();
+  const { isAdmin } = getEncryptionStorage();
+
   const [status, setStatus] = useState('');
   const [showDetailModal, setShowDetailModal] = useState({
     show: false,

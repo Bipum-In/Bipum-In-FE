@@ -12,7 +12,7 @@ import useResizeGetPageSize from 'hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { __requestStatus } from 'redux/modules/requestStatus';
-import Storage from 'utils/localStorage';
+import { getEncryptionStorage } from '../../utils/encryptionStorage';
 
 export default function RequestStatus() {
   const dispatch = useDispatch();
@@ -32,8 +32,7 @@ export default function RequestStatus() {
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
-  // const isAdmin = false;
-  const isAdmin = Storage.getLocalStorageJSON('userData').isAdmin;
+  const { isAdmin } = getEncryptionStorage();
   const path = isAdmin ? '/admin' : '';
 
   useEffect(() => {

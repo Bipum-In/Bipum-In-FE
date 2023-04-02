@@ -7,6 +7,7 @@ import Axios from 'api/axios';
 import ROUTER from 'constants/routerConst';
 import QUERY from 'constants/query';
 import Storage from 'utils/localStorage';
+import { encrypt } from '../utils/encryption';
 
 import Input from 'elements/Input';
 import Button from 'elements/Button';
@@ -14,8 +15,10 @@ import SelectCategory from 'components/common/SelectCategory';
 
 import KakaoUserInfo from 'styles/rendingIcon/kakaoUserInfo.svg';
 import { ReactComponent as Logo } from 'styles/logo.svg';
+import { getEncryptionStorage } from '../utils/encryptionStorage';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+
 export default function Login() {
   const { search } = useLocation();
   const navigate = useNavigate();
@@ -31,11 +34,10 @@ export default function Login() {
   useEffect(() => {
     const code = search.split('=')[1];
 
-    const localStorageData = Storage.getLocalStorageJSON(
-      QUERY.STORAGE.LOCAL_NAME
-    );
+    // const { checkUser } = getEncryptionStorage() || {};
+    const { checkUser } = getEncryptionStorage();
 
-    if (localStorageData && localStorageData.checkUser) {
+    if (getEncryptionStorage() && checkUser) {
       navigate(ROUTER.PATH.ADMIN.DASHBOARD);
     }
 
@@ -43,7 +45,11 @@ export default function Login() {
       axios.post(`/api/user/login?code=${code}`).then(res => {
         const userInfo = res.data.data;
         const { checkUser } = userInfo;
-        Storage.setLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME, userInfo);
+        const encryptedUserInfo = encrypt(userInfo); // 암호화
+        Storage.setLocalStorageJSON(
+          QUERY.STORAGE.LOCAL_NAME,
+          encryptedUserInfo
+        );
         setSaveUserInfo(userInfo);
         setWriteUser(checkUser);
         setCheckCode(true);
@@ -65,12 +71,15 @@ export default function Login() {
       phone: stringToNumPrice,
     };
 
-    Storage.setLocalStorageJSON('userData', {
-      ...saveUserInfo,
-      checkUser: true,
-      deptName: departmentName,
-      empName,
-    });
+    Storage.setLocalStorageJSON(
+      'userData',
+      encrypt({
+        ...saveUserInfo,
+        checkUser: true,
+        deptName: departmentName,
+        empName,
+      })
+    );
 
     axios
       .post(`/api/user/loginadd`, loginadd)
