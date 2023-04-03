@@ -66,8 +66,8 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
                   isAdmin
                     ? [
                         'supplyRequests',
-                        'returnRequests',
                         'repairRequests',
+                        'returnRequests',
                         'ReportRequests',
                       ]
                     : [
