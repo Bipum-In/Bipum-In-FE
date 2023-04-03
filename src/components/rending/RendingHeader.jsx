@@ -26,7 +26,12 @@ export default function RendingHeader() {
   };
 
   const handleReturnDashboard = () => {
-    const targetPath = isLoggedIn
+    const getLocalstorage = Storage.getLocalStorageJSON(
+      QUERY.STORAGE.LOCAL_NAME
+    );
+    const { isAdmin } = getLocalstorage;
+
+    const targetPath = isAdmin
       ? ROUTER.PATH.ADMIN.DASHBOARD
       : ROUTER.PATH.USER.DASHBOARD;
     navigate(targetPath);
@@ -67,7 +72,6 @@ export default function RendingHeader() {
     </HeaderStyles>
   );
 }
-
 const HeaderStyles = styled.header`
   display: flex;
   justify-content: center;
