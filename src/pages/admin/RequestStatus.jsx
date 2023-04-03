@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-
 import StatusMenu from 'components/common/status/StatusMenu';
 import RequestShow from 'components/requestStatus/RequestShow';
 import RequestModal from 'components/requestStatus/RequestModal';
@@ -28,7 +27,13 @@ export default function RequestStatus() {
   const [keyword, setKeyword] = useState('');
   const [modal, setModal] = useState({ show: false, detailId: null });
 
-  const [menuStyle, clickMenu] = useSelectMenu(menu);
+  const editMenu = useRef(
+    menu.map(item =>
+      item.name === '보고서 결재' ? { ...item, name: '보고서 결재 요청' } : item
+    )
+  ).current;
+  const [menuStyle, clickMenu] = useSelectMenu(editMenu);
+
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
@@ -51,7 +56,7 @@ export default function RequestStatus() {
   ]);
 
   const handleClickMenu = useSetStateChange(
-    ['전체', '비품 요청', '반납 요청', '수리 요청', '보고서 결재'],
+    ['전체', '비품 요청', '반납 요청', '수리 요청', '보고서 결재 요청'],
     ['', 'SUPPLY', 'RETURN', 'REPAIR', 'REPORT'],
     setType,
     e => {

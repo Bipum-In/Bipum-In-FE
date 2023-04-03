@@ -38,14 +38,14 @@ const REQUEST_NAME = {
   SUPPLY: '비품 요청',
   REPAIR: '수리 요청',
   RETURN: '반납 요청',
-  REPORT: '보고서 결재',
+  REPORT: '보고서 결재 요청',
 };
 
 const REQUEST_NAME_ENG = {
   '비품 요청': 'SUPPLY',
   '수리 요청': 'REPAIR',
   '반납 요청': 'RETURN',
-  '보고서 결재': 'REPORT',
+  '보고서 결재 요청': 'REPORT',
 };
 const CATEGORY = {
   전체: '',

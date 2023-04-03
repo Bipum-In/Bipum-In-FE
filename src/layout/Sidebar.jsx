@@ -154,7 +154,7 @@ const LogoContainer = styled.div`
 `;
 
 const Logo = styled.div`
-  min-width: 7.25rem;
+  min-width: 8rem;
   height: 1.9375rem;
   background: url(${logo}) no-repeat;
 `;
