@@ -15,6 +15,6 @@ export default function alertModal(message, timeToSecond) {
       root.unmount(root);
       root = null;
       clearTimeout(unmount);
-    }, timeSet);
+    }, timeSet + 100);
   }
 }
