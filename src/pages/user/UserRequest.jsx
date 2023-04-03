@@ -15,7 +15,9 @@ export default function UserRequest() {
     menu
       .filter(item => item.name !== '전체')
       .map(item =>
-        item.name === '비품 요청' ? { ...item, status: true } : item
+        item.name === '보고서 결재'
+          ? { ...item, name: '보고서 결재 요청' }
+          : item
       )
   ).current;
 
@@ -23,7 +25,7 @@ export default function UserRequest() {
   const [type, setType] = useState('SUPPLY');
 
   const handleClickMenu = useSetStateChange(
-    ['비품 요청', '반납 요청', '수리 요청', '보고서 결재'],
+    ['비품 요청', '반납 요청', '수리 요청', '보고서 결재 요청'],
     ['SUPPLY', 'RETURN', 'REPAIR', 'REPORT'],
     setType,
     e => {
