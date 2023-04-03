@@ -4,7 +4,7 @@ const SelectCaregoryConteiner = styled.div`
   display: flex;
   gap: 0.5rem;
   select {
-    min-width: 5.25rem;
+    width: auto;
     height: 2.6rem;
     border-color: ${props => props.theme.color.blue.brandColor3};
     color: ${props => props.theme.color.blue.brandColor6};
