@@ -35,12 +35,12 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
             onClick={() =>
               navigate(
                 ROUTER.PATH[isAdminStr][
-                  isAdmin ? 'EQUIPMENT_MANAGEMENT' : 'REQUEST_LIST'
+                  isAdmin ? 'REQUEST_STATUS' : 'REQUEST_LIST'
                 ]
               )
             }
           >
-            {isAdmin ? '관리 현황' : '요청 내역'}
+            {isAdmin ? '요청 현황' : '요청 내역'}
             <ArrowIcon />
           </AnchorBtn>
           <ManagementWrapper>
