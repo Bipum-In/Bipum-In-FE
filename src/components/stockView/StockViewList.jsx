@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
+import { FormatDateToKoShort } from 'utils/formatDate';
 
 export default function StockViewList({ requestData, onClickDetail }) {
   const { content } = requestData;
@@ -17,8 +18,10 @@ export default function StockViewList({ requestData, onClickDetail }) {
           >
             <img src={item.image} alt="" />
             <Content>
-              <span>{item.modelName}</span>
-              <span>{item.createdAt}</span>
+              <StokeItemTitle>{item.modelName}</StokeItemTitle>
+              <StokeCreateAt>
+                등록일: {FormatDateToKoShort(item.createdAt)}
+              </StokeCreateAt>
             </Content>
           </Card>
         ))}
@@ -67,4 +70,14 @@ const Content = styled.div`
     font-size: 12px;
     color: ${props => props.theme.color.grey.brandColor5};
   }
+`;
+
+const StokeItemTitle = styled.span`
+  font-size: 1.125rem;
+  padding-bottom: 0.625rem;
+`;
+
+const StokeCreateAt = styled.span`
+  font-size: 0.75rem;
+  color: ${props => props.theme.color.grey.brandColor5};
 `;
