@@ -199,8 +199,6 @@ export default function AddSingleItem({ category, largeCategory }) {
     !equipmentData.largeCategory ||
     !checkSallCategory;
 
-  // || !preview;
-
   return (
     <>
       {category && (
@@ -239,7 +237,6 @@ export default function AddSingleItem({ category, largeCategory }) {
                   <styles.TypeTitle>협력업체</styles.TypeTitle>
                   <PartnerCompany>
                     <SelectBox>
-                      {/* <styles.SelectCaregoryConteiner> */}
                       <SelectCategory
                         category={partners}
                         optionNullName={optionNullList.partners}
@@ -248,14 +245,12 @@ export default function AddSingleItem({ category, largeCategory }) {
                         optionName={'partnersName'}
                         onChangeCategory={handleChangePartners}
                       />
-                      {/* </styles.SelectCaregoryConteiner> */}
                     </SelectBox>
                   </PartnerCompany>
                 </styles.TypeBox>
                 <styles.TypeBox>
                   <styles.TypeTitle>사용자</styles.TypeTitle>
                   <SelectBox>
-                    {/* <styles.SelectCaregoryConteiner> */}
                     <SelectUser
                       category={[dept, user]}
                       optionNullName={[
@@ -267,7 +262,6 @@ export default function AddSingleItem({ category, largeCategory }) {
                       optionName={['deptName', 'empName']}
                       onChangeCategory={[handleChangeDept, handleChangeUser]}
                     />
-                    {/* </styles.SelectCaregoryConteiner> */}
                   </SelectBox>
                 </styles.TypeBox>
               </EquipmentLeftContainer>
