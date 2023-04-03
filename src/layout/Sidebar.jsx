@@ -8,7 +8,8 @@ import {
   CategoryItemRight,
 } from 'components/layout/CategoryItem';
 
-import logo from 'styles/logo.svg';
+import { ReactComponent as Logo } from 'styles/logo.svg';
+
 import { ReactComponent as Eye } from 'styles/sidebarIcon/eye.svg';
 import { ReactComponent as Add } from 'styles/sidebarIcon/add.svg';
 import { ReactComponent as Dashboard } from 'styles/sidebarIcon/dashboard.svg';
@@ -151,12 +152,9 @@ const LogoContainer = styled.div`
   width: 100%;
   margin: 1.875rem 0;
   ${props => props.theme.CursorActive};
-`;
-
-const Logo = styled.div`
-  min-width: 8rem;
-  height: 1.9375rem;
-  background: url(${logo}) no-repeat;
+  svg {
+    width: 70%;
+  }
 `;
 
 const SidebarCategoryContainer = styled.div`
