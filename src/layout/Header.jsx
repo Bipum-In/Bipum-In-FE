@@ -66,6 +66,9 @@ export default function Header() {
         );
       },
     });
+    if (!isAdmin) {
+      headerData.splice(1, 1);
+    }
   }
 
   return (
