@@ -20,6 +20,12 @@ const grey = {
   brandColor7: '#5F5F5F',
 };
 
+const fontWeight = {
+  weight5: '500',
+  weight6: '600',
+  weight7: '700',
+};
+
 const color = {
   blue,
   grey,
@@ -27,12 +33,6 @@ const color = {
   accpet: '#2b9936',
   reject: '#C73939',
   remove: '#746336',
-};
-
-const fontWeight = {
-  bold: 700,
-  semi_bold: 600,
-  regular: 400,
 };
 
 const screen = {
