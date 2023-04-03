@@ -102,6 +102,35 @@ ${props =>
       font-weight: 400;
     `}
 
+    ${props =>
+    props.submit &&
+    css`
+      padding: 0rem 0.625rem;
+      font-size: ${props => (props.post === 'true' ? '1.375rem' : '1rem')};
+      width: ${props => (props.post ? '20.5em;' : '15rem')};
+      height: ${props => (props.crawling ? '100%' : '3.5rem;')};
+      gap: ${props => (props.crawling ? '.25rem' : 'unset')};
+      font-weight: bold;
+      text-align: center;
+      color: white;
+      background: ${props =>
+        props.disabled
+          ? props.theme.color.grey.brandColor3
+          : props.theme.color.blue.brandColor6};
+    `}
+  ${props =>
+    props.cancel &&
+    css`
+      padding: 0rem 0.625rem;
+      font-size: 1rem;
+      width: 15rem;
+      height: 3.5rem;
+      text-align: center;
+      color: ${props => props.theme.color.blue.brandColor6};
+      border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
+      background-color: white;
+      margin-right: 1.25rem;
+    `}
 
   & {
     cursor: pointer;

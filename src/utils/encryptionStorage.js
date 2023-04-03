@@ -9,6 +9,7 @@ const DEFAULT_STORAGE_DATA = {
   image: null,
   isAdmin: null,
   userId: null,
+  userRole: null,
 };
 
 export function getEncryptionStorage() {

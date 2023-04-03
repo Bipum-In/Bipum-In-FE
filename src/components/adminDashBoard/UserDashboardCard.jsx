@@ -19,10 +19,8 @@ export default function UserDashboardCard({
       >
         <CategoryTitle>
           <span>{categoryName}</span>
-          <span>
-            <Status status={status} />
-            {STRING.EQUIPMENT_STATUS[status]}
-          </span>
+          <Status status={status} />
+          {STRING.EQUIPMENT_STATUS[status]}
         </CategoryTitle>
         <CategoryContainer>
           <TotalCountTitle>
@@ -60,7 +58,7 @@ const CategoryTitle = styled.div`
   font-weight: 500;
   font-size: 1.125rem;
   gap: 10px;
-
+  padding-bottom: 1rem;
   span:last-child {
     font-weight: 400;
     font-size: 12px;
@@ -84,6 +82,7 @@ const ImageContainer = styled.div`
   img {
     width: 5.5rem;
     height: 5.5rem;
+    border-radius: 1rem;
   }
 `;
 

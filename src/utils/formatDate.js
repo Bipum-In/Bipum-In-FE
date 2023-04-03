@@ -38,6 +38,19 @@ export function FormatDateToDot(dateStr) {
   return `${year}.${monthStr}.${dayStr}`;
 }
 
+export function FormatDateToKoShort(dateStr) {
+  if (!dateStr) {
+    return '';
+  }
+  const date = new Date(dateStr);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const monthStr = month < 10 ? `0${month}` : `${month}`;
+  const dayStr = day < 10 ? `0${day}` : `${day}`;
+  return `${year}년 ${monthStr}월 ${dayStr}일`;
+}
+
 export function FormatKoreanTime(dateStr) {
   if (!dateStr) {
     return '';

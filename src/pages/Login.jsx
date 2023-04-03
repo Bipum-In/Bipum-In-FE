@@ -33,30 +33,40 @@ export default function Login() {
 
   useEffect(() => {
     const code = search.split('=')[1];
-
-    // const { checkUser } = getEncryptionStorage() || {};
-    const { checkUser } = getEncryptionStorage();
+    const currentUrl = document.location.href.split('//')[1].substring(0, 5);
+    const { checkUser, isAdmin } = getEncryptionStorage();
 
     if (getEncryptionStorage() && checkUser) {
-      navigate(ROUTER.PATH.ADMIN.DASHBOARD);
+      const targetPath = isAdmin
+        ? ROUTER.PATH.ADMIN.DASHBOARD
+        : ROUTER.PATH.USER.DASHBOARD;
+      navigate(targetPath);
     }
 
     if (code && !checkCode) {
-      axios.post(`/api/user/login?code=${code}`).then(res => {
-        const userInfo = res.data.data;
-        const { checkUser } = userInfo;
-        const encryptedUserInfo = encrypt(userInfo); // 암호화
-        Storage.setLocalStorageJSON(
-          QUERY.STORAGE.LOCAL_NAME,
-          encryptedUserInfo
-        );
-        setSaveUserInfo(userInfo);
-        setWriteUser(checkUser);
-        setCheckCode(true);
-      });
+      axios
+        .post(`/api/user/login?code=${code}&urlType=${currentUrl}`)
+        .then(res => {
+          console.log(res.data.data);
+          const userInfo = res.data.data;
+          const { checkUser } = userInfo;
+          const encryptedUserInfo = encrypt(userInfo); // 암호화
+          Storage.setLocalStorageJSON(
+            QUERY.STORAGE.LOCAL_NAME,
+            encryptedUserInfo
+          );
+          setSaveUserInfo(userInfo);
+          setWriteUser(checkUser);
+          setCheckCode(true);
+        });
       axios.get(`/api/dept`).then(res => setDepartmentList(res.data.data));
     }
-    writeUser && navigate(ROUTER.PATH.ADMIN.DASHBOARD);
+    if (writeUser) {
+      const targetPath = isAdmin
+        ? ROUTER.PATH.ADMIN.DASHBOARD
+        : ROUTER.PATH.USER.DASHBOARD;
+      navigate(targetPath);
+    }
   }, [checkCode, navigate, search, writeUser]);
 
   const handleLoginInfoAdd = () => {

@@ -9,6 +9,7 @@ import Storage from 'utils/localStorage';
 
 import { useIsLoggedIn } from 'hooks/useIsLoggedIn';
 import { logoutSuccess } from 'redux/modules/authSlice';
+import { getEncryptionStorage } from 'utils/encryptionStorage';
 
 import ROUTER from 'constants/routerConst';
 import QUERY from 'constants/query';
@@ -26,7 +27,9 @@ export default function RendingHeader() {
   };
 
   const handleReturnDashboard = () => {
-    const targetPath = isLoggedIn
+    const { isAdmin } = getEncryptionStorage();
+
+    const targetPath = isAdmin
       ? ROUTER.PATH.ADMIN.DASHBOARD
       : ROUTER.PATH.USER.DASHBOARD;
     navigate(targetPath);
@@ -67,7 +70,6 @@ export default function RendingHeader() {
     </HeaderStyles>
   );
 }
-
 const HeaderStyles = styled.header`
   display: flex;
   justify-content: center;
