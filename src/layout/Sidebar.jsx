@@ -81,6 +81,9 @@ export default function Sidebar({
   const handleSidebarToggle = () => setIsSidebarHidden(prev => !prev);
 
   const handleLogoClick = () => {
+    if (desktopSize) {
+      setIsSidebarHidden(true);
+    }
     const targetPath = isAdmin
       ? ROUTER.PATH.ADMIN.DASHBOARD
       : ROUTER.PATH.USER.DASHBOARD;
