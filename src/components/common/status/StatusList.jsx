@@ -202,7 +202,7 @@ const StatusColor = styled.div`
   ${props =>
     props.status === '재고' &&
     css`
-      background-color: #027cff;
+      background-color: #d23737;
     `};
 
   ${props =>
