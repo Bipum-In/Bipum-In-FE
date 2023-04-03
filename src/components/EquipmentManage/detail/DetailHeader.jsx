@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Button from 'elements/Button';
+import STRING from 'constants/string';
 
 export default function DetailHeader({
   edit,
@@ -7,6 +8,7 @@ export default function DetailHeader({
   detail,
   onEdit,
   onDispose,
+  onFromRequest,
 }) {
   const { supplyId, isAdmin, isMySupply } = detail.supplyDetail;
   return (
@@ -38,9 +40,24 @@ export default function DetailHeader({
         <>
           {isMySupply && (
             <>
-              <ReportButton>보고서 작성</ReportButton>
-              <ReturnButton>반납요청</ReturnButton>
-              <RepairButton>수리요청</RepairButton>
+              <ReportButton
+                value={STRING.REQUEST_TYPES.REPORT}
+                onClick={e => onFromRequest(e)}
+              >
+                보고서 작성
+              </ReportButton>
+              <ReturnButton
+                value={STRING.REQUEST_TYPES.RETURN}
+                onClick={e => onFromRequest(e)}
+              >
+                반납 요청
+              </ReturnButton>
+              <RepairButton
+                value={STRING.REQUEST_TYPES.REPAIR}
+                onClick={e => onFromRequest(e)}
+              >
+                수리 요청
+              </RepairButton>
             </>
           )}
         </>
