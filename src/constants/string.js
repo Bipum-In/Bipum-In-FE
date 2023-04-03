@@ -21,8 +21,8 @@ const SIDEBAR = {
 const REQUEST_TYPES = {
   ALL: 'ALL',
   SUPPLY: 'SUPPLY',
-  REPAIR: 'REPAIR',
   RETURN: 'RETURN',
+  REPAIR: 'REPAIR',
   REPORT: 'REPORT',
 };
 
