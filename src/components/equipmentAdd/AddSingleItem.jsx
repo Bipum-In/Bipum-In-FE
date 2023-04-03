@@ -86,7 +86,11 @@ export default function AddSingleItem({ category, largeCategory }) {
   const handleChangeLargeCategory = e => {
     const { ko, eng } = JSON.parse(e.target.value);
     const text = e.target.options[e.target.selectedIndex].innerText;
-    setOptionNullList(state => ({ ...state, largeCategory: text }));
+    setOptionNullList(state => ({
+      ...state,
+      largeCategory: text,
+      smallCategory: '소분류',
+    }));
 
     equipmentData.largeCategory = eng;
     setSmallCategory(parseCategoryData(ko, category));
@@ -112,9 +116,8 @@ export default function AddSingleItem({ category, largeCategory }) {
   const handleChangeDept = e => {
     const { ko: dept } = JSON.parse(e.target.value);
     const text = e.target.options[e.target.selectedIndex].innerText;
-    setOptionNullList(state => ({ ...state, dept: text }));
-
-    getUserData(dept);
+    setOptionNullList(state => ({ ...state, dept: text, user: '사원명' }));
+    dept ? getUserData(dept) : setUser('');
   };
 
   const handleChangeUser = e => {
@@ -235,26 +238,37 @@ export default function AddSingleItem({ category, largeCategory }) {
                 <styles.TypeBox>
                   <styles.TypeTitle>협력업체</styles.TypeTitle>
                   <PartnerCompany>
-                    <SelectCategory
-                      category={partners}
-                      optionNullName={optionNullList.partners}
-                      optionKey={'partnersName'}
-                      optionValueKey={'partnersId'}
-                      optionName={'partnersName'}
-                      onChangeCategory={handleChangePartners}
-                    />
+                    <SelectBox>
+                      {/* <styles.SelectCaregoryConteiner> */}
+                      <SelectCategory
+                        category={partners}
+                        optionNullName={optionNullList.partners}
+                        optionKey={'partnersName'}
+                        optionValueKey={'partnersId'}
+                        optionName={'partnersName'}
+                        onChangeCategory={handleChangePartners}
+                      />
+                      {/* </styles.SelectCaregoryConteiner> */}
+                    </SelectBox>
                   </PartnerCompany>
                 </styles.TypeBox>
                 <styles.TypeBox>
                   <styles.TypeTitle>사용자</styles.TypeTitle>
-                  <SelectUser
-                    category={[dept, user]}
-                    optionNullName={[optionNullList.dept, optionNullList.user]}
-                    optionKey={['deptName', 'empName']}
-                    optionValueKey={['deptId', 'userId']}
-                    optionName={['deptName', 'empName']}
-                    onChangeCategory={[handleChangeDept, handleChangeUser]}
-                  />
+                  <SelectBox>
+                    {/* <styles.SelectCaregoryConteiner> */}
+                    <SelectUser
+                      category={[dept, user]}
+                      optionNullName={[
+                        optionNullList.dept,
+                        optionNullList.user,
+                      ]}
+                      optionKey={['deptName', 'empName']}
+                      optionValueKey={['deptId', 'userId']}
+                      optionName={['deptName', 'empName']}
+                      onChangeCategory={[handleChangeDept, handleChangeUser]}
+                    />
+                    {/* </styles.SelectCaregoryConteiner> */}
+                  </SelectBox>
                 </styles.TypeBox>
               </EquipmentLeftContainer>
               <Hr />
@@ -319,4 +333,21 @@ const SubminPostContainer = styled.div`
   ${props => props.theme.FlexCenter};
   padding-top: 1rem;
   width: 100%;
+`;
+
+const SelectBox = styled.div`
+  ${props => props.theme.FlexRow};
+  color: ${props => props.theme.color.grey.brandColor7};
+  gap: 0.5rem;
+
+  select {
+    width: auto;
+    border: 1px solid ${props => props.theme.color.grey.brandColor3};
+    background-color: ${props => props.theme.color.grey.brandColor1};
+    margin-right: 0.2rem;
+  }
+
+  path {
+    stroke: ${props => props.theme.color.grey.brandColor7};
+  }
 `;
