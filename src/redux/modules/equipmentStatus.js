@@ -100,6 +100,11 @@ const equipmentStatusSlice = Redux.slice(
     initHistory: (state, _) => {
       state.supplyHistory.user = { content: [], lastPage: false };
     },
+    initEquipmentDetail: (state, _) => {
+      state.equipmentDetail.getDetail = null;
+      state.equipmentDetail.isDetailLoading = false;
+      state.equipmentDetail.isDetailError = false;
+    },
     setCategoryData: (state, action) => {
       state.categoryData.categoryIdData = action.payload.categoryId;
       state.categoryData.categoryNameData = action.payload.categoryName;
@@ -153,5 +158,6 @@ const equipmentStatusSlice = Redux.slice(
   }
 );
 
-export const { initHistory, setCategoryData } = equipmentStatusSlice.actions;
+export const { initHistory, initEquipmentDetail, setCategoryData } =
+  equipmentStatusSlice.actions;
 export default equipmentStatusSlice.reducer;

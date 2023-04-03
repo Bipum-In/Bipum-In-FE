@@ -56,7 +56,16 @@ export default function EquipmentListContainer({
       })
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, keyword, categoryId, page, status, pageSize, handleResize]);
+  }, [
+    dispatch,
+    keyword,
+    categoryId,
+    page,
+    status,
+    pageSize,
+    handleResize,
+    showDetailModal.show,
+  ]);
 
   const handleClickMenu = e => {
     const name = e.target.innerText;

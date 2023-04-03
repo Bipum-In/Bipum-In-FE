@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import Button from 'elements/Button';
 import { styles } from '../common/commonStyled';
@@ -37,6 +37,10 @@ export default function UserEquipmentRequest({
   });
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
 
+  useEffect(() => {
+    initData();
+  }, [type]);
+
   const initData = () => {
     setPreview(null);
     setMysupply(null);
@@ -65,9 +69,13 @@ export default function UserEquipmentRequest({
 
   const handleChangeLargeCategory = e => {
     const { ko } = JSON.parse(e.target.value);
-    const text = e.target.options[e.target.selectedIndex].innerText;
+    const largeCategory = e.target.options[e.target.selectedIndex].innerText;
     const smallCatagory = parseCategoryData(ko, category);
-    setOptionNullList(state => ({ ...state, largeCategory: text }));
+    setOptionNullList({
+      largeCategory,
+      smallCategory: '소분류',
+      supply: '선택',
+    });
 
     requestData.categoryId = smallCatagory[0].categoryId;
     setSmallCategory(smallCatagory);
@@ -75,10 +83,14 @@ export default function UserEquipmentRequest({
 
   const handleChangeSmallCategory = e => {
     const { ko: categoryId } = JSON.parse(e.target.value);
-    requestData.categoryId = categoryId;
-    const text = e.target.options[e.target.selectedIndex].innerText;
-    setOptionNullList(state => ({ ...state, smallCategory: text }));
+    const smallCategory = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({
+      ...state,
+      smallCategory,
+      supply: '선택',
+    }));
 
+    requestData.categoryId = categoryId;
     type !== 'SUPPLY' && setMySupply(categoryId);
     setCheckSallCategory(requestData.categoryName);
   };
@@ -199,8 +211,8 @@ export default function UserEquipmentRequest({
                     <styles.SelectCaregoryConteiner>
                       <SelectCategory
                         category={mySupply}
-                        optionName={optionNullList.supply}
-                        optionNullName={'선택'}
+                        optionName={'modelName'}
+                        optionNullName={optionNullList.supply}
                         optionKey={'supplyId'}
                         optionValueKey={'supplyId'}
                         onChangeCategory={handleChangeMySupply}

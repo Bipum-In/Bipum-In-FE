@@ -6,12 +6,11 @@ import Button from 'elements/Button';
 
 export default function DetailInfoRequester({
   edit,
+  optionNullList,
   editRequester,
   deptValue,
   detail,
   partners,
-  category,
-  onChangeCategory,
   onChangeDept,
   onChangePartners,
   onEditRequester,
@@ -27,24 +26,8 @@ export default function DetailInfoRequester({
       <CategoryContainer>
         <TextType edit={edit}>
           <span>비품 종류</span>
-          {editRequester.category ? (
-            <SelectCategoryList
-              category={category}
-              optionName={['name', 'categoryName']}
-              optionNullName={['대분류', '소분류']}
-              optionKey={['name', 'categoryName']}
-              optionValueKey={['name', 'categoryName']}
-              onChangeCategory={onChangeCategory}
-            />
-          ) : (
-            <span>{smallCategory}</span>
-          )}
+          <span>{smallCategory}</span>
         </TextType>
-        {edit && (
-          <Button value={'category'} onClick={onEditRequester}>
-            수정
-          </Button>
-        )}
       </CategoryContainer>
       <PartnersContainer>
         <TextType>
@@ -53,7 +36,7 @@ export default function DetailInfoRequester({
             <Partners>
               <SelectCategory
                 category={partners}
-                optionNullName="회사명"
+                optionNullName={optionNullList.partners}
                 optionKey={'partnersName'}
                 optionValueKey={'partnersId'}
                 optionName={'partnersName'}
@@ -61,7 +44,7 @@ export default function DetailInfoRequester({
               />
             </Partners>
           ) : (
-            <span>{partnersName}</span>
+            <span>{partnersName || ''}</span>
           )}
         </TextType>
         {edit && (
@@ -77,7 +60,7 @@ export default function DetailInfoRequester({
             <DeptUser>
               <SelectUser
                 category={deptValue}
-                optionNullName={['부서명', '사원명']}
+                optionNullName={[optionNullList.dept, optionNullList.user]}
                 optionKey={['deptName', 'empName']}
                 optionValueKey={['deptId', 'userId']}
                 optionName={['deptName', 'empName']}
@@ -85,7 +68,7 @@ export default function DetailInfoRequester({
               />
             </DeptUser>
           ) : (
-            <span>{`${deptName} / ${empName}`}</span>
+            <span>{deptName && empName ? `${deptName} / ${empName}` : ''}</span>
           )}
         </TextType>
         {edit && (
