@@ -21,9 +21,13 @@ export default function RendingHeader() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useIsLoggedIn();
+  const currentUrl =
+    document.location.href === 'http://localhost:3000/'
+      ? process.env.REACT_APP_LOCALHOST_URL
+      : process.env.REACT_APP_S3_URL;
 
   const handleKakaoLogin = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${process.env.REACT_APP_LOCALHOST_URL}/api/user/kakao/callback&response_type=code`;
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${currentUrl}/api/user/kakao/callback&response_type=code`;
   };
 
   const handleReturnDashboard = () => {
