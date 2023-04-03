@@ -51,22 +51,3 @@ export function updateEncryptionStorage(key, value) {
     return null;
   }
 }
-
-// export function getEncryptionStorage() {
-//   const encryptedData = Storage.getLocalStorageJSON(QUERY.STORAGE.LOCAL_NAME);
-
-//   if (!encryptedData) {
-//     return null;
-//   }
-
-//   try {
-//     const decryptedData = decrypt(encryptedData);
-//     return decryptedData;
-//   } catch (error) {
-//     console.error(
-//       '로컬 저장소 데이터 복호화 중 오류가 발생했습니다. : ',
-//       error
-//     );
-//     return null;
-//   }
-// }
