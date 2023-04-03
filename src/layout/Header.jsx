@@ -27,7 +27,8 @@ export default function Header() {
   const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
   useOutsideClick(dropDownRef, () => setIsDropdownVisible(false));
 
-  const { empName, deptName, image, isAdmin } = getEncryptionStorage();
+  const { empName, deptName, image, isAdmin, userRole } =
+    getEncryptionStorage();
 
   const headerData = [
     {
@@ -41,18 +42,6 @@ export default function Header() {
       path: '',
     },
     {
-      icon: <Rotate />,
-      text: isAdmin
-        ? STRING.HEADER_DROPDOWN.USERMODE
-        : STRING.HEADER_DROPDOWN.ADMINMODE,
-      click: () => {
-        updateEncryptionStorage('isAdmin', !isAdmin);
-        navigate(
-          isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
-        );
-      },
-    },
-    {
       icon: <Pay />,
       text: STRING.HEADER_DROPDOWN.PAYINFO,
       path: '',
@@ -63,6 +52,21 @@ export default function Header() {
       path: '',
     },
   ];
+
+  if (userRole === 'ADMIN') {
+    headerData.splice(2, 0, {
+      icon: <Rotate />,
+      text: isAdmin
+        ? STRING.HEADER_DROPDOWN.USERMODE
+        : STRING.HEADER_DROPDOWN.ADMINMODE,
+      click: () => {
+        updateEncryptionStorage('isAdmin', !isAdmin);
+        navigate(
+          isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
+        );
+      },
+    });
+  }
 
   return (
     <HeaderWrapper>
