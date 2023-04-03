@@ -65,7 +65,17 @@ export default function EquipmentListContainer({
     pageSize,
     handleResize,
     showDetailModal.show,
+    showSingleModal,
+    showMultipleModal,
   ]);
+
+  const initEquipmentList = () => {
+    setCategoryList({ show: false, list: categoryList.list });
+    setCategoryId('');
+    setPage(1);
+    setKeyword('');
+    setCategoryTitle('전체');
+  };
 
   const handleClickMenu = e => {
     const name = e.target.innerText;
@@ -73,11 +83,7 @@ export default function EquipmentListContainer({
     clickMenu(e);
 
     if (name === '전체') {
-      setCategoryList({ show: false, list: categoryList.list });
-      setCategoryId('');
-      setPage(1);
-      setKeyword('');
-      setCategoryTitle('전체');
+      initEquipmentList();
       return;
     }
     setCategoryList({ show: true, list: parseCategoryList });
@@ -105,12 +111,20 @@ export default function EquipmentListContainer({
     setKeyword(e.target.value);
   };
 
-  const handleDetailModal = id =>
+  const handleDetailModal = id => {
+    handleClickMenu({ target: { innerText: '전체' } });
     setShowDetailModal(state => ({ show: !state.show, id: id }));
+  };
 
-  const handleSingleModal = () => setShowSingleModal(state => !state);
+  const handleSingleModal = () => {
+    handleClickMenu({ target: { innerText: '전체' } });
+    setShowSingleModal(state => !state);
+  };
 
-  const handleMultipleModal = () => setShowMultipleModal(state => !state);
+  const handleMultipleModal = () => {
+    handleClickMenu({ target: { innerText: '전체' } });
+    setShowMultipleModal(state => !state);
+  };
 
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.largeCategory === name);
