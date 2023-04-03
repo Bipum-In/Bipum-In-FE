@@ -36,14 +36,16 @@ export default function Provide({
           </SelectWrapper>
         </ProvideEquipment>
       ) : (
-        <EquipmentImageContainer>
-          <span>비품 사진</span>
-          <ImageContainer>
-            {image.map(img => (
-              <img key={uuidv4()} src={img} alt="equipmentImg" />
-            ))}
-          </ImageContainer>
-        </EquipmentImageContainer>
+        requestType !== '비품 요청' && (
+          <EquipmentImageContainer>
+            <span>비품 사진</span>
+            <ImageContainer>
+              {image.map(img => (
+                <img key={uuidv4()} src={img} alt="equipmentImg" />
+              ))}
+            </ImageContainer>
+          </EquipmentImageContainer>
+        )
       )}
       {requestStatus === '처리전' ? (
         <MessegeAndRefuse>
@@ -54,10 +56,12 @@ export default function Provide({
           />
         </MessegeAndRefuse>
       ) : (
-        <SendMessegeContainer>
-          <span>남긴 메시지</span>
-          <SendMessege>{comment}</SendMessege>
-        </SendMessegeContainer>
+        comment && (
+          <SendMessegeContainer>
+            <span>남긴 메시지</span>
+            <SendMessege>{comment}</SendMessege>
+          </SendMessegeContainer>
+        )
       )}
     </ProvideContainer>
   );
@@ -75,7 +79,6 @@ const EquipmentImageContainer = styled.div`
   color: ${props => props.theme.color.blue.brandColor6};
   padding: 1.5rem 0;
   border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
-
   img {
     max-width: 8.25rem;
     min-width: 8.25rem;
