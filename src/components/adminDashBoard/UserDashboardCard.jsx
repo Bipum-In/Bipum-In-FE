@@ -19,8 +19,10 @@ export default function UserDashboardCard({
       >
         <CategoryTitle>
           <span>{categoryName}</span>
-          <Status status={status} />
-          {STRING.EQUIPMENT_STATUS[status]}
+          <StatusContainer>
+            <Status status={status} />
+            {STRING.EQUIPMENT_STATUS[status]}
+          </StatusContainer>
         </CategoryTitle>
         <CategoryContainer>
           <TotalCountTitle>
@@ -54,6 +56,8 @@ const CategoryContainer = styled.div`
 
 const CategoryTitle = styled.div`
   display: flex;
+  width: 7.4375rem;
+  height: 1.875rem;
   align-items: center;
   font-weight: 500;
   font-size: 1.125rem;
@@ -84,6 +88,16 @@ const ImageContainer = styled.div`
     height: 5.5rem;
     border-radius: 1rem;
   }
+`;
+
+const StatusContainer = styled.div`
+  ${props => props.theme.FlexRow};
+  ${props => props.theme.FlexCenter}
+  width: 3.875rem;
+  height: 1.875rem;
+  font-size: 0.75rem;
+  background-color: ${props => props.theme.color.blue.brandColor1};
+  border-radius: 0.5rem;
 `;
 
 const Status = styled.span`

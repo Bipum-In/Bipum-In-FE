@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import {
   getEquipmentDetail,
   initEquipmentDetail,
 } from 'redux/modules/equipmentStatus';
 import styled from 'styled-components';
 import Axios from 'api/axios';
-import STRING from 'constants/string';
+import STRING, { REQUEST_PAGES } from 'constants/string';
 
 import DetailImage from './DetailImage';
 import DetailHeader from './DetailHeader';
@@ -15,6 +16,8 @@ import DetailUseHistory from './DetailUseHistory';
 import DetailInfoProduct from './DetailInfoProduct';
 import DetailRepairHistory from './DetailRepairHistory';
 import DetailInfoRequester from './DetailInfoRequester';
+import { setRequestData } from 'redux/modules/requestStatus';
+import ROUTER from 'constants/routerConst';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -36,6 +39,7 @@ export default function EquipmentDetail({
   isClose,
 }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
   const [editRequester, setEditRequester] = useState({
     category: false,
@@ -123,15 +127,10 @@ export default function EquipmentDetail({
     axios.delete(`/api/supply/${supplyId}`).then(() => isClose());
   };
 
-  const handleChangeLargeCategory = e => {
-    const { ko, eng } = JSON.parse(e.target.value);
-    detailData.largeCategory = eng;
-    setSmallCategory(parseCategoryData(ko, category));
-  };
-
-  const handleChangeSmallCategory = e => {
-    const { ko } = JSON.parse(e.target.value);
-    detailData.categoryName = ko;
+  const handleFromRequest = e => {
+    const { value } = e.target;
+    dispatch(setRequestData(REQUEST_PAGES[value]));
+    navigate(ROUTER.PATH.USER.REQUEST);
   };
 
   const handleChangePartners = e => {
@@ -158,10 +157,6 @@ export default function EquipmentDetail({
 
     detailData.userId = user;
     console.log(detailData, user);
-  };
-
-  const parseCategoryData = (name, getCategory) => {
-    return getCategory.filter(item => item.largeCategory === name);
   };
 
   const getUserData = deptId =>
@@ -212,6 +207,7 @@ export default function EquipmentDetail({
             onEdit={handleEdit}
             onSave={handleSave}
             onDispose={handleDispose}
+            onFromRequest={handleFromRequest}
           />
           <DetailBodyTitle detail={getDetail} />
           <DetailBodyContainer>

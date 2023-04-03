@@ -10,7 +10,7 @@ import useSetStateChange from 'hooks/useSetStateChange';
 import useResizeGetPageSize from 'hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { __requestStatus } from 'redux/modules/requestStatus';
+import { initRequestData, __requestStatus } from 'redux/modules/requestStatus';
 import { getEncryptionStorage } from '../../utils/encryptionStorage';
 
 export default function RequestStatus() {
@@ -39,6 +39,10 @@ export default function RequestStatus() {
 
   const { isAdmin } = getEncryptionStorage();
   const path = isAdmin ? '/admin' : '';
+
+  useEffect(() => {
+    dispatch(initRequestData());
+  }, [dispatch]);
 
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();

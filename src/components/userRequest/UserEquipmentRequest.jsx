@@ -167,7 +167,11 @@ export default function UserEquipmentRequest({
     }
   };
 
-  const sendFormData = formData => axios.post(`/api/requests`, formData);
+  const sendFormData = formData =>
+    axios.post(`/api/requests`, [
+      formData,
+      `${STRING.REQUEST_NAME[type]} 완료`,
+    ]);
 
   const setMySupply = categoryId => {
     axios

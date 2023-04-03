@@ -21,7 +21,7 @@ const initialState = {
       { name: '비품 요청', type: 'SUPPLY', status: false },
       { name: '반납 요청', type: 'RETURN', status: false },
       { name: '수리 요청', type: 'REPAIR', status: false },
-      { name: '보고서 결재', type: 'REPORT', status: false },
+      { name: '보고서 결재 요청', type: 'REPORT', status: false },
     ],
   },
 };
@@ -53,6 +53,15 @@ const requestStatusSlice = Redux.slice(
     initDetail: (state, _) => {
       state.requestDetail.getDetail = null;
     },
+    initRequestData: (state, _) => {
+      state.requestData.menu = current(state.requestData.menu).map(menu =>
+        menu.name === '전체'
+          ? { ...menu, status: true }
+          : { ...menu, status: false }
+      );
+      state.requestData.menuType = '';
+      state.requestData.selectStatus = '';
+    },
     setRequestData: (state, action) => {
       state.requestData.menu = current(state.requestData.menu).map(menu =>
         menu.name === action.payload.name
@@ -83,6 +92,6 @@ const requestStatusSlice = Redux.slice(
   }
 );
 
-export const { initRequest, initDetail, setRequestData } =
+export const { initRequest, initDetail, initRequestData, setRequestData } =
   requestStatusSlice.actions;
 export default requestStatusSlice.reducer;

@@ -68,6 +68,7 @@ export default function RequestDetail({ isClose, detail }) {
     }
 
     data.acceptResult = 'ACCEPT';
+    data.comment = declineComment;
     putRequest(data);
   };
 

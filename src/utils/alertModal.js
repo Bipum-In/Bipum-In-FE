@@ -4,9 +4,11 @@ import Alert from 'components/common/Alert';
 
 let root = null;
 
-export default function alertModal(message, timeToSecond) {
+export default function alertModal(completeStyle, message, timeToSecond) {
   const timeSet = timeToSecond * 1000 || 2500;
-  const alertComponent = <Alert message={message} duration={timeSet} />;
+  const alertComponent = (
+    <Alert completeStyle={completeStyle} message={message} duration={timeSet} />
+  );
   if (!root) {
     root = ReactDOM.createRoot(document.getElementById('alert-root'));
     root.render(alertComponent);

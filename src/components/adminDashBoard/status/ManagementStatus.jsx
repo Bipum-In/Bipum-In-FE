@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import { useNavigate } from 'react-router-dom';
@@ -10,7 +10,7 @@ import { ManagementCards } from '../ManagementCard';
 import ROUTER from 'constants/routerConst';
 import STRING, { REQUEST_PAGES } from 'constants/string';
 import { useDispatch } from 'react-redux';
-import { setRequestData } from 'redux/modules/requestStatus';
+import { initRequest, setRequestData } from 'redux/modules/requestStatus';
 
 export default function ManagementStatus({ isAdmin, getDashboard }) {
   const navigate = useNavigate();
@@ -20,13 +20,17 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
     requestsCountDto: { countMap, modifiedAtMap },
   } = getDashboard.data;
 
-  const moveToUnprocessed = () => {
-    dispatch(setRequestData(REQUEST_PAGES.UNPROCESSED));
+  const requestTypeKey = useRef(
+    Object.values(STRING.REQUEST_TYPES).filter(item => item !== 'ALL')
+  ).current;
+
+  const moveToRequset = key => {
+    dispatch(initRequest());
+    dispatch(setRequestData(REQUEST_PAGES[key]));
     navigate(
       ROUTER.PATH[isAdminStr][isAdmin ? 'REQUEST_STATUS' : 'REQUEST_LIST']
     );
   };
-
   return (
     <>
       {getDashboard && (
@@ -45,7 +49,11 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
           </AnchorBtn>
           <ManagementWrapper>
             <ManagementAlertTopContainer>
-              <NewAlertContainer onClick={moveToUnprocessed}>
+              <NewAlertContainer
+                onClick={() => {
+                  moveToRequset('UNPROCESSED');
+                }}
+              >
                 {isAdmin ? <RequestIcon /> : <List />}
                 <NewAlertTitle>
                   {isAdmin ? '처리대기 요청' : '전체 요청 내역'}
@@ -60,14 +68,16 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
             </ManagementAlertTopContainer>
             <ManagementAlertBottomContainer>
               <ManagementCards
+                requestTypeKey={requestTypeKey}
                 requestsCountData={countMap}
                 requestsDate={modifiedAtMap}
+                moveToRequset={moveToRequset}
                 requestKey={
                   isAdmin
                     ? [
                         'supplyRequests',
-                        'returnRequests',
                         'repairRequests',
+                        'returnRequests',
                         'ReportRequests',
                       ]
                     : [
@@ -86,9 +96,9 @@ export default function ManagementStatus({ isAdmin, getDashboard }) {
                         'ReportModifiedAt',
                       ]
                     : [
-                        'supplyModifiedAt',
-                        'returnModifiedAt',
-                        'repairModifiedAt',
+                        'supplyUserModifiedAt',
+                        'returnUserModifiedAt',
+                        'repairUserModifiedAt',
                         'ReportUserModifiedAt',
                       ]
                 }
