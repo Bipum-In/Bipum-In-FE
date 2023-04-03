@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { ErrorModal } from 'elements/AlertModal';
+import AlertModal from 'elements/AlertModal';
 import { useModalState } from 'hooks/useModalState';
 
-export default function Alert({ message, duration }) {
+export default function Alert({ completeStyle, message, duration }) {
   const [isErrorModalOpen, toggleErrorModal] = useModalState(true);
 
   useEffect(() => {
@@ -18,9 +18,9 @@ export default function Alert({ message, duration }) {
   }, [duration, isErrorModalOpen, toggleErrorModal]);
 
   return (
-    <ErrorModal
+    <AlertModal
+      completeStyle={completeStyle}
       isOpen={isErrorModalOpen}
-      toggle={() => toggleErrorModal(false)}
       message={message}
       progressBarDuration={duration}
     />

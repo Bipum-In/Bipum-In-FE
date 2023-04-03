@@ -2,12 +2,13 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled, { keyframes } from 'styled-components';
 import { ReactComponent as Alert } from 'styles/commonIcon/alert.svg';
+import { ReactComponent as RequestIcon } from 'styles/commonIcon/requestIcon.svg';
 
 export default function AlertModal({
+  completeStyle,
   isOpen,
-  onClose,
+  message,
   progressBarDuration,
-  children,
 }) {
   const backdropVariants = {
     visible: { opacity: 1 },
@@ -41,13 +42,21 @@ export default function AlertModal({
         >
           <ModalContainer
             key="modal"
+            complete={completeStyle.toString()}
             variants={modalVariants}
             initial="hidden"
             animate="visible"
             exit="hidden"
             onClick={e => e.stopPropagation()}
           >
-            {children}
+            <ModalMsgWrapper>
+              <AlertIcon>
+                {completeStyle ? <RequestIcon /> : <Alert />}
+              </AlertIcon>
+              <MsgContainer>
+                <p>{message}</p>
+              </MsgContainer>
+            </ModalMsgWrapper>
             {isOpen && (
               <ProgressBar progressBarDuration={progressBarDuration} />
             )}
@@ -58,28 +67,6 @@ export default function AlertModal({
   );
 }
 
-export const ErrorModal = React.memo(
-  ({ isOpen, toggle, message, progressBarDuration }) => {
-    return (
-      <>
-        <AlertModal
-          isOpen={isOpen}
-          onClose={toggle}
-          progressBarDuration={progressBarDuration}
-        >
-          <ModalMsgWrapper>
-            <AlertIcon>
-              <Alert />
-            </AlertIcon>
-            <MsgContainer>
-              <p>{message}</p>
-            </MsgContainer>
-          </ModalMsgWrapper>
-        </AlertModal>
-      </>
-    );
-  }
-);
 const shrink = keyframes`
   from {
     width: 100%;
@@ -110,10 +97,15 @@ const Backdrop = styled(motion.div)`
 `;
 
 const ModalContainer = styled(motion.div)`
-  background-color: tomato;
+  background-color: ${props =>
+    props.complete === 'true' ? '#0ea50bff' : 'tomato'};
   box-shadow: 0 1px 10px 0 rgba(0, 0, 0, 0.1), 0 2px 15px 0 rgba(0, 0, 0, 0.05);
   border-radius: 0.25rem;
   width: 340px;
+
+  path {
+    stroke: ${props => (props.complete === 'true' ? '#0ea50bff' : 'tomato')};
+  }
 `;
 
 const ModalMsgWrapper = styled.div`
