@@ -1,15 +1,8 @@
-import React, { useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { v4 as uuidv4 } from 'uuid';
 import { FormatDateToDot } from 'utils/formatDate';
-
-import ROUTER from 'constants/routerConst';
-import STRING, { REQUEST_PAGES } from 'constants/string';
-
-import { useDispatch } from 'react-redux';
-import { initRequest, setRequestData } from 'redux/modules/requestStatus';
+import STRING from 'constants/string';
 
 export function ManagementCard({
   statusTitle,
@@ -23,7 +16,13 @@ export function ManagementCard({
         <DetailContainer>
           <StatusTitle>{statusTitle}</StatusTitle>
           <StatusCount>{statusCount}건</StatusCount>
-          <StatusDate>{statusDate}</StatusDate>
+          {statusDate && (
+            <StatusDate>
+              {statusDate}
+              <br />
+              업데이트
+            </StatusDate>
+          )}
         </DetailContainer>
       </CardWrapper>
     </>
@@ -31,23 +30,13 @@ export function ManagementCard({
 }
 
 export function ManagementCards({
+  requestTypeKey,
   requestsCountData,
   requestsDate,
+  moveToRequset,
   requestKey,
   modifiedAtKey,
 }) {
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const requestTypeKey = useRef(
-    Object.values(STRING.REQUEST_TYPES).filter(item => item !== 'ALL')
-  ).current;
-
-  const moveToRequset = key => {
-    dispatch(initRequest());
-    dispatch(setRequestData(REQUEST_PAGES[key]));
-    navigate(ROUTER.PATH.ADMIN.REQUEST_STATUS);
-  };
   return (
     <>
       {requestTypeKey.map((key, index) => (
@@ -96,4 +85,5 @@ const StatusCount = styled.span`
 const StatusDate = styled.span`
   font-size: 0.875rem;
   color: ${props => props.theme.color.grey.brandColor5};
+  text-align: center;
 `;
