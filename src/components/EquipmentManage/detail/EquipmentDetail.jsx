@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEquipmentDetail } from 'redux/modules/equipmentStatus';
+import {
+  getEquipmentDetail,
+  initEquipmentDetail,
+} from 'redux/modules/equipmentStatus';
 import styled from 'styled-components';
 import Axios from 'api/axios';
 import STRING from 'constants/string';
