@@ -8,7 +8,8 @@ import {
   CategoryItemRight,
 } from 'components/layout/CategoryItem';
 
-import { ReactComponent as Logo } from 'styles/logo.svg';
+// import { ReactComponent as Logo } from 'styles/logo.svg';
+import Logo from 'components/layout/Logo';
 
 import { ReactComponent as Eye } from 'styles/sidebarIcon/eye.svg';
 import { ReactComponent as Add } from 'styles/sidebarIcon/add.svg';

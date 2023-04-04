@@ -1,8 +1,10 @@
 import styled from 'styled-components';
 
 import { v4 as uuidv4 } from 'uuid';
-import { FormatDateToDot } from 'utils/formatDate';
+import { formatAgo } from 'utils/formatDate';
 import STRING from 'constants/string';
+
+import { ReactComponent as NewIcon } from 'styles/commonIcon/new.svg';
 
 export function ManagementCard({
   statusTitle,
@@ -17,11 +19,12 @@ export function ManagementCard({
           <StatusTitle>{statusTitle}</StatusTitle>
           <StatusCount>{statusCount}건</StatusCount>
           {statusCount !== 0 && (
-            <StatusDate>
-              {statusDate}
-              <br />
-              업데이트
-            </StatusDate>
+            <StatusDateContainer>
+              <StatusDateTitle>
+                <NewIcon />
+                <span>{statusDate}</span>
+              </StatusDateTitle>
+            </StatusDateContainer>
           )}
         </DetailContainer>
       </CardWrapper>
@@ -47,7 +50,7 @@ export function ManagementCards({
           }}
           statusTitle={STRING.REQUEST_NAME[key]}
           statusCount={requestsCountData[requestKey[index]]}
-          statusDate={FormatDateToDot(requestsDate[modifiedAtKey[index]])}
+          statusDate={formatAgo(requestsDate[modifiedAtKey[index]])}
         />
       ))}
     </>
@@ -55,6 +58,7 @@ export function ManagementCards({
 }
 
 const CardWrapper = styled.div`
+  position: relative;
   ${props => props.theme.FlexCol};
   justify-content: center;
   min-width: 9.25rem;
@@ -65,6 +69,7 @@ const CardWrapper = styled.div`
   background-color: white;
   border: 0.0625rem solid ${props => props.theme.color.grey.brandColor2};
   ${props => props.theme.CursorActive};
+  overflow: hidden;
 `;
 
 const DetailContainer = styled.div`
@@ -82,8 +87,23 @@ const StatusCount = styled.span`
   font-size: 1.75rem;
 `;
 
-const StatusDate = styled.span`
-  font-size: 0.875rem;
-  color: ${props => props.theme.color.grey.brandColor5};
-  text-align: center;
+const StatusDateContainer = styled.div`
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  padding: 0.5rem;
+  background: ${props => props.theme.color.blue.brandColor2};
+`;
+
+const StatusDateTitle = styled.div`
+  ${props => props.theme.FlexRow};
+  ${props => props.theme.FlexCenter};
+  font-size: 12px;
+  color: ${props => props.theme.color.blue.brandColor6};
+
+  span {
+    padding: 0.15rem 0 0 0.25rem;
+    text-align: center;
+  }
 `;
