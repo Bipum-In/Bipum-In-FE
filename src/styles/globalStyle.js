@@ -37,6 +37,13 @@ img {
   -o-user-drag: none;
 }
 
+textarea {
+  border: none;
+  padding: 0.5rem;
+  resize: none;
+  white-space: pre-wrap;
+}
+
 html,
 body,
 div,
