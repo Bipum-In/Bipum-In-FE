@@ -59,12 +59,12 @@ export default function ImageAdd({
         onDrop={handleDragEnterOrDrop}
         isCurrent={isCurrent}
       >
-        {!preview && (
+        {!preview.length && (
           <DragAndDropIcon>
             <DragIcon />
           </DragAndDropIcon>
         )}
-        {preview ? (
+        {preview.length ? (
           <ImageCarousel imageUrlList={preview} onDeleteImage={onDeleteImage} />
         ) : (
           <DefaultImgWrapper onClick={handlerInputFile}>

@@ -34,7 +34,7 @@ export default function ImageCarousel({ imageUrlList, onDeleteImage }) {
       >
         <DeleteImg />
       </DeleteImgContainer>
-      {Array.isArray(imageUrlList) ? (
+      {imageUrlList.length !== 1 ? (
         <>
           {imageUrlList.map(url => (
             <Imgs key={uuidv4()} imgPage={imgPage}>
@@ -56,7 +56,7 @@ export default function ImageCarousel({ imageUrlList, onDeleteImage }) {
           </Dots>
         </>
       ) : (
-        <Img src={imageUrlList} />
+        <Img src={imageUrlList[0]} />
       )}
     </ImgContainer>
   );

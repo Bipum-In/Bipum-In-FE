@@ -7,6 +7,7 @@ import Axios from 'api/axios';
 import STRING from 'constants/string';
 import ImageAdd from '../equipmentAdd/single/ImageAdd';
 import SelectCategory from '../common/SelectCategory';
+import Valid from 'validation/validation';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -24,9 +25,9 @@ export default function UserEquipmentRequest({
   category,
   largeCategory,
 }) {
-  const [preview, setPreview] = useState(null);
+  const [preview, setPreview] = useState([]);
   const [mySupply, setMysupply] = useState(null);
-  const [formImage, setFormformImage] = useState(null);
+  const [formImage, setFormImage] = useState([]);
   const [messageValue, setMessageValue] = useState('');
   const [smallCategory, setSmallCategory] = useState(null);
   const [checkSallCategory, setCheckSallCategory] = useState(false);
@@ -42,10 +43,10 @@ export default function UserEquipmentRequest({
   }, [type]);
 
   const initData = () => {
-    setPreview(null);
+    setPreview([]);
     setMysupply(null);
     setMessageValue('');
-    setFormformImage(null);
+    setFormImage([]);
     setSmallCategory(null);
     setCheckSallCategory(null);
     setOptionNullList({
@@ -136,7 +137,10 @@ export default function UserEquipmentRequest({
 
   const handleChangeimge = e => {
     const img = [...e.target.files];
-    setFormformImage(img);
+    const addImg = [...formImage, ...img];
+    if (!Valid.imgLengthCheck(addImg, 10)) return;
+
+    setFormImage(addImg);
     setPreviewImage(img);
   };
 
@@ -145,14 +149,14 @@ export default function UserEquipmentRequest({
     if (Array.isArray(preview) && preview.length > 1) {
       const deletePreview = preview.filter((_, index) => index !== absImgPage);
       const deleteform = formImage.filter((_, index) => index !== absImgPage);
-      setPreview(deletePreview);
-      setFormformImage(deleteform);
 
+      setPreview(deletePreview);
+      setFormImage(deleteform);
       return;
     }
 
-    setPreview(null);
-    setFormformImage(null);
+    setPreview([]);
+    setFormImage([]);
   };
 
   const setPreviewImage = images => {
@@ -162,12 +166,10 @@ export default function UserEquipmentRequest({
       const reader = new FileReader();
 
       reader.onloadend = () => {
-        if (images.length === 1) return setPreview(reader.result);
-
         previewArray.push(reader.result);
 
         if (previewArray.length === images.length) {
-          setPreview(previewArray);
+          setPreview([...preview, ...previewArray]);
         }
       };
 
