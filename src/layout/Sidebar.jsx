@@ -99,12 +99,15 @@ export default function Sidebar({
           )}
           {isAdmin && (
             <LogoutContainer>
-              <CategoryItemRight
+              <CategoryItemLeft
+                category={`${
+                  ARRAY.SIDEBAR.SIDEBAR_STYLE(pathname, isAdmin)[4]
+                }`}
                 onClick={() => navigate(ROUTER.PATH.ADMIN.MANAGEMENT)}
-                title="관리자 설정"
+                title={STRING.HEADER_DROPDOWN.SETTINGS}
               >
                 <Setting />
-              </CategoryItemRight>
+              </CategoryItemLeft>
             </LogoutContainer>
           )}
         </SidebarCategoryContainer>
