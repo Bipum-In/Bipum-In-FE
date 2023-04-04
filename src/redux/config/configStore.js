@@ -6,6 +6,7 @@ import partnersList from '../modules/partnersList';
 import deptList from '../modules/deptList';
 import deptUserList from '../modules/deptUserList';
 import authReducer from '../modules/authSlice';
+import sseSlice from '../modules/sseSlice';
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     dashboardStatus,
     equipmentStatus,
     authReducer,
+    sseSlice,
   },
 });
 

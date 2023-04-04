@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import styled, { css } from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
@@ -10,28 +11,13 @@ import { FormatKoreanTime } from 'utils/formatDate';
 import EmptyAlarm from './EmptyAlarm';
 
 import STRING from 'constants/string';
-import SSE from 'api/sse';
 
 export default function AlertStatus({ isAdmin, getDashboard }) {
   const [alarm, setAlarm] = useState(false);
   const { notifications } = getDashboard.data;
-
-  useEffect(() => {
-    const url = `${process.env.REACT_APP_SERVER_URL}/api/subscribe`;
-    const sse = new SSE(url, 20);
-
-    sse.onMessage(event => {
-      const checkJSON = event.data.split(' ')[0];
-      const data = checkJSON !== 'EventStream' && JSON.parse(event.data);
-      console.log(data);
-    });
-
-    return () => {
-      sse.close();
-      console.log('close');
-    };
-  }, []);
-
+  const { sseAdminData, sseUserData } = useSelector(state => state.sseSlice);
+  const sseData = isAdmin ? sseAdminData : sseUserData;
+  console.log(sseData, notifications);
   return (
     <>
       {notifications && (
@@ -40,22 +26,37 @@ export default function AlertStatus({ isAdmin, getDashboard }) {
           <styleds.AlertAndAddContainer>
             {alarm && <LnbAlarmPoint />}
             {notifications.length === 0 && <EmptyAlarm />}
-            {notifications.map(data => (
-              <AlertListContainer key={uuidv4()}>
+            {[...sseData, ...notifications].map(data => (
+              <AlertListContainer
+                key={uuidv4()}
+                defaultValue={data.request_id || data.requestId}
+              >
                 {isAdmin ? (
                   <AlertImgContainer>
                     <AlertImg src={data.image} alt="" />
                   </AlertImgContainer>
                 ) : (
                   <AlertStatusContainer>
-                    <Status status={STRING.REQUEST_STATUS[data.accept_result]}>
-                      {STRING.REQUEST_STATUS[data.accept_result]}
+                    <Status
+                      status={
+                        STRING.REQUEST_STATUS[
+                          data.accept_result || data.acceptResult
+                        ]
+                      }
+                    >
+                      {
+                        STRING.REQUEST_STATUS[
+                          data.accept_result || data.acceptResult
+                        ]
+                      }
                     </Status>
                   </AlertStatusContainer>
                 )}
                 <AlertDetailContainer>
                   <AlertTitle>{data.content}</AlertTitle>
-                  <AlertData>{FormatKoreanTime(data.created_At)}</AlertData>
+                  <AlertData>
+                    {FormatKoreanTime(data.createdAt || data.created_At)}
+                  </AlertData>
                 </AlertDetailContainer>
               </AlertListContainer>
             ))}

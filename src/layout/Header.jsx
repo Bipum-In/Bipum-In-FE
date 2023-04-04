@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styled, { css } from 'styled-components';
 import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
 import { ReactComponent as Alaram } from 'styles/commonIcon/alarm.svg';
@@ -13,13 +13,19 @@ import STRING from 'constants/string';
 import { v4 as uuidv4 } from 'uuid';
 import useOutsideClick from 'hooks/useOutsideClick';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import ROUTER from 'constants/routerConst';
+
 import {
   getEncryptionStorage,
   updateEncryptionStorage,
 } from 'utils/encryptionStorage';
 
+import SSE from 'api/sse';
+import { setAdminSSE, setUserSSE } from 'redux/modules/sseSlice';
+
 export default function Header() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const dropDownRef = useRef(null);
 
@@ -29,6 +35,10 @@ export default function Header() {
 
   const { empName, deptName, image, isAdmin, userRole } =
     getEncryptionStorage();
+
+  const { sseAdminLength, sseUserLength } = useSelector(
+    state => state.sseSlice
+  );
 
   const headerData = [
     {
@@ -52,6 +62,55 @@ export default function Header() {
       path: '',
     },
   ];
+
+  useEffect(() => {
+    const url = `${process.env.REACT_APP_SERVER_URL}/api/subscribe`;
+    const sse = new SSE(url, 20);
+
+    sse.onOpen(event => {
+      console.log('open', event);
+    });
+
+    sse.onMessage(event => {
+      const checkJSON = event.data.split(' ')[0];
+      const data = checkJSON !== 'EventStream' && JSON.parse(event.data);
+      data && data.acceptResult && dispatch(setUserSSE(data));
+      data && !data.acceptResult && dispatch(setAdminSSE(data));
+
+      const message = data.content;
+      const notificationTitle = '새로운 알림이 도착했습니다.';
+      const notificationOptions = {
+        body: message,
+      };
+
+      // Notification.requestPermission().then(permission => {
+      //   // If the user accepts, let's create a notification
+      //   if (permission === 'granted') {
+      //     const notification = new Notification('Hi there!');
+      //     console.log(notification);
+      //   }
+      // });
+
+      const notification = new Notification(
+        notificationTitle,
+        notificationOptions
+      );
+
+      notification.onclick = function (event) {
+        event.preventDefault();
+        document.startViewTransition(() => navigate(`/`));
+      };
+    });
+
+    sse.onError(error => {
+      console.log(error);
+    });
+
+    return () => {
+      sse.close();
+      console.log('close');
+    };
+  }, []);
 
   if (userRole === 'ADMIN') {
     headerData.splice(2, 0, {
@@ -86,6 +145,9 @@ export default function Header() {
           <HeaderRightContainer>
             <IconContainer>
               <Alaram />
+              {isAdmin
+                ? sseAdminLength && <AlaramCount>{sseAdminLength}</AlaramCount>
+                : sseUserLength && <AlaramCount>{sseUserLength}</AlaramCount>}
             </IconContainer>
             {/* 드롭다운 컨테이너 */}
             <LoginUserInfoDropDown
@@ -190,6 +252,7 @@ const SearchContainer = styled.div`
 `;
 
 const IconContainer = styled.div`
+  position: relative;
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
   width: 1.875rem;
@@ -203,6 +266,18 @@ const IconContainer = styled.div`
     width: 1.75rem;
     height: 1.75rem;
   }
+`;
+
+const AlaramCount = styled.div`
+  position: absolute;
+  ${props => props.theme.FlexRow};
+  ${props => props.theme.FlexCenter};
+  width: 0.9375rem;
+  height: 0.9375rem;
+  color: white;
+  border-radius: 50%;
+  background-color: red;
+  transform: translate(0.7rem, -0.7rem);
 `;
 
 const SearchInput = styled.input`

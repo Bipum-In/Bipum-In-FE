@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import AddSingleItem from 'components/equipmentAdd/AddSingleItem';
+import AddMultipleItem from 'components/equipmentAdd/AddMultipleItem';
 import StatusMenu from 'components/common/status/StatusMenu';
 
 import useSelectMenu from 'hooks/useSelectMenu';
@@ -36,7 +37,7 @@ export default function EquipmentAdd() {
                 largeCategory={getCategory.largeCategory}
               />
             )}
-            {menuStyle[1].status && <div>복수 등록</div>}
+            {menuStyle[1].status && <AddMultipleItem />}
           </AddComponentsContainer>
         </EquipmentWrapper>
       )}
