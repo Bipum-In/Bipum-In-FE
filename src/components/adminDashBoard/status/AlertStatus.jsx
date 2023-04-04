@@ -6,7 +6,7 @@ import { styleds } from './AdminDashBaordStyled';
 import AnchorBtn from '../AnchorBtn';
 
 import { v4 as uuidv4 } from 'uuid';
-import { FormatKoreanTime } from 'utils/formatDate';
+import { formatAgo } from 'utils/formatDate';
 
 import EmptyAlarm from './EmptyAlarm';
 
@@ -17,7 +17,7 @@ export default function AlertStatus({ isAdmin, getDashboard }) {
   const { notifications } = getDashboard.data;
   const { sseAdminData, sseUserData } = useSelector(state => state.sseSlice);
   const sseData = isAdmin ? sseAdminData : sseUserData;
-  console.log(sseData, notifications);
+
   return (
     <>
       {notifications && (
@@ -55,7 +55,7 @@ export default function AlertStatus({ isAdmin, getDashboard }) {
                 <AlertDetailContainer>
                   <AlertTitle>{data.content}</AlertTitle>
                   <AlertData>
-                    {FormatKoreanTime(data.createdAt || data.created_At)}
+                    {formatAgo(data.createdAt || data.created_At)}
                   </AlertData>
                 </AlertDetailContainer>
               </AlertListContainer>
