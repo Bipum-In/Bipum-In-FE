@@ -15,7 +15,7 @@ export default function EquipmentModal({
 }) {
   return (
     <>
-      <Modal isOpen={showDetailModal.show}>
+      <Modal isOpen={showDetailModal.show} onClose={handleDetailModal}>
         <EquipmentDetailWrapper>
           <ModalHeader isClose={handleDetailModal} requestType={'비품 상세'} />
           <EquipmentDetail
@@ -27,7 +27,7 @@ export default function EquipmentModal({
           />
         </EquipmentDetailWrapper>
       </Modal>
-      <Modal isOpen={showSingleModal}>
+      <Modal isOpen={showSingleModal} onClose={handleSingleModal}>
         <EquipmentAddWrapper>
           <ModalHeader isClose={handleSingleModal} requestType={'단일 등록'} />
           <AddSingleItem category={category} largeCategory={largeCategory} />
@@ -39,14 +39,11 @@ export default function EquipmentModal({
 
 const EquipmentDetailWrapper = styled.div`
   ${props => props.theme.flexCol}
-  width: 90.875rem;
   height: 80vh;
 `;
-
 const EquipmentAddWrapper = styled.div`
   ${props => props.theme.flexCol}
 
-  width: 80vw;
   height: 80vh;
   section {
     width: 100%;
