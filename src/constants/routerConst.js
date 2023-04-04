@@ -9,6 +9,7 @@ const PATH = {
     REQUEST_STATUS: '/request-status',
     EQUIPMENT_MANAGEMENT: '/equipment-management',
     EQUIPMENT_ADD: '/equipment-add',
+    MANAGEMENT: '/management',
   },
   USER: {
     DASHBOARD: '/dashboard',
