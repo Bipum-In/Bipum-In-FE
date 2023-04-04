@@ -1,5 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
+import { KeyFrame } from 'styles/keyframes';
 import { ReactComponent as DefaultImage } from 'styles/commonIcon/addImgIcon2.svg';
 import { ReactComponent as DragIcon } from 'styles/commonIcon/drag.svg';
 
@@ -129,10 +130,6 @@ const ImageContainer = styled.label`
   margin: 1.375rem 0;
   background-color: ${props =>
     props.preview ? 'transperant' : props.theme.color.grey.brandColor1};
-  border: ${({ isCurrent }) => {
-    if (isCurrent === '') return 'none';
-    return `2px dashed ${isCurrent ? 'green' : 'red'}`;
-  }};
 `;
 
 const DefaultImgWrapper = styled.div`
@@ -170,4 +167,23 @@ const ImageinputFile = styled.label`
   input {
     display: none;
   }
+`;
+
+const CurrentImgContainer = styled.div`
+  position: absolute;
+  ${props => props.theme.FlexRow};
+  ${props => props.theme.FlexCenter};
+  ${props => props.theme.wh100};
+  ${props => props.theme.AbsoluteTL};
+  border: 3px dashed
+    ${props =>
+      props.current
+        ? `${props.theme.color.blue.brandColor6}`
+        : `${props.theme.color.reject}`};
+  background-color: ${props =>
+    props.current ? `rgb(20 121 255 / 35%)` : `rgb(255 99 71 / 35%)`};
+  backdrop-filter: blur(2px);
+  border-radius: 0.5rem;
+  opacity: 0;
+  animation: ${KeyFrame.fadeIn} 0.2s ease-in-out forwards;
 `;

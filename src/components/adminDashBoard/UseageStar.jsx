@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { KEYFRAME } from 'styles/keyframes';
+import { KeyFrame } from 'styles/keyframes';
 
 export default function UseageStar() {
   return (
@@ -21,7 +21,7 @@ const Star = styled.div`
     positionLeft !== undefined ? `${positionLeft}px` : '0'};
   background: ${({ bgColor }) => (bgColor ? bgColor : 'white')};
   border-radius: 50%;
-  animation: ${KEYFRAME.starAnimation}
+  animation: ${KeyFrame.starAnimation}
     ${({ animationDuration }) =>
       animationDuration ? `${animationDuration}s` : '3s'}
     linear both infinite;

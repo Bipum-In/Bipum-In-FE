@@ -18,7 +18,7 @@ const starAnimation = keyframes`
   100% { opacity: 0; transform: translate(0, 200px); }
 `;
 
-export const KEYFRAME = {
+export const KeyFrame = {
   floating,
   starAnimation,
 };
