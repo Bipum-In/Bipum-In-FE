@@ -40,10 +40,11 @@ export default function EquipmentModal({
 const EquipmentDetailWrapper = styled.div`
   ${props => props.theme.flexCol}
   height: 80vh;
+  width: 80vw;
 `;
 const EquipmentAddWrapper = styled.div`
   ${props => props.theme.flexCol}
-
+  width: 80vw;
   height: 80vh;
   section {
     width: 100%;
