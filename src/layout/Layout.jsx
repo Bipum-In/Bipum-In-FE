@@ -78,12 +78,12 @@ const OutletContainer = styled.div`
 `;
 
 const SidebarBtnContainer = styled.div`
-  position: relative;
+  position: fixed;
   display: flex;
   align-items: center;
   height: 6.25rem;
   z-index: 1001;
-  margin-left: 1rem;
+  margin-left: 2rem;
 `;
 
 const fadeIn = keyframes`
