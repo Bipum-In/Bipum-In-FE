@@ -183,6 +183,10 @@ const SearchContainer = styled.div`
   height: 3.125rem;
   background-color: white;
   border-radius: 0.5rem;
+
+  @media (max-width: ${props => props.theme.screen.desktop}) {
+    margin-left: 2rem;
+  }
 `;
 
 const IconContainer = styled.div`

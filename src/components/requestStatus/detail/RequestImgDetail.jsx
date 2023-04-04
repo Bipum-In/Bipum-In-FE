@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import UserCarousel from './ModalImgCarousel';
+import ModalImgCarousel from './ModalImgCarousel';
 
 export default function RequestImgDetail({
   text,
@@ -14,7 +14,11 @@ export default function RequestImgDetail({
     <>
       <EquipmentImageContainer>
         <span>{text}</span>
-        <UserCarousel image={image} editMode={editMode} onDelete={onDelete} />
+        <ModalImgCarousel
+          image={image}
+          editMode={editMode}
+          onDelete={onDelete}
+        />
       </EquipmentImageContainer>
       {editMode && (
         <>

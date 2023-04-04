@@ -13,7 +13,7 @@ export default function UserDashboardDetailModal({
   const { getCategory } = useSelector(state => state.equipmentStatus.category);
 
   return (
-    <Modal isOpen={showDetailModal.show}>
+    <Modal isOpen={showDetailModal.show} onClose={onDetailModal}>
       <EquipmentDetailWrapper>
         <ModalHeader isClose={onDetailModal} requestType={'비품 상세'} />
         <EquipmentDetail
@@ -30,6 +30,5 @@ export default function UserDashboardDetailModal({
 
 const EquipmentDetailWrapper = styled.div`
   ${props => props.theme.flexCol}
-  width: 90.875rem;
   height: 80vh;
 `;
