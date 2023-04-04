@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
 import { motion, AnimatePresence } from 'framer-motion';
@@ -6,42 +6,38 @@ import Button from './Button';
 import ModalPortal from './ModalPortal';
 
 export default function Modal({ isOpen, onClose, children }) {
-  const backdropVariants = {
-    visible: { opacity: 1 },
-    hidden: { opacity: 0 },
-  };
-
-  const modalVariants = {
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.1, ease: 'easeInOut' },
-    },
-    hidden: { opacity: 0, scale: 0.9 },
-  };
-
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      const handleKeyDown = event => {
+        if (event.key === 'Escape') onClose();
+      };
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.body.style.overflow = 'unset';
+        document.removeEventListener('keydown', handleKeyDown);
+      };
     }
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>
       {isOpen && (
         <ModalPortal>
           <Backdrop
-            variants={backdropVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={onClose}
           >
             <ModalContainer
-              variants={modalVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                transition: { duration: 0.1, ease: 'easeInOut' },
+              }}
+              exit={{ opacity: 0, scale: 0.9 }}
               onClick={e => e.stopPropagation()}
             >
               {children}
@@ -62,7 +58,7 @@ export function CustomModal({
   text,
 }) {
   return (
-    <Modal isOpen={isOpen}>
+    <Modal isOpen={isOpen} onClose={onClose}>
       <ModalMsgContainer width={'313px'}>
         {children}
         <CloseContainer>
