@@ -8,9 +8,9 @@ import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
 import { ReactComponent as Alaram } from 'styles/commonIcon/alarm.svg';
 import { ReactComponent as Rotate } from 'styles/headerIcon/rotate.svg';
 import { ReactComponent as Useinfo } from 'styles/headerIcon/useinfo.svg';
-import { ReactComponent as Manage } from 'styles/headerIcon/manage.svg';
 import { ReactComponent as Logout } from 'styles/sidebarIcon/logout.svg';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
+import { ReactComponent as Setting } from 'styles/headerIcon/setting.svg';
 
 import STRING from 'constants/string';
 import QUERY from 'constants/query';
@@ -56,16 +56,7 @@ export default function Header() {
       text: STRING.HEADER_DROPDOWN.USERINFO,
       path: '',
     },
-
     {
-      icon: <Logout />,
-      text: '로그아웃',
-      onclick: handleModalShow,
-    },
-  ];
-
-  if (userRole === 'ADMIN') {
-    headerData.splice(2, 0, {
       icon: <Rotate />,
       text: isAdmin
         ? STRING.HEADER_DROPDOWN.USERMODE
@@ -76,6 +67,19 @@ export default function Header() {
           isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
         );
       },
+    },
+    {
+      icon: <Logout />,
+      text: STRING.HEADER_DROPDOWN.LOGOOUT,
+      onclick: handleModalShow,
+    },
+  ];
+
+  if (isAdmin) {
+    headerData.splice(2, 0, {
+      icon: <Setting />,
+      text: STRING.HEADER_DROPDOWN.SETTINGS,
+      path: ROUTER.PATH.ADMIN.MANAGEMENT,
     });
   }
 

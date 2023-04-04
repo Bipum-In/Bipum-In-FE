@@ -8,6 +8,7 @@ const SIDEBAR = {
           pathname === ROUTER.PATH.ADMIN.REQUEST_STATUS && true,
           pathname === ROUTER.PATH.ADMIN.EQUIPMENT_MANAGEMENT && true,
           pathname === ROUTER.PATH.ADMIN.EQUIPMENT_ADD && true,
+          pathname === ROUTER.PATH.ADMIN.MANAGEMENT && true,
         ]
       : [
           pathname === ROUTER.PATH.USER.DASHBOARD && true,

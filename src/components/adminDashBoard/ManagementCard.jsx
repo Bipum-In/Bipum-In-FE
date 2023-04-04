@@ -70,6 +70,10 @@ const CardWrapper = styled.div`
   border: 0.0625rem solid ${props => props.theme.color.grey.brandColor2};
   ${props => props.theme.CursorActive};
   overflow: hidden;
+
+  @media (max-width: ${props => props.theme.screen.dashboardDesktopMaxWidth}) {
+    min-height: 10rem;
+  }
 `;
 
 const DetailContainer = styled.div`

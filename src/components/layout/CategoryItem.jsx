@@ -10,15 +10,6 @@ export function CategoryItemLeft({ children, title, category, onClick }) {
   );
 }
 
-export function CategoryItemRight({ children, title, category, onClick }) {
-  return (
-    <CategoryItemsContainer active={category} onClick={onClick}>
-      <ImtesTitle>{title}</ImtesTitle>
-      {children}
-    </CategoryItemsContainer>
-  );
-}
-
 const CategoryItemsContainer = styled.div`
   position: relative;
   ${props => props.theme.FlexRow}
