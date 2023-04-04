@@ -48,6 +48,7 @@ const UseageContainer = styled(styleds.AlertAndAddContainer)`
   );
   color: white;
   padding: 2.125rem;
+  overflow: hidden;
   h1 {
     font-size: 1.25rem;
     font-weight: bold;

@@ -18,8 +18,8 @@ const AlertAndAddContainer = styled.div`
   padding: 1.5625rem;
   width: 28.25rem;
   height: 100%;
-  min-height: 17.0625rem;
-  overflow: hidden;
+  max-height: 19.5625rem;
+  overflow: auto;
   @media (max-width: ${props => props.theme.screen.dashboardDesktopMaxWidth}) {
     width: 100%;
     min-width: 19.90625;
