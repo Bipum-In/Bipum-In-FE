@@ -111,7 +111,10 @@ export default function RequestStatus() {
           resizeRef={resizeRef}
         />
       </RequestStatusWrapper>
-      <Modal isOpen={modal.show}>
+      <Modal
+        isOpen={modal.show}
+        onClose={() => setModal({ ...modal, show: false })}
+      >
         <RequestModal
           isClose={() => setModal({ ...modal, show: false })}
           detailId={modal.detailId}
