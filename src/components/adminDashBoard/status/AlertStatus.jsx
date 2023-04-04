@@ -17,6 +17,7 @@ export default function AlertStatus({ isAdmin, getDashboard }) {
   const { notifications } = getDashboard.data;
   const { sseAdminData, sseUserData } = useSelector(state => state.sseSlice);
   const sseData = isAdmin ? sseAdminData : sseUserData;
+  console.log(sseData, notifications);
   return (
     <>
       {notifications && (
@@ -26,21 +27,36 @@ export default function AlertStatus({ isAdmin, getDashboard }) {
             {alarm && <LnbAlarmPoint />}
             {notifications.length === 0 && <EmptyAlarm />}
             {[...sseData, ...notifications].map(data => (
-              <AlertListContainer key={uuidv4()} defaultValue={data.requestId}>
+              <AlertListContainer
+                key={uuidv4()}
+                defaultValue={data.request_id || data.requestId}
+              >
                 {isAdmin ? (
                   <AlertImgContainer>
                     <AlertImg src={data.image} alt="" />
                   </AlertImgContainer>
                 ) : (
                   <AlertStatusContainer>
-                    <Status status={STRING.REQUEST_STATUS[data.acceptResult]}>
-                      {STRING.REQUEST_STATUS[data.acceptResult]}
+                    <Status
+                      status={
+                        STRING.REQUEST_STATUS[
+                          data.accept_result || data.acceptResult
+                        ]
+                      }
+                    >
+                      {
+                        STRING.REQUEST_STATUS[
+                          data.accept_result || data.acceptResult
+                        ]
+                      }
                     </Status>
                   </AlertStatusContainer>
                 )}
                 <AlertDetailContainer>
                   <AlertTitle>{data.content}</AlertTitle>
-                  <AlertData>{FormatKoreanTime(data.createdAt)}</AlertData>
+                  <AlertData>
+                    {FormatKoreanTime(data.createdAt || data.created_At)}
+                  </AlertData>
                 </AlertDetailContainer>
               </AlertListContainer>
             ))}
