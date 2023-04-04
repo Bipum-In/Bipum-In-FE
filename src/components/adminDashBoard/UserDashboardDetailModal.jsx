@@ -31,4 +31,5 @@ export default function UserDashboardDetailModal({
 const EquipmentDetailWrapper = styled.div`
   ${props => props.theme.flexCol}
   height: 80vh;
+  width: 80vw;
 `;
