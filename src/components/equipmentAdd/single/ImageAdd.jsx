@@ -1,6 +1,6 @@
 import React, { useState, useRef, useCallback } from 'react';
 import styled from 'styled-components';
-import { KeyFrame } from 'styles/keyframes';
+import { Keyframe } from 'styles/keyframes';
 import { ReactComponent as DefaultImage } from 'styles/commonIcon/addImgIcon2.svg';
 import { ReactComponent as DragIcon } from 'styles/commonIcon/drag.svg';
 
@@ -60,6 +60,13 @@ export default function ImageAdd({
         onDrop={handleDragEnterOrDrop}
         isCurrent={isCurrent}
       >
+        {isCurrent !== '' && (
+          <CurrentImgContainer current={isCurrent}>
+            {isCurrent
+              ? '이미지를 여기에 드롭하세요.'
+              : '형식에 맞지 않은 파일입니다'}
+          </CurrentImgContainer>
+        )}
         {!preview.length && (
           <DragAndDropIcon>
             <DragIcon />
@@ -185,5 +192,5 @@ const CurrentImgContainer = styled.div`
   backdrop-filter: blur(2px);
   border-radius: 0.5rem;
   opacity: 0;
-  animation: ${KeyFrame.fadeIn} 0.2s ease-in-out forwards;
+  animation: ${Keyframe.fadeIn} 0.2s ease-in-out forwards;
 `;
