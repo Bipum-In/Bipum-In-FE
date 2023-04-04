@@ -15,18 +15,13 @@ import { ReactComponent as Add } from 'styles/sidebarIcon/add.svg';
 import { ReactComponent as Dashboard } from 'styles/sidebarIcon/dashboard.svg';
 import { ReactComponent as List } from 'styles/sidebarIcon/list.svg';
 import { ReactComponent as Management } from 'styles/sidebarIcon/management.svg';
-import { ReactComponent as Logout } from 'styles/sidebarIcon/logout.svg';
+
+import { ReactComponent as Setting } from 'styles/headerIcon/setting.svg';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 
 import ROUTER from 'constants/routerConst';
 import STRING from 'constants/string';
-import QUERY from 'constants/query';
 import ARRAY from 'constants/array';
-
-import Storage from 'utils/localStorage';
-import { removeCookie } from 'utils/cookie';
-import { CustomModal } from 'elements/Modal';
-import { useModalState } from 'hooks/useModalState';
 import useOutsideClick from 'hooks/useOutsideClick';
 import { getEncryptionStorage } from '../utils/encryptionStorage';
 
@@ -45,7 +40,6 @@ export default function Sidebar({
     : [<Dashboard />, <Add />, <List />, <Eye />];
 
   const { pathname } = useLocation();
-  const [logoutModal, setLogoutModal] = useModalState();
 
   const handleClickCategory = e => {
     const name = e.target.innerText;
@@ -56,16 +50,6 @@ export default function Sidebar({
       }
     });
   };
-
-  const handleLogoutBtn = e => {
-    e.preventDefault();
-    removeCookie(QUERY.COOKIE.COOKIE_NAME);
-    Storage.clearLocalStorage();
-    navigate('/');
-  };
-
-  const handleModalShow = () => setLogoutModal();
-  const handleModalClose = () => setLogoutModal(false);
 
   const dropDownRef = useRef(null);
 
@@ -112,19 +96,16 @@ export default function Sidebar({
               </CategoryItemLeft>
             )
           )}
-          <LogoutContainer>
-            <CategoryItemRight onClick={handleModalShow} title="로그아웃">
-              <Logout />
-            </CategoryItemRight>
-            <CustomModal
-              isOpen={logoutModal}
-              onClose={handleModalClose}
-              submit={handleLogoutBtn}
-              text={'로그아웃'}
-            >
-              정말 로그아웃 하시겠습니까?
-            </CustomModal>
-          </LogoutContainer>
+          {isAdmin && (
+            <LogoutContainer>
+              <CategoryItemRight
+                onClick={() => navigate(ROUTER.PATH.ADMIN.MANAGEMENT)}
+                title="관리자 설정"
+              >
+                <Setting />
+              </CategoryItemRight>
+            </LogoutContainer>
+          )}
         </SidebarCategoryContainer>
       </SidebarWrapper>
     </>
@@ -162,7 +143,8 @@ const LogoContainer = styled.div`
 
 const SidebarCategoryContainer = styled.div`
   ${props => props.theme.FlexCol};
-  ${props => props.theme.FlexCenter};
+  align-items: center;
+  justify-content: flex-start;
   height: 100%;
   width: 100%;
   gap: 0.9375rem;
