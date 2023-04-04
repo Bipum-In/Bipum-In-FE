@@ -96,6 +96,14 @@ export default function UserEquipmentRequest({
   };
 
   const setFormData = e => {
+    if (
+      optionNullList.largeCategory === '대분류' ||
+      optionNullList.smallCategory === '소분류'
+    ) {
+      alert('소분류를 선택해주세요');
+      return;
+    }
+
     const formDataKeyArray =
       type === 'SUPPLY'
         ? ['categoryId', 'requestType', 'content', 'storedImageURLs']
@@ -179,6 +187,11 @@ export default function UserEquipmentRequest({
       .then(res => setMysupply(res.data.data));
   };
 
+  const isDisabled =
+    type === 'SUPPLY'
+      ? !messageValue || !smallCategory
+      : !messageValue || !smallCategory || !requestData.supplyId || !formImage;
+
   return (
     <>
       {category && (
@@ -247,7 +260,7 @@ export default function UserEquipmentRequest({
               )}
             </EquipmentDetailContainer>
             <SubminPostContainer>
-              <Button submit post onClick={setFormData}>
+              <Button submit post onClick={setFormData} disabled={isDisabled}>
                 {STRING.REQUEST_NAME[type]} 완료
               </Button>
             </SubminPostContainer>
@@ -280,11 +293,12 @@ const ImageContainer = styled.div`
 `;
 
 const TextArea = styled.textarea`
+  padding: 1rem;
   width: 30.875rem;
   height: 10rem;
   background: ${props => props.theme.color.grey.brandColor1};
+  border-radius: 0.25rem;
   border: none;
-  padding: 0.5rem;
   resize: none;
   margin: auto;
 `;
