@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
+import ModalImgCarousel from './ModalImgCarousel';
 
 export default function Provide({
   image,
@@ -39,11 +40,7 @@ export default function Provide({
         requestType !== '비품 요청' && (
           <EquipmentImageContainer>
             <span>비품 사진</span>
-            <ImageContainer>
-              {image.map(img => (
-                <img key={uuidv4()} src={img} alt="equipmentImg" />
-              ))}
-            </ImageContainer>
+            <ModalImgCarousel image={image} />
           </EquipmentImageContainer>
         )
       )}
@@ -75,23 +72,15 @@ const ProvideContainer = styled.div`
 `;
 
 const EquipmentImageContainer = styled.div`
+  position: relative;
   ${props => props.theme.FlexCol};
   color: ${props => props.theme.color.blue.brandColor6};
-  padding: 1.5rem 0;
-  border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
-  img {
-    max-width: 8.25rem;
-    min-width: 8.25rem;
-    min-height: 8.25rem;
-    max-height: 8.25rem;
-    border-radius: 0.375rem;
-    margin-top: 1.5rem;
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+  overflow: hidden;
+  span {
+    padding-bottom: 1rem;
   }
-`;
-
-const ImageContainer = styled.div`
-  ${props => props.theme.FlexRow};
-  justify-content: flex-start;
 `;
 
 const ProvideEquipment = styled.div`
@@ -137,6 +126,7 @@ const TextArea = styled.textarea`
   border: none;
   padding: 0.5rem;
   resize: none;
+  white-space: pre-wrap;
 `;
 
 const Select = styled.select`
