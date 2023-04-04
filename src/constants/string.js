@@ -67,9 +67,8 @@ const HEADER_DROPDOWN = {
   USERINFO: '내 정보',
   ADMINMODE: '관리자 모드 전환',
   USERMODE: '유저 모드 전환',
-  PAYINFO: '결제정보',
-  SETTINGS: '설정',
-  MANAGE: '멤버관리',
+  SETTINGS: '관리자 설정',
+  LOGOOUT: '로그아웃',
 };
 const REQUEST_STATUS = {
   ACCEPT: '승인',
