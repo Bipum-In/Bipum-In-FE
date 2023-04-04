@@ -1,30 +1,40 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { v4 as uuidv4 } from 'uuid';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
 import styled, { css } from 'styled-components';
 import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
 import { ReactComponent as Alaram } from 'styles/commonIcon/alarm.svg';
 import { ReactComponent as Rotate } from 'styles/headerIcon/rotate.svg';
 import { ReactComponent as Useinfo } from 'styles/headerIcon/useinfo.svg';
 import { ReactComponent as Manage } from 'styles/headerIcon/manage.svg';
-
-import { ReactComponent as Pay } from 'styles/headerIcon/pay.svg';
-import { ReactComponent as Setting } from 'styles/headerIcon/setting.svg';
+import { ReactComponent as Logout } from 'styles/sidebarIcon/logout.svg';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
+
 import STRING from 'constants/string';
-import { v4 as uuidv4 } from 'uuid';
-import useOutsideClick from 'hooks/useOutsideClick';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import QUERY from 'constants/query';
 import ROUTER from 'constants/routerConst';
+
+import { CustomModal } from 'elements/Modal';
+import useOutsideClick from 'hooks/useOutsideClick';
+import { useModalState } from 'hooks/useModalState';
 
 import {
   getEncryptionStorage,
   updateEncryptionStorage,
 } from 'utils/encryptionStorage';
+import Storage from 'utils/localStorage';
+import { removeCookie } from 'utils/cookie';
 
 import SSE from 'api/sse';
 import { setAdminSSE, setUserSSE } from 'redux/modules/sseSlice';
 
 export default function Header() {
+  const [logoutModal, setLogoutModal] = useModalState();
+  const handleModalShow = () => setLogoutModal();
+  const handleModalClose = () => setLogoutModal(false);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const dropDownRef = useRef(null);
@@ -46,22 +56,35 @@ export default function Header() {
       text: STRING.HEADER_DROPDOWN.USERINFO,
       path: '',
     },
+
     {
-      icon: <Manage />,
-      text: STRING.HEADER_DROPDOWN.MANAGE,
-      path: '',
-    },
-    {
-      icon: <Pay />,
-      text: STRING.HEADER_DROPDOWN.PAYINFO,
-      path: '',
-    },
-    {
-      icon: <Setting />,
-      text: STRING.HEADER_DROPDOWN.SETTINGS,
-      path: '',
+      icon: <Logout />,
+      text: '로그아웃',
+      onclick: handleModalShow,
     },
   ];
+
+  if (userRole === 'ADMIN') {
+    headerData.splice(2, 0, {
+      icon: <Rotate />,
+      text: isAdmin
+        ? STRING.HEADER_DROPDOWN.USERMODE
+        : STRING.HEADER_DROPDOWN.ADMINMODE,
+      onclick: () => {
+        updateEncryptionStorage('isAdmin', !isAdmin);
+        navigate(
+          isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
+        );
+      },
+    });
+  }
+
+  const handleLogoutBtn = e => {
+    e.preventDefault();
+    removeCookie(QUERY.COOKIE.COOKIE_NAME);
+    Storage.clearLocalStorage();
+    navigate('/');
+  };
 
   useEffect(() => {
     const url = `${process.env.REACT_APP_SERVER_URL}/api/subscribe`;
@@ -112,24 +135,6 @@ export default function Header() {
     };
   }, []);
 
-  if (userRole === 'ADMIN') {
-    headerData.splice(2, 0, {
-      icon: <Rotate />,
-      text: isAdmin
-        ? STRING.HEADER_DROPDOWN.USERMODE
-        : STRING.HEADER_DROPDOWN.ADMINMODE,
-      click: () => {
-        updateEncryptionStorage('isAdmin', !isAdmin);
-        navigate(
-          isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
-        );
-      },
-    });
-    if (!isAdmin) {
-      headerData.splice(1, 1);
-    }
-  }
-
   return (
     <HeaderWrapper>
       <HeaderContainer>
@@ -171,12 +176,20 @@ export default function Header() {
                   {headerData.map(item => (
                     <DropdownList
                       key={uuidv4()}
-                      onClick={item.click || (() => navigate(item.path))}
+                      onClick={item.onclick || (() => navigate(item.path))}
                     >
                       {item.icon}
                       {item.text}
                     </DropdownList>
                   ))}
+                  <CustomModal
+                    isOpen={logoutModal}
+                    onClose={handleModalClose}
+                    submit={handleLogoutBtn}
+                    text={'로그아웃'}
+                  >
+                    정말 로그아웃 하시겠습니까?
+                  </CustomModal>
                 </DropdownBox>
               </DropdownContainer>
             </LoginUserInfoDropDown>
