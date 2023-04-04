@@ -16,7 +16,7 @@ export function ManagementCard({
         <DetailContainer>
           <StatusTitle>{statusTitle}</StatusTitle>
           <StatusCount>{statusCount}건</StatusCount>
-          {statusDate && (
+          {statusCount !== 0 && (
             <StatusDate>
               {statusDate}
               <br />
