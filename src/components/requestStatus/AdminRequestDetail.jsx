@@ -151,6 +151,7 @@ export default function RequestDetail({ isClose, detail }) {
             수리가 완료된 비품입니까?
           </CustomModal>
           <ProcessButton
+            declineComment={declineComment}
             requestType={requestType}
             requestStatus={requestStatus}
             handleAccept={handleAccept}
