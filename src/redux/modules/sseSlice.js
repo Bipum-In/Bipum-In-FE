@@ -22,9 +22,25 @@ const sseSlice = createSlice({
       state.sseUserData = [action.payload, ...state.sseUserData];
       state.sseUserLength = state.sseUserData.length;
     },
+    deleteAdminSseData: (state, action) => {
+      state.sseAdminData = [...state.sseAdminData].filter(
+        item => item.notificationId !== action.payload
+      );
+    },
+    deleteUserSseData: (state, action) => {
+      state.sseUserData = [...state.sseUserData].filter(
+        item => item.notificationId !== action.payload
+      );
+    },
   },
 });
 
-export const { initSSE, setAdminSSE, setUserSSE } = sseSlice.actions;
+export const {
+  initSSE,
+  setAdminSSE,
+  setUserSSE,
+  deleteAdminSseData,
+  deleteUserSseData,
+} = sseSlice.actions;
 
 export default sseSlice.reducer;
