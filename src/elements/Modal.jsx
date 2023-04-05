@@ -14,7 +14,6 @@ export default function Modal({ isOpen, onClose, children }) {
       };
       document.addEventListener('keydown', handleKeyDown);
       return () => {
-        document.body.style.overflow = 'unset';
         document.removeEventListener('keydown', handleKeyDown);
       };
     }

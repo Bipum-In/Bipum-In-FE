@@ -7,7 +7,7 @@ import FirstPage from './FirstPage';
 export default function RendingScrollPage({
   pageIndex,
   setPageCount,
-  setPageIndex,
+  onclick,
 }) {
   const pages = [<FirstPage />, <SecondPage />];
 
@@ -16,10 +16,6 @@ export default function RendingScrollPage({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setPageCount]);
 
-  const handleBackToFirstPage = () => {
-    setPageIndex(0);
-  };
-
   return (
     <ScrollContainer pageIndex={pageIndex}>
       {pages.map((page, index) => (
@@ -27,7 +23,7 @@ export default function RendingScrollPage({
           {page}
           {index === pages.length - 1 && (
             <ScrollToTopContainer>
-              <ScrollToTopIcon onClick={handleBackToFirstPage} />
+              <ScrollToTopIcon onClick={onclick} />
             </ScrollToTopContainer>
           )}
         </FadeInPage>

@@ -12,7 +12,7 @@ export default function Logo() {
           fill="none"
           className="main-logo-svg"
         >
-          <g class="logo__Image">
+          <g className="logo__Image">
             <path
               d="M9.33333 29C11.2594 29 13.1666 28.6249 14.946 27.8963C16.7255 27.1676 18.3423 26.0995 19.7042 24.753C21.0662 23.4066 22.1465 21.8081 22.8836 20.0489C23.6206 18.2897 24 16.4042 24 14.5H9.33333V29Z"
               fill="#4E9AFF"
@@ -27,7 +27,7 @@ export default function Logo() {
               fill="#87BBFF"
             />
           </g>
-          <g class="logo__txt">
+          <g className="logo__txt">
             <path
               d="M31 2.70147H33.6197V8.15372C35.3923 6.3405 37.9078 5.20724 40.6709 5.20724C46.0537 5.20724 50.3808 9.38772 50.3808 14.5504C50.3808 19.713 46.0537 23.9313 40.6709 23.9313C35.288 23.9313 31 19.7256 31 14.5504V2.70147ZM33.6197 14.5504C33.6197 18.3153 36.7738 21.4003 40.6709 21.4003C44.5679 21.4003 47.7611 18.3153 47.7611 14.5504C47.7611 10.7854 44.607 7.73819 40.6709 7.73819C36.7347 7.73819 33.6197 10.7854 33.6197 14.5504Z"
               fill="#005EDA"
@@ -61,7 +61,7 @@ export default function Logo() {
               fill="#005EDA"
             />
           </g>
-          <g class="logo__txt2">
+          <g className="logo__txt2">
             <path
               d="M45.6704 3.5V25.5H47.6831V3.5H45.6704ZM31 5.36976V20.2064H41.3299V5.36976H39.3173V11.1733H32.9884V5.36976H31ZM32.9884 12.7759H39.3173V18.5552H32.9884V12.7759Z"
               fill="#005EDA"
@@ -92,10 +92,10 @@ const LogoContainer = styled.div`
       transform: translate3d(30px, 0, 0);
     }
     &:hover .main-logo-svg > .logo__txt > path {
-      transform: translate3d(0, -600px, 0);
+      transform: translate3d(0, -100px, 0);
     }
     &:hover .main-logo-svg > .logo__txt > path:nth-child(2n) {
-      transform: translate3d(0, 600px, 0);
+      transform: translate3d(0, 100px, 0);
     }
     &:hover .main-logo-svg > .logo__txt2 > path {
       transform: translate3d(30px, 0, 0);
