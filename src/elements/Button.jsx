@@ -86,7 +86,7 @@ ${props =>
       font-size: 1rem;
     `}
 
-${props =>
+  ${props =>
     props.menuStyle === true &&
     css`
       color: white;
@@ -94,12 +94,26 @@ ${props =>
       font-weight: 600;
     `}
 
-${props =>
+  ${props =>
     props.menuStyle === false &&
     css`
       color: ${props => props.theme.color.grey.brandColor7};
       background-color: white;
       font-weight: 400;
+    `}
+
+  ${props =>
+    props.multipleStyle === true &&
+    css`
+      color: white;
+      background-color: ${props => props.theme.color.blue.brandColor5};
+    `}
+
+  ${props =>
+    props.multipleStyle === false &&
+    css`
+      color: ${props => props.theme.color.blue.brandColor5};
+      background-color: white;
     `}
 
     ${props =>
