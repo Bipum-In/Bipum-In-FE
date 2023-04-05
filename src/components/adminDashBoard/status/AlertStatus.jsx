@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import styled, { css } from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import AnchorBtn from '../AnchorBtn';
+import Modal from 'elements/Modal';
+import RequestModal from 'components/requestStatus/RequestModal';
 
 import { formatAgo } from 'utils/formatDate';
-
 import EmptyAlarm from './EmptyAlarm';
 import STRING from 'constants/string';
 import NUMBER from 'constants/number';
@@ -14,9 +15,19 @@ import NUMBER from 'constants/number';
 import { useInView } from 'react-intersection-observer';
 import { __adminSseAlert } from 'redux/modules/sseAlertList';
 import { __userSseAlert } from 'redux/modules/sseAlertList';
+import Axios from 'api/axios';
+import {
+  deleteAdminAlertData,
+  deleteUserAlertData,
+} from 'redux/modules/sseAlertList';
+import { deleteAdminSseData, deleteUserSseData } from 'redux/modules/sseSlice';
+
+const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function AlertStatus({ isAdmin }) {
   const dispatch = useDispatch();
+  const [modal, setModal] = useState({ show: false, detailId: null });
+  const path = isAdmin ? '/admin' : '';
 
   const {
     adminSseAlert: { getAdminSseAlert, isAdminSseAlertError },
@@ -46,36 +57,74 @@ export default function AlertStatus({ isAdmin }) {
     }
   }, [dispatch, page, size, inView, isLastPage, isAdmin]);
 
-  console.log(getAdminSseAlert);
+  const putRequest = (notificationId, requestId) => {
+    axios.put(`/api/main/read/${notificationId}`).then(() => {
+      if (isAdmin) {
+        dispatch(deleteAdminAlertData(notificationId));
+        dispatch(deleteAdminSseData(notificationId));
+      } else {
+        dispatch(deleteUserAlertData(notificationId));
+        dispatch(deleteUserSseData(notificationId));
+      }
+    });
+    setModal({ show: true, detailId: requestId });
+  };
+
   return (
     <>
       {content && (
         <styleds.EquipmentTopContainer col="true">
           <AnchorBtn onClick={() => {}}>알림</AnchorBtn>
           <styleds.AlertAndAddContainer>
-            {content.length === 0 && <EmptyAlarm />}
-            {[...sseData, ...content].map((data, index) => (
-              <AlertListContainer key={index} defaultValue={data.request_id}>
-                {isAdmin ? (
-                  <AlertImgContainer>
-                    <AlertImg src={data.image} alt="" />
-                  </AlertImgContainer>
-                ) : (
-                  <AlertStatusContainer>
-                    <Status status={STRING.REQUEST_STATUS[data.accept_result]}>
-                      {STRING.REQUEST_STATUS[data.accept_result]}
-                    </Status>
-                  </AlertStatusContainer>
-                )}
-                <AlertDetailContainer>
-                  <AlertTitle>{data.content}</AlertTitle>
-                  <AlertData>{formatAgo(data.created_At)}</AlertData>
-                </AlertDetailContainer>
-              </AlertListContainer>
-            ))}
-            {getAdminSseAlert && (
+            {sseData.length === 0 && content.length === 0 && isLastPage && (
+              <EmptyAlarm />
+            )}
+            {[...sseData, ...content].map((data, index) => {
+              return (
+                <>
+                  <AlertListContainer
+                    AlertListContainer
+                    key={index}
+                    defaultValue={data.request_id}
+                    onClick={() =>
+                      putRequest(
+                        data.notification_id || data.notificationId,
+                        data.request_id || data.requestId
+                      )
+                    }
+                  >
+                    {isAdmin ? (
+                      <AlertImgContainer>
+                        <AlertImg src={data.image} alt="" />
+                      </AlertImgContainer>
+                    ) : (
+                      <AlertStatusContainer>
+                        <Status
+                          status={
+                            STRING.REQUEST_STATUS[
+                              data.accept_result || data.acceptResult
+                            ]
+                          }
+                        >
+                          {
+                            STRING.REQUEST_STATUS[
+                              data.accept_result || data.acceptResult
+                            ]
+                          }
+                        </Status>
+                      </AlertStatusContainer>
+                    )}
+                    <AlertDetailContainer>
+                      <AlertTitle>{data.content}</AlertTitle>
+                      <AlertData>{formatAgo(data.created_At)}</AlertData>
+                    </AlertDetailContainer>
+                  </AlertListContainer>
+                </>
+              );
+            })}
+            {content && (
               <InfinityContainer ref={ref}>
-                {isLastPage && content.length !== 0 && (
+                {isLastPage && content.length > 4 && (
                   <span>마지막 페이지 입니다.</span>
                 )}
               </InfinityContainer>
@@ -83,6 +132,18 @@ export default function AlertStatus({ isAdmin }) {
           </styleds.AlertAndAddContainer>
         </styleds.EquipmentTopContainer>
       )}
+      {/* 알림 요청현황 모달 */}
+      <Modal
+        isOpen={modal.show}
+        onClose={() => setModal({ ...modal, show: false })}
+      >
+        <RequestModal
+          isClose={() => setModal({ ...modal, show: false })}
+          detailId={modal.detailId}
+          isAdmin={isAdmin}
+          path={path}
+        />
+      </Modal>
     </>
   );
 }
@@ -93,6 +154,9 @@ const AlertListContainer = styled.div`
   align-items: center;
   gap: 1rem;
   margin-bottom: 2.0625rem;
+  &:last-child {
+    margin-bottom: 0;
+  }
   &:before {
     content: '';
     position: absolute;

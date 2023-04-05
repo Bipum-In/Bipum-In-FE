@@ -56,7 +56,6 @@ const CategoryContainer = styled.div`
 
 const CategoryTitle = styled.div`
   display: flex;
-  width: 7.4375rem;
   height: 1.875rem;
   align-items: center;
   font-weight: 500;
