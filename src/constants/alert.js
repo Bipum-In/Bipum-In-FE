@@ -4,6 +4,11 @@ const ALERT = {
   CHECK_IMAGE_LENGTH(length) {
     return `이미지는 ${length}장까지 등록 가능합니다.`;
   },
+  CHECK_EXCEL_SHEET(errorArray) {
+    return `다음 항목을 확인해 주세요.
+
+            ${errorArray.join(' ')}`;
+  },
 };
 
 export default ALERT;
