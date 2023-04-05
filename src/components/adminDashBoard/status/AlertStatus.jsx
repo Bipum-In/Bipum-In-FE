@@ -1,65 +1,85 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 import styled, { css } from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import AnchorBtn from '../AnchorBtn';
 
-import { v4 as uuidv4 } from 'uuid';
 import { formatAgo } from 'utils/formatDate';
 
 import EmptyAlarm from './EmptyAlarm';
-
 import STRING from 'constants/string';
+import NUMBER from 'constants/number';
 
-export default function AlertStatus({ isAdmin, getDashboard }) {
-  const [alarm, setAlarm] = useState(false);
-  const { notifications } = getDashboard.data;
+import { useInView } from 'react-intersection-observer';
+import { __adminSseAlert } from 'redux/modules/sseAlertList';
+import { __userSseAlert } from 'redux/modules/sseAlertList';
+
+export default function AlertStatus({ isAdmin }) {
+  const dispatch = useDispatch();
+
+  const {
+    adminSseAlert: { getAdminSseAlert, isAdminSseAlertError },
+    userSseAlert: { getUserSseAlert, isUserSseAlertError },
+  } = useSelector(state => state.sseAlertList);
+
+  const content = isAdmin
+    ? getAdminSseAlert?.content
+    : getUserSseAlert?.content;
+  const isLastPage = isAdmin
+    ? getAdminSseAlert?.lastPage
+    : getUserSseAlert?.lastPage;
+
   const { sseAdminData, sseUserData } = useSelector(state => state.sseSlice);
-  const sseData = isAdmin ? sseAdminData : sseUserData;
 
+  const sseData = isAdmin ? sseAdminData : sseUserData;
+  const [ref, inView] = useInView({ threshold: 0 }); //inView
+  const page = useRef(1);
+  const size = NUMBER.INT.FOUR;
+
+  useEffect(() => {
+    if (!isLastPage && inView) {
+      isAdmin
+        ? dispatch(__adminSseAlert({ page: page.current, size }))
+        : dispatch(__userSseAlert({ page: page.current, size }));
+      page.current += 1;
+    }
+  }, [dispatch, page, size, inView, isLastPage, isAdmin]);
+
+  console.log(getAdminSseAlert);
   return (
     <>
-      {notifications && (
+      {content && (
         <styleds.EquipmentTopContainer col="true">
           <AnchorBtn onClick={() => {}}>알림</AnchorBtn>
           <styleds.AlertAndAddContainer>
-            {alarm && <LnbAlarmPoint />}
-            {notifications.length === 0 && <EmptyAlarm />}
-            {[...sseData, ...notifications].map(data => (
-              <AlertListContainer
-                key={uuidv4()}
-                defaultValue={data.request_id || data.requestId}
-              >
+            {content.length === 0 && <EmptyAlarm />}
+            {[...sseData, ...content].map((data, index) => (
+              <AlertListContainer key={index} defaultValue={data.request_id}>
                 {isAdmin ? (
                   <AlertImgContainer>
                     <AlertImg src={data.image} alt="" />
                   </AlertImgContainer>
                 ) : (
                   <AlertStatusContainer>
-                    <Status
-                      status={
-                        STRING.REQUEST_STATUS[
-                          data.accept_result || data.acceptResult
-                        ]
-                      }
-                    >
-                      {
-                        STRING.REQUEST_STATUS[
-                          data.accept_result || data.acceptResult
-                        ]
-                      }
+                    <Status status={STRING.REQUEST_STATUS[data.accept_result]}>
+                      {STRING.REQUEST_STATUS[data.accept_result]}
                     </Status>
                   </AlertStatusContainer>
                 )}
                 <AlertDetailContainer>
                   <AlertTitle>{data.content}</AlertTitle>
-                  <AlertData>
-                    {formatAgo(data.createdAt || data.created_At)}
-                  </AlertData>
+                  <AlertData>{formatAgo(data.created_At)}</AlertData>
                 </AlertDetailContainer>
               </AlertListContainer>
             ))}
+            {getAdminSseAlert && (
+              <InfinityContainer ref={ref}>
+                {isLastPage && content.length !== 0 && (
+                  <span>마지막 페이지 입니다.</span>
+                )}
+              </InfinityContainer>
+            )}
           </styleds.AlertAndAddContainer>
         </styleds.EquipmentTopContainer>
       )}
@@ -157,12 +177,12 @@ const AlertData = styled.span`
   color: ${props => props.theme.color.grey.brandColor5};
 `;
 
-const LnbAlarmPoint = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 7px;
-  height: 7px;
-  border-radius: 100%;
-  background-color: rgb(255, 153, 0);
+const InfinityContainer = styled.div`
+  ${props => props.theme.FlexRow};
+  ${props => props.theme.FlexCenter};
+  height: 2rem;
+  width: 100%;
+  span {
+    color: ${props => props.theme.color.grey.brandColor5};
+  }
 `;
