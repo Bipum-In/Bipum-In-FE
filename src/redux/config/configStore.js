@@ -7,6 +7,7 @@ import deptList from '../modules/deptList';
 import deptUserList from '../modules/deptUserList';
 import authReducer from '../modules/authSlice';
 import sseSlice from '../modules/sseSlice';
+import sseAlertList from '../modules/sseAlertList';
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     equipmentStatus,
     authReducer,
     sseSlice,
+    sseAlertList,
   },
 });
 
