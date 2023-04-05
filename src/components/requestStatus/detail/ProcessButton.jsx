@@ -8,13 +8,19 @@ export default function ProcessButton({
   handleDecline,
   handleModalShow,
   handleRepairModalShow,
+  declineComment,
 }) {
   return (
     <ApproveAndRefuse>
       {requestStatus === '처리전' && (
         <>
           <AcceptBtn onClick={handleAccept}>승인</AcceptBtn>
-          <DeclineBtn onClick={handleDecline}>거절</DeclineBtn>
+          <DeclineBtn
+            disabled={declineComment.length < 2}
+            onClick={handleDecline}
+          >
+            거절
+          </DeclineBtn>
         </>
       )}
       {requestStatus === '처리전' && requestType === '수리 요청' && (
@@ -58,10 +64,18 @@ const AcceptBtn = styled.button`
 `;
 
 const DeclineBtn = styled(AcceptBtn)`
-  color: ${props => props.theme.color.blue.brandColor6};
+  color: ${props =>
+    props.disabled
+      ? props.theme.color.grey.brandColor3
+      : props.theme.color.blue.brandColor6};
   background-color: white;
-  border: 1px solid ${props => props.theme.color.blue.brandColor6};
+  border: 1px solid
+    ${props =>
+      props.disabled
+        ? props.theme.color.grey.brandColor3
+        : props.theme.color.blue.brandColor6};
   cursor: pointer;
+  pointer-events: ${props => (props.disabled ? 'none' : 'pointer')};
 `;
 
 const DisposeBtn = styled(AcceptBtn)`
