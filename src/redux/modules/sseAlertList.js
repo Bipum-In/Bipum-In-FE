@@ -39,7 +39,24 @@ export const __userSseAlert = Redux.asyncThunk(
 const sseAlertListSlice = Redux.slice(
   'getSseAlert',
   initialState,
-  {},
+  {
+    deleteAdminAlertData: (state, action) => {
+      state.adminSseAlert.getAdminSseAlert = {
+        ...state.adminSseAlert.getAdminSseAlert,
+        content: [...state.adminSseAlert.getAdminSseAlert.content].filter(
+          item => item.notification_id !== action.payload
+        ),
+      };
+    },
+    deleteUserAlertData: (state, action) => {
+      state.userSseAlert.getUserSseAlert = {
+        ...state.userSseAlert.getUserSseAlert,
+        content: [...state.userSseAlert.getUserSseAlert.content].filter(
+          item => item.notification_id !== action.payload
+        ),
+      };
+    },
+  },
   bulider => {
     Redux.extraReducer(
       bulider,
@@ -72,4 +89,6 @@ const sseAlertListSlice = Redux.slice(
   }
 );
 
+export const { deleteAdminAlertData, deleteUserAlertData } =
+  sseAlertListSlice.actions;
 export default sseAlertListSlice.reducer;
