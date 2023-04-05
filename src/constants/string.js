@@ -70,10 +70,21 @@ const HEADER_DROPDOWN = {
   SETTINGS: '관리자 설정',
   LOGOOUT: '로그아웃',
 };
+
 const REQUEST_STATUS = {
   ACCEPT: '승인',
   DECLINE: '거절',
   DISPOSE: '폐기',
+};
+
+const EXCEL_COLUMN = {
+  A: 'A',
+  B: 'B',
+  C: 'C',
+  D: 'D',
+  E: 'E',
+  F: 'F',
+  G: 'G',
 };
 
 const IS_ADMIN = isAdmin => (isAdmin ? 'ADMIN' : 'USER');
@@ -118,6 +129,7 @@ const STRING = {
   REQUEST_STATUS,
   IS_ADMIN,
   REQUEST_NAME_ENG,
+  EXCEL_COLUMN,
 };
 
 export default STRING;
