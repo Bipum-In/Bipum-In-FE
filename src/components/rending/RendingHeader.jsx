@@ -1,72 +1,38 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import Logo from 'styles/logo.svg';
+
+import Logo from 'components/layout/Logo';
 import Button from 'elements/Button';
-import { removeCookie } from 'utils/cookie';
-import Storage from 'utils/localStorage';
-
-import { useIsLoggedIn } from 'hooks/useIsLoggedIn';
-import { logoutSuccess } from 'redux/modules/authSlice';
-import { getEncryptionStorage } from 'utils/encryptionStorage';
-
-import ROUTER from 'constants/routerConst';
-import QUERY from 'constants/query';
 
 import { ReactComponent as KakaoIcon } from 'styles/commonIcon/kakao.svg';
 import { ReactComponent as ReturnIcon } from 'styles/commonIcon/return.svg';
 
-export default function RendingHeader() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const isLoggedIn = useIsLoggedIn();
-  const currentUrl =
-    document.location.href === 'http://localhost:3000/'
-      ? process.env.REACT_APP_LOCALHOST_URL
-      : process.env.REACT_APP_S3_URL;
-
-  const handleKakaoLogin = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${currentUrl}/api/user/kakao/callback&response_type=code`;
-  };
-
-  const handleReturnDashboard = () => {
-    const { isAdmin } = getEncryptionStorage();
-
-    const targetPath = isAdmin
-      ? ROUTER.PATH.ADMIN.DASHBOARD
-      : ROUTER.PATH.USER.DASHBOARD;
-    navigate(targetPath);
-  };
-
-  const handleLogoutBtn = e => {
-    e.preventDefault();
-    removeCookie(QUERY.COOKIE.COOKIE_NAME);
-    Storage.clearLocalStorage();
-    dispatch(logoutSuccess());
-  };
-
+export default function RendingHeader({
+  isLoggedIn,
+  logoClick,
+  loginClick,
+  moveDashboard,
+  logoutClick,
+}) {
   return (
     <HeaderStyles>
       <HeaderContainer>
-        <HeaderLogoContainer>
-          <Link to="/">
-            <LogoImg src={Logo} alt="비품인" />
-          </Link>
+        <HeaderLogoContainer onClick={logoClick}>
+          <Logo />
         </HeaderLogoContainer>
         <LoginContainer>
           {!isLoggedIn ? (
-            <KakaoLoginBtn onClick={handleKakaoLogin}>
+            <KakaoLoginBtn onClick={loginClick}>
               <KakaoIcon />
               카카오 로그인
             </KakaoLoginBtn>
           ) : (
             <>
-              <ReturnDashboardBtn onClick={handleReturnDashboard}>
+              <ReturnDashboardBtn onClick={moveDashboard}>
                 비품인으로 돌아가기
                 <ReturnIcon />
               </ReturnDashboardBtn>
-              <LogoutBtn onClick={handleLogoutBtn}>로그아웃</LogoutBtn>
+              <LogoutBtn onClick={logoutClick}>로그아웃</LogoutBtn>
             </>
           )}
         </LoginContainer>
@@ -100,11 +66,7 @@ const LoginContainer = styled.div`
 `;
 const HeaderLogoContainer = styled.div`
   flex: 0 0 auto;
-`;
-const LogoImg = styled.img`
-  height: 31px;
-  width: 116px;
-  display: block;
+  cursor: pointer;
 `;
 
 const HeaderBtnStyle = styled(Button)`

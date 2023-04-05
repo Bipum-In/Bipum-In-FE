@@ -1,11 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
 import RendingHeader from 'components/rending/RendingHeader';
 import RendingDots from 'components/rending/RendingDots';
 import RendingScrollPage from 'components/rending/pages/RendingScrollPage';
 
+import { removeCookie } from 'utils/cookie';
+import Storage from 'utils/localStorage';
+import { useIsLoggedIn } from 'hooks/useIsLoggedIn';
+import { logoutSuccess } from 'redux/modules/authSlice';
+import { getEncryptionStorage } from 'utils/encryptionStorage';
+
+import ROUTER from 'constants/routerConst';
+import QUERY from 'constants/query';
+
 export default function Rending() {
   const [pageIndex, setPageIndex] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isLoggedIn = useIsLoggedIn();
+  const currentUrl =
+    document.location.href === 'http://localhost:3000/'
+      ? process.env.REACT_APP_LOCALHOST_URL
+      : process.env.REACT_APP_S3_URL;
 
   useEffect(() => {
     const handleScroll = e => {
@@ -15,22 +34,48 @@ export default function Rending() {
         setPageIndex(prevIndex => prevIndex - 1);
       }
     };
-
     window.addEventListener('wheel', handleScroll, { passive: false });
-
-    // 언마운트/업데이트될 때 이벤트 리스너를 제거
     return () => {
       window.removeEventListener('wheel', handleScroll);
     };
   }, [pageIndex, totalPages]);
 
+  const handleKakaoLogin = () => {
+    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${currentUrl}/api/user/kakao/callback&response_type=code`;
+  };
+
+  const handleReturnDashboard = () => {
+    const { isAdmin } = getEncryptionStorage();
+
+    const targetPath = isAdmin
+      ? ROUTER.PATH.ADMIN.DASHBOARD
+      : ROUTER.PATH.USER.DASHBOARD;
+    navigate(targetPath);
+  };
+
+  const handleLogoutBtn = e => {
+    e.preventDefault();
+    removeCookie(QUERY.COOKIE.COOKIE_NAME);
+    Storage.clearLocalStorage();
+    dispatch(logoutSuccess());
+  };
+
+  const handleBackToFirstPage = () => setPageIndex(0);
+
   return (
     <>
-      <RendingHeader />
+      <RendingHeader
+        isLoggedIn={isLoggedIn}
+        loginClick={handleKakaoLogin}
+        logoClick={handleBackToFirstPage}
+        moveDashboard={handleReturnDashboard}
+        logoutClick={handleLogoutBtn}
+      />
       <RendingScrollPage
         pageIndex={pageIndex}
         setPageCount={setTotalPages}
         setPageIndex={setPageIndex}
+        onclick={handleBackToFirstPage}
       />
       <RendingDots
         pageIndex={pageIndex}
