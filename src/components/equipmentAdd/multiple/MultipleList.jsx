@@ -1,6 +1,5 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import { FormatDateToDot, FormatKoreanTime } from 'utils/formatDate';
 import ARRAY from 'constants/array';
 
 export default function MultipleList({ excel }) {
