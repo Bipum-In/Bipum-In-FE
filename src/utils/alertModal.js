@@ -20,3 +20,21 @@ export default function alertModal(completeStyle, message, timeToSecond) {
     }, timeSet + 100);
   }
 }
+
+export function alertModalButton(completeStyle, message) {
+  const handleUnmountButton = () => {
+    root.unmount(root);
+    root = null;
+  };
+
+  if (!root) {
+    root = ReactDOM.createRoot(document.getElementById('alert-root'));
+    root.render(
+      <Alert
+        completeStyle={completeStyle}
+        message={message}
+        onUnmountButton={handleUnmountButton}
+      />
+    );
+  }
+}

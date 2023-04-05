@@ -3,12 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import styled, { keyframes } from 'styled-components';
 import { ReactComponent as Alert } from 'styles/commonIcon/alert.svg';
 import { ReactComponent as RequestIcon } from 'styles/commonIcon/requestIcon.svg';
+import Button from './Button';
 
 export default function AlertModal({
   completeStyle,
   isOpen,
   message,
   progressBarDuration,
+  onUnmountButton,
 }) {
   const backdropVariants = {
     visible: { opacity: 1 },
@@ -57,8 +59,13 @@ export default function AlertModal({
                 <p>{message}</p>
               </MsgContainer>
             </ModalMsgWrapper>
-            {isOpen && (
+            {isOpen && !onUnmountButton && (
               <ProgressBar progressBarDuration={progressBarDuration} />
+            )}
+            {onUnmountButton && (
+              <UnmountButtonContainer complete={completeStyle.toString()}>
+                <Button onClick={onUnmountButton}>확인</Button>
+              </UnmountButtonContainer>
             )}
           </ModalContainer>
         </Backdrop>
@@ -141,5 +148,18 @@ const MsgContainer = styled.div`
     white-space: pre-line;
     font-weight: bold;
     font-size: 1rem;
+  }
+`;
+
+const UnmountButtonContainer = styled.div`
+  display: flex;
+  justify-content: end;
+  padding-right: 0.5rem;
+  padding-bottom: 0.5rem;
+
+  button {
+    font-weight: bold;
+    color: ${props => (props.complete === 'true' ? '#0ea50bff' : 'tomato')};
+    background-color: white;
   }
 `;
