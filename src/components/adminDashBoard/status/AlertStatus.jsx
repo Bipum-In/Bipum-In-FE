@@ -79,49 +79,45 @@ export default function AlertStatus({ isAdmin }) {
             {sseData.length === 0 && content.length === 0 && isLastPage && (
               <EmptyAlarm />
             )}
-            {[...sseData, ...content].map((data, index) => {
-              return (
-                <>
-                  <AlertListContainer
-                    AlertListContainer
-                    key={index}
-                    defaultValue={data.request_id}
-                    onClick={() =>
-                      putRequest(
-                        data.notification_id || data.notificationId,
-                        data.request_id || data.requestId
-                      )
-                    }
-                  >
-                    {isAdmin ? (
-                      <AlertImgContainer>
-                        <AlertImg src={data.image} alt="" />
-                      </AlertImgContainer>
-                    ) : (
-                      <AlertStatusContainer>
-                        <Status
-                          status={
-                            STRING.REQUEST_STATUS[
-                              data.accept_result || data.acceptResult
-                            ]
-                          }
-                        >
-                          {
-                            STRING.REQUEST_STATUS[
-                              data.accept_result || data.acceptResult
-                            ]
-                          }
-                        </Status>
-                      </AlertStatusContainer>
-                    )}
-                    <AlertDetailContainer>
-                      <AlertTitle>{data.content}</AlertTitle>
-                      <AlertData>{formatAgo(data.created_At)}</AlertData>
-                    </AlertDetailContainer>
-                  </AlertListContainer>
-                </>
-              );
-            })}
+            {[...sseData, ...content].map((data, index) => (
+              <AlertListContainer
+                AlertListContainer
+                key={index}
+                defaultValue={data.request_id}
+                onClick={() =>
+                  putRequest(
+                    data.notification_id || data.notificationId,
+                    data.request_id || data.requestId
+                  )
+                }
+              >
+                {isAdmin ? (
+                  <AlertImgContainer>
+                    <AlertImg src={data.image} alt="" />
+                  </AlertImgContainer>
+                ) : (
+                  <AlertStatusContainer>
+                    <Status
+                      status={
+                        STRING.REQUEST_STATUS[
+                          data.accept_result || data.acceptResult
+                        ]
+                      }
+                    >
+                      {
+                        STRING.REQUEST_STATUS[
+                          data.accept_result || data.acceptResult
+                        ]
+                      }
+                    </Status>
+                  </AlertStatusContainer>
+                )}
+                <AlertDetailContainer>
+                  <AlertTitle>{data.content}</AlertTitle>
+                  <AlertData>{formatAgo(data.created_At)}</AlertData>
+                </AlertDetailContainer>
+              </AlertListContainer>
+            ))}
             {content && (
               <InfinityContainer ref={ref}>
                 {isLastPage && content.length > 4 && (
