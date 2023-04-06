@@ -81,7 +81,7 @@ export default function AddMultipleItem() {
   const setExcels = workBook => {
     return workBook.SheetNames.map(sheetName =>
       XLSX.utils.sheet_to_json(workBook.Sheets[sheetName], {
-        range: 8,
+        range: 10,
         blankrows: false,
       })
     );
@@ -90,7 +90,7 @@ export default function AddMultipleItem() {
   const jsonToExcel = workBook => {
     return Object.values(workBook.Sheets).map(sheet =>
       XLSX.utils.sheet_to_json(sheet, {
-        range: 8,
+        range: 10,
         header: 1,
         defval: '',
       })
