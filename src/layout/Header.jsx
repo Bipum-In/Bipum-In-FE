@@ -103,30 +103,6 @@ export default function Header() {
       const data = checkJSON !== 'EventStream' && JSON.parse(event.data);
       data && data.acceptResult && dispatch(setUserSSE(data));
       data && !data.acceptResult && dispatch(setAdminSSE(data));
-
-      const message = data.content;
-      const notificationTitle = '새로운 알림이 도착했습니다.';
-      const notificationOptions = {
-        body: message,
-      };
-
-      // Notification.requestPermission().then(permission => {
-      //   // If the user accepts, let's create a notification
-      //   if (permission === 'granted') {
-      //     const notification = new Notification('Hi there!');
-      //     console.log(notification);
-      //   }
-      // });
-
-      const notification = new Notification(
-        notificationTitle,
-        notificationOptions
-      );
-
-      notification.onclick = function (event) {
-        event.preventDefault();
-        document.startViewTransition(() => navigate(`/`));
-      };
     });
 
     sse.onError(error => {
