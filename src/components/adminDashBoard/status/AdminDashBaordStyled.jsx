@@ -15,12 +15,11 @@ const AlertAndAddContainer = styled.div`
   ${props => props.theme.Boxshadow};
   border: 0.0625rem solid ${props => props.theme.color.grey.brandColor2};
   background-color: white;
-  padding: 1.5625rem;
   width: 28.25rem;
   min-height: 19.5625rem;
   max-height: 19.5625rem;
-  overflow: auto;
-
+  overflow: overlay;
+  padding: 1rem 0 0.2rem;
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;
