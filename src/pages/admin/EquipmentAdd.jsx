@@ -18,6 +18,9 @@ export default function EquipmentAdd() {
     { name: STRING.ADDMENUE.ADDMULTIPLE, status: false },
   ]);
   const { getCategory } = useSelector(state => state.equipmentStatus.category);
+  const largeCategory = Object.values(STRING.CATEGORY_ENG).map(value => {
+    return { name: value };
+  });
 
   useEffect(() => {
     dispatch(getCategoryList());
@@ -33,8 +36,8 @@ export default function EquipmentAdd() {
           <AddComponentsContainer>
             {menuStyle[0].status && (
               <AddSingleItem
-                category={getCategory.category}
-                largeCategory={getCategory.largeCategory}
+                categoryList={getCategory.category}
+                largeCategoryList={largeCategory}
               />
             )}
             {menuStyle[1].status && <AddMultipleItem />}
