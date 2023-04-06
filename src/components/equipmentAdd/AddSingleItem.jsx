@@ -9,6 +9,7 @@ import SelectCategoryList from './single/SelectCategoryList';
 import EquipmentInput from './single/EquipmentInput';
 import SelectUser from './single/SelectUser';
 import ImageAdd from './single/ImageAdd';
+import STRING from 'constants/string';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 const equipmentData = {
@@ -17,7 +18,9 @@ const equipmentData = {
   modelName: '',
   serialNum: '',
   partnersId: '',
+  deptId: '',
   userId: '',
+  useType: null,
 };
 
 export default function AddSingleItem({ category, largeCategory }) {
@@ -28,7 +31,7 @@ export default function AddSingleItem({ category, largeCategory }) {
   const [serialValue, setSerialValue] = useState('');
   const [smallCategory, setSmallCategory] = useState(null);
   const [checkSallCategory, setCheckSallCategory] = useState(false);
-  const [formImage, setFormformImage] = useState(null);
+  const [formImage, setFormImage] = useState([]);
   const [preview, setPreview] = useState('');
   const [crawlingImg, setCrawlingImg] = useState(null);
   const [optionNullList, setOptionNullList] = useState({
@@ -36,7 +39,7 @@ export default function AddSingleItem({ category, largeCategory }) {
     smallCategory: '소분류',
     partners: '회사명',
     dept: '부서명',
-    user: '사원명',
+    user: '공용',
   });
 
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
@@ -61,9 +64,9 @@ export default function AddSingleItem({ category, largeCategory }) {
     setNameValue('');
     setSerialValue('');
     setUser(null);
-    setPreview(null);
+    setPreview([]);
     setCrawlingImg(null);
-    setFormformImage(null);
+    setFormImage([]);
     setSmallCategory(null);
     setCheckSallCategory(null);
     setOptionNullList({
@@ -71,7 +74,7 @@ export default function AddSingleItem({ category, largeCategory }) {
       smallCategory: '소분류',
       partners: '회사명',
       dept: '부서명',
-      user: '사원명',
+      user: '공용',
     });
   };
 
@@ -116,8 +119,20 @@ export default function AddSingleItem({ category, largeCategory }) {
   const handleChangeDept = e => {
     const { ko: dept } = JSON.parse(e.target.value);
     const text = e.target.options[e.target.selectedIndex].innerText;
-    setOptionNullList(state => ({ ...state, dept: text, user: '사원명' }));
-    dept ? getUserData(dept) : setUser('');
+    setOptionNullList(state => ({ ...state, dept: text, user: '공용' }));
+
+    if (dept) {
+      getUserData(dept);
+      equipmentData.deptId = dept;
+      equipmentData.userId = '';
+      equipmentData.useType = STRING.USE_TYPE['공용'];
+      return;
+    }
+
+    equipmentData.deptId = '';
+    equipmentData.userId = '';
+    equipmentData.useType = '';
+    setUser('');
   };
 
   const handleChangeUser = e => {
@@ -125,7 +140,11 @@ export default function AddSingleItem({ category, largeCategory }) {
     const text = e.target.options[e.target.selectedIndex].innerText;
     setOptionNullList(state => ({ ...state, user: text }));
 
-    equipmentData.userId = user;
+    if (user) {
+      equipmentData.userId = user;
+      equipmentData.useType = STRING.USE_TYPE['개인'];
+      return;
+    }
   };
 
   const parseCategoryData = (name, getCategory) => {
@@ -133,13 +152,13 @@ export default function AddSingleItem({ category, largeCategory }) {
   };
 
   const handleDeleteImage = e => {
-    setFormformImage(null);
-    setPreview(null);
+    setFormImage([]);
+    setPreview([]);
   };
 
   const onChangeimge = e => {
     const img = e.target.files[0];
-    setFormformImage(img);
+    setFormImage([img]);
     setPreviewImage(img);
     setCrawlingImg('');
   };
@@ -147,7 +166,7 @@ export default function AddSingleItem({ category, largeCategory }) {
   const setPreviewImage = img => {
     const reader = new FileReader();
     reader.onloadend = () => {
-      setPreview(reader.result);
+      setPreview([reader.result]);
     };
     reader.readAsDataURL(img);
   };
@@ -164,27 +183,29 @@ export default function AddSingleItem({ category, largeCategory }) {
     formData.append('serialNum', equipmentData.serialNum);
     formData.append('partnersId', equipmentData.partnersId);
     formData.append('userId', equipmentData.userId);
+    formData.append('deptId', equipmentData.deptId);
+    formData.append('useType', equipmentData.useType);
 
-    if (formImage) {
+    if (formImage.length) {
       formData.append('multipartFile', formImage);
     } else {
       formData.append('image', crawlingImg);
     }
 
     sendFormData(formData);
-    initData();
   };
 
   const getUserData = deptId =>
     axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
 
-  const sendFormData = formData => axios.post(`/api/supply`, formData);
+  const sendFormData = formData =>
+    axios.post(`/api/supply`, formData).then(() => initData());
 
   const getCrawlingData = () => {
     axios.get(`/api/supply/search?modelName=${nameValue}`).then(res => {
       setCrawlingImg(res.data.data.image);
-      setPreview(res.data.data.image);
-      setFormformImage('');
+      setPreview([res.data.data.image]);
+      setFormImage([]);
     });
   };
 
