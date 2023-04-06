@@ -6,6 +6,7 @@ import { ReactComponent as DragIcon } from 'styles/commonIcon/drag.svg';
 
 import ImageCarousel from '../../common/ImageCarousel';
 import { v4 as uuidv4 } from 'uuid';
+import { useLocation } from 'react-router-dom';
 
 export default function ImageAdd({
   preview,
@@ -13,9 +14,11 @@ export default function ImageAdd({
   onDeleteImage,
   children,
 }) {
+  const { pathname } = useLocation();
   const [isCurrent, setIsCurrent] = useState('');
   const [invalidFile, setInvalidFile] = useState(false);
   const inputRef = useRef(null);
+  const multiple = pathname !== '/equipment-add' ? true : false;
 
   const handlerInputFile = () => inputRef.current.click();
   const handleDragOver = useCallback(e => e.preventDefault(), []);
@@ -94,7 +97,7 @@ export default function ImageAdd({
           type="file"
           accept=".png,.jpg,.jpeg,.gif"
           onChange={onChangeimge}
-          multiple
+          {...(multiple && { multiple: true })}
         />
       </ImageinputFile>
     </ImageWrapper>
