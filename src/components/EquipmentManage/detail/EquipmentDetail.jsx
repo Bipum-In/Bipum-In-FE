@@ -22,18 +22,6 @@ import ROUTER from 'constants/routerConst';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-const detailData = {
-  largeCategory: '',
-  categoryName: '',
-  modelName: '',
-  serialNum: '',
-  partnersId: '',
-  deptId: '',
-  userId: '',
-  useType: '',
-  image: '',
-};
-
 export default function EquipmentDetail({
   isAdmin,
   category,
@@ -51,11 +39,13 @@ export default function EquipmentDetail({
   });
   const [dept, setDept] = useState(null);
   const [user, setUser] = useState('');
+  const [deptId, setDeptId] = useState('');
+  const [userId, setUserId] = useState('');
+  const [useType, setUseType] = useState('');
+  const [partnersId, setPartnersId] = useState('');
   const [imageForm, setImageForm] = useState(null);
   const [preview, setPreview] = useState('');
   const [partners, setPartners] = useState('');
-  const [smallCategory, setSmallCategory] = useState(null);
-  const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
   const [optionNullList, setOptionNullList] = useState({
     partners: '회사명',
     dept: '부서명',
@@ -94,33 +84,7 @@ export default function EquipmentDetail({
     setEditRequester({ ...editRequester, [value]: !editRequester[value] });
   };
 
-  const handleSave = supplyId => {
-    const {
-      largeCategory,
-      category,
-      partnersId,
-      userId,
-      image,
-      modelName,
-      serialNum,
-    } = getDetail.supplyDetail;
-
-    detailData.largeCategory = STRING.CATEGORY[largeCategory];
-    detailData.categoryName = category;
-    detailData.modelName = modelName;
-    detailData.serialNum = serialNum;
-
-    partnersId && !detailData.partnersId && (detailData.partnersId = '');
-    detailData.userId || (detailData.userId = userId || '');
-
-    detailData.deptId && (detailData.useType = STRING.USE_TYPE['공용']);
-    detailData.userId && (detailData.useType = STRING.USE_TYPE['개인']);
-    !detailData.deptId && (detailData.useType = '');
-
-    detailData.image || (detailData.image = image);
-
-    sendFormData(supplyId, image);
-  };
+  const handleSave = supplyId => sendFormData(supplyId);
 
   const handleDispose = supplyId => {
     axios.delete(`/api/supply/${supplyId}`).then(() => isClose());
@@ -137,18 +101,23 @@ export default function EquipmentDetail({
     const text = e.target.options[e.target.selectedIndex].innerText;
 
     setOptionNullList(state => ({ ...state, partners: text }));
-    detailData.partnersId = partners;
+    setPartnersId(partners);
   };
 
   const handleChangeDept = e => {
     const { ko: dept } = JSON.parse(e.target.value);
     const text = e.target.options[e.target.selectedIndex].innerText;
     setOptionNullList(state => ({ ...state, dept: text, user: '공용' }));
+    console.log(dept);
+    if (!dept) {
+      setUseType('');
+      return;
+    }
 
-    dept && getUserData(dept);
-    detailData.deptId = dept;
-    detailData.userId = '';
-    console.log(detailData.userId);
+    getUserData(dept);
+    setDeptId(dept);
+    setUserId('');
+    setUseType(STRING.USE_TYPE['공용']);
   };
 
   const handleChangeUser = e => {
@@ -156,22 +125,27 @@ export default function EquipmentDetail({
     const text = e.target.options[e.target.selectedIndex].innerText;
     setOptionNullList(state => ({ ...state, user: text }));
 
-    detailData.userId = user;
+    setDeptId('');
+    setUserId(user);
+    setUseType(STRING.USE_TYPE['개인']);
   };
 
   const getUserData = deptId =>
     axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
 
-  const sendFormData = (supplyId, image) => {
+  const sendFormData = supplyId => {
     const formData = new FormData();
-    formData.append('largeCategory', detailData.largeCategory);
-    formData.append('categoryName', detailData.categoryName);
-    formData.append('modelName', detailData.modelName);
-    formData.append('serialNum', detailData.serialNum);
-    formData.append('partnersId', detailData.partnersId);
-    formData.append('userId', detailData.userId);
-    formData.append('deptId', detailData.deptId);
-    formData.append('useType', detailData.useType);
+    const { largeCategory, category, image, modelName, serialNum } =
+      getDetail.supplyDetail;
+
+    formData.append('largeCategory', STRING.CATEGORY[largeCategory]);
+    formData.append('categoryName', category);
+    formData.append('modelName', modelName);
+    formData.append('serialNum', serialNum);
+    formData.append('partnersId', partnersId);
+    formData.append('userId', userId);
+    formData.append('deptId', deptId);
+    formData.append('useType', useType);
 
     if (imageForm) {
       formData.append('multipartFile', imageForm);
