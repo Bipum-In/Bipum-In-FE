@@ -47,6 +47,7 @@ const REQUEST_NAME_ENG = {
   '반납 요청': 'RETURN',
   '보고서 결재 요청': 'REPORT',
 };
+
 const CATEGORY = {
   전체: '',
   컴퓨터: 'COMPUTER',
@@ -54,6 +55,14 @@ const CATEGORY = {
   가전제품: 'ELECTRONICS',
   가구: 'FURNITURE',
   기타: 'ETC',
+};
+
+const CATEGORY_ENG = {
+  COMPUTER: '컴퓨터',
+  DIGITAL: '디지털',
+  ELECTRONICS: '가전제품',
+  FURNITURE: '가구',
+  ETC: '기타',
 };
 
 const EQUIPMENT_STATUS = {
@@ -136,6 +145,7 @@ const STRING = {
   REQUEST_NAME_ENG,
   EXCEL_COLUMN,
   USE_TYPE,
+  CATEGORY_ENG,
 };
 
 export default STRING;
