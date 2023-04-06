@@ -46,7 +46,7 @@ export default function AlertStatus({ isAdmin }) {
   const sseData = isAdmin ? sseAdminData : sseUserData;
   const [ref, inView] = useInView({ threshold: 0 }); //inView
   const page = useRef(1);
-  const size = NUMBER.INT.FOUR;
+  const size = NUMBER.INT.FIVE;
 
   useEffect(() => {
     if (!isLastPage && inView) {
@@ -234,10 +234,9 @@ const AlertData = styled.span`
 const InfinityContainer = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
-  padding: 1rem;
-  min-height: 4rem;
   width: 100%;
   span {
     color: ${props => props.theme.color.grey.brandColor5};
+    padding: 1rem;
   }
 `;

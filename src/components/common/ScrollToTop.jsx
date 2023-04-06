@@ -53,8 +53,8 @@ export default ScrollToTop;
 
 const ScrollToTopContainer = styled.div`
   position: fixed;
-  bottom: 30px;
-  right: 30px;
+  bottom: 27px;
+  right: 100px;
   z-index: 1;
 `;
 
