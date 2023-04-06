@@ -149,27 +149,20 @@ const AlertListContainer = styled.div`
   ${props => props.theme.FlexRow};
   align-items: center;
   gap: 1rem;
-  margin-bottom: 2.0625rem;
-  &:last-child {
-    margin-bottom: 0;
+  min-height: 4.625rem;
+  padding: 0 1.5625rem;
+  border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
+  transition: background 0.1s ease-in-out;
+  cursor: pointer;
+  :hover {
+    background: ${props => props.theme.color.blue.brandColor2};
   }
-  &:before {
-    content: '';
-    position: absolute;
-    bottom: -1.03125rem;
-    left: 0;
-    width: 100%;
-    height: 1px;
-    background-color: ${props => props.theme.color.grey.brandColor2};
-  }
-  &:last-child {
-    margin-bottom: 0;
-  }
-  &:last-child:before {
-    display: none;
+  &:first-child {
+    margin-top: -1.25rem;
+    padding-top: 1rem;
+    min-height: 6rem;
   }
 `;
-
 const AlertImgContainer = styled.div`
   width: 2.5rem;
   height: 2.5rem;
@@ -225,7 +218,8 @@ const AlertImg = styled.img`
 
 const AlertDetailContainer = styled.div`
   ${props => props.theme.FlexCol};
-  justify-content: space-around;
+  justify-content: center;
+  gap: 0.5rem;
   height: 100%;
 `;
 
@@ -240,7 +234,8 @@ const AlertData = styled.span`
 const InfinityContainer = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
-  height: 2rem;
+  padding: 1rem;
+  min-height: 4rem;
   width: 100%;
   span {
     color: ${props => props.theme.color.grey.brandColor5};

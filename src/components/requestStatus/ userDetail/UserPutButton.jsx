@@ -22,13 +22,11 @@ export default function UserPutButton({
   const editFunction = editFunctions[requestType];
 
   return (
-    acceptResult !== STRING.REQUEST_STATUS.ACCEPT && (
-      <Button
-        mainBtn={'fill'}
-        onClick={editMode ? editFunction : handleEditToggle}
-      >
-        {editMode ? '저장' : '수정'}
-      </Button>
-    )
+    <Button
+      mainBtn={'fill'}
+      onClick={editMode ? editFunction : handleEditToggle}
+    >
+      {editMode ? '저장' : '수정'}
+    </Button>
   );
 }

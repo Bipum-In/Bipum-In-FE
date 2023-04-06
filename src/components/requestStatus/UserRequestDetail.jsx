@@ -119,6 +119,7 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
   const editRepair = e => editRequest(e, STRING.REQUEST_TYPES.REPAIR);
   const editReport = e => editRequest(e, STRING.REQUEST_TYPES.REPORT);
 
+  console.log('acceptResult====>', acceptResult);
   return (
     <>
       <DetailContainer>
@@ -127,23 +128,26 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
           <RequestContainer>
             <RequestTopWrapper>
               <DetailTitle>요청 정보</DetailTitle>
-              <DeleteAndPutContainer>
-                {!editMode && (
-                  <Button mainBtn={'border'} onClick={deletRequest}>
-                    삭제
-                  </Button>
-                )}
-                <UserPutButton
-                  requestType={requestType}
-                  acceptResult={acceptResult}
-                  editMode={editMode}
-                  handleEditToggle={handleEditToggle}
-                  editSupply={editSupply}
-                  editReturn={editReturn}
-                  editRepair={editRepair}
-                  editReport={editReport}
-                />
-              </DeleteAndPutContainer>
+
+              {acceptResult === null && (
+                <DeleteAndPutContainer>
+                  {!editMode && (
+                    <Button mainBtn={'border'} onClick={deletRequest}>
+                      삭제
+                    </Button>
+                  )}
+                  <UserPutButton
+                    requestType={requestType}
+                    acceptResult={acceptResult}
+                    editMode={editMode}
+                    handleEditToggle={handleEditToggle}
+                    editSupply={editSupply}
+                    editReturn={editReturn}
+                    editRepair={editRepair}
+                    editReport={editReport}
+                  />
+                </DeleteAndPutContainer>
+              )}
             </RequestTopWrapper>
 
             {/* 부폼 관련 정보 */}
