@@ -18,8 +18,8 @@ const AlertAndAddContainer = styled.div`
   width: 28.25rem;
   min-height: 19.5625rem;
   max-height: 19.5625rem;
+  padding: 0.6rem 0 0.2rem;
   overflow: overlay;
-  padding: 1rem 0 0.2rem;
   &::-webkit-scrollbar {
     width: 8px;
     height: 8px;
