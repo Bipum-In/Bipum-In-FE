@@ -77,6 +77,11 @@ const REQUEST_STATUS = {
   DISPOSE: '폐기',
 };
 
+const USE_TYPE = {
+  개인: 'PERSONAL',
+  공용: 'COMMON',
+};
+
 const EXCEL_COLUMN = {
   A: 'A',
   B: 'B',
@@ -130,6 +135,7 @@ const STRING = {
   IS_ADMIN,
   REQUEST_NAME_ENG,
   EXCEL_COLUMN,
+  USE_TYPE,
 };
 
 export default STRING;
