@@ -48,7 +48,7 @@ function validExcelSheet(excel) {
   let columnCnt = 0;
   let rowCnt = 0;
 
-  const parseEmptyColumn = excel.filter(v => new Set(v).size !== 1);
+  const parseEmptyColumn = excel.filter(column => new Set(column).size > 2);
   const rowLength = parseEmptyColumn.length - 1;
 
   while (columnCnt < columnArray.length) {
