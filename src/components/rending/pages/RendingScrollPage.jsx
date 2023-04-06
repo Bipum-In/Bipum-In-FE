@@ -13,8 +13,7 @@ export default function RendingScrollPage({
 
   useEffect(() => {
     setPageCount(pages.length);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setPageCount]);
+  }, [pages.length, setPageCount]);
 
   return (
     <ScrollContainer pageIndex={pageIndex}>
