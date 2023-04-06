@@ -14,6 +14,7 @@ import { getEncryptionStorage } from 'utils/encryptionStorage';
 
 import ROUTER from 'constants/routerConst';
 import QUERY from 'constants/query';
+import { useThrottle } from 'hooks/useThrottle';
 
 export default function Rending() {
   const [pageIndex, setPageIndex] = useState(0);
@@ -21,24 +22,30 @@ export default function Rending() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useIsLoggedIn();
+
+  const throttledHandleScroll = useThrottle(e => handleScroll(e), 200);
+
   const currentUrl =
     document.location.href === 'http://localhost:3000/'
       ? process.env.REACT_APP_LOCALHOST_URL
       : process.env.REACT_APP_S3_URL;
 
   useEffect(() => {
-    const handleScroll = e => {
-      if (e.deltaY > 0 && pageIndex < totalPages - 1) {
-        setPageIndex(prevIndex => prevIndex + 1);
-      } else if (e.deltaY < 0 && pageIndex > 0) {
-        setPageIndex(prevIndex => prevIndex - 1);
-      }
-    };
-    window.addEventListener('wheel', handleScroll, { passive: false });
+    window.addEventListener('wheel', throttledHandleScroll, { passive: false });
     return () => {
-      window.removeEventListener('wheel', handleScroll);
+      window.removeEventListener('wheel', throttledHandleScroll);
     };
-  }, [pageIndex, totalPages]);
+  }, [throttledHandleScroll]);
+
+  const handleScroll = e => {
+    if (e.deltaY > 0) {
+      setPageIndex(prevIndex =>
+        prevIndex < totalPages - 1 ? prevIndex + 1 : prevIndex
+      );
+    } else if (e.deltaY < 0) {
+      setPageIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
+    }
+  };
 
   const handleGoogleLogin = () => {
     window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${currentUrl}/login/oauth2/code/google&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
