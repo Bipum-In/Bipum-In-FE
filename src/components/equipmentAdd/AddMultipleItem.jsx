@@ -1,119 +1,115 @@
-import Button from 'elements/Button';
-import Input from 'elements/Input';
+import ARRAY from 'constants/array';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import * as XLSX from 'xlsx';
-import { v4 as uuidv4 } from 'uuid';
+
+import MultipleHeader from './multiple/MultipleHeader';
+import MultipleList from './multiple/MultipleList';
+import Valid from 'validation/validation';
 
 export default function AddMultipleItem() {
-  const [excel, setExcel] = useState({ data: null, sheetName: null, path: '' });
+  const [excel, setExcel] = useState({
+    data: null,
+    sheetList: null,
+    sheetItem: 0,
+  });
 
-  const readExcel = e => {
-    let { files, value } = e.target;
-    let reader = new FileReader();
+  const handleChangeSheet = e => {
+    const { value } = e.target;
+    const sheetList = editSheetList(excel, value);
+    setExcel({ ...excel, sheetList, sheetItem: Number(value) });
+  };
+
+  const handleReadExcel = e => {
+    const { files } = e.target;
+    const reader = new FileReader();
     reader.onload = () => {
-      let data = reader.result;
-      let workBook = XLSX.read(data, { type: 'binary' });
+      const workBook = XLSX.read(reader.result, { type: 'binary' });
       const sheetName = workBook.SheetNames;
-      console.log(sheetName);
 
-      const excels = workBook.SheetNames.map(sheetName =>
-        XLSX.utils.sheet_to_json(workBook.Sheets[sheetName])
-      );
-      setExcel({ data: excels, sheetName, path: value });
+      const excels = setExcels(workBook);
+      const sheetList = setSheetList(workBook);
+      const jsonToExcelArray = jsonToExcel(workBook);
+
+      if (!Valid.excelSheetCheck(sheetName, jsonToExcelArray)) return;
+
+      setExcel({ data: excels, sheetList, sheetItem: 0 });
     };
     reader.readAsBinaryString(files[0]);
+    e.target.value = '';
   };
 
-  const DownLoadToExcel = () => {
-    const csvData = [
-      {
-        카테고리: '노트북',
-        제품명: 'MacBook Pro',
-        시리얼_번호: 'ms11223-344kj55',
-        협력업체: '',
-        부서명: '',
-        사원명: '',
-      },
-    ];
-    const ws = XLSX.utils.json_to_sheet(csvData);
-    const wb = XLSX.utils.book_new();
+  const handleDownLoadToExcel = async () => {
+    const response = await fetch('data/bipumin.xlsx');
+    const blob = await response.blob();
 
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-    XLSX.writeFile(wb, 'test.xlsx');
+    const nowDate = new Date().toISOString().slice(0, 10);
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = `bipumin-${nowDate}.xlsx`;
+    link.click();
   };
-  console.log(excel);
+
+  const setSheetList = workBook => {
+    return workBook.SheetNames.map((sheetName, index) =>
+      index
+        ? {
+            status: false,
+            sheetName,
+          }
+        : {
+            status: true,
+            sheetName,
+          }
+    );
+  };
+
+  const editSheetList = (excel, value) => {
+    return excel.sheetList.map((sheetItem, index) =>
+      index === Number(value)
+        ? {
+            status: true,
+            sheetName: sheetItem.sheetName,
+          }
+        : {
+            status: false,
+            sheetName: sheetItem.sheetName,
+          }
+    );
+  };
+
+  const setExcels = workBook => {
+    return workBook.SheetNames.map(sheetName =>
+      XLSX.utils.sheet_to_json(workBook.Sheets[sheetName], {
+        range: 10,
+        blankrows: false,
+      })
+    );
+  };
+
+  const jsonToExcel = workBook => {
+    return Object.values(workBook.Sheets).map(sheet =>
+      XLSX.utils.sheet_to_json(sheet, {
+        range: 10,
+        header: 1,
+        defval: '',
+      })
+    );
+  };
+
   return (
     <MultipleWrapper>
-      <MultipleHeaderContainer>
-        <InputFileContainer>
-          <InputFile>
-            파일 선택
-            <Input
-              key={uuidv4()}
-              type="file"
-              setState={readExcel}
-              accept=".csv,.xlsx,.xls,.numbers"
-            />
-          </InputFile>
-          <InputFilePath>{excel.path || ':'}</InputFilePath>
-        </InputFileContainer>
-        <Button onClick={DownLoadToExcel}>양식 다운로드</Button>
-      </MultipleHeaderContainer>
-      <ul>
-        {excel?.data?.map((row, index) =>
-          // <div>{excel.sheetName[index]}</div>
-          row.map(column => (
-            <li>{`카테고리:${column['카테고리']} | 제품명:${column['제품명']} | 시리얼_번호:${column['시리얼_번호']} | 협력업체:${column['협력업체']} | 부서명:${column['부서명']} | 사원명:${column['사원명']}`}</li>
-          ))
-        )}
-      </ul>
+      <MultipleHeader
+        sheetList={excel.sheetList}
+        readExcel={handleReadExcel}
+        downLoadToExcel={handleDownLoadToExcel}
+        onChangeSheet={handleChangeSheet}
+      />
+      <MultipleList excel={excel} />
     </MultipleWrapper>
   );
 }
 
 const MultipleWrapper = styled.section`
   width: 100%;
-  padding: 2rem 3rem;
-`;
-
-const MultipleHeaderContainer = styled.header`
-  ${props => props.theme.FlexRow}
-  justify-content: space-between;
-
-  button {
-    color: white;
-    background-color: ${props => props.theme.color.blue.brandColor6};
-  }
-`;
-
-const InputFileContainer = styled.div`
-  ${props => props.theme.FlexRow}
-  ${props => props.theme.FlexCenter}
-`;
-
-const InputFile = styled.label`
-  border: 0;
-  border-radius: 0.375rem;
-  ${props => props.theme.FlexCol};
-  ${props => props.theme.FlexCenter};
-  color: ${props => props.theme.color.blue.brandColor6};
-  width: 5rem;
-  height: 2.8125rem;
-  font-weight: 600;
-  font-size: 1rem;
-  background-color: #e4f0ff;
-  cursor: pointer;
-
-  input {
-    display: none;
-  }
-`;
-
-const InputFilePath = styled.div`
-  display: flex;
-  align-items: center;
-  min-width: 20rem;
-  height: 2.8125rem;
-  border: 3px solid #e4f0ff;
 `;

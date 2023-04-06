@@ -11,30 +11,27 @@ import Valid from 'validation/validation';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-const requestData = {
-  supplyId: '',
-  categoryId: '',
-  content: '',
-  requestType: '',
-  multipartFile: '',
-  storedImageURLs: '',
-};
-
 export default function UserEquipmentRequest({
   type,
   category,
   largeCategory,
 }) {
+  const [useType, setUseType] = useState('');
+  const [supplyId, setSupplyId] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+
   const [preview, setPreview] = useState([]);
   const [mySupply, setMysupply] = useState(null);
   const [formImage, setFormImage] = useState([]);
   const [messageValue, setMessageValue] = useState('');
+
+  const [notSupplyLargeCategory, setNotSupplyLargeCategory] = useState(null);
   const [smallCategory, setSmallCategory] = useState(null);
-  const [checkSallCategory, setCheckSallCategory] = useState(false);
   const [optionNullList, setOptionNullList] = useState({
     largeCategory: '대분류',
     smallCategory: '소분류',
     supply: '선택',
+    useType: '선택',
   });
   const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
 
@@ -43,42 +40,63 @@ export default function UserEquipmentRequest({
   }, [type]);
 
   const initData = () => {
+    setUseType('');
+    setSupplyId('');
+    setCategoryId('');
     setPreview([]);
+    setFormImage([]);
     setMysupply(null);
     setMessageValue('');
-    setFormImage([]);
     setSmallCategory(null);
-    setCheckSallCategory(null);
     setOptionNullList({
       largeCategory: '대분류',
       smallCategory: '소분류',
       supply: '선택',
+      useType: '선택',
     });
   };
 
-  const parseCategoryData = (name, getCategory) => {
-    return getCategory.filter(item => item.largeCategory === name);
-  };
-
   const handleChangeMySupply = e => {
-    const { ko } = JSON.parse(e.target.value);
+    const { ko: id } = JSON.parse(e.target.value);
     const text = e.target.options[e.target.selectedIndex].innerText;
     setOptionNullList(state => ({ ...state, supply: text }));
 
-    requestData.supplyId = ko;
+    setSupplyId(id);
+  };
+
+  const handleChangeUseType = e => {
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList({
+      useType: text,
+      largeCategory: '대분류',
+      smallCategory: '소분류',
+      supply: '선택',
+    });
+
+    if (type !== 'SUPPLY' && text) {
+      getNotSupplyLargeCategory(text);
+    }
+
+    setUseType(STRING.USE_TYPE[text]);
   };
 
   const handleChangeLargeCategory = e => {
     const { ko } = JSON.parse(e.target.value);
     const largeCategory = e.target.options[e.target.selectedIndex].innerText;
     const smallCatagory = parseCategoryData(ko, category);
-    setOptionNullList({
+    setOptionNullList(state => ({
+      ...state,
       largeCategory,
       smallCategory: '소분류',
       supply: '선택',
-    });
+    }));
 
-    requestData.categoryId = smallCatagory[0].categoryId;
+    if (type !== 'SUPPLY' && useType) {
+      getNotSupplySmallCategory(ko);
+      return;
+    }
+
+    setCategoryId(smallCatagory[0].categoryId);
     setSmallCategory(smallCatagory);
   };
 
@@ -91,35 +109,26 @@ export default function UserEquipmentRequest({
       supply: '선택',
     }));
 
-    requestData.categoryId = categoryId;
-    type !== 'SUPPLY' && setMySupply(categoryId);
-    setCheckSallCategory(requestData.categoryName);
+    setCategoryId(categoryId);
+    type !== 'SUPPLY' && getMySupply(categoryId);
   };
 
-  const setFormData = e => {
-    if (
-      optionNullList.largeCategory === '대분류' ||
-      optionNullList.smallCategory === '소분류'
-    ) {
-      alert('소분류를 선택해주세요');
-      return;
-    }
+  const parseCategoryData = (name, getCategory) => {
+    return getCategory.filter(item => item.largeCategory === name);
+  };
 
-    const formDataKeyArray =
-      type === 'SUPPLY'
-        ? ['categoryId', 'requestType', 'content', 'storedImageURLs']
-        : [
-            'supplyId',
-            'requestType',
-            'content',
-            'multipartFile',
-            'storedImageURLs',
-          ];
-
-    requestData.requestType = type;
-    requestData.content = messageValue;
-
+  const setFormData = () => {
     const formData = new FormData();
+
+    formData.append('requestType', type);
+    formData.append('content', messageValue);
+    formData.append('useType', useType);
+
+    if (type === 'SUPPLY') {
+      formData.append('categoryId', categoryId);
+    } else {
+      formData.append('supplyId', supplyId);
+    }
 
     if (formImage) {
       formImage.forEach(img => {
@@ -127,12 +136,7 @@ export default function UserEquipmentRequest({
       });
     }
 
-    formDataKeyArray.forEach(formDataKey => {
-      formData.append(formDataKey, requestData[formDataKey]);
-    });
-
     sendFormData(formData);
-    initData();
   };
 
   const handleChangeimge = e => {
@@ -177,22 +181,45 @@ export default function UserEquipmentRequest({
     }
   };
 
-  const sendFormData = formData =>
-    axios.post(`/api/requests`, [
-      formData,
-      `${STRING.REQUEST_NAME[type]} 완료`,
-    ]);
+  const sendFormData = formData => {
+    axios
+      .post(`/api/requests`, [formData, `${STRING.REQUEST_NAME[type]} 완료`])
+      .then(() => initData());
+  };
 
-  const setMySupply = categoryId => {
+  const getMySupply = categoryId => {
     axios
       .get(`/api/supply/mysupply/${categoryId}`)
       .then(res => setMysupply(res.data.data));
   };
 
+  const getNotSupplyLargeCategory = useType => {
+    const common = useType === '공용' ? '/common' : '';
+
+    axios.get(`/api/category${common}/myLargeCategory`).then(res => {
+      const categoryList = res.data.data;
+      const parseList = categoryList.map(category => {
+        return { name: STRING.CATEGORY_ENG[category], type: category };
+      });
+
+      setNotSupplyLargeCategory(parseList);
+    });
+  };
+
+  const getNotSupplySmallCategory = largeType => {
+    const common = useType === '공용' ? '/common' : '';
+
+    axios
+      .get(`/api/category${common}/myCategory?largeCategory=${largeType}`)
+      .then(res => {
+        setSmallCategory(res.data.data);
+      });
+  };
+
   const isDisabled =
     type === 'SUPPLY'
-      ? !messageValue || !smallCategory
-      : !messageValue || !smallCategory || !requestData.supplyId || !formImage;
+      ? !messageValue || !smallCategory || !useType
+      : !messageValue || !smallCategory || !supplyId || !formImage || !useType;
 
   return (
     <>
@@ -203,18 +230,38 @@ export default function UserEquipmentRequest({
               <EquipmentLeftContainer>
                 <styles.TypeBox>
                   <styles.TypeTitle requiredinput="true">
+                    사용처
+                  </styles.TypeTitle>
+                  <styles.SelectCaregoryConteiner>
+                    <SelectCategory
+                      category={Object.keys(STRING.USE_TYPE)}
+                      optionNullName={optionNullList.useType}
+                      onChangeCategory={handleChangeUseType}
+                    />
+                  </styles.SelectCaregoryConteiner>
+                </styles.TypeBox>
+                <styles.TypeBox>
+                  <styles.TypeTitle requiredinput="true">
                     비품종류
                   </styles.TypeTitle>
                   <styles.SelectCaregoryConteiner>
                     <SelectCategoryList
-                      category={[parseLargeCategory, smallCategory]}
+                      category={[
+                        type === 'SUPPLY'
+                          ? parseLargeCategory
+                          : notSupplyLargeCategory,
+                        smallCategory,
+                      ]}
                       optionName={['name', 'categoryName']}
                       optionNullName={[
                         optionNullList.largeCategory,
                         optionNullList.smallCategory,
                       ]}
                       optionKey={['name', 'categoryName']}
-                      optionValueKey={['name', 'categoryId']}
+                      optionValueKey={[
+                        type === 'SUPPLY' ? 'name' : 'type',
+                        'categoryId',
+                      ]}
                       onChangeCategory={[
                         handleChangeLargeCategory,
                         handleChangeSmallCategory,
