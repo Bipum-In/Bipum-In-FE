@@ -80,7 +80,7 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/api/user/kakao/callback',
+    path: ROUTER.PATH.GOOGLE,
     element: <Login />,
   },
 ]);

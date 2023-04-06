@@ -45,16 +45,18 @@ export default function Login() {
 
     if (code && !checkCode) {
       axios
-        .post(`/api/user/login?code=${code}&urlType=${currentUrl}`)
+        .post(`/api/user/login/google?code=${code}&urlType=${currentUrl}`)
         .then(res => {
           console.log(res.data.data);
           const userInfo = res.data.data;
           const { checkUser } = userInfo;
           const encryptedUserInfo = encrypt(userInfo); // 암호화
+
           Storage.setLocalStorageJSON(
             QUERY.STORAGE.LOCAL_NAME,
             encryptedUserInfo
           );
+
           setSaveUserInfo(userInfo);
           setWriteUser(checkUser);
           setCheckCode(true);
@@ -80,7 +82,7 @@ export default function Login() {
     };
 
     Storage.setLocalStorageJSON(
-      'userData',
+      QUERY.STORAGE.LOCAL_NAME,
       encrypt({
         ...saveUserInfo,
         checkUser: true,

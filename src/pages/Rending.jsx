@@ -40,8 +40,8 @@ export default function Rending() {
     };
   }, [pageIndex, totalPages]);
 
-  const handleKakaoLogin = () => {
-    window.location.href = `https://kauth.kakao.com/oauth/authorize?client_id=${process.env.REACT_APP_KAKAO_KEY}&redirect_uri=${currentUrl}/api/user/kakao/callback&response_type=code`;
+  const handleGoogleLogin = () => {
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${currentUrl}/login/oauth2/code/google&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
   };
 
   const handleReturnDashboard = () => {
@@ -66,7 +66,7 @@ export default function Rending() {
     <>
       <RendingHeader
         isLoggedIn={isLoggedIn}
-        loginClick={handleKakaoLogin}
+        loginClick={handleGoogleLogin}
         logoClick={handleBackToFirstPage}
         moveDashboard={handleReturnDashboard}
         logoutClick={handleLogoutBtn}
