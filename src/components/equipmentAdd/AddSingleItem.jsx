@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { styles } from '../common/commonStyled';
 import Button from 'elements/Button';
@@ -10,27 +10,28 @@ import EquipmentInput from './single/EquipmentInput';
 import SelectUser from './single/SelectUser';
 import ImageAdd from './single/ImageAdd';
 import STRING from 'constants/string';
+import Input from 'elements/Input';
+import alertModal from 'utils/alertModal';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
-const equipmentData = {
-  largeCategory: '',
-  categoryName: '',
-  modelName: '',
-  serialNum: '',
-  partnersId: '',
-  deptId: '',
-  userId: '',
-  useType: null,
-};
 
-export default function AddSingleItem({ category, largeCategory }) {
+export default function AddSingleItem({ categoryList, largeCategoryList }) {
+  const [largeCategory, setLargeCategory] = useState('');
+  const [categoryName, setCategoryName] = useState('');
+  const [partnersId, setPartnersId] = useState('');
+  const [deptId, setDeptId] = useState('');
+  const [userId, setUserId] = useState('');
+  const [useType, setUseType] = useState('');
+
   const [dept, setDept] = useState(null);
   const [user, setUser] = useState(null);
   const [partners, setPartners] = useState(null);
   const [nameValue, setNameValue] = useState('');
   const [serialValue, setSerialValue] = useState('');
   const [smallCategory, setSmallCategory] = useState(null);
-  const [checkSallCategory, setCheckSallCategory] = useState(false);
+  const [showCategoryInput, setShowCategoryInput] = useState(false);
+  const [categoryInput, setCategoryInput] = useState('');
+
   const [formImage, setFormImage] = useState([]);
   const [preview, setPreview] = useState('');
   const [crawlingImg, setCrawlingImg] = useState(null);
@@ -41,8 +42,13 @@ export default function AddSingleItem({ category, largeCategory }) {
     dept: '부서명',
     user: '공용',
   });
-
-  const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
+  console.log(categoryName);
+  const isDisabled =
+    !largeCategory ||
+    !nameValue ||
+    !serialValue ||
+    (!categoryName && !categoryInput) ||
+    (!formImage.length && !preview.length);
 
   useEffect(() => {
     axios
@@ -63,12 +69,21 @@ export default function AddSingleItem({ category, largeCategory }) {
   const initData = () => {
     setNameValue('');
     setSerialValue('');
-    setUser(null);
     setPreview([]);
-    setCrawlingImg(null);
     setFormImage([]);
+    setUser(null);
+    setCrawlingImg(null);
     setSmallCategory(null);
-    setCheckSallCategory(null);
+    setShowCategoryInput(false);
+
+    setCategoryInput('');
+    setUseType('');
+    setLargeCategory('');
+    setCategoryName('');
+    setPartnersId('');
+    setDeptId('');
+    setUserId('');
+
     setOptionNullList({
       largeCategory: '대분류',
       smallCategory: '소분류',
@@ -87,16 +102,19 @@ export default function AddSingleItem({ category, largeCategory }) {
   };
 
   const handleChangeLargeCategory = e => {
-    const { ko, eng } = JSON.parse(e.target.value);
     const text = e.target.options[e.target.selectedIndex].innerText;
+    console.log(text);
     setOptionNullList(state => ({
       ...state,
       largeCategory: text,
       smallCategory: '소분류',
     }));
 
-    equipmentData.largeCategory = eng;
-    setSmallCategory(parseCategoryData(ko, category));
+    setLargeCategory(STRING.CATEGORY[text]);
+    setSmallCategory([
+      { categoryName: '직접입력' },
+      ...parseCategoryData(text, categoryList),
+    ]);
   };
 
   const handleChangeSmallCategory = e => {
@@ -104,16 +122,24 @@ export default function AddSingleItem({ category, largeCategory }) {
     const text = e.target.options[e.target.selectedIndex].innerText;
     setOptionNullList(state => ({ ...state, smallCategory: text }));
 
-    equipmentData.categoryName = ko;
-    setCheckSallCategory(equipmentData.categoryName);
+    if (text === '직접입력') {
+      setShowCategoryInput(true);
+      setCategoryName('');
+      return;
+    }
+
+    setCategoryName(ko);
+    setShowCategoryInput(false);
   };
+
+  const handleChangeCategoryInput = e => setCategoryInput(e.target.value);
 
   const handleChangePartners = e => {
     const { ko: partners } = JSON.parse(e.target.value);
     const text = e.target.options[e.target.selectedIndex].innerText;
     setOptionNullList(state => ({ ...state, partners: text }));
 
-    equipmentData.partnersId = partners;
+    setPartnersId(partners);
   };
 
   const handleChangeDept = e => {
@@ -123,15 +149,15 @@ export default function AddSingleItem({ category, largeCategory }) {
 
     if (dept) {
       getUserData(dept);
-      equipmentData.deptId = dept;
-      equipmentData.userId = '';
-      equipmentData.useType = STRING.USE_TYPE['공용'];
+      setDeptId(dept);
+      setUserId('');
+      setUseType(STRING.USE_TYPE['공용']);
       return;
     }
 
-    equipmentData.deptId = '';
-    equipmentData.userId = '';
-    equipmentData.useType = '';
+    setDeptId('');
+    setUserId('');
+    setUseType('');
     setUser('');
   };
 
@@ -141,8 +167,8 @@ export default function AddSingleItem({ category, largeCategory }) {
     setOptionNullList(state => ({ ...state, user: text }));
 
     if (user) {
-      equipmentData.userId = user;
-      equipmentData.useType = STRING.USE_TYPE['개인'];
+      setUserId(user);
+      setUseType(STRING.USE_TYPE['개인']);
       return;
     }
   };
@@ -174,17 +200,15 @@ export default function AddSingleItem({ category, largeCategory }) {
   const setFormData = e => {
     e.preventDefault();
     const formData = new FormData();
-    equipmentData.modelName = nameValue;
-    equipmentData.serialNum = serialValue;
 
-    formData.append('largeCategory', equipmentData.largeCategory);
-    formData.append('categoryName', equipmentData.categoryName);
-    formData.append('modelName', equipmentData.modelName);
-    formData.append('serialNum', equipmentData.serialNum);
-    formData.append('partnersId', equipmentData.partnersId);
-    formData.append('userId', equipmentData.userId);
-    formData.append('deptId', equipmentData.deptId);
-    formData.append('useType', equipmentData.useType);
+    formData.append('largeCategory', largeCategory);
+    formData.append('categoryName', categoryName || categoryInput);
+    formData.append('modelName', nameValue);
+    formData.append('serialNum', serialValue);
+    formData.append('partnersId', partnersId);
+    formData.append('userId', userId);
+    formData.append('deptId', deptId);
+    formData.append('useType', useType);
 
     if (formImage.length) {
       formData.append('multipartFile', formImage);
@@ -199,7 +223,10 @@ export default function AddSingleItem({ category, largeCategory }) {
     axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
 
   const sendFormData = formData =>
-    axios.post(`/api/supply`, formData).then(() => initData());
+    axios.post(`/api/supply`, formData).then(() => {
+      initData();
+      alertModal(true, '비품 등록이 완료되었습니다.', 2);
+    });
 
   const getCrawlingData = () => {
     axios.get(`/api/supply/search?modelName=${nameValue}`).then(res => {
@@ -214,15 +241,9 @@ export default function AddSingleItem({ category, largeCategory }) {
     getCrawlingData();
   };
 
-  const isDisabled =
-    !serialValue ||
-    !nameValue ||
-    !equipmentData.largeCategory ||
-    !checkSallCategory;
-
   return (
     <>
-      {category && (
+      {categoryList && (
         <AddEquipmentWrapper>
           <AddEquipmentArticle>
             <EquipmentDetailContainer>
@@ -233,7 +254,7 @@ export default function AddSingleItem({ category, largeCategory }) {
                   </styles.TypeTitle>
                   <styles.SelectCaregoryConteiner>
                     <SelectCategoryList
-                      category={[parseLargeCategory, smallCategory]}
+                      category={[largeCategoryList, smallCategory]}
                       optionName={['name', 'categoryName']}
                       optionNullName={[
                         optionNullList.largeCategory,
@@ -247,6 +268,15 @@ export default function AddSingleItem({ category, largeCategory }) {
                       ]}
                     />
                   </styles.SelectCaregoryConteiner>
+                  {showCategoryInput && (
+                    <CategoryInputContainer>
+                      <Input
+                        value={categoryInput}
+                        setState={handleChangeCategoryInput}
+                        placeholder="직접 입력하세요."
+                      />
+                    </CategoryInputContainer>
+                  )}
                 </styles.TypeBox>
                 <EquipmentInput
                   value={[nameValue, serialValue]}
@@ -365,4 +395,8 @@ const SelectBox = styled.div`
   path {
     stroke: ${props => props.theme.color.grey.brandColor7};
   }
+`;
+
+const CategoryInputContainer = styled.div`
+  width: 8rem;
 `;
