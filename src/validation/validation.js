@@ -1,92 +1,22 @@
-import ALERT from '../constants/alert';
+import ALERT from 'constants/alert';
+import ARRAY from 'constants/array';
+import alertModal, { alertModalButton } from 'utils/alertModal';
 
 const Valid = {
-  signUp(id, pw, pwCheck, nickName, isIdDone, isNickNameDone) {
-    if (!formEmpty(id, pw, pwCheck, nickName)) {
-      alert(ALERT.CHECK_EMPTY);
-      return false;
-    }
-    if (!pwDifferentCheck(pw, pwCheck)) {
-      alert(ALERT.CHECK_DIFF_PW);
-      return false;
-    }
-    if (!idLength(id)) {
-      alert('아이디는 4글자 이상 10이하만 입력 가능 합니다.');
-      return false;
-    }
-    if (!idType(id)) {
-      alert('아이디는 숫자, 문자만 입력 가능 합니다.');
-      return false;
-    }
-    if (!nickNameLength(nickName)) {
-      alert('닉네임은 2글자 이상 10글자 이하만 입력 가능 합니다.');
-      return false;
-    }
-    if (!pwLength(pw)) {
-      alert('비밀번호는 8글자 이상 15글자 이하만 입력 가능 합니다.');
-      return false;
-    }
-    if (!pwType(pw)) {
-      alert('비밀번호는 숫자, 문자, 대문자 특수문자만 입력 가능 합니다.');
-      return false;
-    }
-    if (!idDoneCheck(isIdDone)) {
-      alert('아이디 중복 체크 확인 바랍니다.');
-      return false;
-    }
-    if (!nickNameDoneCheck(isNickNameDone)) {
-      alert('닉네임 중복 체크 확인 바랍니다.');
+  imgLengthCheck(img, length) {
+    if (img.length > length) {
+      alertModal(false, ALERT.CHECK_IMAGE_LENGTH(length), 2);
       return false;
     }
 
     return true;
   },
 
-  login(id, pw) {
-    if (!formEmpty(id, pw)) {
-      alert(ALERT.CHECK_EMPTY);
-      return false;
-    }
-    if (!idLength(id)) {
-      alert('아이디는 4글자 이상 10이하만 입력 가능 합니다.');
-      return false;
-    }
-    if (!idType(id)) {
-      alert('아이디는 숫자, 문자만 입력 가능 합니다.');
-      return false;
-    }
-    if (!pwLength(pw)) {
-      alert('비밀번호는 8글자 이상 15글자 이하만 입력 가능 합니다.');
-      return false;
-    }
-    if (!pwType(pw)) {
-      alert('비밀번호는 숫자, 문자, 대문자 특수문자만 입력 가능 합니다.');
-      return false;
-    }
+  excelSheetCheck(sheetName, excel) {
+    const errorArray = validRoopExcelSheet(sheetName, excel);
 
-    return true;
-  },
-
-  emptyPostAddCheck(img, ...input) {
-    if (!formEmpty(...input)) {
-      alert('공백은 추가할수 없습니다.');
-      return false;
-    }
-    if (!imgEmpty(img)) {
-      alert('이미지를 추가해 주세요.');
-      return false;
-    }
-
-    return true;
-  },
-
-  addLenghCheck(title, content) {
-    if (!titleLength(title)) {
-      alert('제목은 20자 이상 입력할 수 없습니다.');
-      return false;
-    }
-    if (!contentLength(content)) {
-      alert('내용은 200자 이상 입력할 수 없습니다.');
+    if (errorArray.length) {
+      alertModalButton(false, ALERT.CHECK_EXCEL_SHEET(errorArray));
       return false;
     }
 
@@ -94,66 +24,59 @@ const Valid = {
   },
 };
 
-function imgEmpty(img) {
-  if (img.length <= 0) return false;
-  return true;
+function validRoopExcelSheet(sheetNames, excel) {
+  const result = [];
+
+  sheetNames.forEach((sheetName, index) => {
+    const errorArray = validExcelSheet(excel[index]);
+    if (errorArray.length) {
+      result.push(`
+      sheet: ${sheetName} 
+      cell : ${errorArray.join(', ')}
+      `);
+    }
+  });
+
+  return result;
 }
 
-function titleLength(text) {
-  if (text.length > 20) return false;
-  return true;
-}
+function validExcelSheet(excel) {
+  const errorArray = [];
+  const columnArray = ARRAY.EXCEL_COLUMN;
+  const columnTitleArray = ARRAY.MULTIPLE_HEADER;
 
-function contentLength(text) {
-  if (text.length > 200) return false;
-  return true;
-}
+  let columnCnt = 0;
+  let rowCnt = 0;
 
-function formEmpty(...text) {
-  const textArr = text.filter(v => v === '');
-  if (textArr.length !== 0) return false;
-  return true;
-}
+  const parseEmptyColumn = excel.filter(v => new Set(v).size !== 1);
+  const rowLength = parseEmptyColumn.length - 1;
 
-function idLength(id) {
-  if (id.length < 4 || id.length > 10) return false;
-  return true;
-}
+  while (columnCnt < columnArray.length) {
+    const checkRow = parseEmptyColumn[rowCnt][columnCnt];
 
-function idType(id) {
-  if (!/[a-zA-Z0-9]/.test(id)) return false;
-  return true;
-}
+    if (checkRow) {
+      if (rowCnt === 0 && columnTitleArray[columnCnt] !== checkRow) {
+        errorArray.push(`${columnArray[columnCnt]}${rowCnt + 1}`);
+      }
 
-function nickNameLength(nickName) {
-  if (nickName.length < 2 || nickName.length > 10) return false;
-  return true;
-}
+      rowCnt++;
+    }
 
-function pwLength(pw) {
-  if (pw.length < 8 || pw.length > 15) return false;
-  return true;
-}
+    if (!checkRow) {
+      if (rowCnt === 0 || columnCnt < 3) {
+        errorArray.push(`${columnArray[columnCnt]}${rowCnt + 1}`);
+      }
 
-function pwType(pw) {
-  const regExp = /[?.,;:|*~`!^\-_+<>@#$%&]/g;
-  if (!/[a-zA-Z0-9]/gi.test(pw) && !regExp.test(pw)) return false;
-  return true;
-}
+      rowCnt++;
+    }
 
-function pwDifferentCheck(...text) {
-  if (new Set([...text]).size === text.length) return false;
-  return true;
-}
+    if (rowCnt === rowLength) {
+      columnCnt++;
+      rowCnt = 0;
+    }
+  }
 
-function idDoneCheck(id) {
-  if (!id) return false;
-  return true;
-}
-
-function nickNameDoneCheck(nickName) {
-  if (!nickName) return false;
-  return true;
+  return errorArray;
 }
 
 export default Valid;

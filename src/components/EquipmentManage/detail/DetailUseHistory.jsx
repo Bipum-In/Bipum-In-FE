@@ -6,7 +6,7 @@ import { useInView } from 'react-intersection-observer';
 import NUMBER from 'constants/number';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect, useRef } from 'react';
-import { getHistory, initHistory } from 'redux/modules/equipmentStatus';
+import { getHistory } from 'redux/modules/equipmentStatus';
 
 export default function DetailUseHistory({ detail }) {
   const dispatch = useDispatch();
@@ -22,10 +22,6 @@ export default function DetailUseHistory({ detail }) {
 
   const page = useRef(2);
   const size = NUMBER.INT.SIX;
-
-  useEffect(() => {
-    dispatch(initHistory());
-  }, [dispatch]);
 
   useEffect(() => {
     if (!lastPage && inView) {

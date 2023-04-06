@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import styled from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
-import { KEYFRAME } from 'styles/keyframes';
+import { Keyframe } from 'styles/keyframes';
 
 import useageImg from 'styles/commonIcon/useage.svg';
 import Button from 'elements/Button';
@@ -65,7 +65,7 @@ const RoketWrapper = styled.div`
   width: 12.4375rem;
   height: 12.4375rem;
   background: url(${useageImg}) no-repeat center center/cover;
-  animation: ${KEYFRAME.floating} 2s ease-in-out infinite;
+  animation: ${Keyframe.floating} 2s ease-in-out infinite;
   z-index: 0;
 `;
 const RokentContainer = styled.div`

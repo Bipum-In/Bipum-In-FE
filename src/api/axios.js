@@ -32,8 +32,8 @@ export default class Axios {
 
         if (response.data.statusCode === 200) {
           message && alertModal(true, message, 2);
-          message = null;
         }
+        message = null;
 
         return response;
       },

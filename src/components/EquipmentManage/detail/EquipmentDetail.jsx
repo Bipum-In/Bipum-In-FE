@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import {
   getEquipmentDetail,
   initEquipmentDetail,
+  initHistory,
 } from 'redux/modules/equipmentStatus';
 import styled from 'styled-components';
 import Axios from 'api/axios';
@@ -27,7 +28,9 @@ const detailData = {
   modelName: '',
   serialNum: '',
   partnersId: '',
+  deptId: '',
   userId: '',
+  useType: '',
   image: '',
 };
 
@@ -56,7 +59,7 @@ export default function EquipmentDetail({
   const [optionNullList, setOptionNullList] = useState({
     partners: '회사명',
     dept: '부서명',
-    user: '사원명',
+    user: '공용',
   });
 
   const { getDetail, isDetailError } = useSelector(
@@ -65,6 +68,7 @@ export default function EquipmentDetail({
 
   useEffect(() => {
     const path = isAdmin ? '/admin' : '';
+    dispatch(initHistory());
     dispatch(initEquipmentDetail());
     dispatch(getEquipmentDetail({ path, supplyId: detailId }));
 
@@ -77,7 +81,7 @@ export default function EquipmentDetail({
       .get(`/api/partners`)
       .then(res =>
         setPartners([
-          { partnersId: 'null', partnersName: '선택 안함' },
+          { partnersId: '', partnersName: '선택 안함' },
           ...res.data.data,
         ])
       );
@@ -106,20 +110,15 @@ export default function EquipmentDetail({
     detailData.modelName = modelName;
     detailData.serialNum = serialNum;
 
-    if (detailData.partnersId === 'null') {
-      detailData.partnersId = '';
-    } else {
-      detailData.partnersId || (detailData.partnersId = partnersId || '');
-    }
+    partnersId && !detailData.partnersId && (detailData.partnersId = '');
+    detailData.userId || (detailData.userId = userId || '');
 
-    if (detailData.userId) {
-      detailData.userId === '선택 안함' && (detailData.userId = '');
-    } else {
-      detailData.userId = userId || '';
-    }
+    detailData.deptId && (detailData.useType = STRING.USE_TYPE['공용']);
+    detailData.userId && (detailData.useType = STRING.USE_TYPE['개인']);
+    !detailData.deptId && (detailData.useType = '');
 
     detailData.image || (detailData.image = image);
-    console.log(detailData);
+
     sendFormData(supplyId, image);
   };
 
@@ -144,10 +143,12 @@ export default function EquipmentDetail({
   const handleChangeDept = e => {
     const { ko: dept } = JSON.parse(e.target.value);
     const text = e.target.options[e.target.selectedIndex].innerText;
-    setOptionNullList(state => ({ ...state, dept: text, user: '사원명' }));
+    setOptionNullList(state => ({ ...state, dept: text, user: '공용' }));
 
     dept && getUserData(dept);
-    detailData.userId = text;
+    detailData.deptId = dept;
+    detailData.userId = '';
+    console.log(detailData.userId);
   };
 
   const handleChangeUser = e => {
@@ -156,7 +157,6 @@ export default function EquipmentDetail({
     setOptionNullList(state => ({ ...state, user: text }));
 
     detailData.userId = user;
-    console.log(detailData, user);
   };
 
   const getUserData = deptId =>
@@ -170,6 +170,8 @@ export default function EquipmentDetail({
     formData.append('serialNum', detailData.serialNum);
     formData.append('partnersId', detailData.partnersId);
     formData.append('userId', detailData.userId);
+    formData.append('deptId', detailData.deptId);
+    formData.append('useType', detailData.useType);
 
     if (imageForm) {
       formData.append('multipartFile', imageForm);

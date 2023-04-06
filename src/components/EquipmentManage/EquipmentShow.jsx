@@ -42,7 +42,7 @@ export default function EquipmentShow({
     'serialNum',
     'createdAt',
     'partners',
-    'username',
+    'empName',
     'deptName',
     'status',
   ];

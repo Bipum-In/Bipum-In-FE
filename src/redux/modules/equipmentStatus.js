@@ -98,7 +98,8 @@ const equipmentStatusSlice = Redux.slice(
   initialState,
   {
     initHistory: (state, _) => {
-      state.supplyHistory.user = { content: [], lastPage: false };
+      state.supplyHistory.history.user = { content: [], lastPage: false };
+      state.supplyHistory.history.repair = { content: [], lastPage: false };
     },
     initEquipmentDetail: (state, _) => {
       state.equipmentDetail.getDetail = null;
