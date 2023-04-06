@@ -3,15 +3,19 @@ import styled from 'styled-components';
 import { styles } from './RendingPageStyled';
 import Rending01 from 'styles/rendingIcon/rendingFirstImg.svg';
 import Button from 'elements/Button';
+import Typing from '../Typing';
 
 export default function FirstPage() {
+  const textList = ['비품인', 'Bipum-In'];
   return (
     <>
       <styles.Fullpage>
         <RendingWrapper>
           <RendingLeftContainer>
             <Description>세상에서 가장 쉬운 비품관리</Description>
-            <CompanyTitle>비품인</CompanyTitle>
+            <CompanyTitle>
+              <Typing textList={textList} />
+            </CompanyTitle>
             <Button submit>알아보기</Button>
           </RendingLeftContainer>
           <RendingRightContainer bg={Rending01} />
@@ -50,7 +54,6 @@ const Description = styled.span`
 `;
 
 const CompanyTitle = styled.span`
-  font-size: 4.375rem;
-  font-weight: 700;
+  min-height: 4.5625rem;
   margin-bottom: 3.5625rem;
 `;
