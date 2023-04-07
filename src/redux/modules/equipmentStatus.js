@@ -1,6 +1,7 @@
 import Axios from 'api/axios';
 import NUMBER from 'constants/number';
 import Redux from '../redux';
+import { current } from '@reduxjs/toolkit';
 
 const initialState = {
   equipmentStatus: {
@@ -57,6 +58,7 @@ export const getCategoryList = Redux.asyncThunk(
   () => axios.get(`/api/category`),
   response => {
     const parseLargeCategory = largeCategory(response);
+    console.log('response.data.data --->', response.data.data);
     return { largeCategory: parseLargeCategory, category: response.data.data };
   }
 );
@@ -110,6 +112,38 @@ const equipmentStatusSlice = Redux.slice(
       state.categoryData.categoryIdData = action.payload.categoryId;
       state.categoryData.categoryNameData = action.payload.categoryName;
     },
+    setSmallCategoryData: (state, action) => {
+      const { largeCategory, categoryName } = action.payload;
+
+      state.category = {
+        ...state.category,
+        getCategory: {
+          ...state.category.getCategory,
+          category: [
+            ...state.category.getCategory.category,
+            {
+              largeCategory,
+              categoryName,
+            },
+          ],
+        },
+      };
+    },
+    editCategoryData: (state, action) => {
+      const { largeCategory, categoryName, prevCategory } = action.payload;
+
+      state.category = {
+        ...state.category,
+        getCategory: {
+          ...state.category.getCategory,
+          category: [...state.category.getCategory.category].map(category =>
+            category.categoryName === prevCategory
+              ? { largeCategory: largeCategory, categoryName: categoryName }
+              : category
+          ),
+        },
+      };
+    },
   },
   bulider => {
     Redux.extraReducer(
@@ -159,6 +193,11 @@ const equipmentStatusSlice = Redux.slice(
   }
 );
 
-export const { initHistory, initEquipmentDetail, setCategoryData } =
-  equipmentStatusSlice.actions;
+export const {
+  initHistory,
+  initEquipmentDetail,
+  setCategoryData,
+  setSmallCategoryData,
+  editCategoryData,
+} = equipmentStatusSlice.actions;
 export default equipmentStatusSlice.reducer;
