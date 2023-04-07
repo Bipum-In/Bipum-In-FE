@@ -29,6 +29,18 @@ const router = createBrowserRouter([
         element: <Rending />,
       },
       {
+        path: ROUTER.PATH.SIGNUP,
+        element: <Singup />,
+      },
+      {
+        path: ROUTER.PATH.LOGIN,
+        element: <Login />,
+      },
+      {
+        path: ROUTER.PATH.GOOGLE,
+        element: <Login />,
+      },
+      {
         element: <Layout />,
         children: [
           {
@@ -70,18 +82,6 @@ const router = createBrowserRouter([
         ],
       },
     ],
-  },
-  {
-    path: ROUTER.PATH.SIGNUP,
-    element: <Singup />,
-  },
-  {
-    path: ROUTER.PATH.LOGIN,
-    element: <Login />,
-  },
-  {
-    path: ROUTER.PATH.GOOGLE,
-    element: <Login />,
   },
 ]);
 
