@@ -83,9 +83,11 @@ export default function AddMultipleItem() {
     const { files } = e.target;
     const reader = new FileReader();
     reader.onload = () => {
-      const workBook = XLSX.read(reader.result, { type: 'binary' });
+      const workBook = XLSX.read(reader.result, {
+        type: 'binary',
+        cellDates: true,
+      });
       const sheetName = workBook.SheetNames;
-
       const excels = setSheetListImage(setExcels(workBook));
       const sheetList = setSheetList(workBook.SheetNames);
       const jsonToExcelArray = jsonToExcel(workBook);
@@ -165,6 +167,13 @@ export default function AddMultipleItem() {
     });
   };
 
+  const formatDate = date => {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}-${mm}-${dd}`;
+  };
+
   const postMultiData = data => {
     axios.post('api/supply/excel', data).then(() => {
       initMultiData();
@@ -213,6 +222,10 @@ export default function AddMultipleItem() {
             !column['이미지'] && crawlingImgList
               ? crawlingImgList[sheetIndex][columnIndex].image
               : column['이미지'] || '',
+          시리얼넘버: `${column['시리얼넘버']}` || '',
+          등록일자: column['등록일자']
+            ? formatDate(new Date(column['등록일자']))
+            : '',
         };
       });
     });
