@@ -53,8 +53,8 @@ export default ScrollToTop;
 
 const ScrollToTopContainer = styled.div`
   position: fixed;
-  bottom: 27px;
-  right: 100px;
+  bottom: 20px;
+  right: 85px;
   z-index: 1;
 `;
 
@@ -64,12 +64,17 @@ const ScrollToTopIcon = styled(ScrollUp)`
   color: ${props => props.theme.color.blue.brandColor6};
   cursor: pointer;
   transition: color 0.2s, opacity 0.2s, transform 0.3s;
+  filter: drop-shadow(2px 4px 2px rgba(0, 0, 0, 0.269));
   opacity: ${({ 'data-visible': visible }) => (visible ? 1 : 0)};
   transform: ${({ 'data-visible': visible }) =>
     visible ? 'translateY(0)' : 'translateY(5rem)'};
-
   &:active {
-    color: ${props => props.theme.color.blue.brandColor5};
     transform: scale(0.9);
+  }
+  :hover {
+    transform: scale(1.1);
+    svg {
+      filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.269));
+    }
   }
 `;
