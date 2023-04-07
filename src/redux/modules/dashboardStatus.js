@@ -12,6 +12,11 @@ const initialState = {
     isDashboardLoading: false,
     isDashboardError: false,
   },
+  commonSupplyDtos: {
+    getCommonSupplyDtos: null,
+    isCommonSupplyDtosLoading: false,
+    isCommonSupplyDtosError: false,
+  },
 };
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
@@ -23,6 +28,10 @@ export const adminDashboardStatus = Redux.asyncThunk(
 
 export const userDashboardStatus = Redux.asyncThunk('USER_DASHBOARD', payload =>
   axios.get(`/api/main?largeCategory=${payload}`)
+);
+
+export const commonSupplyDtos = Redux.asyncThunk('COMMON_SUPPLY_DTOS', () =>
+  axios.get(`/api/main/common`)
 );
 
 const dashboardStatusSlice = Redux.slice(
@@ -45,6 +54,14 @@ const dashboardStatusSlice = Redux.slice(
       'isDashboardLoading',
       'getDashboard',
       'isDashboardError'
+    );
+    Redux.extraReducer(
+      bulider,
+      commonSupplyDtos,
+      'commonSupplyDtos',
+      'isCommonSupplyDtosLoading',
+      'getCommonSupplyDtos',
+      'isCommonSupplyDtosError'
     );
   }
 );
