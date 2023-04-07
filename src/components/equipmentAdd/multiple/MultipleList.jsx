@@ -1,8 +1,9 @@
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import ARRAY from 'constants/array';
+import Button from 'elements/Button';
 
-export default function MultipleList({ excel }) {
+export default function MultipleList({ excel, onDeleteRow }) {
   return (
     <MultipleBodyWrapper>
       <table>
@@ -19,7 +20,7 @@ export default function MultipleList({ excel }) {
       <MultipleBodyContainer>
         <table>
           {excel.data &&
-            excel.data[excel.sheetItem].map((column, index) => (
+            excel.data[excel.sheetItem]?.map((column, index) => (
               <RequestShowList
                 key={uuidv4()}
                 // onClick={() => onDetail(list.requestId || list.supplyId)}
@@ -36,6 +37,13 @@ export default function MultipleList({ excel }) {
                     />
                   </td>
                 </tr>
+                <Button
+                  onClick={() => {
+                    onDeleteRow(index);
+                  }}
+                >
+                  삭제
+                </Button>
               </RequestShowList>
             ))}
         </table>
@@ -76,6 +84,7 @@ const MultipleBodyWrapper = styled.div`
     }
 
     td {
+      heigth: 6.625rem;
       text-align: left;
       text-overflow: ellipsis;
       font-size: 0.875rem;
@@ -159,11 +168,26 @@ const RequestShowListTitle = styled.thead`
 `;
 
 const RequestShowList = styled.tbody`
+  position: relative;
   border-bottom: 0.0625rem solid ${props => props.theme.color.grey.brandColor3};
   font-size: 1.0625rem;
   cursor: pointer;
 
   &:hover {
     background-color: ${props => props.theme.color.blue.brandColor2};
+  }
+
+  &:hover > button {
+    opacity: 1;
+  }
+
+  button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2rem;
+    height: 2rem;
+    opacity: 0;
+    transform: translate(-50%, calc(50% + 1rem));
   }
 `;
