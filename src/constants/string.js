@@ -1,6 +1,6 @@
 const ADDMENUE = {
-  ADDBIPUM: '단일 등록',
-  ADDMULTIPLE: '복수 등록',
+  ADDBIPUM: '비품 등록',
+  ADDMULTIPLE: '단품 등록',
 };
 
 const SIDEBAR = {
@@ -63,6 +63,12 @@ const CATEGORY_ENG = {
   ELECTRONICS: '가전제품',
   FURNITURE: '가구',
   ETC: '기타',
+};
+
+const MANAGEMENT_TITLE = {
+  CATEGORY: '카테고리 관리',
+  DEPTAUTH: '부서및 권환 관리',
+  PARTNER: '협력 업체 관리',
 };
 
 const EQUIPMENT_STATUS = {
@@ -146,6 +152,7 @@ const STRING = {
   EXCEL_COLUMN,
   USE_TYPE,
   CATEGORY_ENG,
+  MANAGEMENT_TITLE,
 };
 
 export default STRING;
