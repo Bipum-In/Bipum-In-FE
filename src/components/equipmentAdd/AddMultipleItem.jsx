@@ -32,6 +32,23 @@ export default function AddMultipleItem() {
     });
   };
 
+  const handleAddMultiData = () => {
+    const deleteImageFormData = deleteFormDataImage(excel);
+    const flatFormData = flatSheet(deleteImageFormData);
+    const formData = parseFlatFormData(flatFormData);
+
+    sendFormData(formData);
+  };
+
+  const handleAddMultiImage = async () => {
+    const modelNameToStr = getAllModelNameList(excel.data).join(',');
+    const sheetLengthArr = sheetLengthList(excel.data);
+    const imgList = await getCrawlingImg(modelNameToStr, sheetLengthArr);
+    const data = setSheetListImage(excel.data, imgList);
+
+    setExcel({ ...excel, data });
+  };
+
   const handleDeleteRow = columnId => {
     const deleteRowList = deleteRow(excel, columnId);
     const sheetLengthArray = sheetLengthList(deleteRowList);
@@ -92,6 +109,87 @@ export default function AddMultipleItem() {
     link.click();
   };
 
+  const handleAddImage = (e, sheetItem, index) => {
+    const image = e.target.files[0];
+    setMultiImageList(state => [...state, { image, sheetItem, index }]);
+    setPreviewImage(image, sheetItem, index);
+  };
+
+  const setPreviewImage = (image, sheetItem, index) => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const preview = reader.result;
+      const data = setSheetImage(excel.data, preview, sheetItem, index);
+
+      setExcel({ ...excel, data });
+    };
+    reader.readAsDataURL(image);
+  };
+
+  const handleDeleteImage = (sheetItem, index, img) => {
+    const sliceImgName = img.slice(0, 4);
+    const data = deleteImage(excel, sheetItem, index);
+
+    if (sliceImgName === 'data') {
+      const data = deleteMultipartImage(multiImageList, sheetItem, index);
+      setMultiImageList(data);
+    }
+
+    setExcel({ ...excel, data });
+  };
+
+  const sendFormData = data => {
+    const formData = new FormData();
+    data.forEach(item => {
+      formData.append('jsonObjectList', JSON.stringify(item));
+    });
+
+    multiImageList.forEach(item => {
+      formData.append('multipartFileList', item['image']);
+    });
+
+    postMultiData(formData);
+  };
+
+  const parseFlatFormData = flatSheet => {
+    return flatSheet.map(object => {
+      return {
+        category: object[ARRAY.MULTIPLE_HEADER[0]],
+        modelName: object[ARRAY.MULTIPLE_HEADER[1]],
+        serialNum: object[ARRAY.MULTIPLE_HEADER[2]],
+        createdAt: object[ARRAY.MULTIPLE_HEADER[3]] || '',
+        deptName: object[ARRAY.MULTIPLE_HEADER[4]] || '',
+        empName: object[ARRAY.MULTIPLE_HEADER[5]] || '',
+        image: object['이미지'] || '',
+      };
+    });
+  };
+
+  const postMultiData = data => {
+    axios.post('api/supply/excel', data).then(() => {
+      initMultiData();
+      alertModal(true, '비품 등록이 완료되었습니다.', 2);
+    });
+  };
+
+  const getCrawlingImg = async (modelNameToString, sheetLengthArr) => {
+    let response = null;
+    await axios
+      .get(`api/supply/search?modelNameList=${modelNameToString}`)
+      .then(res => (response = sliceData(res.data.data, sheetLengthArr)));
+
+    return response;
+  };
+
+  const sliceData = (data, sheetLengthArr) => {
+    let result = [];
+    sheetLengthArr.forEach(v => {
+      result.push(data.splice(0, v));
+    });
+
+    return result;
+  };
+
   const setSheetList = workBook => {
     return workBook.map((sheetName, index) =>
       index
@@ -104,6 +202,73 @@ export default function AddMultipleItem() {
             sheetName,
           }
     );
+  };
+
+  const setSheetListImage = (workBook, crawlingImgList) => {
+    return workBook.map((sheet, sheetIndex) => {
+      return sheet.map((column, columnIndex) => {
+        return {
+          ...column,
+          이미지:
+            !column['이미지'] && crawlingImgList
+              ? crawlingImgList[sheetIndex][columnIndex].image
+              : column['이미지'] || '',
+        };
+      });
+    });
+  };
+
+  const setSheetImage = (workBook, preview, sheetItem, index) => {
+    return workBook.map((sheet, sheetIndex) => {
+      return sheet.map((column, columnIndex) => {
+        return sheetIndex === sheetItem && columnIndex === index
+          ? {
+              ...column,
+              이미지: preview,
+            }
+          : column;
+      });
+    });
+  };
+
+  const deleteImage = (excel, sheetItem, index) => {
+    return excel.data.map((sheet, sheetIndex) => {
+      return sheet.map((column, columnIndex) => {
+        if (sheetIndex === sheetItem && columnIndex === index) {
+          return {
+            ...column,
+            이미지: '',
+          };
+        }
+        return column;
+      });
+    });
+  };
+
+  const deleteFormDataImage = excel => {
+    return excel.data.map(sheet => {
+      return sheet.map(column => {
+        const sliceImgName = column['이미지'].slice(0, 4);
+        if (sliceImgName === 'data') {
+          return {
+            ...column,
+            이미지: '',
+          };
+        }
+        return column;
+      });
+    });
+  };
+
+  const deleteMultipartImage = (multiImageList, sheetItem, index) => {
+    return multiImageList.filter(
+      item => item.sheetItem !== sheetItem && item.index !== index
+    );
+  };
+
+  const getAllModelNameList = workBook => {
+    const flatSheetList = flatSheet(workBook);
+    return flatSheetList.map(object => object[ARRAY.MULTIPLE_HEADER[1]]);
   };
 
   const editSheetList = (excel, value) => {
@@ -147,6 +312,18 @@ export default function AddMultipleItem() {
     );
   };
 
+  const sheetLengthList = sheetList => {
+    return sheetList.map(sheet => sheet.length);
+  };
+
+  const parseSheetNameList = (excel, sheetLengthList) => {
+    return excel.filter((_, index) => sheetLengthList[index] !== 0);
+  };
+
+  const flatSheet = excel => {
+    return excel.flatMap(sheet => sheet);
+  };
+
   return (
     <MultipleWrapper>
       <MultipleHeader
@@ -154,11 +331,15 @@ export default function AddMultipleItem() {
         readExcel={handleReadExcel}
         downLoadToExcel={handleDownLoadToExcel}
         onChangeSheet={handleChangeSheet}
+        onAddMultiData={handleAddMultiData}
+        onAddMultiImage={handleAddMultiImage}
       />
       <MultipleList
         excel={excel}
         multiImageList={multiImageList}
         onDeleteRow={handleDeleteRow}
+        onAddImage={handleAddImage}
+        onDeleteImage={handleDeleteImage}
       />
     </MultipleWrapper>
   );
