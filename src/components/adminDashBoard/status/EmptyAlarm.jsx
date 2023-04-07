@@ -8,7 +8,7 @@ export default function EmptyAlarm() {
       <EmptyAlarmWrapper>
         <EmptyAlarmContainer>
           <Bell />
-          <EmptyTitle>아무런 알림이 존재하지 않습니다.</EmptyTitle>
+          <EmptyTitle>알림이 존재하지 않습니다.</EmptyTitle>
         </EmptyAlarmContainer>
       </EmptyAlarmWrapper>
     </>
