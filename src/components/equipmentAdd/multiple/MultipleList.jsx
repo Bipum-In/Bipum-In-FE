@@ -47,10 +47,7 @@ export default function MultipleList({
             <table>
               {excel.data &&
                 excel.data[excel.sheetItem]?.map((column, index) => (
-                  <RequestShowList
-                    key={uuidv4()}
-                    // onClick={() => onDetail(list.requestId || list.supplyId)}
-                  >
+                  <RequestShowList key={uuidv4()}>
                     <tr>
                       <td>{index + 1}</td>
                       {ARRAY.MULTIPLE_HEADER.map(header => (
@@ -58,11 +55,7 @@ export default function MultipleList({
                       ))}
                       <td>
                         {column['이미지'] ? (
-                          <ImageContainer
-                            onClick={() => {
-                              onImageDetail(column['이미지']);
-                            }}
-                          >
+                          <ImageContainer>
                             <Button
                               onClick={() => {
                                 onDeleteImage(
@@ -74,7 +67,13 @@ export default function MultipleList({
                             >
                               <DeleteImg />
                             </Button>
-                            <img src={column['이미지']} alt="multipleImg" />
+                            <div
+                              onClick={() => {
+                                onImageDetail(column['이미지']);
+                              }}
+                            >
+                              <img src={column['이미지']} alt="multipleImg" />
+                            </div>
                           </ImageContainer>
                         ) : (
                           <>
