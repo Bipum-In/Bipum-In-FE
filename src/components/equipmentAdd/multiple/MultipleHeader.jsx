@@ -18,20 +18,6 @@ export default function MultipleHeader({
     <MultipleHeaderContainer>
       <SheetListContainer>
         <MultipleHeaderTitle>복수 등록</MultipleHeaderTitle>
-        <SheetList>
-          {sheetList?.map((sheetItem, index) => (
-            <Button
-              key={uuidv4()}
-              multipleStyle={sheetItem.status}
-              value={index}
-              onClick={onChangeSheet}
-            >{`${sheetItem.sheetName} 시트`}</Button>
-          ))}
-        </SheetList>
-      </SheetListContainer>
-      <InputFileContainer>
-        <Button onClick={onAddMultiImage}>사진 자동 등록</Button>
-        <Button onClick={onAddMultiData}>복수 등록 완료</Button>
         <Button onClick={downLoadToExcel}>엑셀 양식 다운로드</Button>
         <InputFile>
           엑셀 첨부
@@ -42,6 +28,10 @@ export default function MultipleHeader({
             accept=".xlsx"
           />
         </InputFile>
+      </SheetListContainer>
+      <InputFileContainer>
+        <Button onClick={onAddMultiImage}>사진 자동 등록</Button>
+        <Button onClick={onAddMultiData}>복수 등록 완료</Button>
       </InputFileContainer>
     </MultipleHeaderContainer>
   );
@@ -62,17 +52,17 @@ const MultipleHeaderTitle = styled.h3`
 const SheetListContainer = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
-`;
-
-const SheetList = styled.div`
-  ${props => props.theme.FlexRow}
-  ${props => props.theme.FlexCenter}
-
+  gap: 0.5rem;
   button {
     height: 2.3125rem;
-    border: 0.0625rem solid ${props => props.theme.color.blue.brandColor5};
     font-weight: 600;
     font-size: 1rem;
+  }
+
+  button:nth-child(2) {
+    border: 0.0625rem solid #3aa471;
+    color: #3aa471;
+    background-color: white;
   }
 `;
 
@@ -89,16 +79,6 @@ const InputFileContainer = styled.div`
     background-color: ${props => props.theme.color.blue.brandColor6};
     font-weight: 600;
     font-size: 1rem;
-  }
-
-  button:nth-child(2) {
-    margin-right: 2.5625rem;
-  }
-
-  button:nth-child(3) {
-    border: 0.0625rem solid #3aa471;
-    color: #3aa471;
-    background-color: white;
   }
 `;
 
