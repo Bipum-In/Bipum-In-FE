@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import Logo from 'components/layout/Logo';
 import Button from 'elements/Button';
 
-import { ReactComponent as KakaoIcon } from 'styles/commonIcon/kakao.svg';
+import { ReactComponent as GoogleIcon } from 'styles/rendingIcon/googleLogo.svg';
 import { ReactComponent as ReturnIcon } from 'styles/commonIcon/return.svg';
 
 export default function RendingHeader({
@@ -22,10 +22,10 @@ export default function RendingHeader({
         </HeaderLogoContainer>
         <LoginContainer>
           {!isLoggedIn ? (
-            <KakaoLoginBtn onClick={loginClick}>
-              <KakaoIcon />
-              카카오 로그인
-            </KakaoLoginBtn>
+            <GoogleLoginBtn onClick={loginClick}>
+              <GoogleIcon />
+              구글 계정으로 로그인
+            </GoogleLoginBtn>
           ) : (
             <>
               <ReturnDashboardBtn onClick={moveDashboard}>
@@ -44,7 +44,7 @@ const HeaderStyles = styled.header`
   display: flex;
   justify-content: center;
   width: 100%;
-  height: 164px;
+  height: 10.25rem;
   position: fixed;
   top: 0;
   left: 0;
@@ -56,7 +56,7 @@ const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0rem 80px;
+  padding: 0rem 5rem;
   width: 100%;
 `;
 
@@ -71,26 +71,27 @@ const HeaderLogoContainer = styled.div`
 
 const HeaderBtnStyle = styled(Button)`
   justify-content: center;
-  padding: 16px 24px;
+  padding: 1rem 1.5rem;
   border-radius: 5px;
   > div {
     align-items: center;
-    gap: 11.2px;
+    gap: 0.7rem;
   }
 `;
-const KakaoLoginBtn = styled(HeaderBtnStyle)`
-  background-color: #fae64d;
-  height: 53px;
+const GoogleLoginBtn = styled(HeaderBtnStyle)`
+  background-color: white;
+  border: 1px solid ${props => props.theme.color.grey.brandColor7};
+  height: 3rem;
 `;
 
 const ReturnDashboardBtn = styled(HeaderBtnStyle)`
   background-color: ${props => props.theme.color.blue.brandColor6};
   color: white;
-  height: 45px;
+  height: 2.8125rem;
 `;
 
 const LogoutBtn = styled(HeaderBtnStyle)`
   border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
   color: ${props => props.theme.color.blue.brandColor6};
-  height: 45px;
+  height: 2.8125rem;
 `;

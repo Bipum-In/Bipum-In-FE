@@ -211,7 +211,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
     formData.append('useType', useType);
 
     if (formImage.length) {
-      formData.append('multipartFile', formImage);
+      formData.append('multipartFile', formImage[0]);
     } else {
       formData.append('image', crawlingImg);
     }
