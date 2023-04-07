@@ -11,8 +11,33 @@ export default function AddMultipleItem() {
   const [excel, setExcel] = useState({
     data: null,
     sheetList: null,
+    sheetName: null,
     sheetItem: 0,
   });
+
+  const handleDeleteRow = columnId => {
+    const deleteRowList = deleteRow(excel.data, columnId);
+    const sheetLengthArray = sheetLengthList(deleteRowList);
+    const sheetNameList = parseSheetNameList(excel.sheetName, sheetLengthArray);
+
+    const data = deleteRow.filter(sheet => sheet.length);
+    let sheetList = excel.sheetList;
+    let sheetName = excel.sheetName;
+    let sheetItem = excel.sheetItem;
+    if (sheetNameList.length !== excel.sheetName.length) {
+      sheetList = setSheetList(sheetNameList);
+      sheetName = sheetNameList;
+      sheetItem = 0;
+    }
+
+    setExcel(state => ({
+      ...state,
+      data,
+      sheetList,
+      sheetName,
+      sheetItem,
+    }));
+  };
 
   const handleChangeSheet = e => {
     const { value } = e.target;
@@ -28,12 +53,12 @@ export default function AddMultipleItem() {
       const sheetName = workBook.SheetNames;
 
       const excels = setExcels(workBook);
-      const sheetList = setSheetList(workBook);
+      const sheetList = setSheetList(workBook.SheetNames);
       const jsonToExcelArray = jsonToExcel(workBook);
 
       if (!Valid.excelSheetCheck(sheetName, jsonToExcelArray)) return;
 
-      setExcel({ data: excels, sheetList, sheetItem: 0 });
+      setExcel({ data: excels, sheetList, sheetName, sheetItem: 0 });
     };
     reader.readAsBinaryString(files[0]);
     e.target.value = '';
@@ -51,7 +76,7 @@ export default function AddMultipleItem() {
   };
 
   const setSheetList = workBook => {
-    return workBook.SheetNames.map((sheetName, index) =>
+    return workBook.map((sheetName, index) =>
       index
         ? {
             status: false,
@@ -97,6 +122,19 @@ export default function AddMultipleItem() {
     );
   };
 
+  const deleteRow = (excel, columnId) => {
+    return excel.map((sheet, index) =>
+      index === excel.sheetItem
+        ? sheet.filter((_, index) => index !== Number(columnId))
+        : sheet
+    );
+  };
+
+  const sheetLengthList = sheetList => sheetList.map(sheet => sheet.length);
+
+  const parseSheetNameList = (excel, sheetLengthList) =>
+    excel.filter((_, index) => sheetLengthList[index] !== 0);
+
   return (
     <MultipleWrapper>
       <MultipleHeader
@@ -105,7 +143,7 @@ export default function AddMultipleItem() {
         downLoadToExcel={handleDownLoadToExcel}
         onChangeSheet={handleChangeSheet}
       />
-      <MultipleList excel={excel} />
+      <MultipleList excel={excel} onDeleteRow={handleDeleteRow} />
     </MultipleWrapper>
   );
 }
