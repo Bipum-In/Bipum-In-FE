@@ -11,6 +11,8 @@ export default function MultipleHeader({
   readExcel,
   downLoadToExcel,
   onChangeSheet,
+  onAddMultiData,
+  onAddMultiImage,
 }) {
   return (
     <MultipleHeaderContainer>
@@ -28,8 +30,8 @@ export default function MultipleHeader({
         </SheetList>
       </SheetListContainer>
       <InputFileContainer>
-        <Button onClick={downLoadToExcel}>사진 자동 등록</Button>
-        <Button onClick={downLoadToExcel}>비품 추가</Button>
+        <Button onClick={onAddMultiImage}>사진 자동 등록</Button>
+        <Button onClick={onAddMultiData}>복수 등록 완료</Button>
         <Button onClick={downLoadToExcel}>엑셀 양식 다운로드</Button>
         <InputFile>
           엑셀 첨부
@@ -80,6 +82,7 @@ const InputFileContainer = styled.div`
   gap: 0.5rem;
 
   button {
+    width: auto;
     height: 2.3125rem;
     border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
     color: white;
@@ -88,17 +91,11 @@ const InputFileContainer = styled.div`
     font-size: 1rem;
   }
 
-  button:nth-child(1) {
-    width: 7.1875rem;
-  }
-
   button:nth-child(2) {
-    width: 5.25rem;
     margin-right: 2.5625rem;
   }
 
   button:nth-child(3) {
-    width: 8.9375rem;
     border: 0.0625rem solid #3aa471;
     color: #3aa471;
     background-color: white;
