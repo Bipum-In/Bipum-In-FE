@@ -1,13 +1,20 @@
-import ARRAY from 'constants/array';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import * as XLSX from 'xlsx';
 
 import MultipleHeader from './multiple/MultipleHeader';
 import MultipleList from './multiple/MultipleList';
+
+import ARRAY from 'constants/array';
 import Valid from 'validation/validation';
+import alertModal from 'utils/alertModal';
+
+import Axios from 'api/axios';
+
+const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function AddMultipleItem() {
+  const [multiImageList, setMultiImageList] = useState([]);
   const [excel, setExcel] = useState({
     data: null,
     sheetList: null,
@@ -15,12 +22,22 @@ export default function AddMultipleItem() {
     sheetItem: 0,
   });
 
+  const initMultiData = () => {
+    setMultiImageList([]);
+    setExcel({
+      data: null,
+      sheetList: null,
+      sheetName: null,
+      sheetItem: 0,
+    });
+  };
+
   const handleDeleteRow = columnId => {
-    const deleteRowList = deleteRow(excel.data, columnId);
+    const deleteRowList = deleteRow(excel, columnId);
     const sheetLengthArray = sheetLengthList(deleteRowList);
     const sheetNameList = parseSheetNameList(excel.sheetName, sheetLengthArray);
 
-    const data = deleteRow.filter(sheet => sheet.length);
+    const data = deleteRowList.filter(sheet => sheet.length);
     let sheetList = excel.sheetList;
     let sheetName = excel.sheetName;
     let sheetItem = excel.sheetItem;
@@ -52,7 +69,7 @@ export default function AddMultipleItem() {
       const workBook = XLSX.read(reader.result, { type: 'binary' });
       const sheetName = workBook.SheetNames;
 
-      const excels = setExcels(workBook);
+      const excels = setSheetListImage(setExcels(workBook));
       const sheetList = setSheetList(workBook.SheetNames);
       const jsonToExcelArray = jsonToExcel(workBook);
 
@@ -123,17 +140,12 @@ export default function AddMultipleItem() {
   };
 
   const deleteRow = (excel, columnId) => {
-    return excel.map((sheet, index) =>
+    return excel.data.map((sheet, index) =>
       index === excel.sheetItem
         ? sheet.filter((_, index) => index !== Number(columnId))
         : sheet
     );
   };
-
-  const sheetLengthList = sheetList => sheetList.map(sheet => sheet.length);
-
-  const parseSheetNameList = (excel, sheetLengthList) =>
-    excel.filter((_, index) => sheetLengthList[index] !== 0);
 
   return (
     <MultipleWrapper>
@@ -143,7 +155,11 @@ export default function AddMultipleItem() {
         downLoadToExcel={handleDownLoadToExcel}
         onChangeSheet={handleChangeSheet}
       />
-      <MultipleList excel={excel} onDeleteRow={handleDeleteRow} />
+      <MultipleList
+        excel={excel}
+        multiImageList={multiImageList}
+        onDeleteRow={handleDeleteRow}
+      />
     </MultipleWrapper>
   );
 }
