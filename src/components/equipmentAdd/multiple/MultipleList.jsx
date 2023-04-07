@@ -1,94 +1,118 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import ARRAY from 'constants/array';
 import Button from 'elements/Button';
 import { ReactComponent as DefaultImageIcon } from 'styles/commonIcon/addImgIcon2.svg';
 import { ReactComponent as MinusRound } from 'styles/commonIcon/minusRound.svg';
 import { ReactComponent as DeleteImg } from 'styles/commonIcon/deleteImg.svg';
+import { ImgDetailModal } from 'elements/ImgModal';
 
 export default function MultipleList({
   excel,
+  sheetList,
+  showImageModal,
+  onChangeSheet,
   onDeleteRow,
   onAddImage,
   onDeleteImage,
+  onImageDetail,
 }) {
   return (
     <MultipleBodyWrapper>
-      <table>
-        <RequestShowListTitle>
-          <tr>
-            <th>순번</th>
-            {ARRAY.MULTIPLE_HEADER.map(header => (
-              <th key={uuidv4()}>{header}</th>
-            ))}
-            <th>이미지</th>
-          </tr>
-        </RequestShowListTitle>
-      </table>
+      <SheetList>
+        {sheetList?.map((sheetItem, index) => (
+          <ButtonStyle key={uuidv4()} btnStyle={sheetItem.status}>
+            <Button
+              multipleStyle={sheetItem.status}
+              value={index}
+              onClick={onChangeSheet}
+            >{`${sheetItem.sheetName} 시트`}</Button>
+          </ButtonStyle>
+        ))}
+      </SheetList>
       <MultipleBodyContainer>
         <table>
-          {excel.data &&
-            excel.data[excel.sheetItem]?.map((column, index) => (
-              <RequestShowList
-                key={uuidv4()}
-                // onClick={() => onDetail(list.requestId || list.supplyId)}
-              >
-                <tr>
-                  <td>{index + 1}</td>
-                  {ARRAY.MULTIPLE_HEADER.map(header => (
-                    <td key={uuidv4()}>{column[header] || '-'}</td>
-                  ))}
-                  <td>
-                    {column['이미지'] ? (
-                      <ImageContainer>
-                        <Button
-                          onClick={() => {
-                            onDeleteImage(
-                              excel.sheetItem,
-                              index,
-                              column['이미지']
-                            );
-                          }}
-                        >
-                          <DeleteImg />
-                        </Button>
-                        <img src={column['이미지']} alt="multipleImg" />
-                      </ImageContainer>
-                    ) : (
-                      <>
-                        <ImageinputFile>
-                          <DefaultImage />
-                          <input
-                            key={uuidv4()}
-                            type="file"
-                            accept=".png,.jpg,.jpeg,.gif"
-                            onChange={e => {
-                              onAddImage(e, excel.sheetItem, index);
-                            }}
-                          />
-                        </ImageinputFile>
-                      </>
-                    )}
-                  </td>
-                  <td>
-                    <DeleteCoulmnBtn
-                      onClick={() => {
-                        onDeleteRow(index);
-                      }}
-                    >
-                      <MinusRound />
-                    </DeleteCoulmnBtn>
-                  </td>
-                </tr>
-              </RequestShowList>
-            ))}
+          <RequestShowListTitle>
+            <tr>
+              <th>순번</th>
+              {ARRAY.MULTIPLE_HEADER.map(header => (
+                <th key={uuidv4()}>{header}</th>
+              ))}
+              <th>이미지</th>
+            </tr>
+          </RequestShowListTitle>
         </table>
+        <MultipleBody>
+          <table>
+            {excel.data &&
+              excel.data[excel.sheetItem]?.map((column, index) => (
+                <RequestShowList
+                  key={uuidv4()}
+                  // onClick={() => onDetail(list.requestId || list.supplyId)}
+                >
+                  <tr>
+                    <td>{index + 1}</td>
+                    {ARRAY.MULTIPLE_HEADER.map(header => (
+                      <td key={uuidv4()}>{column[header] || '-'}</td>
+                    ))}
+                    <td>
+                      {column['이미지'] ? (
+                        <ImageContainer onClick={onImageDetail}>
+                          <Button
+                            onClick={() => {
+                              onDeleteImage(
+                                excel.sheetItem,
+                                index,
+                                column['이미지']
+                              );
+                            }}
+                          >
+                            <DeleteImg />
+                          </Button>
+                          <img src={column['이미지']} alt="multipleImg" />
+                          <ImgDetailModal
+                            src={column['이미지']}
+                            isOpen={showImageModal}
+                            onClose={onImageDetail}
+                          />
+                        </ImageContainer>
+                      ) : (
+                        <>
+                          <ImageinputFile>
+                            <DefaultImage />
+                            <input
+                              key={uuidv4()}
+                              type="file"
+                              accept=".png,.jpg,.jpeg,.gif"
+                              onChange={e => {
+                                onAddImage(e, excel.sheetItem, index);
+                              }}
+                            />
+                          </ImageinputFile>
+                        </>
+                      )}
+                    </td>
+                    <td>
+                      <DeleteCoulmnBtn
+                        onClick={() => {
+                          onDeleteRow(index);
+                        }}
+                      >
+                        <MinusRound />
+                      </DeleteCoulmnBtn>
+                    </td>
+                  </tr>
+                </RequestShowList>
+              ))}
+          </table>
+        </MultipleBody>
       </MultipleBodyContainer>
     </MultipleBodyWrapper>
   );
 }
 
 const MultipleBodyWrapper = styled.div`
+  display: flex;
   width: 100%;
 
   table {
@@ -120,10 +144,9 @@ const MultipleBodyWrapper = styled.div`
     }
 
     td {
-      heigth: 6.625rem;
       text-align: left;
       text-overflow: ellipsis;
-      font-size: 0.875rem;
+      font-size: 0.8125rem;
       overflow: hidden;
       white-space: nowrap;
     }
@@ -138,39 +161,39 @@ const MultipleBodyWrapper = styled.div`
 
       :nth-child(2) {
         width: 4.9375rem;
-        margin-right: 2.75rem;
+        margin-right: 1.4375rem;
         font-weight: 600;
       }
 
       :nth-child(3) {
-        width: 10rem;
-        margin-right: 3.6875rem;
+        width: 9.5rem;
+        margin-right: 3rem;
         font-weight: 600;
       }
 
       :nth-child(4) {
-        width: 8.75rem;
-        margin-right: 1.75rem;
+        width: 7.5rem;
+        margin-right: 3rem;
       }
 
       :nth-child(5) {
         width: 5.75rem;
-        margin-right: 3.9375rem;
+        margin-right: 3rem;
       }
 
       :nth-child(6) {
-        width: 7.5rem;
-        margin-right: 1.3125rem;
+        width: 5rem;
+        margin-right: 3rem;
       }
 
       :nth-child(7) {
-        width: 3.1875rem;
-        margin-right: 4.9375rem;
+        width: 3.8125rem;
+        margin-right: 3rem;
       }
 
       :nth-child(8) {
-        width: 7rem;
-        margin-right: 3.5rem;
+        width: 8.25rem;
+        margin-right: 3rem;
       }
 
       :nth-child(9) {
@@ -180,7 +203,41 @@ const MultipleBodyWrapper = styled.div`
   }
 `;
 
+const SheetList = styled.div`
+  button {
+    justify-content: flex-start;
+    width: 12.75rem;
+    height: 4.5rem;
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    padding-left: 2.4375rem;
+    font-weight: 600;
+    font-size: 0.875rem;
+    :hover {
+      opacity: 1;
+    }
+  }
+`;
+
+const ButtonStyle = styled.div`
+  button {
+    ${props =>
+      !props.btnStyle &&
+      css`
+        color: ${props.theme.color.grey.brandColor7};
+        :hover {
+          background-color: ${props.theme.color.blue.brandColor2};
+        }
+      `}
+  }
+`;
+
 const MultipleBodyContainer = styled.section`
+  width: 100%;
+`;
+
+const MultipleBody = styled.div`
   height: 57.55vh;
   overflow-x: hidden;
   overflow-y: scroll;
@@ -219,6 +276,7 @@ const RequestShowList = styled.tbody`
 
 const ImageContainer = styled.div`
   position: relative;
+  cursor: pointer;
 
   &:hover > button {
     opacity: 1;
@@ -261,6 +319,10 @@ const DefaultImage = styled(DefaultImageIcon)`
 
   :hover {
     transform: scale(1.05);
+
+    path {
+      fill: ${props => props.theme.color.blue.brandColor5};
+    }
   }
 `;
 
