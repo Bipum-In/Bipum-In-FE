@@ -39,7 +39,7 @@ export default function MultipleHeader({
             key={uuidv4()}
             type="file"
             setState={readExcel}
-            accept=".csv,.xlsx,.xls,.numbers"
+            accept=".xlsx"
           />
         </InputFile>
       </InputFileContainer>
