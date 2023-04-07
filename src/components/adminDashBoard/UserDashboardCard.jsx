@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import STRING from 'constants/string';
+import Button from 'elements/Button';
 
 export default function UserDashboardCard({
   image,
@@ -9,6 +10,8 @@ export default function UserDashboardCard({
   supplyName,
   categoryName,
   onDetailModal,
+  getCommonSupplyDtos,
+  showCommonSupplyDtos,
 }) {
   return (
     <>
@@ -17,17 +20,20 @@ export default function UserDashboardCard({
           onDetailModal(supplyId);
         }}
       >
-        <CategoryTitle>
+        <CategoryTitleContainer>
           <span>{categoryName}</span>
           <StatusContainer>
             <Status status={status} />
             {STRING.EQUIPMENT_STATUS[status]}
           </StatusContainer>
-        </CategoryTitle>
+          {getCommonSupplyDtos && showCommonSupplyDtos && (
+            <Button>공용비품</Button>
+          )}
+        </CategoryTitleContainer>
         <CategoryContainer>
-          <TotalCountTitle>
+          <SupplyNameTitle>
             <span>{supplyName}</span>
-          </TotalCountTitle>
+          </SupplyNameTitle>
           <ImageContainer>
             <img src={image} alt="categoryImg" />
           </ImageContainer>
@@ -50,27 +56,30 @@ const CardWrapper = styled.div`
 
 const CategoryContainer = styled.div`
   ${props => props.theme.FlexRow};
-  ${props => props.theme.FlexCenter}
+  align-items: center;
+  justify-content: space-between;
   gap: 1.25rem;
 `;
 
-const CategoryTitle = styled.div`
+const CategoryTitleContainer = styled.div`
   display: flex;
   height: 1.875rem;
   align-items: center;
   font-weight: 500;
   font-size: 1.125rem;
-  gap: 10px;
+  gap: 0.375rem;
   padding-bottom: 1rem;
-  span:last-child {
-    font-weight: 400;
-    font-size: 12px;
+  button {
+    font-size: 0.6875rem;
+    margin: 0;
+    padding: 0.375rem;
+    background-color: ${props => props.theme.color.blue.brandColor5};
+    color: white;
   }
 `;
 
-const TotalCountTitle = styled.span`
+const SupplyNameTitle = styled.span`
   color: ${props => props.theme.color.blue.brandColor6};
-
   span {
     font-weight: 500;
     font-size: 0.875rem;
@@ -80,8 +89,6 @@ const TotalCountTitle = styled.span`
 const ImageContainer = styled.div`
   ${props => props.theme.FlexRow};
   align-items: center;
-  justify-content: space-between;
-
   img {
     width: 5.5rem;
     height: 5.5rem;
