@@ -2,8 +2,16 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import ARRAY from 'constants/array';
 import Button from 'elements/Button';
+import { ReactComponent as DefaultImageIcon } from 'styles/commonIcon/addImgIcon2.svg';
+import { ReactComponent as MinusRound } from 'styles/commonIcon/minusRound.svg';
+import { ReactComponent as DeleteImg } from 'styles/commonIcon/deleteImg.svg';
 
-export default function MultipleList({ excel, onDeleteRow }) {
+export default function MultipleList({
+  excel,
+  onDeleteRow,
+  onAddImage,
+  onDeleteImage,
+}) {
   return (
     <MultipleBodyWrapper>
       <table>
@@ -31,19 +39,47 @@ export default function MultipleList({ excel, onDeleteRow }) {
                     <td key={uuidv4()}>{column[header] || '-'}</td>
                   ))}
                   <td>
-                    <img
-                      src="https://i.namu.wiki/i/khk4X_G8rY31qrzfqTJykqahaagl_d9XpnkvTPKuyyBFlFiAKPT9wS-luaI0TsivwPm1eu3wJ0vGjyEj9V_Iwc2qYIl3ZdY7VmAOqLjFjWPKY2xled4Gh_Rwyq4ip5qEoSisRX7Tpaxazz7Mbh8KQw.webp"
-                      alt="multipleImg"
-                    />
+                    {column['이미지'] ? (
+                      <ImageContainer>
+                        <Button
+                          onClick={() => {
+                            onDeleteImage(
+                              excel.sheetItem,
+                              index,
+                              column['이미지']
+                            );
+                          }}
+                        >
+                          <DeleteImg />
+                        </Button>
+                        <img src={column['이미지']} alt="multipleImg" />
+                      </ImageContainer>
+                    ) : (
+                      <>
+                        <ImageinputFile>
+                          <DefaultImage />
+                          <input
+                            key={uuidv4()}
+                            type="file"
+                            accept=".png,.jpg,.jpeg,.gif"
+                            onChange={e => {
+                              onAddImage(e, excel.sheetItem, index);
+                            }}
+                          />
+                        </ImageinputFile>
+                      </>
+                    )}
+                  </td>
+                  <td>
+                    <DeleteCoulmnBtn
+                      onClick={() => {
+                        onDeleteRow(index);
+                      }}
+                    >
+                      <MinusRound />
+                    </DeleteCoulmnBtn>
                   </td>
                 </tr>
-                <Button
-                  onClick={() => {
-                    onDeleteRow(index);
-                  }}
-                >
-                  삭제
-                </Button>
               </RequestShowList>
             ))}
         </table>
@@ -171,11 +207,18 @@ const RequestShowList = styled.tbody`
   position: relative;
   border-bottom: 0.0625rem solid ${props => props.theme.color.grey.brandColor3};
   font-size: 1.0625rem;
-  cursor: pointer;
 
   &:hover {
     background-color: ${props => props.theme.color.blue.brandColor2};
   }
+
+  &:hover td > button {
+    opacity: 1;
+  }
+`;
+
+const ImageContainer = styled.div`
+  position: relative;
 
   &:hover > button {
     opacity: 1;
@@ -185,9 +228,50 @@ const RequestShowList = styled.tbody`
     position: absolute;
     top: 0;
     right: 0;
-    width: 2rem;
-    height: 2rem;
     opacity: 0;
-    transform: translate(-50%, calc(50% + 1rem));
+    transform: translate(0.5rem, -0.5rem);
+
+    svg {
+      width: 1.125rem;
+      height: 1.125rem;
+
+      :hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+`;
+
+const DeleteCoulmnBtn = styled(Button)`
+  position: absolute;
+  top: 0;
+  right: 0;
+  opacity: 0;
+  transform: translate(-50%, calc(50% + 0.75rem));
+
+  svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+`;
+
+const DefaultImage = styled(DefaultImageIcon)`
+  width: 4.5rem;
+  height: 4.5rem;
+
+  :hover {
+    transform: scale(1.05);
+  }
+`;
+
+const ImageinputFile = styled.label`
+  ${props => props.theme.FlexCol};
+  ${props => props.theme.FlexCenter};
+  width: 4.75rem;
+  height: 4.75rem;
+  cursor: pointer;
+
+  input {
+    display: none;
   }
 `;
