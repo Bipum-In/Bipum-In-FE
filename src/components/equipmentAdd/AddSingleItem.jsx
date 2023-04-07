@@ -42,7 +42,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
     dept: '부서명',
     user: '공용',
   });
-  console.log(categoryName);
+
   const isDisabled =
     !largeCategory ||
     !nameValue ||
@@ -103,7 +103,6 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
 
   const handleChangeLargeCategory = e => {
     const text = e.target.options[e.target.selectedIndex].innerText;
-    console.log(text);
     setOptionNullList(state => ({
       ...state,
       largeCategory: text,

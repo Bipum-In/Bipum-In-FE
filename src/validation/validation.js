@@ -48,15 +48,14 @@ function validExcelSheet(excel) {
   let columnCnt = 0;
   let rowCnt = 0;
 
-  const parseEmptyColumn = excel.filter(column => new Set(column).size > 2);
-  const rowLength = parseEmptyColumn.length - 1;
-
+  const parseEmptyColumn = excel.filter(column => new Set(column).size !== 1);
+  const rowLength = parseEmptyColumn.length;
   while (columnCnt < columnArray.length) {
     const checkRow = parseEmptyColumn[rowCnt][columnCnt];
 
     if (checkRow) {
       if (rowCnt === 0 && columnTitleArray[columnCnt] !== checkRow) {
-        errorArray.push(`${columnArray[columnCnt]}${rowCnt + 1}`);
+        errorArray.push(`${columnArray[columnCnt]}${rowCnt + 11}`);
       }
 
       rowCnt++;
@@ -64,7 +63,7 @@ function validExcelSheet(excel) {
 
     if (!checkRow) {
       if (rowCnt === 0 || columnCnt < 3) {
-        errorArray.push(`${columnArray[columnCnt]}${rowCnt + 1}`);
+        errorArray.push(`${columnArray[columnCnt]}${rowCnt + 11}`);
       }
 
       rowCnt++;
