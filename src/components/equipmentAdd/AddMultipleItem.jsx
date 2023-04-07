@@ -15,7 +15,10 @@ const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function AddMultipleItem() {
   const [multiImageList, setMultiImageList] = useState([]);
-  const [showImageModal, setShowImageModal] = useState(false);
+  const [showImageModal, setShowImageModal] = useState({
+    show: false,
+    image: null,
+  });
   const [excel, setExcel] = useState({
     data: null,
     sheetList: null,
@@ -141,8 +144,10 @@ export default function AddMultipleItem() {
     setExcel({ ...excel, data });
   };
 
-  const handleImageDetail = () => {
-    setShowImageModal(state => !state);
+  const handleImageDetail = image => {
+    setShowImageModal(state =>
+      state.show ? { show: false, image: null } : { show: true, image }
+    );
   };
 
   const sendFormData = data => {
@@ -345,10 +350,8 @@ export default function AddMultipleItem() {
   return (
     <MultipleWrapper>
       <MultipleHeader
-        // sheetList={excel.sheetList}
         readExcel={handleReadExcel}
         downLoadToExcel={handleDownLoadToExcel}
-        // onChangeSheet={handleChangeSheet}
         onAddMultiData={handleAddMultiData}
         onAddMultiImage={handleAddMultiImage}
       />

@@ -1,6 +1,6 @@
 const ADDMENUE = {
-  ADDBIPUM: '비품 등록',
-  ADDMULTIPLE: '단품 등록',
+  ADDBIPUM: '단품 등록',
+  ADDMULTIPLE: '복수 등록',
 };
 
 const SIDEBAR = {

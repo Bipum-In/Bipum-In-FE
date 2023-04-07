@@ -18,96 +18,101 @@ export default function MultipleList({
   onImageDetail,
 }) {
   return (
-    <MultipleBodyWrapper>
-      <SheetList>
-        {sheetList?.map((sheetItem, index) => (
-          <ButtonStyle key={uuidv4()} btnStyle={sheetItem.status}>
-            <Button
-              multipleStyle={sheetItem.status}
-              value={index}
-              onClick={onChangeSheet}
-            >{`${sheetItem.sheetName} 시트`}</Button>
-          </ButtonStyle>
-        ))}
-      </SheetList>
-      <MultipleBodyContainer>
-        <table>
-          <RequestShowListTitle>
-            <tr>
-              <th>순번</th>
-              {ARRAY.MULTIPLE_HEADER.map(header => (
-                <th key={uuidv4()}>{header}</th>
-              ))}
-              <th>이미지</th>
-            </tr>
-          </RequestShowListTitle>
-        </table>
-        <MultipleBody>
+    <>
+      <MultipleBodyWrapper>
+        <SheetList>
+          {sheetList?.map((sheetItem, index) => (
+            <ButtonStyle key={uuidv4()} btnStyle={sheetItem.status}>
+              <Button
+                multipleStyle={sheetItem.status}
+                value={index}
+                onClick={onChangeSheet}
+              >{`${sheetItem.sheetName} 시트`}</Button>
+            </ButtonStyle>
+          ))}
+        </SheetList>
+        <MultipleBodyContainer>
           <table>
-            {excel.data &&
-              excel.data[excel.sheetItem]?.map((column, index) => (
-                <RequestShowList
-                  key={uuidv4()}
-                  // onClick={() => onDetail(list.requestId || list.supplyId)}
-                >
-                  <tr>
-                    <td>{index + 1}</td>
-                    {ARRAY.MULTIPLE_HEADER.map(header => (
-                      <td key={uuidv4()}>{column[header] || '-'}</td>
-                    ))}
-                    <td>
-                      {column['이미지'] ? (
-                        <ImageContainer onClick={onImageDetail}>
-                          <Button
-                            onClick={() => {
-                              onDeleteImage(
-                                excel.sheetItem,
-                                index,
-                                column['이미지']
-                              );
-                            }}
-                          >
-                            <DeleteImg />
-                          </Button>
-                          <img src={column['이미지']} alt="multipleImg" />
-                          <ImgDetailModal
-                            src={column['이미지']}
-                            isOpen={showImageModal}
-                            onClose={onImageDetail}
-                          />
-                        </ImageContainer>
-                      ) : (
-                        <>
-                          <ImageinputFile>
-                            <DefaultImage />
-                            <input
-                              key={uuidv4()}
-                              type="file"
-                              accept=".png,.jpg,.jpeg,.gif"
-                              onChange={e => {
-                                onAddImage(e, excel.sheetItem, index);
-                              }}
-                            />
-                          </ImageinputFile>
-                        </>
-                      )}
-                    </td>
-                    <td>
-                      <DeleteCoulmnBtn
-                        onClick={() => {
-                          onDeleteRow(index);
-                        }}
-                      >
-                        <MinusRound />
-                      </DeleteCoulmnBtn>
-                    </td>
-                  </tr>
-                </RequestShowList>
-              ))}
+            <RequestShowListTitle>
+              <tr>
+                <th>순번</th>
+                {ARRAY.MULTIPLE_HEADER.map(header => (
+                  <th key={uuidv4()}>{header}</th>
+                ))}
+                <th>이미지</th>
+              </tr>
+            </RequestShowListTitle>
           </table>
-        </MultipleBody>
-      </MultipleBodyContainer>
-    </MultipleBodyWrapper>
+          <MultipleBody>
+            <table>
+              {excel.data &&
+                excel.data[excel.sheetItem]?.map((column, index) => (
+                  <RequestShowList key={uuidv4()}>
+                    <tr>
+                      <td>{index + 1}</td>
+                      {ARRAY.MULTIPLE_HEADER.map(header => (
+                        <td key={uuidv4()}>{column[header] || '-'}</td>
+                      ))}
+                      <td>
+                        {column['이미지'] ? (
+                          <ImageContainer>
+                            <Button
+                              onClick={() => {
+                                onDeleteImage(
+                                  excel.sheetItem,
+                                  index,
+                                  column['이미지']
+                                );
+                              }}
+                            >
+                              <DeleteImg />
+                            </Button>
+                            <div
+                              onClick={() => {
+                                onImageDetail(column['이미지']);
+                              }}
+                            >
+                              <img src={column['이미지']} alt="multipleImg" />
+                            </div>
+                          </ImageContainer>
+                        ) : (
+                          <>
+                            <ImageinputFile>
+                              <DefaultImage />
+                              <input
+                                key={uuidv4()}
+                                type="file"
+                                accept=".png,.jpg,.jpeg,.gif"
+                                onChange={e => {
+                                  onAddImage(e, excel.sheetItem, index);
+                                }}
+                              />
+                            </ImageinputFile>
+                          </>
+                        )}
+                      </td>
+                      <td>
+                        <DeleteCoulmnBtn
+                          onClick={() => {
+                            onDeleteRow(index);
+                          }}
+                        >
+                          <MinusRound />
+                        </DeleteCoulmnBtn>
+                      </td>
+                    </tr>
+                  </RequestShowList>
+                ))}
+            </table>
+          </MultipleBody>
+        </MultipleBodyContainer>
+      </MultipleBodyWrapper>
+      <ImgDetailModal
+        src={showImageModal.image}
+        isOpen={showImageModal.show}
+        onClose={onImageDetail}
+      />
+    </>
   );
 }
 
