@@ -1,36 +1,55 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+
 import { useDispatch, useSelector } from 'react-redux';
 import { userDashboardStatus } from 'redux/modules/dashboardStatus';
+import { commonSupplyDtos } from 'redux/modules/dashboardStatus';
 import { getCategoryList } from 'redux/modules/equipmentStatus';
+import { getEncryptionStorage } from 'utils/encryptionStorage';
+
 import ScrollToTop from 'components/common/ScrollToTop';
 import ManagementStatus from 'components/adminDashBoard/status/ManagementStatus';
 import AlertStatus from 'components/adminDashBoard/status/AlertStatus';
 import TestStatus from 'components/adminDashBoard/status/UseageCard';
 import CategoryStatus from 'components/adminDashBoard/status/CategoryStatus';
 import UserDashboardDetailModal from 'components/adminDashBoard/UserDashboardDetailModal';
-import { getEncryptionStorage } from '../../utils/encryptionStorage';
 
 export default function UserDashBoard() {
   const dispatch = useDispatch();
   const { isAdmin } = getEncryptionStorage();
 
   const [status, setStatus] = useState('');
+  const [showCommonSupplyDtos, setShowCommonSupplyDtos] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState({
     show: false,
     id: null,
   });
-  const { getDashboard, isDashboardError } = useSelector(
-    state => state.dashboardStatus.userDashboard
-  );
+  const {
+    userDashboard: { getDashboard, isDashboardError },
+    commonSupplyDtos: { getCommonSupplyDtos, isCommonSupplyDtosError },
+  } = useSelector(state => state.dashboardStatus);
 
   useEffect(() => {
     dispatch(userDashboardStatus(status));
+    dispatch(commonSupplyDtos());
     dispatch(getCategoryList());
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, status]);
 
   const handleDetailModal = id =>
     setShowDetailModal(state => ({ show: !state.show, id: id }));
+
+  const handleCommonSupplyDtos = e => {
+    setShowCommonSupplyDtos(
+      prevShowCommonSupplyDtos => !prevShowCommonSupplyDtos
+    );
+    if (!showCommonSupplyDtos) {
+      dispatch(commonSupplyDtos());
+    }
+  };
+
+  console.log('getCommonSupplyDtos s->', getCommonSupplyDtos);
 
   return (
     <>
@@ -50,6 +69,9 @@ export default function UserDashBoard() {
               setStatus={setStatus}
               getDashboard={getDashboard}
               onDetailModal={handleDetailModal}
+              handleCommonSupplyDtos={handleCommonSupplyDtos}
+              getCommonSupplyDtos={getCommonSupplyDtos}
+              showCommonSupplyDtos={showCommonSupplyDtos}
             />
           </BottomSideContainer>
           <ScrollToTop targetSelector="#scrollable-div" />
