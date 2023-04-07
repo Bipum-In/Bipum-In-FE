@@ -1,16 +1,33 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Outlet } from 'react-router-dom';
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useLayoutEffect,
+} from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+
 import styled, { useTheme, keyframes, css } from 'styled-components';
-import Header from './Header';
-import Sidebar from './Sidebar';
 import { ReactComponent as Hamburger } from 'styles/sidebarIcon/hamburger.svg';
 import { ReactComponent as Close } from 'styles/commonIcon/close.svg';
 
+import Header from './Header';
+import Sidebar from './Sidebar';
+import { getEncryptionStorage } from 'utils/encryptionStorage';
+import ROUTER from 'constants/routerConst';
+
 export default function DashBoardLayout() {
+  const navigate = useNavigate();
+  const { checkUser } = getEncryptionStorage();
   const [isSidebarHidden, setIsSidebarHidden] = useState(false);
   const [isMobileView, setIsMobileView] = useState(false);
   const theme = useTheme();
   const desktopSize = theme.screen.desktopSize;
+
+  useEffect(() => {
+    if (!checkUser) {
+      navigate(ROUTER.PATH.MAIN);
+    }
+  }, [checkUser, navigate]);
 
   useEffect(() => {
     const handleWindowResize = () => {
@@ -35,27 +52,31 @@ export default function DashBoardLayout() {
   }, []);
 
   return (
-    <LayoutWrapper>
-      {isMobileView && (
-        <SidebarBtnContainer onClick={handleSidebarToggle}>
-          <AlaramIcon $isHidden={isSidebarHidden} />
-          <ArrowDownIcon $isHidden={isSidebarHidden} />
-        </SidebarBtnContainer>
-      )}
+    <>
+      {checkUser && (
+        <LayoutWrapper>
+          {isMobileView && (
+            <SidebarBtnContainer onClick={handleSidebarToggle}>
+              <AlaramIcon $isHidden={isSidebarHidden} />
+              <ArrowDownIcon $isHidden={isSidebarHidden} />
+            </SidebarBtnContainer>
+          )}
 
-      <Header
-        isSidebarHidden={isSidebarHidden}
-        setIsSidebarHidden={setIsSidebarHidden}
-        isMobileView={isMobileView}
-      />
-      <Sidebar
-        isSidebarHidden={isSidebarHidden}
-        setIsSidebarHidden={setIsSidebarHidden}
-      />
-      <OutletContainer>
-        <Outlet />
-      </OutletContainer>
-    </LayoutWrapper>
+          <Header
+            isSidebarHidden={isSidebarHidden}
+            setIsSidebarHidden={setIsSidebarHidden}
+            isMobileView={isMobileView}
+          />
+          <Sidebar
+            isSidebarHidden={isSidebarHidden}
+            setIsSidebarHidden={setIsSidebarHidden}
+          />
+          <OutletContainer>
+            <Outlet />
+          </OutletContainer>
+        </LayoutWrapper>
+      )}
+    </>
   );
 }
 
