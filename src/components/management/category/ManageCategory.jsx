@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import STRING from 'constants/string';
 import Button from 'elements/Button';
@@ -18,7 +18,6 @@ import {
   setSmallCategoryData,
   editCategoryData,
 } from 'redux/modules/equipmentStatus';
-// import CategorySidebar from './CategorySidebar';
 import ManageSidebar from './ManageSidebar';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
@@ -33,14 +32,15 @@ export default function ManageCategory({
     category => ({ name: category })
   );
 
-  const [idModalCategory, setIdModalCategory] = useState(null);
   const dispatch = useDispatch();
-  const [logoutModal, setLogoutModal] = useModalState();
+  const [addSmallModal, setAddSmallModal] = useModalState();
+  const [idModalCategory, setIdModalCategory] = useState(null);
   const [deleteModal, setDeleteModal] = useModalState();
+  const [editingCategoryName, setEditingCategoryName] = useState('');
   const handleInputClear = () => setEditingCategoryName('');
+  const handleAddClear = () => setNewCategory('');
   const [newCategory, setNewCategory] = useState('');
   const [editingCategoryId, setEditingCategoryId] = useState(null);
-  const [editingCategoryName, setEditingCategoryName] = useState('');
   const [prevCategory, setPrevCategory] = useState('');
 
   const handleEditClick = item => {
@@ -50,7 +50,7 @@ export default function ManageCategory({
   };
 
   const handleEditInputChange = e => setEditingCategoryName(e.target.value);
-  const handleModalClose = () => setLogoutModal(false);
+  const handleModalClose = () => setAddSmallModal(false);
   const deleteModalClose = () => setDeleteModal(false);
 
   const handleSubmit = name => {
@@ -69,7 +69,7 @@ export default function ManageCategory({
         );
       });
     setNewCategory('');
-    setLogoutModal('');
+    setAddSmallModal('');
   };
 
   const handleEditSubmit = () => {
@@ -161,23 +161,30 @@ export default function ManageCategory({
                   </SmallCategoryItemContainer>
                 )
               )}
-              <Button mainBtn="border" type="button" onClick={setLogoutModal}>
+              <Button mainBtn="border" type="button" onClick={setAddSmallModal}>
                 <Add /> 소분류 추가
               </Button>
               <CustomModal
-                isOpen={logoutModal}
+                isOpen={addSmallModal}
                 onClose={handleModalClose}
                 submit={() => handleSubmit(newCategory)}
                 text={'추가 완료'}
               >
                 소분류 추가
                 <InputBox>
-                  <Input
-                    value={newCategory}
-                    setState={e => setNewCategory(e.target.value)}
-                    placeholder="소분류명을 입력해 주세요"
-                    type="text"
-                  />
+                  <InputWrapper>
+                    <Input
+                      value={newCategory}
+                      setState={e => setNewCategory(e.target.value)}
+                      placeholder="소분류명을 입력해 주세요"
+                      type="text"
+                    />
+                    {newCategory && (
+                      <CancelInputWrapper onClick={handleAddClear}>
+                        <CancelInput />
+                      </CancelInputWrapper>
+                    )}
+                  </InputWrapper>
                 </InputBox>
               </CustomModal>
             </SmallCategoryRow>
@@ -291,6 +298,7 @@ const SmallCategoryItemContainer = styled.div`
     line-height: 1.1875rem;
   }
   &:hover {
+    color: ${props => props.theme.color.blue.brandColor6};
     svg {
       opacity: 1;
     }
