@@ -169,8 +169,10 @@ export default function EquipmentListContainer({
         isAdmin={isAdmin}
         showDetailModal={showDetailModal}
         showSingleModal={showSingleModal}
+        showMultipleModal={showMultipleModal}
         handleDetailModal={handleDetailModal}
         handleSingleModal={handleSingleModal}
+        handleMultipleModal={handleMultipleModal}
         category={category}
         largeCategory={largeCategory}
       />
