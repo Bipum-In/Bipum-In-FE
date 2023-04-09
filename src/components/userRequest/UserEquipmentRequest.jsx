@@ -84,6 +84,7 @@ export default function UserEquipmentRequest({
     const { ko } = JSON.parse(e.target.value);
     const largeCategory = e.target.options[e.target.selectedIndex].innerText;
     const smallCatagory = parseCategoryData(ko, category);
+
     setOptionNullList(state => ({
       ...state,
       largeCategory,
@@ -92,7 +93,7 @@ export default function UserEquipmentRequest({
     }));
 
     if (type !== 'SUPPLY' && useType) {
-      getNotSupplySmallCategory(ko);
+      getNotSupplySmallCategory(ko, useType);
       return;
     }
 
@@ -188,8 +189,10 @@ export default function UserEquipmentRequest({
   };
 
   const getMySupply = categoryId => {
+    const useTypeKO = STRING.USE_TYPE_ENG[useType];
+    const common = useTypeKO === '공용' ? '/common' : '';
     axios
-      .get(`/api/supply/mysupply/${categoryId}`)
+      .get(`/api/supply${common}/mysupply/${categoryId}`)
       .then(res => setMysupply(res.data.data));
   };
 
@@ -206,8 +209,9 @@ export default function UserEquipmentRequest({
     });
   };
 
-  const getNotSupplySmallCategory = largeType => {
-    const common = useType === '공용' ? '/common' : '';
+  const getNotSupplySmallCategory = (largeType, useType) => {
+    const useTypeKO = STRING.USE_TYPE_ENG[useType];
+    const common = useTypeKO === '공용' ? '/common' : '';
 
     axios
       .get(`/api/category${common}/myCategory?largeCategory=${largeType}`)
