@@ -1,6 +1,7 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import StatusItem from './StatusItem';
+import { useLocation } from 'react-router-dom';
 
 export default function StatusList({
   headerList,
@@ -11,8 +12,9 @@ export default function StatusList({
   onDetail,
   isAdmin,
 }) {
+  const { pathname } = useLocation();
   return (
-    <RequestShowBody>
+    <RequestShowBody pathname={pathname}>
       <table ref={listHeaderRef}>
         <RequestShowListTitle>
           <tr>
@@ -70,6 +72,72 @@ const RequestShowBody = styled.div`
     line-height: 3.3125rem;
     gap: 1.875rem;
     justify-content: center;
+
+    ${props =>
+      props.pathname === '/equipment-management' &&
+      css`
+        td:nth-child(2),
+        th:nth-child(2) {
+          @media (max-width: 100rem) {
+            min-width: 8rem;
+            width: 8rem;
+          }
+        }
+
+        td:nth-child(5),
+        th:nth-child(5) {
+          @media (max-width: 91.875rem) {
+            display: none;
+          }
+        }
+
+        td:nth-child(4),
+        th:nth-child(4) {
+          @media (max-width: 68.125rem) {
+            display: none;
+          }
+        }
+
+        td:nth-child(7),
+        th:nth-child(7) {
+          @media (max-width: 60rem) {
+            display: none;
+          }
+        }
+      `}
+
+    ${props =>
+      props.pathname === '/request-status' &&
+      css`
+        td:nth-child(3),
+        th:nth-child(3) {
+          @media (max-width: 100rem) {
+            min-width: 10rem;
+            width: 10rem;
+          }
+        }
+
+        td:nth-child(6),
+        th:nth-child(6) {
+          @media (max-width: 90.625rem) {
+            display: none;
+          }
+        }
+
+        td:nth-child(2),
+        th:nth-child(2) {
+          @media (max-width: 63.125rem) {
+            display: none;
+          }
+        }
+
+        td:nth-child(5),
+        th:nth-child(5) {
+          @media (max-width: 56.875rem) {
+            display: none;
+          }
+        }
+      `}
   }
 
   td {
