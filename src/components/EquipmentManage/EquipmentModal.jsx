@@ -7,9 +7,7 @@ import AddSingleItem from '../equipmentAdd/AddSingleItem';
 
 export default function EquipmentModal({
   isAdmin,
-  showDetailModal,
-  showSingleModal,
-  showMultipleModal,
+  showModal,
   handleDetailModal,
   handleSingleModal,
   handleMultipleModal,
@@ -18,19 +16,19 @@ export default function EquipmentModal({
 }) {
   return (
     <>
-      <Modal isOpen={showDetailModal.show} onClose={handleDetailModal}>
+      <Modal isOpen={showModal.detailShow} onClose={handleDetailModal}>
         <EquipmentDetailWrapper>
           <ModalHeader isClose={handleDetailModal} requestType={'비품 상세'} />
           <EquipmentDetail
             isAdmin={isAdmin}
             category={category}
             largeCategory={largeCategory}
-            detailId={showDetailModal.id}
+            detailId={showModal.id}
             isClose={handleDetailModal}
           />
         </EquipmentDetailWrapper>
       </Modal>
-      <Modal isOpen={showSingleModal} onClose={handleSingleModal}>
+      <Modal isOpen={showModal.singleShow} onClose={handleSingleModal}>
         <EquipmentAddWrapper>
           <ModalHeader isClose={handleSingleModal} requestType={'단일 등록'} />
           <AddSingleItem
@@ -40,7 +38,7 @@ export default function EquipmentModal({
         </EquipmentAddWrapper>
       </Modal>
 
-      <Modal isOpen={showMultipleModal} onClose={handleMultipleModal}>
+      <Modal isOpen={showModal.multipleShow} onClose={handleMultipleModal}>
         <EquipmentAddWrapper>
           <ModalHeader
             isClose={handleMultipleModal}

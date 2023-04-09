@@ -1,21 +1,26 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { v4 as uuidv4 } from 'uuid';
 import Button from 'elements/Button';
 
 export default function CategoryItems({
   getCategory,
   getSmallCategory,
+  categoryOutsideRef,
   onClickMenu,
   onClickCategory,
 }) {
   return (
-    <>
+    <div ref={categoryOutsideRef}>
       <CategoryItemsWrapper>
         {getCategory &&
           getCategory.map(item => (
-            <CategoryItemContainer key={uuidv4()}>
-              <Button category={item.status} onClick={e => onClickMenu(e)}>
+            <CategoryItemContainer key={item.name}>
+              <Button
+                category={item.status}
+                onClick={e => {
+                  onClickMenu(e);
+                }}
+              >
                 {item.name}
               </Button>
             </CategoryItemContainer>
@@ -25,7 +30,7 @@ export default function CategoryItems({
         <CategoryWrapper show={getSmallCategory.show}>
           <SmallCategoryItemsWrapper>
             {getSmallCategory.list.map(item => (
-              <SmallCategoryItemContainer key={uuidv4()}>
+              <SmallCategoryItemContainer key={item.categoryId}>
                 <Button onClick={e => onClickCategory(e)}>
                   {item.categoryName}
                 </Button>
@@ -34,7 +39,7 @@ export default function CategoryItems({
           </SmallCategoryItemsWrapper>
         </CategoryWrapper>
       )}
-    </>
+    </div>
   );
 }
 
@@ -54,16 +59,9 @@ const CategoryItemContainer = styled.div`
   ${props => props.theme.FlexCenter};
   padding-right: 2rem;
   font-size: 0.875rem;
-  &:before {
-    content: '';
-    position: absolute;
-    right: 1rem;
-    height: 100%;
-    width: 1px;
-    background-color: ${props => props.theme.color.grey.brandColor2};
-  }
-  &:last-child:before {
-    display: none;
+
+  button {
+    font-weight: 600;
   }
 `;
 
@@ -80,6 +78,7 @@ const CategoryWrapper = styled.div`
       : css`
           transform: translateY(-0.3rem);
           opacity: 0;
+          pointer-events: none;
         `}
 
   z-index: 2;

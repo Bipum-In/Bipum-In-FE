@@ -62,19 +62,23 @@ const Title = styled.div`
   font-weight: 600;
   font-size: 1.25rem;
   margin-top: 1.75rem;
-  margin-left: 2.5rem;
+  margin: 1.75rem 2.5rem 0 2.5rem;
+  white-space: nowrap;
 `;
 
 const SearchSelect = styled.div`
   ${props => props.theme.FlexRow}
-  ${props => props.theme.FlexCenter}
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
   margin-top: 1.5rem;
 `;
 
 const SearchContainer = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
-  width: 28.375rem;
+  max-width: 28.375rem;
+  width: 100%;
   height: 2.125rem;
   background-color: ${props => props.theme.color.grey.brandColor1};
   margin: 0;
@@ -82,6 +86,7 @@ const SearchContainer = styled.div`
   border-radius: 0.5rem;
 
   input {
+    width: 100%;
     font-size: 1rem;
     padding: 0.5rem 0.5rem 0.5rem 0;
   }
@@ -109,6 +114,10 @@ const Select = styled.select`
   appearance: none;
   padding: 0.3125rem 0.625rem;
   padding-right: 1.5625rem;
+
+  @media (max-width: 900px) {
+    color: transparent; // Hide the text color
+  }
 `;
 
 const SelectWrapper = styled.div`
@@ -118,6 +127,12 @@ const SelectWrapper = styled.div`
   width: 5.6rem;
   height: 2.5rem;
   margin-right: 1.9375rem;
+
+  @media (max-width: 900px) {
+    justify-content: end;
+    width: 2rem;
+    color: transparent;
+  }
 `;
 
 const SelectArrow = styled.div`

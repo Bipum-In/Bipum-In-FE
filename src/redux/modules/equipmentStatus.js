@@ -58,7 +58,6 @@ export const getCategoryList = Redux.asyncThunk(
   () => axios.get(`/api/category`),
   response => {
     const parseLargeCategory = largeCategory(response);
-    console.log('response.data.data --->', response.data.data);
     return { largeCategory: parseLargeCategory, category: response.data.data };
   }
 );
