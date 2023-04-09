@@ -33,7 +33,7 @@ export default function EquipmentListContainer({
   const [categoryTitle, setCategoryTitle] = useState(categoryNameData);
   const [categoryList, setCategoryList] = useState({
     show: false,
-    list: [category],
+    list: category,
   });
 
   const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
