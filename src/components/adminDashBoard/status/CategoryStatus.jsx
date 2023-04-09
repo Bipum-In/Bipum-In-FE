@@ -70,7 +70,7 @@ export default function CategoryStatus({
             {!isAdmin && (
               <TransitionBtn mainBtn={'fill'} onClick={handleCommonSupplyDtos}>
                 <Rotate />
-                {showCommonSupplyDtos ? '개인 비품 전환' : ' 공용 비품 전환'}
+                {showCommonSupplyDtos ? '개인 비품 보기' : ' 공용 비품 보기'}
               </TransitionBtn>
             )}
             <CategoryItems
