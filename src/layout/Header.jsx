@@ -233,11 +233,12 @@ const ItemContainer = styled.div`
 const SearchContainer = styled.div`
   ${props => props.theme.FlexRow};
   align-items: center;
+  min-width: 25.875rem;
   width: 28.375rem;
   height: 3.125rem;
   background-color: white;
   border-radius: 0.5rem;
-
+  margin-right: 2rem;
   @media (max-width: ${props => props.theme.screen.desktop}) {
     margin-left: 2rem;
   }
@@ -316,6 +317,7 @@ const UserInfoDetailContainer = styled.div`
   justify-content: center;
   gap: 0.25rem;
   min-width: 5.625rem;
+  white-space: nowrap;
 `;
 const InfoCompanyTitle = styled.span`
   font-size: 0.875rem;
