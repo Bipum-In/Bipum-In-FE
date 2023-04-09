@@ -80,7 +80,23 @@ export default function EquipmentDetail({
       );
   }, [detailId, dispatch]);
 
-  const handleEdit = () => setEdit(true);
+  const handleEdit = () => {
+    const { partnersId, userId, deptId } = getDetail.supplyDetail;
+    setEdit(true);
+    setPartnersId(partnersId);
+
+    if (userId) {
+      setUserId(userId);
+      setUseType(STRING.USE_TYPE['개인']);
+      return;
+    }
+
+    if (deptId && !userId) {
+      setDeptId(deptId);
+      setUseType(STRING.USE_TYPE['공용']);
+      return;
+    }
+  };
 
   const handleEditRequester = e => {
     const value = e.target.value;
@@ -112,7 +128,7 @@ export default function EquipmentDetail({
     const { ko: dept } = JSON.parse(e.target.value);
     const text = e.target.options[e.target.selectedIndex].innerText;
     setOptionNullList(state => ({ ...state, dept: text, user: '공용' }));
-    console.log(dept);
+
     if (!dept) {
       setUseType('');
       return;
