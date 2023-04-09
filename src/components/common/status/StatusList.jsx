@@ -16,18 +16,11 @@ export default function StatusList({
       <table ref={listHeaderRef}>
         <RequestShowListTitle>
           <tr>
-            <ZeroTh width={headerList[0].width}>{headerList[0].name}</ZeroTh>
-            <OneTh width={headerList[1].width}>{headerList[1].name}</OneTh>
-            <TwoTh width={headerList[2].width}>{headerList[2].name}</TwoTh>
-            <ThreeTh width={headerList[3].width}>{headerList[3].name}</ThreeTh>
-            <FourTh width={headerList[4].width}>{headerList[4].name}</FourTh>
-            <FiveTh width={headerList[5].width}>{headerList[5].name}</FiveTh>
-            <SixTh width={headerList[6].width}>{headerList[6].name}</SixTh>
-            {isAdmin && (
-              <SevenTh width={headerList[7].width}>
-                {headerList[7].name}
-              </SevenTh>
-            )}
+            {headerList.map(list => (
+              <ThItem key={uuidv4()} width={list.width}>
+                {list.name}
+              </ThItem>
+            ))}
           </tr>
         </RequestShowListTitle>
       </table>
@@ -39,88 +32,65 @@ export default function StatusList({
               onClick={() => onDetail(list.requestId || list.supplyId)}
             >
               <tr>
-                <Zero width={headerList[0].width}>
-                  {list[contentKeyArr[0]] || '-'}
-                </Zero>
-                <One width={headerList[1].width}>
-                  {list[contentKeyArr[1]] || '-'}
-                </One>
-                <Two width={headerList[2].width}>
-                  {list[contentKeyArr[2]] || '-'}
-                </Two>
-                {isAdmin ? (
-                  <>
-                    {headerList[3].name === '등록일자' ? (
-                      <Three width={headerList[3].width}>
-                        {FormatDateToDot(list[contentKeyArr[3]]) || '-'}
-                      </Three>
-                    ) : (
-                      <Three width={headerList[3].width}>
-                        {list[contentKeyArr[3]] || '-'}
-                      </Three>
-                    )}
-                  </>
-                ) : (
-                  <Three width={headerList[3].width}>
-                    {FormatDateToDot(list[contentKeyArr[3]] || '-')}
-                  </Three>
-                )}
-                <Four width={headerList[4].width}>
-                  {list[contentKeyArr[4]] || '-'}
-                </Four>
-                {isAdmin ? (
-                  <>
-                    {headerList[5].name === '사용자' ? (
-                      <Five width={headerList[5].width}>
-                        {list[contentKeyArr[5]] || '-'}
-                      </Five>
-                    ) : (
-                      <Five width={headerList[5].width}>
-                        {FormatKoreanTime(list[contentKeyArr[5]]) || '-'}
-                      </Five>
-                    )}
-                  </>
-                ) : (
-                  <Five width={headerList[5].width}>
-                    {list[contentKeyArr[5]] || '-'}
-                  </Five>
-                )}
-                {isAdmin ? (
-                  <>
-                    {headerList[7].name === '상태' ? (
-                      <>
-                        <Six width={headerList[6].width}>
-                          {list[contentKeyArr[6]] || '-'}
-                        </Six>
-                        <Seven width={headerList[7].width}>
-                          <Status>
-                            <StatusColor status={list[contentKeyArr[7]]} />
-                            {list[contentKeyArr[7]] || '-'}
-                          </Status>
-                        </Seven>
-                      </>
-                    ) : (
-                      <>
-                        <Six width={headerList[6].width}>
-                          {list[contentKeyArr[6]] || '-'}
-                        </Six>
-                        <RequsetSeven
-                          width={headerList[7].width}
-                          status={list[contentKeyArr[7]]}
-                        >
-                          {list[contentKeyArr[7]] || '-'}
-                        </RequsetSeven>
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <RequsetSeven
-                    width={headerList[6].width}
-                    status={list[contentKeyArr[6]]}
-                  >
-                    {list[contentKeyArr[6]] || '-'}
-                  </RequsetSeven>
-                )}
+                {headerList.map((headerItem, index, headerArray) => {
+                  if (
+                    headerItem.name === '신청일' &&
+                    contentKeyArr[index] === 'createdAt'
+                  ) {
+                    return (
+                      <TdItem key={uuidv4()} width={headerItem.width}>
+                        {isAdmin &&
+                          FormatKoreanTime(list[contentKeyArr[index]])}
+                        {!isAdmin &&
+                          FormatDateToDot(list[contentKeyArr[index]])}
+                      </TdItem>
+                    );
+                  }
+
+                  if (
+                    headerItem.name === '등록일자' &&
+                    contentKeyArr[index] === 'createdAt'
+                  ) {
+                    return (
+                      <TdItem key={uuidv4()} width={headerItem.width}>
+                        {FormatDateToDot(list[contentKeyArr[index]]) || '-'}
+                      </TdItem>
+                    );
+                  }
+
+                  if (contentKeyArr[index] === 'acceptResult') {
+                    return (
+                      <TdItemAcceptResult
+                        key={uuidv4()}
+                        width={headerItem.width}
+                        status={list[contentKeyArr[index]]}
+                      >
+                        {isAdmin && list[contentKeyArr[index]]}
+                        {!isAdmin && list[contentKeyArr[index]]}
+                      </TdItemAcceptResult>
+                    );
+                  }
+
+                  if (
+                    contentKeyArr[index] === 'status' &&
+                    headerArray[index + 1]?.name !== '결과'
+                  ) {
+                    return (
+                      <TdItemStatus key={uuidv4()} width={headerItem.width}>
+                        <Status>
+                          <StatusColor status={list[contentKeyArr[index]]} />
+                          {list[contentKeyArr[index]] || '-'}
+                        </Status>
+                      </TdItemStatus>
+                    );
+                  }
+
+                  return (
+                    <TdItem key={uuidv4()} width={headerItem.width}>
+                      {list[contentKeyArr[index]] || '-'}
+                    </TdItem>
+                  );
+                })}
               </tr>
             </RequestShowList>
           ))
@@ -158,7 +128,6 @@ const RequestShowBody = styled.div`
   }
 
   td {
-    /* height: 100%; */
     text-align: left;
     text-overflow: ellipsis;
     font-size: 0.875rem;
@@ -190,121 +159,17 @@ const RequestShowList = styled.tbody`
   }
 `;
 
-const Status = styled.div`
-  ${props => props.theme.FlexRow}
-  align-items: center;
-  gap: 0.5rem;
-`;
-
-const StatusColor = styled.div`
-  width: 0.9375rem;
-  height: 0.9375rem;
-  ${props =>
-    props.status === '재고' &&
-    css`
-      background-color: #d23737;
-    `};
-
-  ${props =>
-    props.status === '사용중' &&
-    css`
-      background-color: #37d259;
-    `};
-
-  ${props =>
-    props.status === '수리중' &&
-    css`
-      background-color: #ff8502;
-    `};
-  border-radius: 50%;
-`;
-
-const ZeroTh = styled.th`
+const ThItem = styled.th`
   width: ${props => props.width};
   min-width: ${props => props.width};
 `;
 
-const OneTh = styled.th`
+const TdItem = styled.td`
   width: ${props => props.width};
   min-width: ${props => props.width};
 `;
 
-const TwoTh = styled.th`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-`;
-
-const ThreeTh = styled.th`
-  min-width: ${props => props.width};
-  width: ${props => props.width};
-`;
-
-const FourTh = styled.th`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-`;
-
-const FiveTh = styled.th`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-`;
-
-const SixTh = styled.th`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-`;
-
-const SevenTh = styled.th`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-`;
-
-const Zero = styled.td`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-  font-weight: 600;
-`;
-
-const One = styled.td`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-  font-weight: 600;
-`;
-
-const Two = styled.td`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-`;
-
-const Three = styled.td`
-  min-width: ${props => props.width};
-  width: ${props => props.width};
-`;
-
-const Four = styled.td`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-`;
-
-const Five = styled.td`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-`;
-
-const Six = styled.td`
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-`;
-
-const Seven = styled.td`
-  display: flex;
-  align-items: center;
-  width: ${props => props.width};
-  min-width: ${props => props.width};
-  height: 100%;
-`;
-
-const RequsetSeven = styled.td`
+const TdItemAcceptResult = styled.td`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -333,4 +198,41 @@ const RequsetSeven = styled.td`
       color: ${props => props.theme.color.remove};
       border: 1px solid ${props => props.theme.color.remove};
     `}
+`;
+
+const TdItemStatus = styled.td`
+  display: flex;
+  align-items: center;
+  width: ${props => props.width};
+  min-width: ${props => props.width};
+  height: 100%;
+`;
+
+const Status = styled.div`
+  ${props => props.theme.FlexRow}
+  align-items: center;
+  gap: 0.5rem;
+`;
+
+const StatusColor = styled.div`
+  width: 0.9375rem;
+  height: 0.9375rem;
+  ${props =>
+    props.status === '재고' &&
+    css`
+      background-color: #d23737;
+    `};
+
+  ${props =>
+    props.status === '사용중' &&
+    css`
+      background-color: #37d259;
+    `};
+
+  ${props =>
+    props.status === '수리중' &&
+    css`
+      background-color: #ff8502;
+    `};
+  border-radius: 50%;
 `;
