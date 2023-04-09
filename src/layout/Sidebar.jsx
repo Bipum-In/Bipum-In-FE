@@ -3,10 +3,7 @@ import styled, { useTheme } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
-import {
-  CategoryItemLeft,
-  CategoryItemRight,
-} from 'components/layout/CategoryItem';
+import { CategoryItemLeft } from 'components/layout/CategoryItem';
 
 // import { ReactComponent as Logo } from 'styles/logo.svg';
 import Logo from 'components/layout/Logo';
@@ -52,34 +49,31 @@ export default function Sidebar({
     });
   };
 
-  const dropDownRef = useRef(null);
-
   const desktopSize = window.innerWidth <= theme.screen.desktopSize;
-  useOutsideClick(
-    dropDownRef,
-    () => {
-      setIsSidebarHidden(true);
-    },
-    desktopSize
-  );
+
+  const dropDownRef = useOutsideClick(() => {
+    setIsSidebarHidden(true);
+  }, desktopSize);
 
   const handleSidebarToggle = () => setIsSidebarHidden(prev => !prev);
 
-  const handleLogoClick = () => {
+  const handleSidebarClick = e => {
+    const name = e.target.innerText;
+    console.log(name);
     if (desktopSize) {
       setIsSidebarHidden(true);
     }
     const targetPath = isAdmin
       ? ROUTER.PATH.ADMIN.DASHBOARD
       : ROUTER.PATH.USER.DASHBOARD;
-    navigate(targetPath);
+    !name && navigate(targetPath);
   };
 
   return (
     <>
       <SidebarWrapper isHidden={isSidebarHidden} ref={dropDownRef}>
         {isMobileView && <ArrowDownIcon onClick={handleSidebarToggle} />}
-        <LogoContainer onClick={handleLogoClick}>
+        <LogoContainer onClick={handleSidebarClick}>
           <Logo />
         </LogoContainer>
         <SidebarCategoryContainer>
@@ -98,7 +92,7 @@ export default function Sidebar({
             )
           )}
           {isAdmin && (
-            <LogoutContainer>
+            <ManageManetContainer onClick={handleSidebarClick}>
               <CategoryItemLeft
                 category={`${
                   ARRAY.SIDEBAR.SIDEBAR_STYLE(pathname, isAdmin)[4]
@@ -108,7 +102,7 @@ export default function Sidebar({
               >
                 <Setting />
               </CategoryItemLeft>
-            </LogoutContainer>
+            </ManageManetContainer>
           )}
         </SidebarCategoryContainer>
       </SidebarWrapper>
@@ -154,7 +148,7 @@ const SidebarCategoryContainer = styled.div`
   gap: 0.9375rem;
 `;
 
-const LogoutContainer = styled.div`
+const ManageManetContainer = styled.div`
   ${props => props.theme.FlexRow}
   width: 100%;
   margin-top: auto;
