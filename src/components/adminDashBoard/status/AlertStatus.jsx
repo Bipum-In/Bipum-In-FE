@@ -30,8 +30,8 @@ export default function AlertStatus({ isAdmin }) {
   const path = isAdmin ? '/admin' : '';
 
   const {
-    adminSseAlert: { getAdminSseAlert, isAdminSseAlertError },
-    userSseAlert: { getUserSseAlert, isUserSseAlertError },
+    adminSseAlert: { getAdminSseAlert },
+    userSseAlert: { getUserSseAlert },
   } = useSelector(state => state.sseAlertList);
 
   const content = isAdmin
@@ -46,7 +46,7 @@ export default function AlertStatus({ isAdmin }) {
   const sseData = isAdmin ? sseAdminData : sseUserData;
   const [ref, inView] = useInView({ threshold: 0 }); //inView
   const page = useRef(1);
-  const size = NUMBER.INT.FIVE;
+  const size = page.current === 1 ? NUMBER.INT.FIVE : NUMBER.INT.TEN;
 
   useEffect(() => {
     if (!isLastPage && inView) {
@@ -55,7 +55,8 @@ export default function AlertStatus({ isAdmin }) {
         : dispatch(__userSseAlert({ page: page.current, size }));
       page.current += 1;
     }
-  }, [dispatch, page, size, inView, isLastPage, isAdmin]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dispatch, inView, isAdmin]);
 
   const putRequest = (notificationId, requestId) => {
     axios.put(`/api/main/read/${notificationId}`).then(() => {

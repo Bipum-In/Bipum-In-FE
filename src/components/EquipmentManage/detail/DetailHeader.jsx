@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import Button from 'elements/Button';
 import STRING from 'constants/string';
+import { CustomModal } from 'elements/Modal';
 
 export default function DetailHeader({
   edit,
@@ -9,6 +10,9 @@ export default function DetailHeader({
   onEdit,
   onDispose,
   onFromRequest,
+  disposeModal,
+  handleModalClose,
+  handleDispose,
 }) {
   const { supplyId, isAdmin, isMySupply } = detail.supplyDetail;
   return (
@@ -25,14 +29,16 @@ export default function DetailHeader({
             </SaveButton>
           ) : (
             <>
-              <DisposeButton
-                onClick={() => {
-                  onDispose(supplyId);
-                }}
-              >
-                폐기
-              </DisposeButton>
+              <DisposeButton onClick={onDispose}>폐기</DisposeButton>
               <EditButton onClick={onEdit}>수정</EditButton>
+              <CustomModal
+                isOpen={disposeModal}
+                onClose={handleModalClose}
+                submit={() => handleDispose(supplyId)}
+                text={'페기'}
+              >
+                비품을 폐기하시겠습니까?
+              </CustomModal>
             </>
           )}
         </>

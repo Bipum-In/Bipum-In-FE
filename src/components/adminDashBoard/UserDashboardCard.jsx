@@ -26,9 +26,7 @@ export default function UserDashboardCard({
             <Status status={status} />
             {STRING.EQUIPMENT_STATUS[status]}
           </StatusContainer>
-          {getCommonSupplyDtos && showCommonSupplyDtos && (
-            <Button>공용비품</Button>
-          )}
+          {getCommonSupplyDtos && showCommonSupplyDtos && <Button>공용</Button>}
         </CategoryTitleContainer>
         <CategoryContainer>
           <SupplyNameTitle>

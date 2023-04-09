@@ -31,7 +31,7 @@ export default function UserDashBoard() {
 
   useEffect(() => {
     dispatch(userDashboardStatus(status));
-    dispatch(commonSupplyDtos());
+    dispatch(commonSupplyDtos(status));
     dispatch(getCategoryList());
 
     // eslint-disable-next-line react-hooks/exhaustive-deps

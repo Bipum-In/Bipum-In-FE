@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import {
@@ -6,9 +6,13 @@ import {
   initEquipmentDetail,
   initHistory,
 } from 'redux/modules/equipmentStatus';
+import { setRequestData } from 'redux/modules/requestStatus';
+import { useModalState } from 'hooks/useModalState';
+
 import styled from 'styled-components';
 import Axios from 'api/axios';
 import STRING, { REQUEST_PAGES } from 'constants/string';
+import ROUTER from 'constants/routerConst';
 
 import DetailImage from './DetailImage';
 import DetailHeader from './DetailHeader';
@@ -17,8 +21,6 @@ import DetailUseHistory from './DetailUseHistory';
 import DetailInfoProduct from './DetailInfoProduct';
 import DetailRepairHistory from './DetailRepairHistory';
 import DetailInfoRequester from './DetailInfoRequester';
-import { setRequestData } from 'redux/modules/requestStatus';
-import ROUTER from 'constants/routerConst';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -32,6 +34,7 @@ export default function EquipmentDetail({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
+  const [disposeModal, setDisposeModal] = useModalState();
   const [editRequester, setEditRequester] = useState({
     category: false,
     partners: false,
@@ -88,6 +91,7 @@ export default function EquipmentDetail({
 
   const handleDispose = supplyId => {
     axios.delete(`/api/supply/${supplyId}`).then(() => isClose());
+    setDisposeModal(false);
   };
 
   const handleFromRequest = e => {
@@ -172,6 +176,9 @@ export default function EquipmentDetail({
     reader.readAsDataURL(img);
   };
 
+  const handleModalOpen = () => setDisposeModal();
+  const handleModalClose = () => setDisposeModal(false);
+
   return (
     <>
       {isDetailError && <div>에러가 발생했습니다.</div>}
@@ -182,8 +189,11 @@ export default function EquipmentDetail({
             detail={getDetail}
             onEdit={handleEdit}
             onSave={handleSave}
-            onDispose={handleDispose}
+            onDispose={handleModalOpen}
+            disposeModal={disposeModal}
             onFromRequest={handleFromRequest}
+            handleModalClose={handleModalClose}
+            handleDispose={handleDispose}
           />
           <DetailBodyTitle detail={getDetail} />
           <DetailBodyContainer>
