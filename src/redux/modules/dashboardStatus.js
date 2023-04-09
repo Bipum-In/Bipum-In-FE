@@ -30,8 +30,9 @@ export const userDashboardStatus = Redux.asyncThunk('USER_DASHBOARD', payload =>
   axios.get(`/api/main?largeCategory=${payload}`)
 );
 
-export const commonSupplyDtos = Redux.asyncThunk('COMMON_SUPPLY_DTOS', () =>
-  axios.get(`/api/main/common`)
+export const commonSupplyDtos = Redux.asyncThunk(
+  'COMMON_SUPPLY_DTOS',
+  payload => axios.get(`/api/main/common?largeCategory=${payload}`)
 );
 
 const dashboardStatusSlice = Redux.slice(
