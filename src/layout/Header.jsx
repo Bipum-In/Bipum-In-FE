@@ -37,11 +37,10 @@ export default function Header() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const dropDownRef = useRef(null);
+  const dropDownRef = useOutsideClick(() => setIsDropdownVisible(false));
 
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
-  useOutsideClick(dropDownRef, () => setIsDropdownVisible(false));
 
   const { empName, deptName, image, isAdmin, userRole } =
     getEncryptionStorage();

@@ -1,20 +1,26 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 
-function useOutsideClick(ref, callback, condition = true) {
+const useOutsideClick = (onClickOutside, desktopSize = true) => {
+  const ref = useRef(null);
+
+  const handleClick = useCallback(
+    e => {
+      if (!ref.current || !desktopSize) return;
+      const inside = ref.current.contains(e.target);
+
+      if (inside) return;
+      onClickOutside();
+    },
+    [onClickOutside, ref, desktopSize]
+  );
+
   useEffect(() => {
-    if (!condition) return;
+    document.addEventListener('click', handleClick);
 
-    function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        callback();
-      }
-    }
+    return () => document.removeEventListener('click', handleClick);
+  }, [handleClick]);
 
-    document.addEventListener('click', handleClickOutside);
-    return () => {
-      document.removeEventListener('click', handleClickOutside);
-    };
-  }, [ref, callback, condition]);
-}
+  return ref;
+};
 
 export default useOutsideClick;
