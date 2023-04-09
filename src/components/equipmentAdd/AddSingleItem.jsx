@@ -228,9 +228,9 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
     });
 
   const getCrawlingData = () => {
-    axios.get(`/api/supply/search?modelName=${nameValue}`).then(res => {
-      setCrawlingImg(res.data.data.image);
-      setPreview([res.data.data.image]);
+    axios.get(`/api/supply/search?modelNameList=${nameValue}`).then(res => {
+      setCrawlingImg(res.data.data[0].image);
+      setPreview([res.data.data[0].image]);
       setFormImage([]);
     });
   };
