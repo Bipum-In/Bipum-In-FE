@@ -10,11 +10,15 @@ import useResizeGetPageSize from 'hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { getEquipmentList } from 'redux/modules/equipmentStatus';
-import EquipmentModal from './EquipmentModal';
-import { getEncryptionStorage } from '../../utils/encryptionStorage';
+import useOutsideClick from 'hooks/useOutsideClick';
 
 export default function EquipmentListContainer({
   category: { category, largeCategory },
+  isAdmin,
+  showModal,
+  onClickDetail,
+  onClickSingleModal,
+  onClickMultiModal,
 }) {
   const dispatch = useDispatch();
   const {
@@ -22,18 +26,11 @@ export default function EquipmentListContainer({
     categoryData: { categoryIdData, categoryNameData },
   } = useSelector(state => state.equipmentStatus);
 
-  const { isAdmin } = getEncryptionStorage();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState('');
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);
   const [categoryTitle, setCategoryTitle] = useState(categoryNameData);
-  const [showDetailModal, setShowDetailModal] = useState({
-    show: false,
-    id: null,
-  });
-  const [showSingleModal, setShowSingleModal] = useState(false);
-  const [showMultipleModal, setShowMultipleModal] = useState(false);
   const [categoryList, setCategoryList] = useState({
     show: false,
     list: [category],
@@ -43,7 +40,12 @@ export default function EquipmentListContainer({
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
+  const categoryOutsideRef = useOutsideClick(() =>
+    setCategoryList(state => ({ ...state, show: false }))
+  );
+
   useEffect(() => {
+    console.log('getEquipment', getEquipment?.content.length, page);
     const size = pageSize || firstPageSize || handleResize();
     dispatch(
       getEquipmentList({
@@ -64,10 +66,14 @@ export default function EquipmentListContainer({
     status,
     pageSize,
     handleResize,
-    showDetailModal.show,
-    showSingleModal,
-    showMultipleModal,
+    showModal,
   ]);
+
+  useEffect(() => {
+    if (getEquipment && getEquipment.content.length === 0) {
+      setPage(state => (state > 1 ? state - 1 : 1));
+    }
+  }, [getEquipment]);
 
   const initEquipmentList = () => {
     setCategoryList({ show: false, list: categoryList.list });
@@ -111,21 +117,6 @@ export default function EquipmentListContainer({
     setKeyword(e.target.value);
   };
 
-  const handleDetailModal = id => {
-    handleClickMenu({ target: { innerText: '전체' } });
-    setShowDetailModal(state => ({ show: !state.show, id: id }));
-  };
-
-  const handleSingleModal = () => {
-    handleClickMenu({ target: { innerText: '전체' } });
-    setShowSingleModal(state => !state);
-  };
-
-  const handleMultipleModal = () => {
-    handleClickMenu({ target: { innerText: '전체' } });
-    setShowMultipleModal(state => !state);
-  };
-
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.largeCategory === name);
   };
@@ -144,6 +135,7 @@ export default function EquipmentListContainer({
           <CategoryItems
             getCategory={menuStyle}
             getSmallCategory={categoryList}
+            categoryOutsideRef={categoryOutsideRef}
             onClickMenu={handleClickMenu}
             onClickCategory={handleClickCategory}
           />
@@ -159,23 +151,12 @@ export default function EquipmentListContainer({
           setStatus={handleChangeState}
           keyword={keyword}
           setKeyword={handleChangeKeyword}
-          onClickDetail={handleDetailModal}
-          onClickSingleModal={handleSingleModal}
-          onClickMultiModal={handleMultipleModal}
+          onClickDetail={onClickDetail}
+          onClickSingleModal={onClickSingleModal}
+          onClickMultiModal={onClickMultiModal}
           resizeRef={resizeRef}
         />
       </EquipmentListWrapper>
-      <EquipmentModal
-        isAdmin={isAdmin}
-        showDetailModal={showDetailModal}
-        showSingleModal={showSingleModal}
-        showMultipleModal={showMultipleModal}
-        handleDetailModal={handleDetailModal}
-        handleSingleModal={handleSingleModal}
-        handleMultipleModal={handleMultipleModal}
-        category={category}
-        largeCategory={largeCategory}
-      />
     </>
   );
 }
