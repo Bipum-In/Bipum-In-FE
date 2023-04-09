@@ -78,6 +78,7 @@ const CategoryWrapper = styled.div`
       : css`
           transform: translateY(-0.3rem);
           opacity: 0;
+          pointer-events: none;
         `}
 
   z-index: 2;
