@@ -16,7 +16,7 @@ export default function MultipleCardList({
     <MultipleBodyContainer>
       {excel.data &&
         excel.data[excel.sheetItem]?.map((column, columnIndex) => (
-          <CardContainer>
+          <CardContainer key={uuidv4()}>
             <ImageWrapper>
               <MultipleImage
                 excel={excel}
