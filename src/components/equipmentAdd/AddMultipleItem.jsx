@@ -172,6 +172,7 @@ export default function AddMultipleItem() {
         createdAt: object[ARRAY.MULTIPLE_HEADER[3]] || '',
         deptName: object[ARRAY.MULTIPLE_HEADER[4]] || '',
         empName: object[ARRAY.MULTIPLE_HEADER[5]] || '',
+        partners: object[ARRAY.MULTIPLE_HEADER[6]] || '',
         image: object['이미지'] || '',
       };
     });
