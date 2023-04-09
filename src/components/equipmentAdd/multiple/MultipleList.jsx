@@ -156,16 +156,6 @@ const MultipleBodyWrapper = styled.div`
     }
   }
 
-  @media (min-width: 1920px) {
-    section:nth-child(2) {
-      display: block;
-    }
-
-    section:nth-child(3) {
-      display: none;
-    }
-  }
-
   @media (max-width: 1920px) {
     section:nth-child(2) {
       display: none;
@@ -173,6 +163,16 @@ const MultipleBodyWrapper = styled.div`
 
     section:nth-child(3) {
       display: flex;
+    }
+  }
+
+  @media (min-width: 1920px) {
+    section:nth-child(2) {
+      display: block;
+    }
+
+    section:nth-child(3) {
+      display: none;
     }
   }
 `;
