@@ -45,7 +45,6 @@ export default function EquipmentListContainer({
   );
 
   useEffect(() => {
-    console.log('getEquipment', getEquipment?.content.length, page);
     const size = pageSize || firstPageSize || handleResize();
     dispatch(
       getEquipmentList({

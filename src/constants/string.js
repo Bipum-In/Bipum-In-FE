@@ -97,6 +97,11 @@ const USE_TYPE = {
   공용: 'COMMON',
 };
 
+const USE_TYPE_ENG = {
+  PERSONAL: '개인',
+  COMMON: '공용',
+};
+
 const EXCEL_COLUMN = {
   A: 'A',
   B: 'B',
@@ -153,6 +158,7 @@ const STRING = {
   USE_TYPE,
   CATEGORY_ENG,
   MANAGEMENT_TITLE,
+  USE_TYPE_ENG,
 };
 
 export default STRING;

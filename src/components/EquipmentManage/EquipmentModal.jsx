@@ -16,37 +16,47 @@ export default function EquipmentModal({
 }) {
   return (
     <>
-      <Modal isOpen={showModal.detailShow} onClose={handleDetailModal}>
-        <EquipmentDetailWrapper>
-          <ModalHeader isClose={handleDetailModal} requestType={'비품 상세'} />
-          <EquipmentDetail
-            isAdmin={isAdmin}
-            category={category}
-            largeCategory={largeCategory}
-            detailId={showModal.id}
-            isClose={handleDetailModal}
-          />
-        </EquipmentDetailWrapper>
-      </Modal>
-      <Modal isOpen={showModal.singleShow} onClose={handleSingleModal}>
-        <EquipmentAddWrapper>
-          <ModalHeader isClose={handleSingleModal} requestType={'단일 등록'} />
-          <AddSingleItem
-            categoryList={category}
-            largeCategoryList={largeCategory}
-          />
-        </EquipmentAddWrapper>
-      </Modal>
+      {showModal && (
+        <>
+          <Modal isOpen={showModal.detailShow} onClose={handleDetailModal}>
+            <EquipmentDetailWrapper>
+              <ModalHeader
+                isClose={handleDetailModal}
+                requestType={'비품 상세'}
+              />
+              <EquipmentDetail
+                isAdmin={isAdmin}
+                category={category}
+                largeCategory={largeCategory}
+                detailId={showModal.id}
+                isClose={handleDetailModal}
+              />
+            </EquipmentDetailWrapper>
+          </Modal>
+          <Modal isOpen={showModal.singleShow} onClose={handleSingleModal}>
+            <EquipmentAddWrapper>
+              <ModalHeader
+                isClose={handleSingleModal}
+                requestType={'단일 등록'}
+              />
+              <AddSingleItem
+                categoryList={category}
+                largeCategoryList={largeCategory}
+              />
+            </EquipmentAddWrapper>
+          </Modal>
 
-      <Modal isOpen={showModal.multipleShow} onClose={handleMultipleModal}>
-        <EquipmentAddWrapper>
-          <ModalHeader
-            isClose={handleMultipleModal}
-            requestType={'복수 등록'}
-          />
-          <AddMultipleItem />
-        </EquipmentAddWrapper>
-      </Modal>
+          <Modal isOpen={showModal.multipleShow} onClose={handleMultipleModal}>
+            <EquipmentAddWrapper>
+              <ModalHeader
+                isClose={handleMultipleModal}
+                requestType={'복수 등록'}
+              />
+              <AddMultipleItem />
+            </EquipmentAddWrapper>
+          </Modal>
+        </>
+      )}
     </>
   );
 }
