@@ -8,6 +8,7 @@ import deptUserList from '../modules/deptUserList';
 import authReducer from '../modules/authSlice';
 import sseSlice from '../modules/sseSlice';
 import sseAlertList from '../modules/sseAlertList';
+import userInfo from '../modules/userInfoSlice';
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     authReducer,
     sseSlice,
     sseAlertList,
+    userInfo,
   },
 });
 
