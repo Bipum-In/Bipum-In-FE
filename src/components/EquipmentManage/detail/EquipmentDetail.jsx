@@ -24,13 +24,7 @@ import DetailInfoRequester from './DetailInfoRequester';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export default function EquipmentDetail({
-  isAdmin,
-  category,
-  largeCategory,
-  detailId,
-  isClose,
-}) {
+export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
@@ -83,7 +77,10 @@ export default function EquipmentDetail({
   const handleEdit = () => {
     const { partnersId, userId, deptId } = getDetail.supplyDetail;
     setEdit(true);
-    setPartnersId(partnersId);
+
+    if (partnersId) {
+      setPartnersId(partnersId);
+    }
 
     if (userId) {
       setUserId(userId);
