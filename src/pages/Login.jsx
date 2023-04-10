@@ -47,7 +47,6 @@ export default function Login() {
       axios
         .post(`/api/user/login/google?code=${code}&urlType=${currentUrl}`)
         .then(res => {
-          console.log(res.data.data);
           const userInfo = res.data.data;
           const { checkUser } = userInfo;
           const encryptedUserInfo = encrypt(userInfo); // 암호화

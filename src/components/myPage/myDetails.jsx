@@ -120,7 +120,6 @@ export default function MyDetails({ getUserInfo }) {
 
   const onChangeimge = e => {
     const img = e.target.files[0];
-    console.log(img);
     setFormImage([img]);
     setPreviewImage(img);
     setUserImg('');

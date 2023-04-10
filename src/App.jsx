@@ -11,7 +11,6 @@ export default function App() {
       hideDefaultLauncher: true,
     });
     window.ChannelIO('onBadgeChanged', count => {
-      console.log('Badge count changed:', count);
       setBadgeCount(count);
     });
     return () => {

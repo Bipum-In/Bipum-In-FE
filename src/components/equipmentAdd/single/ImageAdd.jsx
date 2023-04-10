@@ -16,7 +16,6 @@ export default function ImageAdd({
   onDeleteImage,
   children,
 }) {
-  console.log('preview', preview);
   const { pathname } = useLocation();
   const [isCurrent, setIsCurrent] = useState('');
   const [invalidFile, setInvalidFile] = useState(false);
