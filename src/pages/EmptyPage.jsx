@@ -42,7 +42,7 @@ export default function EmptyPage() {
 const ButtonBox = styled.div`
   ${props => props.theme.FlexRow};
   position: absolute;
-  min-width: 264px;
+  min-width: 16.5rem;
   height: 3.3125rem;
   bottom: 0;
   left: 50%;
@@ -72,7 +72,7 @@ const NotFoundDesc = styled.p`
   margin-top: 0;
   font-weight: 500;
   font-size: 1.125rem;
-  line-height: 27px;
+  line-height: 1.6875rem;
   margin-bottom: 0;
 `;
 

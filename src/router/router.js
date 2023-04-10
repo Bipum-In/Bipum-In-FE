@@ -6,6 +6,8 @@ import Layout from 'layout/Layout';
 import Rending from 'pages/Rending';
 import Singup from 'pages/Singup';
 import Login from 'pages/Login';
+import EmptyPage from 'pages/EmptyPage';
+import MyPage from '../pages/MyPage';
 
 import AdminDashBoard from 'pages/admin/AdminDashBoard';
 import Management from 'pages/admin/Management';
@@ -15,7 +17,6 @@ import RequestStatus from 'pages/admin/RequestStatus';
 
 import UserDashBoard from 'pages/user/UserDashBoard';
 import UserRequest from 'pages/user/UserRequest';
-import EmptyPage from 'pages/EmptyPage';
 import UserStockView from 'pages/user/UserStockView';
 
 const router = createBrowserRouter([
@@ -78,6 +79,10 @@ const router = createBrowserRouter([
           {
             path: ROUTER.PATH.USER.STOCK_VIEW,
             element: <UserStockView />,
+          },
+          {
+            path: ROUTER.PATH.MYPAGE,
+            element: <MyPage />,
           },
         ],
       },

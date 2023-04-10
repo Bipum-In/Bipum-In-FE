@@ -49,8 +49,6 @@ export default function UserDashBoard() {
     }
   };
 
-  console.log('getCommonSupplyDtos s->', getCommonSupplyDtos);
-
   return (
     <>
       {isDashboardError && <div>에러 발생</div>}

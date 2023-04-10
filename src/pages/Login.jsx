@@ -86,8 +86,8 @@ export default function Login() {
       encrypt({
         ...saveUserInfo,
         checkUser: true,
-        deptName: departmentName,
-        empName,
+        // deptName: departmentName,
+        // empName,
       })
     );
 
