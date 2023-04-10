@@ -55,7 +55,6 @@ export default function ManageCategory({
   const deleteModalClose = () => setDeleteModal(false);
 
   const handleSubmit = name => {
-    console.log(newCategory, activeCategory);
     axios
       .post(`/api/category/`, {
         largeCategory: STRING.CATEGORY[activeCategory],
