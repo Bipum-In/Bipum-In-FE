@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Button from 'elements/Button';
 import { styles } from '../common/commonStyled';
@@ -33,7 +33,15 @@ export default function UserEquipmentRequest({
     supply: '선택',
     useType: '선택',
   });
-  const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
+
+  const isDisabled =
+    type === 'SUPPLY'
+      ? !messageValue || !smallCategory || !useType
+      : !messageValue ||
+        !smallCategory ||
+        !supplyId ||
+        !formImage.length ||
+        !useType;
 
   useEffect(() => {
     initData();
@@ -220,11 +228,6 @@ export default function UserEquipmentRequest({
       });
   };
 
-  const isDisabled =
-    type === 'SUPPLY'
-      ? !messageValue || !smallCategory || !useType
-      : !messageValue || !smallCategory || !supplyId || !formImage || !useType;
-
   return (
     <>
       {category && (
@@ -252,7 +255,7 @@ export default function UserEquipmentRequest({
                     <SelectCategoryList
                       category={[
                         type === 'SUPPLY'
-                          ? parseLargeCategory
+                          ? largeCategory
                           : notSupplyLargeCategory,
                         smallCategory,
                       ]}

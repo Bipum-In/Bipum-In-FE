@@ -2,18 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { FormatDateToKoShort } from 'utils/formatDate';
-export default function StockViewList({ requestData, onClickDetail }) {
+
+export default function StockViewList({ pageRef, requestData, onClickDetail }) {
   const { content } = requestData;
 
   return (
     <StockWrapper>
-      <CardContainer>
-        {content.length === 0 && (
-          <div>현재 비품의 재고가 존재하지 않습니다.</div>
-        )}
+      {content.length === 0 && (
+        <EmptyContainer>현재 비품의 재고가 존재하지 않습니다.</EmptyContainer>
+      )}
+      <CardContainer ref={pageRef} contentLenght={content.length}>
         {content.map(item => (
           <Card
-            key={uuidv4()}
+            key={item.supplyId}
             onClick={() => {
               onClickDetail(item.supplyId);
             }}
@@ -33,13 +34,32 @@ export default function StockViewList({ requestData, onClickDetail }) {
 }
 
 const StockWrapper = styled.section`
-  padding: 0 5.3125rem;
+  height: 33rem;
+  padding: 0.8rem 5.3125rem;
+  @media (max-width: 92.5rem) {
+    overflow: hidden auto;
+  }
+`;
+
+const EmptyContainer = styled.div`
+  display: flex;
+  ${props => props.theme.FlexCenter}
+  width: 100%;
+  height: 100%;
 `;
 
 const CardContainer = styled.div`
-  display: grid;
+  display: ${props => (props.contentLenght ? 'grid' : 'flex')};
   grid-template-columns: repeat(4, 1fr);
   gap: 1.5rem;
+
+  @media (max-width: 92.5rem) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 66.875rem) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 `;
 
 const Card = styled.div`

@@ -74,6 +74,7 @@ export default function DetailRepairHistory({ detail }) {
 }
 
 const DetailRepairHistoryContainer = styled.div`
+  max-width: 25.3125rem;
   width: 100%;
   height: 17.5rem;
   margin: 1.6875rem 0;
@@ -90,7 +91,6 @@ const DetailRepairHistoryContainer = styled.div`
 
 const DetailRepairHistoryHeader = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   height: 2.5rem;
   color: white;
@@ -101,16 +101,22 @@ const DetailRepairHistoryHeader = styled.div`
   padding: 0 2rem;
   gap: 2rem;
 
+  span {
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
   span:nth-child(1) {
-    min-width: 4.875rem;
+    max-width: 4.875rem;
   }
 
   span:nth-child(2) {
-    min-width: 6.25rem;
+    max-width: 6.25rem;
   }
 
   span:nth-child(3) {
-    min-width: 6.25rem;
+    max-width: 6.25rem;
   }
 `;
 

@@ -215,7 +215,7 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
               preview={preview}
               onChangeImage={handleChangeimge}
             />
-            <div>
+            <DetailContentContainer>
               <DetailInfoContainer>
                 <DetailInfo>
                   <DetailInfoProduct edit={edit} detail={getDetail} />
@@ -236,7 +236,7 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
                 <DetailUseHistory detail={getDetail} />
                 <DetailRepairHistory detail={getDetail} />
               </History>
-            </div>
+            </DetailContentContainer>
           </DetailBodyContainer>
         </DetailWrapper>
       )}
@@ -245,25 +245,57 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
 }
 
 const DetailWrapper = styled.main`
-  ${props => props.theme.flexCol}
   padding: 0 6.375rem;
 `;
 
 const DetailBodyContainer = styled.section`
   display: flex;
+  height: 40rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  @media (max-width: 86.25rem) {
+    flex-direction: column;
+    align-items: center;
+
+    div:first-child {
+      margin: 0;
+    }
+  }
 `;
 
 const DetailInfoContainer = styled.div`
   display: flex;
 `;
 
+const DetailContentContainer = styled.article`
+  width: 100%;
+
+  @media (max-width: 86.25rem) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin: 3rem 0;
+  }
+`;
+
 const DetailInfo = styled.div`
   display: flex;
   border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
   gap: 2.875rem;
+
+  @media (max-width: 106.25rem) {
+    flex-direction: column;
+  }
 `;
 
 const History = styled.div`
   display: flex;
   gap: 3.125rem;
+
+  @media (max-width: 106.25rem) {
+    flex-direction: column;
+    margin-top: 2rem;
+  }
 `;

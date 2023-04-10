@@ -7,6 +7,7 @@ import { getCategoryList } from 'redux/modules/equipmentStatus';
 import useSetStateChange from 'hooks/useSetStateChange';
 import UserEquipmentRequest from 'components/userRequest/UserEquipmentRequest';
 import { initRequestData } from 'redux/modules/requestStatus';
+import STRING from 'constants/string';
 
 export default function UserRequest() {
   const dispatch = useDispatch();
@@ -14,6 +15,9 @@ export default function UserRequest() {
   const { menu, menuType } = useSelector(
     state => state.requestStatus.requestData
   );
+  const largeCategory = Object.values(STRING.CATEGORY_ENG).map(value => {
+    return { name: value };
+  });
 
   const deleteAllMenu = useRef(
     menu
@@ -50,7 +54,7 @@ export default function UserRequest() {
             <UserEquipmentRequest
               type={type}
               category={getCategory.category}
-              largeCategory={getCategory.largeCategory}
+              largeCategory={largeCategory}
             />
           </RequestComponentsContainer>
         </RequestWrapper>

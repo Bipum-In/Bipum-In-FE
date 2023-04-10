@@ -138,6 +138,32 @@ const RequestShowBody = styled.div`
           }
         }
       `}
+
+      ${props =>
+      props.pathname === '/request-list' &&
+      css`
+        td:nth-child(3),
+        th:nth-child(3) {
+          @media (max-width: 91.25rem) {
+            min-width: 14rem;
+            width: 14rem;
+          }
+        }
+
+        td:nth-child(4),
+        th:nth-child(4) {
+          @media (max-width: 83.75rem) {
+            display: none;
+          }
+        }
+
+        td:nth-child(5),
+        th:nth-child(5) {
+          @media (max-width: 57.5rem) {
+            display: none;
+          }
+        }
+      `}
   }
 
   td {
