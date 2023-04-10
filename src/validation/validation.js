@@ -26,6 +26,17 @@ const Valid = {
 
 function validRoopExcelSheet(sheetNames, excel) {
   const result = [];
+  const flatExcel = excel
+    .map(sheet => sheet.filter((_, index) => index))
+    .flat();
+  const parseEmptyColumn = flatExcel.filter(
+    column => new Set(column).size !== 1
+  );
+
+  if (parseEmptyColumn.length < 2) {
+    result.push(`2개 이상의 column을 등록해야 합니다.`);
+    return result;
+  }
 
   sheetNames.forEach((sheetName, index) => {
     const errorArray = validExcelSheet(excel[index]);
@@ -50,6 +61,7 @@ function validExcelSheet(excel) {
 
   const parseEmptyColumn = excel.filter(column => new Set(column).size !== 1);
   const rowLength = parseEmptyColumn.length;
+
   while (columnCnt < columnArray.length) {
     const checkRow = parseEmptyColumn[rowCnt][columnCnt];
 
