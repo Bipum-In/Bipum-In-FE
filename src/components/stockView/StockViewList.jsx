@@ -2,13 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { FormatDateToKoShort } from 'utils/formatDate';
-
 export default function StockViewList({ requestData, onClickDetail }) {
   const { content } = requestData;
 
   return (
     <StockWrapper>
       <CardContainer>
+        {content.length === 0 && (
+          <div>현재 비품의 재고가 존재하지 않습니다.</div>
+        )}
         {content.map(item => (
           <Card
             key={uuidv4()}
