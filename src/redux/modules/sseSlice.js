@@ -17,10 +17,12 @@ const sseSlice = createSlice({
     setAdminSSE: (state, action) => {
       state.sseAdminData = [action.payload, ...state.sseAdminData];
       state.sseAdminLength = state.sseAdminData.length;
+      localStorage.setItem('sseAdminLength', state.sseAdminLength);
     },
     setUserSSE: (state, action) => {
       state.sseUserData = [action.payload, ...state.sseUserData];
       state.sseUserLength = state.sseUserData.length;
+      localStorage.setItem('sseUserLength', state.sseUserLength);
     },
     deleteAdminSseData: (state, action) => {
       state.sseAdminData = [...state.sseAdminData].filter(
