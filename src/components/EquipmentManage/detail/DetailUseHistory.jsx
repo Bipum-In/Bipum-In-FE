@@ -80,6 +80,10 @@ const DetailUseHistoryContainer = styled.div`
     font-weight: 500;
     font-size: 13px;
   }
+
+  @media (max-width: 106.25rem) {
+    width: 25.3125rem;
+  }
 `;
 
 const DetailUseHistoryHeader = styled.div`
