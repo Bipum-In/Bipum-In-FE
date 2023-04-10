@@ -352,12 +352,28 @@ const AddEquipmentArticle = styled.form`
   width: 100%;
   padding: 4.5rem 8.75rem;
   justify-content: center;
+
+  @media (max-width: 103.75rem) {
+    display: block;
+    overflow-y: scroll;
+  }
 `;
 
 const EquipmentDetailContainer = styled.div`
   ${props => props.theme.FlexRow};
-  justify-content: space-between;
+  justify-content: center;
   min-height: 30.625rem;
+
+  @media (max-width: 103.75rem) {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+
+    & > div {
+      background-color: transparent;
+      padding-bottom: 3rem;
+    }
+  }
 `;
 
 const EquipmentLeftContainer = styled.div`
@@ -369,7 +385,7 @@ const Hr = styled.div`
   height: 100%;
   width: 0.0625rem;
   background-color: ${props => props.theme.color.grey.brandColor2};
-  margin: 0 2.5rem;
+  margin: 0 3rem;
 `;
 
 const SubminPostContainer = styled.div`

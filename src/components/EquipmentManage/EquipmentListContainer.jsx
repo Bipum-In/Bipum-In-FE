@@ -40,8 +40,9 @@ export default function EquipmentListContainer({
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
-  const categoryOutsideRef = useOutsideClick(() =>
-    setCategoryList(state => ({ ...state, show: false }))
+  const categoryOutsideRef = useOutsideClick(
+    () => setCategoryList(state => ({ ...state, show: false })),
+    categoryList.show
   );
 
   useEffect(() => {
