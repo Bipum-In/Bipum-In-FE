@@ -1,5 +1,9 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import MyDetails from 'components/myPage/myDetails';
 
 export default function MyPage() {
-  return <div>MyPage</div>;
+  const { getUserInfo } = useSelector(state => state.userInfo.userInfoList);
+
+  return <>{getUserInfo && <MyDetails getUserInfo={getUserInfo} />}</>;
 }

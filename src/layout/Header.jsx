@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,12 +29,10 @@ import { removeCookie } from 'utils/cookie';
 
 import SSE from 'api/sse';
 import { setAdminSSE, setUserSSE } from 'redux/modules/sseSlice';
+import { userInfoSlice } from '../redux/modules/userInfoSlice';
 
 export default function Header() {
   const [logoutModal, setLogoutModal] = useModalState();
-  const handleModalShow = () => setLogoutModal();
-  const handleModalClose = () => setLogoutModal(false);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const dropDownRef = useOutsideClick(() => setIsDropdownVisible(false));
@@ -42,18 +40,44 @@ export default function Header() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
 
-  const { empName, deptName, image, isAdmin, userRole } =
-    getEncryptionStorage();
+  const { isAdmin, userRole } = getEncryptionStorage();
 
   const { sseAdminLength, sseUserLength } = useSelector(
     state => state.sseSlice
   );
+  const { getUserInfo } = useSelector(state => state.userInfo.userInfoList);
+  const { empName, deptName, image } = getUserInfo || {};
+
+  useEffect(() => {
+    const url = `${process.env.REACT_APP_SERVER_URL}/api/subscribe`;
+    const sse = new SSE(url, 20);
+
+    sse.onMessage(event => {
+      const checkJSON = event.data.split(' ')[0];
+      const data = checkJSON !== 'EventStream' && JSON.parse(event.data);
+      data && data.acceptResult && dispatch(setUserSSE(data));
+      data && !data.acceptResult && dispatch(setAdminSSE(data));
+    });
+
+    sse.onError(error => {
+      console.log(error);
+    });
+
+    dispatch(userInfoSlice());
+
+    return () => {
+      sse.close();
+    };
+  }, [dispatch]);
+
+  const handleModalShow = () => setLogoutModal();
+  const handleModalClose = () => setLogoutModal(false);
 
   const headerData = [
     {
       icon: <Useinfo />,
       text: STRING.HEADER_DROPDOWN.USERINFO,
-      path: '',
+      path: ROUTER.PATH.MYPAGE,
     },
     {
       icon: <Rotate />,
@@ -61,7 +85,7 @@ export default function Header() {
         ? STRING.HEADER_DROPDOWN.USERMODE
         : STRING.HEADER_DROPDOWN.ADMINMODE,
       onclick: () => {
-        updateEncryptionStorage('isAdmin', !isAdmin);
+        updateEncryptionStorage({ isAdmin: !isAdmin });
         navigate(
           isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
         );
@@ -88,31 +112,6 @@ export default function Header() {
     Storage.clearLocalStorage();
     navigate('/');
   };
-
-  useEffect(() => {
-    const url = `${process.env.REACT_APP_SERVER_URL}/api/subscribe`;
-    const sse = new SSE(url, 20);
-
-    sse.onOpen(event => {
-      console.log('open', event);
-    });
-
-    sse.onMessage(event => {
-      const checkJSON = event.data.split(' ')[0];
-      const data = checkJSON !== 'EventStream' && JSON.parse(event.data);
-      data && data.acceptResult && dispatch(setUserSSE(data));
-      data && !data.acceptResult && dispatch(setAdminSSE(data));
-    });
-
-    sse.onError(error => {
-      console.log(error);
-    });
-
-    return () => {
-      sse.close();
-      console.log('close');
-    };
-  }, []);
 
   return (
     <HeaderWrapper>
