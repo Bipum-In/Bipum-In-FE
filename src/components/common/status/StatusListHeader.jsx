@@ -90,6 +90,17 @@ const SearchContainer = styled.div`
     font-size: 1rem;
     padding: 0.5rem 0.5rem 0.5rem 0;
   }
+
+  @media (max-width: 64.5625rem) {
+    width: 15rem;
+
+    input::-webkit-input-placeholder {
+      color: transparent;
+    }
+    input:-ms-input-placeholder {
+      color: transparent;
+    }
+  }
 `;
 
 const SearchIconContainer = styled.div`
@@ -115,8 +126,8 @@ const Select = styled.select`
   padding: 0.3125rem 0.625rem;
   padding-right: 1.5625rem;
 
-  @media (max-width: 900px) {
-    color: transparent; // Hide the text color
+  @media (max-width: 64.5625rem) {
+    color: transparent;
   }
 `;
 
@@ -128,7 +139,7 @@ const SelectWrapper = styled.div`
   height: 2.5rem;
   margin-right: 1.9375rem;
 
-  @media (max-width: 900px) {
+  @media (max-width: 64.5625rem) {
     justify-content: end;
     width: 2rem;
     color: transparent;
