@@ -66,14 +66,14 @@ const EquipmentDetailWrapper = styled.div`
   height: 80vh;
   width: 80vw;
 `;
+
 const EquipmentAddWrapper = styled.div`
   ${props => props.theme.flexCol}
+  justify-content: center;
+  align-items: center;
+  min-width: 52.5rem;
   width: 80vw;
   height: 80vh;
-  section {
-    width: 100%;
-    padding: 48px;
-  }
 
   form {
     height: 100%;
