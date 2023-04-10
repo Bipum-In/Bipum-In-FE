@@ -113,9 +113,6 @@ path{
   font-family: 'Pretendard';
 }
 
-
-
-
 *:focus {
     outline: none !important;
   }
@@ -128,6 +125,10 @@ code {
 #root{
   width: 100vw;
   height: 100vh;
+}
+
+html {
+  font-size: 15px
 }
 `;
 
