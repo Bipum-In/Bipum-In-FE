@@ -1,11 +1,10 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import styled, { useTheme } from 'styled-components';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
 import { CategoryItemLeft } from 'components/layout/CategoryItem';
 
-// import { ReactComponent as Logo } from 'styles/logo.svg';
 import Logo from 'components/layout/Logo';
 
 import { ReactComponent as Eye } from 'styles/sidebarIcon/eye.svg';
@@ -13,7 +12,6 @@ import { ReactComponent as Add } from 'styles/sidebarIcon/add.svg';
 import { ReactComponent as Dashboard } from 'styles/sidebarIcon/dashboard.svg';
 import { ReactComponent as List } from 'styles/sidebarIcon/list.svg';
 import { ReactComponent as Management } from 'styles/sidebarIcon/management.svg';
-
 import { ReactComponent as Setting } from 'styles/headerIcon/setting.svg';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 
@@ -41,12 +39,22 @@ export default function Sidebar({
 
   const handleClickCategory = e => {
     const name = e.target.innerText;
+    if (!name) {
+      const targetPath = isAdmin
+        ? ROUTER.PATH.ADMIN.DASHBOARD
+        : ROUTER.PATH.USER.DASHBOARD;
+      navigate(targetPath);
+    }
     const routerPathArray = Object.values(ROUTER.PATH[isAdminStr]);
-    Object.values(STRING.SIDEBAR[isAdminStr]).forEach((sidebarName, index) => {
-      if (sidebarName === name) {
-        navigate(routerPathArray[index]);
-      }
-    });
+    const index = Object.values(STRING.SIDEBAR[isAdminStr]).findIndex(
+      sidebarName => sidebarName === name
+    );
+    if (index >= 0) {
+      navigate(routerPathArray[index]);
+    }
+    if (desktopSize) {
+      setIsSidebarHidden(true);
+    }
   };
 
   const desktopSize = window.innerWidth <= theme.screen.desktopSize;
@@ -54,26 +62,11 @@ export default function Sidebar({
   const dropDownRef = useOutsideClick(() => {
     setIsSidebarHidden(true);
   }, desktopSize);
-
-  const handleSidebarToggle = () => setIsSidebarHidden(prev => !prev);
-
-  const handleSidebarClick = e => {
-    const name = e.target.innerText;
-    console.log(name);
-    if (desktopSize) {
-      setIsSidebarHidden(true);
-    }
-    const targetPath = isAdmin
-      ? ROUTER.PATH.ADMIN.DASHBOARD
-      : ROUTER.PATH.USER.DASHBOARD;
-    !name && navigate(targetPath);
-  };
-
   return (
     <>
       <SidebarWrapper isHidden={isSidebarHidden} ref={dropDownRef}>
-        {isMobileView && <ArrowDownIcon onClick={handleSidebarToggle} />}
-        <LogoContainer onClick={handleSidebarClick}>
+        {isMobileView && <ArrowDownIcon onClick={handleClickCategory} />}
+        <LogoContainer onClick={handleClickCategory}>
           <Logo />
         </LogoContainer>
         <SidebarCategoryContainer>
@@ -92,7 +85,7 @@ export default function Sidebar({
             )
           )}
           {isAdmin && (
-            <ManageManetContainer onClick={handleSidebarClick}>
+            <ManageManetContainer onClick={handleClickCategory}>
               <CategoryItemLeft
                 category={`${
                   ARRAY.SIDEBAR.SIDEBAR_STYLE(pathname, isAdmin)[4]
