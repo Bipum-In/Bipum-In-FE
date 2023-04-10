@@ -7,8 +7,16 @@ import { ReactComponent as PrevIcon } from 'styles/commonIcon/leftBtn.svg';
 import { ReactComponent as DeleteIcon } from 'styles/commonIcon/deleteImg.svg';
 import emptyImg from 'styles/commonIcon/emptyImg.svg';
 
+import { ImgDetailModal } from 'elements/ImgModal';
+
 export default function ModalImgCarousel({ editMode, image, onDelete }) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const handleClick = index => {
+    setSelectedImage(index);
+    setShowModal(true);
+  };
   const rightRem = 1;
   const slideCount = 3;
   const slideWidth = 8.25 + rightRem;
@@ -48,11 +56,22 @@ export default function ModalImgCarousel({ editMode, image, onDelete }) {
         {image.length > 0 ? (
           image.map((img, index) => (
             <ImgContainer key={uuidv4()} rem={rightRem}>
-              <ImgArr src={img} alt="equipmentImg" />
+              <ImgArr
+                src={img}
+                alt="equipmentImg"
+                onClick={() => handleClick(index)}
+              />
               {editMode && (
                 <DeleteImgContainer onClick={() => onDelete(index)}>
                   <DeleteIcon />
                 </DeleteImgContainer>
+              )}
+              {selectedImage !== null && (
+                <ImgDetailModal
+                  src={image[selectedImage]}
+                  isOpen={showModal}
+                  onClose={() => setShowModal(false)}
+                />
               )}
             </ImgContainer>
           ))
