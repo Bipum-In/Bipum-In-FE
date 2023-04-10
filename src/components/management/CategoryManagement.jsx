@@ -45,12 +45,10 @@ export default function CategoryManagement({
 
   const handleDeleteCategory = categoryId => {
     axios.delete(`/api/category/${categoryId}`).then(response => {
-      if (response.status === 200) {
-        const filteredList = categoryList.list.filter(
-          item => item.categoryId !== categoryId
-        );
-        setCategoryList({ show: true, list: filteredList });
-      }
+      const filteredList = categoryList.list.filter(
+        item => item.categoryId !== categoryId
+      );
+      setCategoryList({ show: true, list: filteredList });
     });
   };
 
