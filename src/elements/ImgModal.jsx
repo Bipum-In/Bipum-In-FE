@@ -56,7 +56,7 @@ const Backdrop = styled(motion.div)`
   width: 100%;
   height: 100%;
   background-color: black;
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(0.3125rem);
 `;
 
 const CloseContainer = styled.div`
@@ -69,8 +69,8 @@ const CloseContainer = styled.div`
   transition: all 0.2s ease-in-out;
   cursor: pointer;
   svg {
-    width: 30px;
-    height: 30px;
+    width: 1.875rem;
+    height: 1.875rem;
   }
 `;
 

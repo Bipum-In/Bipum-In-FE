@@ -102,13 +102,13 @@ const ModalContainer = styled(motion.div)`
 const CloseContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-top: 25px;
+  margin-top: 1.5625rem;
   align-items: center;
   gap: 1rem;
 
   button {
-    width: 80px;
-    height: 40px;
+    width: 5rem;
+    height: 2.5rem;
   }
 `;
 

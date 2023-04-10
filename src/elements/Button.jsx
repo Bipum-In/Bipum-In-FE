@@ -43,7 +43,7 @@ const ButtonWrapper = styled.button`
     props.mainBtn === 'border' &&
     css`
       color: ${props => props.theme.color.blue.brandColor6};
-      border: 1px solid ${props => props.theme.color.blue.brandColor6};
+      border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
     `}
 
 ${props =>
