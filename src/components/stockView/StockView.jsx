@@ -24,13 +24,13 @@ export default function StockView({ category: { category, largeCategory } }) {
   const [categoryId, setCategoryId] = useState(categoryIdData);
   const [categoryTitle, setCategoryTitle] = useState(categoryNameData);
   const [showDetailModal, setShowDetailModal] = useState({
-    show: false,
+    detailShow: false,
     id: null,
   });
 
   const [categoryList, setCategoryList] = useState({
     show: false,
-    list: [category],
+    list: category,
   });
 
   const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
@@ -84,7 +84,7 @@ export default function StockView({ category: { category, largeCategory } }) {
   };
 
   const handleDetailModal = id => {
-    setShowDetailModal(state => ({ show: !state.show, id: id }));
+    setShowDetailModal(state => ({ detailShow: !state.detailShow, id: id }));
   };
 
   const getCategoryList = (name, categoryList) => {
@@ -123,7 +123,7 @@ export default function StockView({ category: { category, largeCategory } }) {
           </EquipmentListWrapper>
           <EquipmentModal
             isAdmin={isAdmin}
-            showDetailModal={showDetailModal}
+            showModal={showDetailModal}
             handleDetailModal={handleDetailModal}
             category={category}
             largeCategory={largeCategory}

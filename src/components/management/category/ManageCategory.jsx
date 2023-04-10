@@ -17,6 +17,7 @@ import Axios from 'api/axios';
 import {
   setSmallCategoryData,
   editCategoryData,
+  getCategoryList,
 } from 'redux/modules/equipmentStatus';
 import ManageSidebar from './ManageSidebar';
 
@@ -61,26 +62,21 @@ export default function ManageCategory({
         categoryName: newCategory,
       })
       .then(() => {
-        dispatch(
-          setSmallCategoryData({
-            largeCategory: activeCategory,
-            categoryName: name,
-          })
-        );
+        dispatch(getCategoryList());
+        setNewCategory('');
+        setAddSmallModal('');
       });
-    setNewCategory('');
-    setAddSmallModal('');
   };
 
-  const handleEditSubmit = () => {
-    axios
+  const handleEditSubmit = async () => {
+    await axios
       .put(`/api/category/${editingCategoryId}`, {
         categoryId: editingCategoryId,
         largeCategory: STRING.CATEGORY[activeCategory],
         categoryName: editingCategoryName,
       })
       .then(() => {
-        setEditingCategoryId(null);
+        dispatch(getCategoryList());
         dispatch(
           editCategoryData({
             largeCategory: activeCategory,
@@ -89,6 +85,8 @@ export default function ManageCategory({
           })
         );
       });
+
+    setEditingCategoryId(null);
   };
 
   return (
@@ -229,6 +227,8 @@ const Test = styled.div`
     height: 1.9375rem;
     min-height: 1.25rem;
     color: ${props => props.theme.color.blue.brandColor6};
+    font-weight: 600;
+    font-size: 1rem;
   }
 `;
 

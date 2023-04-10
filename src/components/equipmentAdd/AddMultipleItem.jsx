@@ -86,6 +86,7 @@ export default function AddMultipleItem() {
   const handleReadExcel = e => {
     const { files } = e.target;
     const reader = new FileReader();
+
     reader.onload = () => {
       const workBook = XLSX.read(reader.result, {
         type: 'binary',
@@ -100,6 +101,7 @@ export default function AddMultipleItem() {
 
       setExcel({ data: excels, sheetList, sheetName, sheetItem: 0 });
     };
+
     reader.readAsBinaryString(files[0]);
     e.target.value = '';
   };

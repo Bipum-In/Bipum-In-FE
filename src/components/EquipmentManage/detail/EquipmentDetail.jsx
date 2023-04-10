@@ -78,7 +78,7 @@ export default function EquipmentDetail({
           ...res.data.data,
         ])
       );
-  }, [detailId, dispatch]);
+  }, [dispatch]);
 
   const handleEdit = () => {
     const { partnersId, userId, deptId } = getDetail.supplyDetail;
