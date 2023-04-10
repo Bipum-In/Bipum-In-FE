@@ -352,12 +352,28 @@ const AddEquipmentArticle = styled.form`
   width: 100%;
   padding: 4.5rem 8.75rem;
   justify-content: center;
+
+  @media (max-width: 103.75rem) {
+    display: block;
+    overflow-y: scroll;
+  }
 `;
 
 const EquipmentDetailContainer = styled.div`
   ${props => props.theme.FlexRow};
   justify-content: space-between;
   min-height: 30.625rem;
+
+  @media (max-width: 103.75rem) {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+
+    & > div {
+      background-color: transparent;
+      padding-bottom: 3rem;
+    }
+  }
 `;
 
 const EquipmentLeftContainer = styled.div`
