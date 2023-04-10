@@ -6,10 +6,7 @@ import { ImgDetailModal } from 'elements/ImgModal';
 export default function DetailImage({ detail, preview, onChangeImage }) {
   const { image } = detail.supplyDetail;
   const [showModal, setShowModal] = useState(false);
-
-  const handleClick = () => {
-    setShowModal(prev => !prev);
-  };
+  const handleClick = () => setShowModal(prev => !prev);
 
   return (
     <>
