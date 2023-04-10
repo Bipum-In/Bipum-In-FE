@@ -5,7 +5,7 @@ export default function UserInfo({
   deptName,
   empName,
   username,
-  phoneNum,
+  phone,
   isAdmin,
 }) {
   return (
@@ -33,7 +33,7 @@ export default function UserInfo({
             ) : (
               <>
                 <span>전화번호</span>
-                {phoneNum}
+                {phone}
               </>
             )}
           </UserName>

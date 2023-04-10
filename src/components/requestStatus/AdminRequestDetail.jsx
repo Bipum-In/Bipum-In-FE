@@ -29,6 +29,7 @@ export default function RequestDetail({ isClose, detail }) {
     deptName,
     empName,
     username,
+    phone,
     comment,
     createdAt,
     modifiedAt,
@@ -113,6 +114,7 @@ export default function RequestDetail({ isClose, detail }) {
                 deptName={deptName}
                 username={username}
                 userImage={userImage}
+                phone={phone}
               />
               <UserContent
                 content={content}
