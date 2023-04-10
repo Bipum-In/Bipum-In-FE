@@ -33,12 +33,14 @@ export default function MultipleCardList({
                 onDeleteRow={onDeleteRow}
               />
             </ColumnDeleteWrapper>
-            {ARRAY.MULTIPLE_HEADER.map((header, headerIndex) => (
-              <ItemContainer key={uuidv4()}>
-                <span>{ARRAY.MULTIPLE_HEADER[headerIndex]}</span>
-                {column[header] || '-'}
-              </ItemContainer>
-            ))}
+            <ItemWrapper>
+              {ARRAY.MULTIPLE_HEADER.map((header, headerIndex) => (
+                <ItemContainer key={uuidv4()}>
+                  <span>{ARRAY.MULTIPLE_HEADER[headerIndex]}</span>
+                  <span>{column[header] || '-'}</span>
+                </ItemContainer>
+              ))}
+            </ItemWrapper>
           </CardContainer>
         ))}
     </MultipleBodyContainer>
@@ -47,6 +49,7 @@ export default function MultipleCardList({
 
 const MultipleBodyContainer = styled.section`
   ${props => props.theme.FlexRow}
+  justify-content: flex-start;
   flex-wrap: wrap;
   width: 100%;
   height: calc(50.5344rem - 6.7112rem);
@@ -72,8 +75,10 @@ const CardContainer = styled.div`
     opacity: 1;
   }
 
-  @media (max-width: 60.7813rem) {
-    max-width: 30rem;
+  @media (max-width: 60.8331rem) {
+    display: flex;
+    max-width: 38rem;
+    margin: 1rem;
   }
 `;
 
@@ -92,19 +97,14 @@ const ImageWrapper = styled.article`
     width: 12rem;
     height: 12rem;
   }
+`;
 
-  @media (max-width: 60.7813rem) {
-    img {
-      width: 20rem;
-      height: 20rem;
-    }
-
-    svg,
-    label {
-      width: 20rem;
-      height: 20rem;
-    }
-  }
+const ItemWrapper = styled.article`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 100%;
+  margin-left: 1rem;
 `;
 
 const ColumnDeleteWrapper = styled.article`
@@ -115,12 +115,22 @@ const ColumnDeleteWrapper = styled.article`
   opacity: 0;
 `;
 
-const ItemContainer = styled.article`
-  span {
-    display: inline-block;
-    width: 5rem;
+const ItemContainer = styled.div`
+  display: grid;
+  grid-template-columns: minmax(5rem, auto) 1fr;
+  align-items: center;
+  margin-right: 1rem;
+  gap: 0.5rem;
+
+  span:first-child {
     font-size: 1rem;
     font-weight: 600;
     margin: 0.5rem 0;
+  }
+
+  span:last-child {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
