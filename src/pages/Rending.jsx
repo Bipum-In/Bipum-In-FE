@@ -14,7 +14,7 @@ import { getEncryptionStorage } from 'utils/encryptionStorage';
 
 import ROUTER from 'constants/routerConst';
 import QUERY from 'constants/query';
-import { useThrottle } from 'hooks/useThrottle';
+import useThrottleCallBack from 'hooks/useThrottleCallback';
 
 export default function Rending() {
   const [pageIndex, setPageIndex] = useState(0);
@@ -23,21 +23,14 @@ export default function Rending() {
   const navigate = useNavigate();
   const isLoggedIn = useIsLoggedIn();
 
-  const throttledHandleScroll = useThrottle(e => handleScroll(e), 200);
+  useThrottleCallBack(handleScroll, 200, 'wheel');
 
   const currentUrl =
     document.location.href === 'http://localhost:3000/'
       ? process.env.REACT_APP_LOCALHOST_URL
       : process.env.REACT_APP_S3_URL;
 
-  useEffect(() => {
-    window.addEventListener('wheel', throttledHandleScroll, { passive: false });
-    return () => {
-      window.removeEventListener('wheel', throttledHandleScroll);
-    };
-  }, [throttledHandleScroll]);
-
-  const handleScroll = e => {
+  function handleScroll(e) {
     if (e.deltaY > 0) {
       setPageIndex(prevIndex =>
         prevIndex < totalPages - 1 ? prevIndex + 1 : prevIndex
@@ -45,7 +38,7 @@ export default function Rending() {
     } else if (e.deltaY < 0) {
       setPageIndex(prevIndex => (prevIndex > 0 ? prevIndex - 1 : prevIndex));
     }
-  };
+  }
 
   const handleGoogleLogin = () => {
     window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${process.env.REACT_APP_GOOGLE_CLIENT_ID}&response_type=code&redirect_uri=${currentUrl}/login/oauth2/code/google&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
