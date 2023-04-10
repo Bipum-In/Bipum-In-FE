@@ -34,6 +34,15 @@ export default function UserEquipmentRequest({
     useType: '선택',
   });
 
+  const isDisabled =
+    type === 'SUPPLY'
+      ? !messageValue || !smallCategory || !useType
+      : !messageValue ||
+        !smallCategory ||
+        !supplyId ||
+        !formImage.length ||
+        !useType;
+
   useEffect(() => {
     initData();
   }, [type]);
@@ -218,11 +227,6 @@ export default function UserEquipmentRequest({
         setSmallCategory(res.data.data);
       });
   };
-
-  const isDisabled =
-    type === 'SUPPLY'
-      ? !messageValue || !smallCategory || !useType
-      : !messageValue || !smallCategory || !supplyId || !formImage || !useType;
 
   return (
     <>
