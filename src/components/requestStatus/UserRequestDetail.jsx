@@ -119,7 +119,6 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
   const editRepair = e => editRequest(e, STRING.REQUEST_TYPES.REPAIR);
   const editReport = e => editRequest(e, STRING.REQUEST_TYPES.REPORT);
 
-  console.log('acceptResult====>', acceptResult);
   return (
     <>
       <DetailContainer>
