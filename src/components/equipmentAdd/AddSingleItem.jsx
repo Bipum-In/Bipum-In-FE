@@ -243,10 +243,10 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
   return (
     <>
       {categoryList && (
-        <AddEquipmentWrapper>
-          <AddEquipmentArticle>
-            <EquipmentDetailContainer>
-              <EquipmentLeftContainer>
+        <styles.AddEquipmentWrapper>
+          <styles.AddEquipmentArticle>
+            <styles.EquipmentDetailContainer>
+              <styles.EquipmentLeftContainer>
                 <styles.TypeBox>
                   <styles.TypeTitle requiredinput="true">
                     비품종류
@@ -268,13 +268,13 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
                     />
                   </styles.SelectCaregoryConteiner>
                   {showCategoryInput && (
-                    <CategoryInputContainer>
+                    <styles.CategoryInputContainer>
                       <Input
                         value={categoryInput}
                         setState={handleChangeCategoryInput}
                         placeholder="직접 입력하세요."
                       />
-                    </CategoryInputContainer>
+                    </styles.CategoryInputContainer>
                   )}
                 </styles.TypeBox>
                 <EquipmentInput
@@ -285,8 +285,8 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
 
                 <styles.TypeBox>
                   <styles.TypeTitle>협력업체</styles.TypeTitle>
-                  <PartnerCompany>
-                    <SelectBox>
+                  <styles.PartnerCompany>
+                    <styles.SelectBox>
                       <SelectCategory
                         category={partners}
                         optionNullName={optionNullList.partners}
@@ -295,12 +295,12 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
                         optionName={'partnersName'}
                         onChangeCategory={handleChangePartners}
                       />
-                    </SelectBox>
-                  </PartnerCompany>
+                    </styles.SelectBox>
+                  </styles.PartnerCompany>
                 </styles.TypeBox>
                 <styles.TypeBox>
                   <styles.TypeTitle>사용자</styles.TypeTitle>
-                  <SelectBox>
+                  <styles.SelectBox>
                     <SelectUser
                       category={[dept, user]}
                       optionNullName={[
@@ -312,106 +312,24 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
                       optionName={['deptName', 'empName']}
                       onChangeCategory={[handleChangeDept, handleChangeUser]}
                     />
-                  </SelectBox>
+                  </styles.SelectBox>
                 </styles.TypeBox>
-              </EquipmentLeftContainer>
-              <Hr />
+              </styles.EquipmentLeftContainer>
+              <styles.Hr />
               <ImageAdd
                 preview={preview}
                 onChangeimge={onChangeimge}
                 onDeleteImage={handleDeleteImage}
               />
-            </EquipmentDetailContainer>
-            <SubminPostContainer>
+            </styles.EquipmentDetailContainer>
+            <styles.SubminPostContainer>
               <Button submit post onClick={setFormData} disabled={isDisabled}>
                 비품 등록 완료
               </Button>
-            </SubminPostContainer>
-          </AddEquipmentArticle>
-        </AddEquipmentWrapper>
+            </styles.SubminPostContainer>
+          </styles.AddEquipmentArticle>
+        </styles.AddEquipmentWrapper>
       )}
     </>
   );
 }
-
-const AddEquipmentWrapper = styled.section`
-  ${props => props.theme.wh100};
-  height: 73.9vh;
-  display: flex;
-  overflow: hidden;
-  position: relative;
-`;
-
-const PartnerCompany = styled.div`
-  min-width: 5.8125rem;
-  height: 2.5rem;
-`;
-
-const AddEquipmentArticle = styled.form`
-  ${props => props.theme.FlexCol};
-  width: 100%;
-  padding: 4.5rem 8.75rem;
-  justify-content: center;
-
-  @media (max-width: 103.75rem) {
-    display: block;
-    overflow-y: scroll;
-  }
-`;
-
-const EquipmentDetailContainer = styled.div`
-  ${props => props.theme.FlexRow};
-  justify-content: center;
-  min-height: 30.625rem;
-
-  @media (max-width: 103.75rem) {
-    display: flex;
-    flex-direction: column-reverse;
-    align-items: center;
-
-    & > div {
-      background-color: transparent;
-      padding-bottom: 3rem;
-    }
-  }
-`;
-
-const EquipmentLeftContainer = styled.div`
-  ${props => props.theme.FlexCol};
-  gap: 3.125rem;
-`;
-
-const Hr = styled.div`
-  height: 100%;
-  width: 0.0625rem;
-  background-color: ${props => props.theme.color.grey.brandColor2};
-  margin: 0 3rem;
-`;
-
-const SubminPostContainer = styled.div`
-  ${props => props.theme.FlexRow};
-  ${props => props.theme.FlexCenter};
-  padding-top: 1rem;
-  width: 100%;
-`;
-
-const SelectBox = styled.div`
-  ${props => props.theme.FlexRow};
-  color: ${props => props.theme.color.grey.brandColor7};
-  gap: 0.5rem;
-
-  select {
-    width: auto;
-    border: 1px solid ${props => props.theme.color.grey.brandColor3};
-    background-color: ${props => props.theme.color.grey.brandColor1};
-    margin-right: 0.2rem;
-  }
-
-  path {
-    stroke: ${props => props.theme.color.grey.brandColor7};
-  }
-`;
-
-const CategoryInputContainer = styled.div`
-  width: 8rem;
-`;
