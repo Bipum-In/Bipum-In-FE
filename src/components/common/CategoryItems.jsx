@@ -10,8 +10,8 @@ export default function CategoryItems({
   onClickCategory,
 }) {
   return (
-    <div ref={categoryOutsideRef}>
-      <CategoryItemsWrapper>
+    <>
+      <CategoryItemsWrapper ref={categoryOutsideRef}>
         {getCategory &&
           getCategory.map(item => (
             <CategoryItemContainer key={item.name}>
@@ -39,7 +39,7 @@ export default function CategoryItems({
           </SmallCategoryItemsWrapper>
         </CategoryWrapper>
       )}
-    </div>
+    </>
   );
 }
 
