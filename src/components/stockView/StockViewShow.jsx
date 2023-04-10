@@ -4,6 +4,7 @@ import PaginationList from '../common/PaginationList';
 import StockViewList from './StockViewList';
 
 export default function StockViewShow({
+  pageRef,
   requestData,
   setSelectName,
   page,
@@ -19,8 +20,12 @@ export default function StockViewShow({
         keyword={keyword}
         setKeyword={setKeyword}
       ></StatusListHeader>
-      <StockViewList requestData={requestData} onClickDetail={onClickDetail} />
-      {requestData && (
+      <StockViewList
+        pageRef={pageRef}
+        requestData={requestData}
+        onClickDetail={onClickDetail}
+      />
+      {requestData.content.length !== 0 && (
         <PaginationList
           page={page}
           pageSize={12}

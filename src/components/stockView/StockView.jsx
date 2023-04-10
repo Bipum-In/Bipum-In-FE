@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styled from 'styled-components';
@@ -10,6 +10,7 @@ import EquipmentModal from '../EquipmentManage/EquipmentModal';
 
 import { getEquipmentList } from 'redux/modules/equipmentStatus';
 import { getEncryptionStorage } from '../../utils/encryptionStorage';
+import useOutsideClick from 'hooks/useOutsideClick';
 
 export default function StockView({ category: { category, largeCategory } }) {
   const dispatch = useDispatch();
@@ -27,11 +28,16 @@ export default function StockView({ category: { category, largeCategory } }) {
     detailShow: false,
     id: null,
   });
-
   const [categoryList, setCategoryList] = useState({
     show: false,
     list: category,
   });
+  const pageRef = useRef();
+
+  const categoryOutsideRef = useOutsideClick(
+    () => setCategoryList(state => ({ ...state, show: false })),
+    categoryList.show
+  );
 
   const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
 
@@ -46,6 +52,7 @@ export default function StockView({ category: { category, largeCategory } }) {
         size: 12,
       })
     );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, keyword, categoryId, page]);
 
@@ -77,6 +84,7 @@ export default function StockView({ category: { category, largeCategory } }) {
 
   const handlePage = e => {
     setPage(e);
+    pageRef.current.scrollIntoView({ behavior: 'smooth' });
   };
 
   const handleChangeKeyword = e => {
@@ -107,11 +115,13 @@ export default function StockView({ category: { category, largeCategory } }) {
               <CategoryItems
                 getCategory={menuStyle}
                 getSmallCategory={categoryList}
+                categoryOutsideRef={categoryOutsideRef}
                 onClickMenu={handleClickMenu}
                 onClickCategory={handleClickCategory}
               />
             </CategoryContainer>
             <StockViewShow
+              pageRef={pageRef}
               requestData={getEquipment}
               setSelectName={categoryTitle}
               page={page}
