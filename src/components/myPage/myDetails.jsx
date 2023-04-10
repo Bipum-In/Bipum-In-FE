@@ -1,15 +1,26 @@
 import React, { useEffect, useState } from 'react';
-
-import Axios from 'api/axios';
-import { setUserInfo } from 'redux/modules/userInfoSlice';
-
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { styles } from 'components/common/commonStyled';
+import { ReactComponent as ClearIcon } from 'styles/commonIcon/cancelInput.svg';
+
 import Input from 'elements/Input';
 import Button from 'elements/Button';
+import ROUTER from 'constants/routerConst';
+import QUERY from 'constants/query';
+
+import Axios from 'api/axios';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from 'redux/modules/userInfoSlice';
+
+import alertModal from 'utils/alertModal';
+import { CustomModal } from 'elements/Modal';
+import { useModalState } from 'hooks/useModalState';
+import { removeCookie } from 'utils/cookie';
+import Storage from 'utils/localStorage';
+
 import ImageAdd from 'components/equipmentAdd/single/ImageAdd';
 import SelectCategory from 'components/common/SelectCategory';
-import { useDispatch } from 'react-redux';
+import { styles } from 'components/common/commonStyled';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -21,7 +32,9 @@ export default function MyDetails({ getUserInfo }) {
     image: myImage,
   } = getUserInfo;
 
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [deleteAccountModal, toggleDeleteAccountModal] = useModalState();
   const [departmentList, setDepartmentList] = useState('');
   const [departmentId, setDepartmentId] = useState('');
   const [empName, setEmpName] = useState(myName);
@@ -30,6 +43,8 @@ export default function MyDetails({ getUserInfo }) {
   const [formImage, setFormImage] = useState(null);
   const [userImg, setUserImg] = useState(myImage);
   const [preview, setPreview] = useState([myImage]);
+  const handleEmpNameClear = () => setEmpName('');
+  const handlePhoneClear = () => setPhone('');
 
   useEffect(() => {
     axios.get(`/api/dept`).then(res => {
@@ -64,8 +79,6 @@ export default function MyDetails({ getUserInfo }) {
 
   const handleLoginInfoAdd = () => {
     const formData = new FormData();
-    if (!departmentId || !empName || !phone)
-      return alert('모든 정보를 입력해주세요');
     const stringToNumPrice = phone.replace(/-/g, '');
 
     formData.append('deptId', departmentId);
@@ -87,11 +100,13 @@ export default function MyDetails({ getUserInfo }) {
       })
     );
 
-    axios.put(`/api/user`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
+    axios
+      .put(`/api/user`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then(() => alertModal(true, '정보가 성공적으로 수정되었습니다.', 2));
   };
 
   const parseMyDeptId = (deptList, deptName) => {
@@ -120,80 +135,141 @@ export default function MyDetails({ getUserInfo }) {
   };
 
   const handleDeleteAccount = () => {
-    axios.post(`/api/user/delete`);
+    axios.post(`/api/user/delete`).then(() => {
+      alertModal(false, '회원 탈퇴가 완료되었습니다.', 4);
+      removeCookie(QUERY.COOKIE.COOKIE_NAME);
+      Storage.clearLocalStorage();
+      navigate(ROUTER.PATH.MAIN);
+    });
   };
+
+  const showDeleteAccountModal = () => toggleDeleteAccountModal();
+  const hideDeleteAccountModal = () => toggleDeleteAccountModal(false);
   return (
     <>
-      <SetUserInputContainer>
-        <styles.TypeBox>
-          <styles.TypeTitle requiredinput="true">부서선택</styles.TypeTitle>
-          <styles.SelectCaregoryConteiner>
-            <SelectCategory
-              category={departmentList}
-              optionName={'deptName'}
-              optionNullName={departmentName}
-              optionKey={'deptName'}
-              optionValueKey={'deptId'}
-              onChangeCategory={handleChangeDepartmentId}
-            />
-          </styles.SelectCaregoryConteiner>
-        </styles.TypeBox>
+      <AddComponentsContainer>
+        <styles.AddEquipmentWrapper mypage>
+          <styles.AddEquipmentArticle>
+            <styles.EquipmentDetailContainer>
+              <styles.EquipmentLeftContainer>
+                {/* 이름 */}
+                <styles.TypeBox>
+                  <MyTypeTitle requiredinput="true">이름</MyTypeTitle>
+                  <MypageInput
+                    type="text"
+                    value={empName}
+                    setState={handleEmpNameBlur}
+                    placeholder="이름을 입력해주세요"
+                    maxLength="15"
+                  />
 
-        <styles.TypeBox>
-          <styles.TypeTitle requiredinput="true">사용자 이름</styles.TypeTitle>
-          <Input
-            type="text"
-            value={empName}
-            setState={handleEmpNameBlur}
-            placeholder="이름을 입력해주세요"
-          />
-        </styles.TypeBox>
+                  <ClearInputBtn onClick={handleEmpNameClear} />
+                </styles.TypeBox>
 
-        <styles.TypeBox>
-          <styles.TypeTitle requiredinput="true">핸드폰 번호</styles.TypeTitle>
-          <Input
-            value={phone}
-            setState={handleChangePhone}
-            placeholder="번호를 입력해 주세요"
-            maxLength="11"
-          />
-        </styles.TypeBox>
-      </SetUserInputContainer>
-      <ImageAdd
-        preview={preview}
-        onChangeimge={onChangeimge}
-        onDeleteImage={handleDeleteImage}
-      />
-      <SetUserSubmitContainer>
-        <Button
-          submit
-          onClick={handleLoginInfoAdd}
-          // disabled={empName.length < 2}
-        >
-          완료
-        </Button>
-
-        <Button submit onClick={handleDeleteAccount}>
-          회원 탈퇴
-        </Button>
-      </SetUserSubmitContainer>
+                {/* 전화번호 */}
+                <styles.TypeBox>
+                  <MyTypeTitle requiredinput="true">전화번호</MyTypeTitle>
+                  <MypageInput
+                    value={phone}
+                    setState={handleChangePhone}
+                    placeholder="번호를 입력해 주세요"
+                    maxLength="11"
+                  />
+                  <ClearInputBtn onClick={handlePhoneClear} />
+                </styles.TypeBox>
+                {/* 비품종류 */}
+                <styles.TypeBox>
+                  <MyTypeTitle requiredinput="true">부서</MyTypeTitle>
+                  <styles.PartnerCompany>
+                    <styles.SelectBox>
+                      <SelectCategory
+                        category={departmentList}
+                        optionName={'deptName'}
+                        optionNullName={departmentName}
+                        optionKey={'deptName'}
+                        optionValueKey={'deptId'}
+                        onChangeCategory={handleChangeDepartmentId}
+                      />
+                    </styles.SelectBox>
+                  </styles.PartnerCompany>
+                </styles.TypeBox>
+              </styles.EquipmentLeftContainer>
+              <styles.Hr />
+              <ImageAdd
+                preview={preview}
+                onChangeimge={onChangeimge}
+                onDeleteImage={handleDeleteImage}
+              />
+            </styles.EquipmentDetailContainer>
+            <styles.SubminPostContainer>
+              <Button type="button" cancel onClick={showDeleteAccountModal}>
+                회원 탈퇴
+              </Button>
+              <Button
+                type="button"
+                submit
+                onClick={handleLoginInfoAdd}
+                disabled={
+                  !departmentId || empName?.length < 2 || phone?.length < 11
+                }
+              >
+                저장
+              </Button>
+            </styles.SubminPostContainer>
+          </styles.AddEquipmentArticle>
+        </styles.AddEquipmentWrapper>
+      </AddComponentsContainer>
+      <CustomModal
+        isOpen={deleteAccountModal}
+        onClose={hideDeleteAccountModal}
+        submit={handleDeleteAccount}
+        text={'회원 탈퇴'}
+      >
+        <WarningMessageContainer>
+          <span>정말 탈퇴하시겠습니까?</span>
+          <span>탈퇴 후에는 복구할 수 없습니다.</span>
+        </WarningMessageContainer>
+      </CustomModal>
     </>
   );
 }
 
-const SetUserInputContainer = styled.div`
-  ${props => props.theme.FlexCol};
-  align-items: flex-start;
-  margin-top: auto;
-  gap: 2.5rem;
-  padding-bottom: 4.5625rem;
+const AddComponentsContainer = styled.main`
+  ${props => props.theme.FlexRow};
+  width: 100%;
+  height: calc(100vh - 12.8125rem);
+  background-color: white;
+  box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
+  border-radius: 0.4628rem;
 `;
 
-const SetUserSubmitContainer = styled.div`
-  ${props => props.theme.FlexRow};
-  ${props => props.theme.FlexCenter};
-  > button {
-    width: 5.25rem;
-    font-weight: bold;
+const MypageInput = styled(Input)`
+  width: fit-content;
+  height: 2.5rem;
+  background: ${props => props.theme.color.grey.brandColor1};
+  border-radius: 0.5rem;
+`;
+
+const MyTypeTitle = styled(styles.TypeTitle)`
+  width: 4.375rem;
+  margin-right: 2rem;
+`;
+
+const WarningMessageContainer = styled.div`
+  ${props => props.theme.FlexCol};
+  span:last-child {
+    padding-top: 0.5rem;
+    color: ${props => props.theme.color.reject};
+  }
+`;
+
+const ClearInputBtn = styled(ClearIcon)`
+  position: absolute;
+  right: 1rem;
+  cursor: pointer;
+  transition: opacity 0.1s ease-in;
+  opacity: 0;
+  path {
+    stroke: ${props => props.theme.color.grey.brandColor7};
   }
 `;

@@ -106,4 +106,5 @@ const Img = styled.img`
   max-height: 8.25rem;
   border-radius: 50%;
   margin-right: 2.25rem;
+  object-fit: cover;
 `;

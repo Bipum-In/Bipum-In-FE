@@ -38,6 +38,7 @@ const RendingLeftContainer = styled.div`
   align-items: flex-start;
   margin-right: 4rem;
   color: ${props => props.theme.color.blue.brandColor6};
+  z-index: 1;
 `;
 
 const RendingRightContainer = styled.div`
@@ -47,6 +48,11 @@ const RendingRightContainer = styled.div`
   background: url(${props => props.bg}) no-repeat center center/contain;
   width: 44.6875rem;
   height: 44.375rem;
+  @media (max-width: 87.5rem) {
+    position: absolute;
+    opacity: 0.4;
+    filter: blur(0.625rem);
+  }
 `;
 const Description = styled.span`
   font-size: 3rem;

@@ -71,7 +71,6 @@ const Select = styled.select`
   padding: 0.5rem;
   padding-right: 2rem;
   font-weight: 600;
-  font-size: 1rem;
   line-height: 1.3125rem;
   cursor: pointer;
 

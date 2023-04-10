@@ -16,6 +16,7 @@ export default function ImageAdd({
   onDeleteImage,
   children,
 }) {
+  console.log('preview', preview);
   const { pathname } = useLocation();
   const [isCurrent, setIsCurrent] = useState('');
   const [invalidFile, setInvalidFile] = useState(false);
@@ -58,7 +59,7 @@ export default function ImageAdd({
     <ImageWrapper>
       {children}
       <ImageContainer
-        preview={preview}
+        preview={preview.length > 0}
         onDragOver={handleDragOver}
         onDragEnter={handleDragEnterOrDrop}
         onDragLeave={handleDragLeave}

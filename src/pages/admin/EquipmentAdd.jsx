@@ -53,13 +53,13 @@ const EquipmentWrapper = styled.div`
 `;
 const AddBtnContainer = styled.div`
   ${props => props.theme.FlexRow};
-
   justify-content: flex-start;
   gap: 0.5375rem;
 `;
 const AddComponentsContainer = styled.main`
   ${props => props.theme.FlexRow};
-  ${props => props.theme.wh100};
+  width: 100%;
+  height: calc(100vh - 16.6875rem);
   background-color: white;
   box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
   border-radius: 0.4628rem;

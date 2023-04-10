@@ -16,7 +16,7 @@ export default function RendingDots({ pageIndex, totalPages, setPageIndex }) {
 }
 const DotsContainer = styled.div`
   position: fixed;
-  right: 1rem;
+  right: 5rem;
   top: 50%;
   transform: translateY(-50%);
   display: flex;

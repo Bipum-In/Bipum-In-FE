@@ -12,6 +12,7 @@ import UserInfo from './detail/UserInfo';
 import UserPutButton from './ userDetail/UserPutButton';
 import RequestImgDetail from './detail/RequestImgDetail';
 import UserRequestItem from './ userDetail/UserRequestItem';
+import { ImgDetailModal } from 'elements/ImgModal';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -38,6 +39,8 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
   const [newContent, setNewContent] = useState(content);
   const [formImage, setFormformImage] = useState(null);
   const [serverImg, setServerImg] = useState(imageList);
+  const [showModal, setShowModal] = useState(false);
+  const handleClick = () => setShowModal(prev => !prev);
 
   const data = {
     requestType: '',
@@ -189,7 +192,17 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
                           <TypeDetailTitle>{allocatedModel}</TypeDetailTitle>
                         </ItemContainer>
                       </RequestDetailWrapper>
-                      <AllocatedImg src={allocatedImage} alt=""></AllocatedImg>
+                      <AllocatedImg
+                        src={allocatedImage}
+                        alt=""
+                        onClick={handleClick}
+                      />
+
+                      <ImgDetailModal
+                        src={allocatedImage}
+                        isOpen={showModal}
+                        onClose={handleClick}
+                      />
                       <Hr />
                     </>
                   )}
@@ -269,6 +282,7 @@ const AllocatedImg = styled.img`
   min-width: 8.25rem;
   min-height: 8.25rem;
   max-height: 8.25rem;
+  object-fit: cover;
 `;
 // TODO: AdminRequestDetail이랑 스타일 중복
 const DetailContainer = styled.main`
