@@ -24,27 +24,19 @@ import { styles } from 'components/common/commonStyled';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export default function MyDetails({ getUserInfo }) {
-  const {
-    empName: myName,
-    phone: myPhone,
-    deptName: myDeptName,
-    image: myImage,
-  } = getUserInfo;
-
+export default function MyDetails() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [deleteAccountModal, toggleDeleteAccountModal] = useModalState();
   const [departmentList, setDepartmentList] = useState('');
   const [departmentId, setDepartmentId] = useState('');
-  const [empName, setEmpName] = useState(myName);
-  const [phone, setPhone] = useState(myPhone);
-  const [departmentName, setDepartmentName] = useState(myDeptName);
+  const [empName, setEmpName] = useState('myName');
+  const [phone, setPhone] = useState('myPhone');
+  const [departmentName, setDepartmentName] = useState('myDeptName');
   const [formImage, setFormImage] = useState(null);
-  const [userImg, setUserImg] = useState(myImage);
-  const [preview, setPreview] = useState([myImage]);
-  const handleEmpNameClear = () => setEmpName('');
-  const handlePhoneClear = () => setPhone('');
+  const [userImg, setUserImg] = useState('myImage');
+  const [preview, setPreview] = useState(['myImage']);
+  const [checkedAlarm, setCheckedAlarm] = useState(false);
 
   useEffect(() => {
     axios.get(`/api/dept`).then(res => {
@@ -84,7 +76,7 @@ export default function MyDetails({ getUserInfo }) {
     formData.append('deptId', departmentId);
     formData.append('empName', empName);
     formData.append('phone', stringToNumPrice);
-    formData.append('alarm', true);
+    formData.append('alarm', checkedAlarm);
 
     if (formImage) {
       formData.append('multipartFile', formImage[0]);
@@ -113,7 +105,7 @@ export default function MyDetails({ getUserInfo }) {
     return deptList.filter(dept => dept.deptName === deptName)[0].deptId;
   };
 
-  const handleDeleteImage = e => {
+  const handleDeleteImage = () => {
     setFormImage([]);
     setPreview([]);
   };
@@ -124,6 +116,8 @@ export default function MyDetails({ getUserInfo }) {
     setPreviewImage(img);
     setUserImg('');
   };
+
+  const handleChange = event => setCheckedAlarm(event.target.checked);
 
   const setPreviewImage = img => {
     const reader = new FileReader();
@@ -142,6 +136,8 @@ export default function MyDetails({ getUserInfo }) {
     });
   };
 
+  const handleEmpNameClear = () => setEmpName('');
+  const handlePhoneClear = () => setPhone('');
   const showDeleteAccountModal = () => toggleDeleteAccountModal();
   const hideDeleteAccountModal = () => toggleDeleteAccountModal(false);
   return (
@@ -175,6 +171,14 @@ export default function MyDetails({ getUserInfo }) {
                     maxLength="11"
                   />
                   <ClearInputBtn onClick={handlePhoneClear} />
+                </styles.TypeBox>
+                <styles.TypeBox>
+                  <MyTypeTitle requiredinput="true">알람</MyTypeTitle>
+                  <CheckBox
+                    role="switch"
+                    checked={checkedAlarm}
+                    onChange={handleChange}
+                  />
                 </styles.TypeBox>
                 {/* 비품종류 */}
                 <styles.TypeBox>
@@ -270,5 +274,37 @@ const ClearInputBtn = styled(ClearIcon)`
   opacity: 0;
   path {
     stroke: ${props => props.theme.color.grey.brandColor7};
+  }
+`;
+
+const CheckBox = styled.input.attrs({ type: 'checkbox' })`
+  appearance: none;
+  position: relative;
+  border-radius: 3rem;
+  height: 2rem !important;
+  width: 4rem;
+  background: ${props => props.theme.color.grey.brandColor2} !important;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:before {
+    content: '';
+    position: absolute;
+    left: 0.4rem;
+    width: 1.5em;
+    height: 1.5em;
+    top: 50%;
+    border-radius: 50%;
+    transform: translateY(-50%);
+    background-color: white;
+    transition: left 0.15s linear;
+  }
+
+  &:checked {
+    background: ${props => props.theme.color.blue.brandColor6} !important;
+  }
+
+  &:checked::before {
+    left: 2.6em;
   }
 `;
