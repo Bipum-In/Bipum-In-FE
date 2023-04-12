@@ -11,10 +11,15 @@ export default function SelectCategory({
   optionKey,
   optionValueKey,
   onChangeCategory,
+  disabled,
 }) {
   return (
     <SelectWrapper>
-      <Select onChange={onChangeCategory} value={optionNullName}>
+      <Select
+        onChange={onChangeCategory}
+        value={optionNullName}
+        disabled={disabled}
+      >
         <option value={optionNullName} disabled hidden>
           {optionNullName}
         </option>

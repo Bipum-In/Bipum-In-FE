@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Button from 'elements/Button';
 import { styles } from '../common/commonStyled';
+
+import Button from 'elements/Button';
 import SelectCategoryList from '../equipmentAdd/single/SelectCategoryList';
 import Axios from 'api/axios';
 import STRING from 'constants/string';
@@ -13,6 +14,8 @@ const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function UserEquipmentRequest({
   type,
+  supplyId: supplyIdProps,
+  supplyName,
   category,
   largeCategory,
 }) {
@@ -34,14 +37,29 @@ export default function UserEquipmentRequest({
     useType: '선택',
   });
 
-  const isDisabled =
-    type === 'SUPPLY'
-      ? !messageValue || !smallCategory || !useType
-      : !messageValue ||
+  const isDisabled = () => {
+    let isDisabled = null;
+
+    if (!supplyName && type === 'SUPPLY') {
+      isDisabled = !messageValue || !smallCategory || !useType;
+      return isDisabled;
+    }
+
+    if (!supplyName && type !== 'SUPPLY') {
+      isDisabled =
+        !messageValue ||
         !smallCategory ||
         !supplyId ||
         !formImage.length ||
         !useType;
+      return isDisabled;
+    }
+
+    if (supplyName) {
+      isDisabled = !messageValue || !formImage.length;
+      return isDisabled;
+    }
+  };
 
   useEffect(() => {
     initData();
@@ -126,7 +144,8 @@ export default function UserEquipmentRequest({
     return getCategory.filter(item => item.largeCategory === name);
   };
 
-  const setFormData = () => {
+  const setFormData = e => {
+    e.preventDefault();
     const formData = new FormData();
 
     formData.append('requestType', type);
@@ -136,7 +155,7 @@ export default function UserEquipmentRequest({
     if (type === 'SUPPLY') {
       formData.append('categoryId', categoryId);
     } else {
-      formData.append('supplyId', supplyId);
+      formData.append('supplyId', supplyIdProps || supplyId);
     }
 
     if (formImage) {
@@ -231,10 +250,10 @@ export default function UserEquipmentRequest({
   return (
     <>
       {category && (
-        <AddEquipmentWrapper>
-          <AddEquipmentArticle>
-            <EquipmentDetailContainer>
-              <EquipmentLeftContainer>
+        <styles.AddEquipmentWrapper>
+          <styles.AddEquipmentArticle>
+            <styles.EquipmentDetailContainer>
+              <styles.EquipmentLeftContainer>
                 <styles.TypeBox>
                   <styles.TypeTitle requiredinput="true">
                     사용처
@@ -244,6 +263,7 @@ export default function UserEquipmentRequest({
                       category={Object.keys(STRING.USE_TYPE)}
                       optionNullName={optionNullList.useType}
                       onChangeCategory={handleChangeUseType}
+                      disabled={supplyName}
                     />
                   </styles.SelectCaregoryConteiner>
                 </styles.TypeBox>
@@ -273,6 +293,7 @@ export default function UserEquipmentRequest({
                         handleChangeLargeCategory,
                         handleChangeSmallCategory,
                       ]}
+                      disabled={supplyName}
                     />
                   </styles.SelectCaregoryConteiner>
                 </styles.TypeBox>
@@ -285,7 +306,7 @@ export default function UserEquipmentRequest({
                       <SelectCategory
                         category={mySupply}
                         optionName={'modelName'}
-                        optionNullName={optionNullList.supply}
+                        optionNullName={supplyName || optionNullList.supply}
                         optionKey={'supplyId'}
                         optionValueKey={'supplyId'}
                         onChangeCategory={handleChangeMySupply}
@@ -297,14 +318,14 @@ export default function UserEquipmentRequest({
                   <styles.TypeTitle requiredinput="true">
                     {type === 'SUPPLY' ? '요청 메시지' : '요청 사유'}
                   </styles.TypeTitle>
-                  <TextArea
+                  <styles.TextArea
                     value={messageValue}
                     onChange={e => setMessageValue(e.target.value)}
                   />
                 </styles.TypeBox>
-              </EquipmentLeftContainer>
+              </styles.EquipmentLeftContainer>
               {type !== 'SUPPLY' && (
-                <ImageContainer>
+                <styles.ImageContainer>
                   <ImageAdd
                     preview={preview}
                     onChangeimge={handleChangeimge}
@@ -312,82 +333,17 @@ export default function UserEquipmentRequest({
                   >
                     <styles.TypeTitle>사진 첨부</styles.TypeTitle>
                   </ImageAdd>
-                </ImageContainer>
+                </styles.ImageContainer>
               )}
-            </EquipmentDetailContainer>
-            <SubminPostContainer>
-              <Button submit post onClick={setFormData} disabled={isDisabled}>
+            </styles.EquipmentDetailContainer>
+            <styles.SubminPostContainer>
+              <Button submit post onClick={setFormData} disabled={isDisabled()}>
                 {STRING.REQUEST_NAME[type]} 완료
               </Button>
-            </SubminPostContainer>
-          </AddEquipmentArticle>
-        </AddEquipmentWrapper>
+            </styles.SubminPostContainer>
+          </styles.AddEquipmentArticle>
+        </styles.AddEquipmentWrapper>
       )}
     </>
   );
 }
-
-const ImageContainer = styled.div`
-  margin-left: 8.8125rem;
-  height: 29.75rem;
-
-  section {
-  }
-
-  label:first-child {
-    height: 23.75rem;
-    background-color: white;
-    border: 1px solid ${props => props.theme.color.grey.brandColor2};
-    border-radius: 0.5rem;
-    margin: 1.0625rem 0;
-  }
-
-  img {
-    width: 23.75rem;
-    height: 17.8125rem;
-  }
-`;
-
-const TextArea = styled.textarea`
-  padding: 1rem;
-  width: 30.875rem;
-  height: 10rem;
-  background: ${props => props.theme.color.grey.brandColor1};
-  border-radius: 0.25rem;
-  border: none;
-  resize: none;
-  margin: auto;
-`;
-
-const EquipmentLeftContainer = styled.div`
-  ${props => props.theme.FlexCol};
-  gap: 3.125rem;
-`;
-
-const EquipmentDetailContainer = styled.div`
-  ${props => props.theme.FlexRow};
-  justify-content: center;
-  min-height: 30.625rem;
-`;
-
-const AddEquipmentArticle = styled.article`
-  ${props => props.theme.FlexCol};
-  width: 100%;
-  padding: 4.5rem 8.75rem;
-  justify-content: center;
-`;
-
-const AddEquipmentWrapper = styled.section`
-  ${props => props.theme.wh100};
-  height: 73.9vh;
-  display: flex;
-  overflow: hidden;
-  position: relative;
-`;
-
-const SubminPostContainer = styled.div`
-  ${props => props.theme.FlexRow};
-  ${props => props.theme.FlexCenter};
-  padding-top: 1rem;
-  width: 100%;
-`;

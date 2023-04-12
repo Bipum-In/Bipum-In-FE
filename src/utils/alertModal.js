@@ -21,10 +21,11 @@ export default function alertModal(completeStyle, message, timeToSecond) {
   }
 }
 
-export function alertModalButton(completeStyle, message) {
+export function alertModalButton(completeStyle, message, callback) {
   const handleUnmountButton = () => {
     root.unmount(root);
     root = null;
+    callback();
   };
 
   if (!root) {

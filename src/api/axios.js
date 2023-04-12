@@ -1,7 +1,9 @@
 import axios from 'axios';
 import QUERY from 'constants/query';
-import alertModal from 'utils/alertModal';
+import alertModal, { alertModalButton } from 'utils/alertModal';
 import { getCookie, setCookie } from 'utils/cookie';
+import logout from 'utils/logout';
+import mem from 'mem';
 
 let message = null;
 
@@ -16,18 +18,24 @@ export default class Axios {
         const [data, completeMessage] = request.data;
         message = completeMessage;
         return { ...request, data };
-      } else {
-        return request;
       }
+
+      return request;
     });
 
     this.instance.interceptors.response.use(
       response => {
-        const token = response.headers.authorization;
+        const accessToken = response.headers.authorization;
+        const refreshToken = response.headers.refresh;
 
-        if (token) {
-          const [, parseToken] = token.split(' ');
+        if (accessToken) {
+          const [, parseToken] = accessToken.split(' ');
           setCookie(QUERY.COOKIE.COOKIE_NAME, parseToken);
+        }
+
+        if (refreshToken) {
+          const [, parseToken] = refreshToken.split(' ');
+          setCookie(QUERY.COOKIE.REFRESH_NAME, parseToken);
         }
 
         if (response.data.statusCode === 200) {
@@ -37,8 +45,21 @@ export default class Axios {
 
         return response;
       },
-      error => {
-        const errorMessage = error.response.data.errorMessage;
+      async error => {
+        const {
+          config,
+          response: { status },
+        } = error;
+
+        if (status === 303 && !config.retry) {
+          const accessToken = await this.#getAccessToken();
+          config.retry = true;
+          config.headers.Authorization = `${accessToken}`;
+
+          return this.instance(config);
+        }
+
+        const errorMessage = error.response?.data?.errorMessage;
         errorMessage && alertModal(false, errorMessage, 2);
         message = null;
         return Promise.reject(error);
@@ -85,4 +106,44 @@ export default class Axios {
     };
     return this.instance.put(`${path}`, payload, option);
   }
+
+  #getAccessToken = mem(
+    async () => {
+      try {
+        const response = await this.instance.post(
+          `/api/user/reissue`, // refresh url
+          '',
+          {
+            headers: {
+              Refresh: `Bearer ${getCookie(QUERY.COOKIE.REFRESH_NAME)}`,
+            },
+          }
+        );
+
+        const accessToken = response.headers.authorization;
+
+        if (accessToken) {
+          const [, parseToken] = accessToken.split(' ');
+          setCookie(QUERY.COOKIE.COOKIE_NAME, parseToken);
+        }
+
+        return accessToken;
+      } catch (refreshError) {
+        const modal = () => {
+          this.post('/api/user/logout');
+          alertModalButton(
+            false,
+            '로그인이 만료되었습니다. 다시 로그인해주세요.',
+            () => {
+              window.location.href = '/';
+            }
+          );
+        };
+
+        logout(modal);
+        return Promise.reject(refreshError);
+      }
+    },
+    { maxAge: 1000 }
+  );
 }
