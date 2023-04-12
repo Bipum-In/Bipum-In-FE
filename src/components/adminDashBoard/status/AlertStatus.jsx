@@ -6,6 +6,7 @@ import { styleds } from './AdminDashBaordStyled';
 import AnchorBtn from '../AnchorBtn';
 import Modal from 'elements/Modal';
 import RequestModal from 'components/requestStatus/RequestModal';
+import alertModal from 'utils/alertModal';
 
 import { formatAgo } from 'utils/formatDate';
 import EmptyAlarm from './EmptyAlarm';
@@ -19,13 +20,21 @@ import Axios from 'api/axios';
 import {
   deleteAdminAlertData,
   deleteUserAlertData,
+  deleteAllUerMsg,
+  deleteAllAdminMsg,
 } from 'redux/modules/sseAlertList';
-import { deleteAdminSseData, deleteUserSseData } from 'redux/modules/sseSlice';
+import {
+  deleteAdminSseData,
+  deleteUserSseData,
+  deleteAllUerSseMsg,
+  deleteAllAdminSseMsg,
+} from 'redux/modules/sseSlice';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function AlertStatus({ isAdmin }) {
   const dispatch = useDispatch();
+  const [isDeleteShow, setDeleteToggle] = useState(false);
   const [modal, setModal] = useState({ show: false, detailId: null });
   const path = isAdmin ? '/admin' : '';
 
@@ -58,6 +67,19 @@ export default function AlertStatus({ isAdmin }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, inView, isAdmin]);
 
+  const allDeleteAlarm = () => {
+    setDeleteToggle(prev => !prev);
+    axios.delete('/api/notification').then(() => {
+      content.length > 0 && alertModal(false, '모든 알림이 삭제되었습니다.', 2);
+      if (isAdmin) {
+        dispatch(deleteAllAdminMsg());
+        dispatch(deleteAllAdminSseMsg());
+      } else {
+        dispatch(deleteAllUerMsg());
+        dispatch(deleteAllUerSseMsg());
+      }
+    });
+  };
   const putRequest = (notificationId, requestId) => {
     axios.put(`/api/main/read/${notificationId}`).then(() => {
       if (isAdmin) {
@@ -75,7 +97,14 @@ export default function AlertStatus({ isAdmin }) {
     <>
       {content && (
         <styleds.EquipmentTopContainer col="true">
-          <AnchorBtn onClick={() => {}}>알림</AnchorBtn>
+          <AnchorBtn
+            isAlert={true}
+            allDeleteAlarm={allDeleteAlarm}
+            isDeleteShow={isDeleteShow}
+            setDeleteToggle={setDeleteToggle}
+          >
+            알림
+          </AnchorBtn>
           <styleds.AlertAndAddContainer>
             {sseData.length === 0 && content.length === 0 && isLastPage && (
               <EmptyAlarm />
