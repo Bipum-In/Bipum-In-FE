@@ -12,6 +12,7 @@ import { encrypt } from '../utils/encryption';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
 import SelectCategory from 'components/common/SelectCategory';
+import useRegexInput from 'hooks/useRegexInput';
 
 import KakaoUserInfo from 'styles/rendingIcon/kakaoUserInfo.svg';
 import { ReactComponent as Logo } from 'styles/logo.svg';
@@ -32,52 +33,74 @@ export default function Login() {
   const [saveUserInfo, setSaveUserInfo] = useState(false);
   const [departmentName, setDepartmentName] = useState('팀을 선택해주세요');
 
+  const pwRegex = /^\d{6}$/;
+  const [inputPw, inputPwHandler, alertPw, checkPwRegex] = useRegexInput(
+    '6자리 숫자로 이루어진 비밀번호를 입력해주세요.',
+    '사용 가능한 비밀번호 입니다.',
+    pwRegex
+  );
+
+  const [inputCheckPw, , alertCheckPw, doubleCheckPwRegex, checkSame] =
+    useRegexInput(
+      '비밀번호가 같지 않습니다. 다시 입력해주세요.',
+      '비밀번호가 같습니다.',
+      pwRegex,
+      inputPw
+    );
+
   useEffect(() => {
     const code = search.split('=')[1];
     const currentUrl = document.location.href.split('//')[1].substring(0, 5);
     const { checkUser, isAdmin } = getEncryptionStorage();
 
-    if (getEncryptionStorage() && checkUser) {
-      const targetPath = ROUTER.PATH[STRING.IS_ADMIN(isAdmin)].DASHBOARD;
+    async function fetchData() {
+      if (getEncryptionStorage() && checkUser) {
+        const targetPath = ROUTER.PATH[STRING.IS_ADMIN(isAdmin)].DASHBOARD;
+        navigate(targetPath);
+        return;
+      }
 
-      navigate(targetPath);
-    }
-
-    if (code && !checkCode) {
-      axios
-        .post(`/api/user/login/google?code=${code}&urlType=${currentUrl}`)
-        .then(res => {
-          const userInfo = res.data.data;
+      if (code && !checkCode) {
+        try {
+          const response = await axios.post(
+            `/api/user/login/google?code=${code}&urlType=${currentUrl}`
+          );
+          const userInfo = response.data.data;
           const { checkUser } = userInfo;
           const encryptedUserInfo = encrypt(userInfo); // 암호화
-
           Storage.setLocalStorageJSON(
             QUERY.STORAGE.LOCAL_NAME,
             encryptedUserInfo
           );
-
           setSaveUserInfo(userInfo);
           setWriteUser(checkUser);
           setCheckCode(true);
-        });
-      axios.get(`/api/dept`).then(res => setDepartmentList(res.data.data));
+
+          const deptResponse = await axios.get(`/api/dept`);
+          setDepartmentList(deptResponse.data.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      if (writeUser) {
+        const targetPath = ROUTER.PATH[STRING.IS_ADMIN(isAdmin)].DASHBOARD;
+        navigate(targetPath);
+      }
     }
-    if (writeUser) {
-      const targetPath = ROUTER.PATH[STRING.IS_ADMIN(isAdmin)].DASHBOARD;
-      navigate(targetPath);
-    }
+
+    fetchData();
   }, [checkCode, navigate, search, writeUser]);
 
   const handleLoginInfoAdd = () => {
     const { ko: deptId } = JSON.parse(departmentId);
     const stringToNumPrice = phone.replace(/-/g, '');
 
-    if (!deptId || !empName || !phone) return alert('모든 정보를 입력해주세요');
-
     const loginadd = {
       departmentId: deptId,
       empName,
       phone: stringToNumPrice,
+      password: inputPw,
     };
 
     Storage.setLocalStorageJSON(
@@ -85,8 +108,6 @@ export default function Login() {
       encrypt({
         ...saveUserInfo,
         checkUser: true,
-        // deptName: departmentName,
-        // empName,
       })
     );
 
@@ -124,7 +145,7 @@ export default function Login() {
             <Logo />
             <SetUserInputContainer>
               <styles.TypeBox>
-                <styles.TypeTitle kakao requiredinput="true">
+                <styles.TypeTitle dept requiredinput="true">
                   부서선택
                 </styles.TypeTitle>
                 <styles.SelectCaregoryConteiner>
@@ -162,13 +183,46 @@ export default function Login() {
                   maxLength="11"
                 />
               </styles.TypeBox>
+              <styles.TypeBox>
+                <styles.TypeTitle requiredinput="true">
+                  비밀번호
+                </styles.TypeTitle>
+                <Input
+                  value={inputPw}
+                  setState={inputPwHandler}
+                  singupInput
+                  type="password"
+                  placeholder="비밀번호를 입력해주세요"
+                  minLength={8}
+                />
+                <LoginAlertSpan isCurrent={checkPwRegex}>
+                  {alertPw}
+                </LoginAlertSpan>
+              </styles.TypeBox>
+
+              <styles.TypeBox>
+                <styles.TypeTitle requiredinput="true">
+                  비밀번호 확인
+                </styles.TypeTitle>
+                <Input
+                  value={inputCheckPw}
+                  setState={checkSame}
+                  singupInput
+                  type="password"
+                  placeholder="비밀번호 확인"
+                  minLength={8}
+                />
+                <LoginAlertSpan isCurrent={doubleCheckPwRegex}>
+                  {alertCheckPw}
+                </LoginAlertSpan>
+              </styles.TypeBox>
             </SetUserInputContainer>
             <SetUserSubmitContainer>
               <Button
                 submit
                 onClick={handleLoginInfoAdd}
                 disabled={
-                  !departmentId ||
+                  !(departmentId && checkPwRegex && doubleCheckPwRegex) ||
                   empName.length < 2 ||
                   phone.replace(/-/g, '').length < 11
                 }
@@ -228,4 +282,15 @@ const SetUserSubmitContainer = styled.div`
     width: 5.25rem;
     font-weight: bold;
   }
+`;
+
+const LoginAlertSpan = styled.div`
+  position: absolute;
+  bottom: -2rem;
+  left: 0.5rem;
+  display: flex;
+  text-align: start;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+  color: ${props => (props.isCurrent ? '#58793e' : 'tomato')};
 `;
