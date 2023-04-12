@@ -12,7 +12,7 @@ import STRING from 'constants/string';
 export default function UserRequest() {
   const dispatch = useDispatch();
   const { getCategory } = useSelector(state => state.equipmentStatus.category);
-  const { menu, menuType } = useSelector(
+  const { menu, menuType, supplyId, supplyName } = useSelector(
     state => state.requestStatus.requestData
   );
   const largeCategory = Object.values(STRING.CATEGORY_ENG).map(value => {
@@ -36,11 +36,12 @@ export default function UserRequest() {
     setType,
     e => {
       clickMenu(e);
+      dispatch(initRequestData());
     }
   );
 
   useEffect(() => {
-    dispatch(initRequestData());
+    dispatch(initRequestData({ supplyId: true, supplyName: true }));
     dispatch(getCategoryList());
   }, [dispatch]);
   return (
@@ -53,6 +54,8 @@ export default function UserRequest() {
           <RequestComponentsContainer>
             <UserEquipmentRequest
               type={type}
+              supplyId={supplyId}
+              supplyName={supplyName}
               category={getCategory.category}
               largeCategory={largeCategory}
             />
