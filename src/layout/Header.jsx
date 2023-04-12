@@ -24,12 +24,15 @@ import {
   getEncryptionStorage,
   updateEncryptionStorage,
 } from 'utils/encryptionStorage';
-import Storage from 'utils/localStorage';
-import { removeCookie } from 'utils/cookie';
 
 import SSE from 'api/sse';
 import { setAdminSSE, setUserSSE } from 'redux/modules/sseSlice';
 import { userInfoSlice } from '../redux/modules/userInfoSlice';
+import Input from 'elements/Input';
+import Axios from 'api/axios';
+import logout from 'utils/logout';
+
+const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function Header() {
   const [logoutModal, setLogoutModal] = useModalState();
@@ -37,6 +40,7 @@ export default function Header() {
   const navigate = useNavigate();
   const dropDownRef = useOutsideClick(() => setIsDropdownVisible(false));
 
+  const [searchValue, setSearchValue] = useState('');
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
 
@@ -70,8 +74,16 @@ export default function Header() {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    if (searchValue === '') return;
+    axios.get('/api/admin/main/search').then(res => {
+      console.log(res.data.data);
+    });
+  }, [dispatch, searchValue]);
+
   const handleModalShow = () => setLogoutModal();
   const handleModalClose = () => setLogoutModal(false);
+  const handleOnChagneSearch = e => setSearchValue(e.target.value);
 
   const headerData = [
     {
@@ -106,11 +118,11 @@ export default function Header() {
     });
   }
 
-  const handleLogoutBtn = e => {
+  const handleLogoutBtn = async e => {
     e.preventDefault();
-    removeCookie(QUERY.COOKIE.COOKIE_NAME);
-    Storage.clearLocalStorage();
-    navigate('/');
+    await axios.post('/api/user/logout').then(() => {
+      logout(navigate('/'));
+    });
   };
 
   return (
@@ -122,7 +134,11 @@ export default function Header() {
             <IconContainer search="true">
               <Search />
             </IconContainer>
-            <SearchInput placeholder="검색어를 입력하세요." />
+            <SearchInput
+              value={searchValue}
+              setState={handleOnChagneSearch}
+              placeholder="검색어를 입력하세요."
+            />
           </SearchContainer>
           {/* 헤더 오른쪽 아이템 */}
           <HeaderRightContainer>
@@ -291,7 +307,7 @@ const AlaramCount = styled.div`
   }
 `;
 
-const SearchInput = styled.input`
+const SearchInput = styled(Input)`
   border: none;
   width: 100%;
   line-height: 1.3125rem;

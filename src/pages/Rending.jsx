@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
@@ -6,15 +6,16 @@ import RendingHeader from 'components/rending/RendingHeader';
 import RendingDots from 'components/rending/RendingDots';
 import RendingScrollPage from 'components/rending/pages/RendingScrollPage';
 
-import { removeCookie } from 'utils/cookie';
-import Storage from 'utils/localStorage';
 import { useIsLoggedIn } from 'hooks/useIsLoggedIn';
 import { logoutSuccess } from 'redux/modules/authSlice';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
 
 import ROUTER from 'constants/routerConst';
-import QUERY from 'constants/query';
 import useThrottleCallBack from 'hooks/useThrottleCallback';
+import Axios from 'api/axios';
+import logout from 'utils/logout';
+
+const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function Rending() {
   const [pageIndex, setPageIndex] = useState(0);
@@ -53,11 +54,14 @@ export default function Rending() {
     navigate(targetPath);
   };
 
-  const handleLogoutBtn = e => {
+  const handleLogoutBtn = async e => {
     e.preventDefault();
-    removeCookie(QUERY.COOKIE.COOKIE_NAME);
-    Storage.clearLocalStorage();
-    dispatch(logoutSuccess());
+
+    try {
+      await axios.post(`/api/user/logout`);
+      dispatch(logoutSuccess());
+      logout(() => navigate(ROUTER.PATH.MAIN));
+    } catch (error) {}
   };
 
   const handleBackToFirstPage = () => setPageIndex(0);
