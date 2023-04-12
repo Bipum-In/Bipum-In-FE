@@ -6,7 +6,11 @@ import { ReactComponent as DeleteImg } from 'styles/commonIcon/deleteImg.svg';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 
-export default function ImageCarousel({ imageUrlList, onDeleteImage }) {
+export default function ImageCarousel({
+  imageUrlList,
+  onDeleteImage,
+  editMode,
+}) {
   const [imgPage, setImgPage] = useState(0);
 
   const handleImgNext = () =>
@@ -27,6 +31,7 @@ export default function ImageCarousel({ imageUrlList, onDeleteImage }) {
   return (
     <ImgContainer>
       <DeleteImgContainer
+        editMode={editMode}
         onClick={() => {
           onDeleteImage(imgPage);
           deleteSetImgPage();
@@ -98,6 +103,7 @@ const DeleteImgContainer = styled.div`
   transform: translate(-1rem, 1rem);
   cursor: pointer;
   z-index: 10000;
+  display: ${props => (props.editMode ? 'flex' : 'none')};
 `;
 
 const Imgs = styled.div`
