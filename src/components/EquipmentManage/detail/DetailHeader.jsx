@@ -14,7 +14,7 @@ export default function DetailHeader({
   handleModalClose,
   handleDispose,
 }) {
-  const { supplyId, isAdmin, isMySupply } = detail.supplyDetail;
+  const { supplyId, isAdmin, isMySupply, category } = detail.supplyDetail;
   return (
     <DetailHeaderContainer>
       {isAdmin ? (
@@ -48,19 +48,25 @@ export default function DetailHeader({
             <>
               <ReportButton
                 value={STRING.REQUEST_TYPES.REPORT}
-                onClick={e => onFromRequest(e)}
+                onClick={e => {
+                  onFromRequest(e, supplyId, category);
+                }}
               >
                 보고서 작성
               </ReportButton>
               <ReturnButton
                 value={STRING.REQUEST_TYPES.RETURN}
-                onClick={e => onFromRequest(e)}
+                onClick={e => {
+                  onFromRequest(e, supplyId, category);
+                }}
               >
                 반납 요청
               </ReturnButton>
               <RepairButton
                 value={STRING.REQUEST_TYPES.REPAIR}
-                onClick={e => onFromRequest(e)}
+                onClick={e => {
+                  onFromRequest(e, supplyId, category);
+                }}
               >
                 수리 요청
               </RepairButton>
