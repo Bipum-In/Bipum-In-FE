@@ -55,10 +55,6 @@ const MultipleBodyContainer = styled.section`
   height: calc(44.6875rem - 6.7112rem);
   overflow-x: hidden;
   overflow-y: scroll;
-
-  &::-webkit-scrollbar-thumb {
-    background-color: ${props => props.theme.color.grey.brandColor2};
-  }
 `;
 
 const CardContainer = styled.div`

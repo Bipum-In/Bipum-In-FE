@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
 import { motion, AnimatePresence } from 'framer-motion';
@@ -61,6 +61,9 @@ export function CustomModal({
       <ModalMsgContainer width={'313px'}>
         {children}
         <CloseContainer>
+          <Button onClick={onClose} mainBtn="border" type="button">
+            취소
+          </Button>
           <Button
             onClick={submit}
             mainBtn="fill"
@@ -68,9 +71,6 @@ export function CustomModal({
             disabled={disabled}
           >
             {text}
-          </Button>
-          <Button onClick={onClose} mainBtn="border" type="button">
-            취소
           </Button>
         </CloseContainer>
       </ModalMsgContainer>

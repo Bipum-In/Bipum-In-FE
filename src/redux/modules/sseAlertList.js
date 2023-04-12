@@ -56,6 +56,18 @@ const sseAlertListSlice = Redux.slice(
         ),
       };
     },
+    deleteAllUerMsg: state => {
+      state.userSseAlert.getUserSseAlert = {
+        ...state.userSseAlert.getUserSseAlert,
+        content: [],
+      };
+    },
+    deleteAllAdminMsg: state => {
+      state.adminSseAlert.getAdminSseAlert = {
+        ...state.adminSseAlert.getAdminSseAlert,
+        content: [],
+      };
+    },
   },
   bulider => {
     Redux.extraReducer(
@@ -89,6 +101,10 @@ const sseAlertListSlice = Redux.slice(
   }
 );
 
-export const { deleteAdminAlertData, deleteUserAlertData } =
-  sseAlertListSlice.actions;
+export const {
+  deleteAdminAlertData,
+  deleteUserAlertData,
+  deleteAllUerMsg,
+  deleteAllAdminMsg,
+} = sseAlertListSlice.actions;
 export default sseAlertListSlice.reducer;

@@ -24,19 +24,40 @@ import { styles } from 'components/common/commonStyled';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export default function MyDetails() {
+export default function MyDetails({ getUserInfo }) {
+  const {
+    empName: myName,
+    phone: myPhone,
+    deptName: myDeptName,
+    image: myImage,
+    alarm: myAlarm,
+  } = getUserInfo;
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const [deleteAccountModal, toggleDeleteAccountModal] = useModalState();
   const [departmentList, setDepartmentList] = useState('');
   const [departmentId, setDepartmentId] = useState('');
-  const [empName, setEmpName] = useState('myName');
-  const [phone, setPhone] = useState('myPhone');
-  const [departmentName, setDepartmentName] = useState('myDeptName');
+  const [empName, setEmpName] = useState(myName);
+  const [phone, setPhone] = useState(myPhone);
+  const [departmentName, setDepartmentName] = useState(myDeptName);
   const [formImage, setFormImage] = useState(null);
-  const [userImg, setUserImg] = useState('myImage');
-  const [preview, setPreview] = useState(['myImage']);
-  const [checkedAlarm, setCheckedAlarm] = useState(false);
+  const [userImg, setUserImg] = useState(myImage);
+  const [preview, setPreview] = useState([myImage]);
+  const [checkedAlarm, setCheckedAlarm] = useState(myAlarm);
+
+  // const [state, setState] = useState({
+  //   departmentList: '',
+  //   departmentId: '',
+  //   empName: myName,
+  //   phone: myPhone,
+  //   departmentName: myDeptName,
+  //   formImage: null,
+  //   userImg: myImage,
+  //   preview: [myImage],
+  //   checkedAlarm: false,
+  // });
 
   useEffect(() => {
     axios.get(`/api/dept`).then(res => {
@@ -140,6 +161,7 @@ export default function MyDetails() {
   const handlePhoneClear = () => setPhone('');
   const showDeleteAccountModal = () => toggleDeleteAccountModal();
   const hideDeleteAccountModal = () => toggleDeleteAccountModal(false);
+  console.log('checkedAlarm', checkedAlarm);
   return (
     <>
       <AddComponentsContainer>
@@ -149,7 +171,7 @@ export default function MyDetails() {
               <styles.EquipmentLeftContainer>
                 {/* 이름 */}
                 <styles.TypeBox>
-                  <MyTypeTitle requiredinput="true">이름</MyTypeTitle>
+                  <MyTypeTitle>이름</MyTypeTitle>
                   <MypageInput
                     type="text"
                     value={empName}
@@ -157,13 +179,11 @@ export default function MyDetails() {
                     placeholder="이름을 입력해주세요"
                     maxLength="15"
                   />
-
                   <ClearInputBtn onClick={handleEmpNameClear} />
                 </styles.TypeBox>
-
                 {/* 전화번호 */}
                 <styles.TypeBox>
-                  <MyTypeTitle requiredinput="true">전화번호</MyTypeTitle>
+                  <MyTypeTitle>전화번호</MyTypeTitle>
                   <MypageInput
                     value={phone}
                     setState={handleChangePhone}
@@ -172,17 +192,9 @@ export default function MyDetails() {
                   />
                   <ClearInputBtn onClick={handlePhoneClear} />
                 </styles.TypeBox>
+                {/* 부서 */}
                 <styles.TypeBox>
-                  <MyTypeTitle requiredinput="true">알람</MyTypeTitle>
-                  <CheckBox
-                    role="switch"
-                    checked={checkedAlarm}
-                    onChange={handleChange}
-                  />
-                </styles.TypeBox>
-                {/* 비품종류 */}
-                <styles.TypeBox>
-                  <MyTypeTitle requiredinput="true">부서</MyTypeTitle>
+                  <MyTypeTitle>부서</MyTypeTitle>
                   <styles.PartnerCompany>
                     <styles.SelectBox>
                       <SelectCategory
@@ -195,6 +207,15 @@ export default function MyDetails() {
                       />
                     </styles.SelectBox>
                   </styles.PartnerCompany>
+                </styles.TypeBox>
+                {/* 알림 */}
+                <styles.TypeBox>
+                  <MyTypeTitle>알림</MyTypeTitle>
+                  <CheckBox
+                    role="switch"
+                    checked={checkedAlarm}
+                    onChange={handleChange}
+                  />
                 </styles.TypeBox>
               </styles.EquipmentLeftContainer>
               <styles.Hr />
@@ -244,6 +265,11 @@ const AddComponentsContainer = styled.main`
   background-color: white;
   box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
   border-radius: 0.4628rem;
+  ${styles.TypeBox} {
+    svg * {
+      stroke: ${props => props.theme.color.grey.brandColor7};
+    }
+  }
 `;
 
 const MypageInput = styled(Input)`
@@ -272,15 +298,12 @@ const ClearInputBtn = styled(ClearIcon)`
   cursor: pointer;
   transition: opacity 0.1s ease-in;
   opacity: 0;
-  path {
-    stroke: ${props => props.theme.color.grey.brandColor7};
-  }
 `;
 
 const CheckBox = styled.input.attrs({ type: 'checkbox' })`
   appearance: none;
   position: relative;
-  border-radius: 3rem;
+  border-radius: 4rem !important;
   height: 2rem !important;
   width: 4rem;
   background: ${props => props.theme.color.grey.brandColor2} !important;

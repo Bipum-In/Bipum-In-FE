@@ -137,6 +137,7 @@ ${props =>
     css`
       padding: 0rem 0.625rem;
       font-size: 1rem;
+      font-weight: 700;
       width: 15rem;
       height: 3.5rem;
       text-align: center;
