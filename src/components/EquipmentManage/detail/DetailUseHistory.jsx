@@ -134,10 +134,6 @@ const InfiniteScroll = styled.div`
     background-clip: padding-box;
     border: 0 solid transparent;
     border-radius: 0.5rem;
-    background-color: ${props => props.theme.color.blue.brandColor6};
-  }
-  ::-webkit-scrollbar-track {
-    background-color: ${props => props.theme.color.blue.brandColor1};
   }
 `;
 

@@ -6,7 +6,6 @@ import { ReactComponent as ClearIcon } from 'styles/commonIcon/cancelInput.svg';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
 import ROUTER from 'constants/routerConst';
-import QUERY from 'constants/query';
 
 import Axios from 'api/axios';
 import { useDispatch } from 'react-redux';
@@ -15,12 +14,11 @@ import { setUserInfo } from 'redux/modules/userInfoSlice';
 import alertModal from 'utils/alertModal';
 import { CustomModal } from 'elements/Modal';
 import { useModalState } from 'hooks/useModalState';
-import { removeCookie } from 'utils/cookie';
-import Storage from 'utils/localStorage';
 
 import ImageAdd from 'components/equipmentAdd/single/ImageAdd';
 import SelectCategory from 'components/common/SelectCategory';
 import { styles } from 'components/common/commonStyled';
+import logout from 'utils/logout';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -140,13 +138,14 @@ export default function EditMyInfo({ getUserInfo }) {
     reader.readAsDataURL(img);
   };
 
-  const handleDeleteAccount = () => {
-    axios.post(`/api/user/delete`).then(() => {
+  const handleDeleteAccount = async () => {
+    try {
+      await axios.post(`/api/user/delete`);
+      await axios.post(`/api/user/logout`);
+
       alertModal(false, '회원 탈퇴가 완료되었습니다.', 4);
-      removeCookie(QUERY.COOKIE.COOKIE_NAME);
-      Storage.clearLocalStorage();
-      navigate(ROUTER.PATH.MAIN);
-    });
+      logout(navigate(ROUTER.PATH.MAIN));
+    } catch (error) {}
   };
 
   const handleEmpNameClear = () => setEmpName('');

@@ -32,7 +32,6 @@ const TypeBox = styled.div`
   ${props => props.theme.FlexRow};
   align-items: center;
   gap: 0.5rem;
-  height: 2.5rem;
   Input {
     height: 2.5rem;
     background: ${props => props.theme.color.grey.brandColor1};
@@ -131,6 +130,26 @@ const CategoryInputContainer = styled.div`
   width: 8rem;
 `;
 
+const ImageContainer = styled.div`
+  margin-left: 8.8125rem;
+
+  @media (max-width: 103.75rem) {
+    margin-left: 0;
+  }
+`;
+
+const TextArea = styled.textarea`
+  width: 30.875rem;
+  height: 10rem;
+  margin: auto;
+  padding: 1rem;
+  padding: 1rem;
+  background: ${props => props.theme.color.grey.brandColor1};
+  border-radius: 0.25rem;
+  border: none;
+  resize: none;
+`;
+
 export const styles = {
   TypeTitle,
   SelectCaregoryConteiner,
@@ -144,4 +163,6 @@ export const styles = {
   SelectBox,
   CategoryInputContainer,
   PartnerCompany,
+  ImageContainer,
+  TextArea,
 };
