@@ -37,35 +37,43 @@ export default function Login() {
     const currentUrl = document.location.href.split('//')[1].substring(0, 5);
     const { checkUser, isAdmin } = getEncryptionStorage();
 
-    if (getEncryptionStorage() && checkUser) {
-      const targetPath = ROUTER.PATH[STRING.IS_ADMIN(isAdmin)].DASHBOARD;
+    async function fetchData() {
+      if (getEncryptionStorage() && checkUser) {
+        const targetPath = ROUTER.PATH[STRING.IS_ADMIN(isAdmin)].DASHBOARD;
+        navigate(targetPath);
+        return;
+      }
 
-      navigate(targetPath);
-    }
-
-    if (code && !checkCode) {
-      axios
-        .post(`/api/user/login/google?code=${code}&urlType=${currentUrl}`)
-        .then(res => {
-          const userInfo = res.data.data;
+      if (code && !checkCode) {
+        try {
+          const response = await axios.post(
+            `/api/user/login/google?code=${code}&urlType=${currentUrl}`
+          );
+          const userInfo = response.data.data;
           const { checkUser } = userInfo;
           const encryptedUserInfo = encrypt(userInfo); // 암호화
-
           Storage.setLocalStorageJSON(
             QUERY.STORAGE.LOCAL_NAME,
             encryptedUserInfo
           );
-
           setSaveUserInfo(userInfo);
           setWriteUser(checkUser);
           setCheckCode(true);
-        });
-      axios.get(`/api/dept`).then(res => setDepartmentList(res.data.data));
+
+          const deptResponse = await axios.get(`/api/dept`);
+          setDepartmentList(deptResponse.data.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+
+      if (writeUser) {
+        const targetPath = ROUTER.PATH[STRING.IS_ADMIN(isAdmin)].DASHBOARD;
+        navigate(targetPath);
+      }
     }
-    if (writeUser) {
-      const targetPath = ROUTER.PATH[STRING.IS_ADMIN(isAdmin)].DASHBOARD;
-      navigate(targetPath);
-    }
+
+    fetchData();
   }, [checkCode, navigate, search, writeUser]);
 
   const handleLoginInfoAdd = () => {
