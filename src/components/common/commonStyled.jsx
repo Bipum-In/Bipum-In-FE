@@ -55,6 +55,8 @@ const AddEquipmentWrapper = styled.section`
 `;
 
 const PartnerCompany = styled.div`
+  ${props => props.theme.FlexRow};
+  align-items: center;
   min-width: 5.8125rem;
   height: 2.5rem;
 `;
