@@ -1,27 +1,22 @@
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useLayoutEffect,
-} from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
-import styled, { useTheme, keyframes, css } from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
 import { ReactComponent as Hamburger } from 'styles/sidebarIcon/hamburger.svg';
 import { ReactComponent as Close } from 'styles/commonIcon/close.svg';
 
 import Header from './Header';
 import Sidebar from './Sidebar';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
+
 import ROUTER from 'constants/routerConst';
+import STRING from 'constants/string';
 
 export default function DashBoardLayout() {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { checkUser } = getEncryptionStorage();
-  const [isSidebarHidden, setIsSidebarHidden] = useState(false);
-  const [isMobileView, setIsMobileView] = useState(false);
-  const theme = useTheme();
-  const desktopSize = theme.screen.desktopSize;
+  const [isSidebarHidden, setIsSidebarHidden] = useState(true);
 
   useEffect(() => {
     if (!checkUser) {
@@ -29,47 +24,52 @@ export default function DashBoardLayout() {
     }
   }, [checkUser, navigate]);
 
-  useEffect(() => {
-    const handleWindowResize = () => {
-      if (window.innerWidth <= desktopSize) {
-        setIsSidebarHidden(true);
-        setIsMobileView(true);
-      } else {
-        setIsSidebarHidden(false);
-        setIsMobileView(false);
-      }
-    };
-    window.addEventListener('resize', handleWindowResize);
-    handleWindowResize();
-    return () => {
-      window.removeEventListener('resize', handleWindowResize);
-    };
-  }, [setIsSidebarHidden, setIsMobileView, desktopSize]);
+  const { isAdmin } = getEncryptionStorage();
+  const isAdminStr = STRING.IS_ADMIN(isAdmin);
 
   const handleSidebarToggle = useCallback(e => {
     e.stopPropagation();
     setIsSidebarHidden(prev => !prev);
   }, []);
 
+  const handleClickCategory = e => {
+    const name = e.target.innerText;
+    if (!name) {
+      const targetPath = isAdmin
+        ? ROUTER.PATH.ADMIN.DASHBOARD
+        : ROUTER.PATH.USER.DASHBOARD;
+      navigate(targetPath);
+    }
+    const routerPathArray = Object.values(ROUTER.PATH[isAdminStr]);
+    const index = Object.values(STRING.SIDEBAR[isAdminStr]).findIndex(
+      sidebarName => sidebarName === name
+    );
+    if (index >= 0) {
+      navigate(routerPathArray[index]);
+    }
+    setIsSidebarHidden(prev => !prev);
+  };
+
   return (
     <>
       {checkUser && (
         <LayoutWrapper>
-          {isMobileView && (
-            <SidebarBtnContainer onClick={handleSidebarToggle}>
-              <AlaramIcon $isHidden={isSidebarHidden} />
-              <ArrowDownIcon $isHidden={isSidebarHidden} />
-            </SidebarBtnContainer>
-          )}
+          <SidebarBtnContainer onClick={handleSidebarToggle}>
+            <HamburgerIcon />
+            <CloseIcon $isHidden={isSidebarHidden} />
+          </SidebarBtnContainer>
 
           <Header
             isSidebarHidden={isSidebarHidden}
             setIsSidebarHidden={setIsSidebarHidden}
-            isMobileView={isMobileView}
           />
           <Sidebar
             isSidebarHidden={isSidebarHidden}
             setIsSidebarHidden={setIsSidebarHidden}
+            handleClickCategory={handleClickCategory}
+            isAdmin={isAdmin}
+            isAdminStr={isAdminStr}
+            pathname={pathname}
           />
           <OutletContainer>
             <Outlet />
@@ -106,6 +106,10 @@ const SidebarBtnContainer = styled.div`
   height: 6.25rem;
   z-index: 1001;
   margin-left: 2rem;
+  @media (max-width: ${props => props.theme.screen.desktopSize}) {
+    transform: ${({ isSidebarVisible }) =>
+      isSidebarVisible ? 'none' : 'block'};
+  }
 `;
 
 const fadeIn = keyframes`
@@ -115,7 +119,7 @@ const fadeIn = keyframes`
   }
   100% {
     opacity: 1;
-    transform: rotate(360deg);
+    transform: rotate(180deg);
   }
 `;
 
@@ -127,8 +131,7 @@ const IconAnimation = condition => css`
   ${props => props.theme.CursorActive};
 `;
 
-const AlaramIcon = styled(Hamburger)`
-  ${IconAnimation($isHidden => $isHidden)}
+const HamburgerIcon = styled(Hamburger)`
   animation: 0.2s linear 0s 1 normal none running crbsY;
   opacity: 1;
   transition: opacity 0.3s linear 0s;
@@ -138,11 +141,15 @@ const AlaramIcon = styled(Hamburger)`
   ${props => props.theme.CursorActive};
 `;
 
-const ArrowDownIcon = styled(Close)`
+const CloseIcon = styled(Close)`
+  display: none;
   position: absolute;
   top: 1rem;
   path {
     stroke: black;
   }
   ${IconAnimation($isHidden => !$isHidden)};
+  @media (max-width: ${props => props.theme.screen.desktop}) {
+    display: block;
+  }
 `;
