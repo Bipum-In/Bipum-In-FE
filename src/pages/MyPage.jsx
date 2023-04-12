@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import MyDetails from 'components/myPage/myDetails';
+import EditMyInfo from 'components/myPage/EditMyInfo';
 import CheckPwPage from 'components/myPage/CheckPwPage';
 
 export default function MyPage() {
@@ -14,7 +14,7 @@ export default function MyPage() {
           {editPage === 'checkPw' ? (
             <CheckPwPage setEditPage={setEditPage} />
           ) : (
-            <MyDetails getUserInfo={getUserInfo} setEditPage={setEditPage} />
+            <EditMyInfo getUserInfo={getUserInfo} setEditPage={setEditPage} />
           )}
         </>
       )}
