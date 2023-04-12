@@ -54,10 +54,6 @@ const MultipleShowList = styled.div`
   height: 57.55vh;
   overflow-x: hidden;
   overflow-y: scroll;
-
-  &::-webkit-scrollbar-thumb {
-    background-color: ${props => props.theme.color.grey.brandColor2};
-  }
 `;
 
 const MultipleShowListTitle = styled.thead`

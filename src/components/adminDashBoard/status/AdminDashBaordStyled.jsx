@@ -24,9 +24,6 @@ const AlertAndAddContainer = styled.div`
     width: 8px;
     height: 8px;
   }
-  &::-webkit-scrollbar-thumb {
-    background-color: ${props => props.theme.color.grey.brandColor2};
-  }
 
   @media (max-width: ${props => props.theme.screen.dashboardDesktopMaxWidth}) {
     width: 100%;

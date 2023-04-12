@@ -19,7 +19,7 @@ body {
   background-clip: padding-box;
   border: 0 solid transparent;
   border-radius: 10px;
-  background-color: ${props => props.theme.color.blue.brandColor6};
+  background-color: ${props => props.theme.color.grey.brandColor3};
 }
 ::-webkit-scrollbar-track {
   background-color: transparent;
