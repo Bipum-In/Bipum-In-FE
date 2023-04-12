@@ -24,6 +24,17 @@ const sseSlice = createSlice({
       state.sseUserLength = state.sseUserData.length;
       localStorage.setItem('sseUserLength', state.sseUserLength);
     },
+    deleteAllAdminSseMsg: state => {
+      state.sseAdminData = [];
+      state.sseAdminLength = '';
+      localStorage.setItem('sseAdminLength', state.sseAdminLength);
+    },
+    deleteAllUerSseMsg: state => {
+      state.sseUserData = [];
+      state.sseUserLength = '';
+      localStorage.setItem('sseUserLength', state.sseUserLength);
+    },
+
     deleteAdminSseData: (state, action) => {
       state.sseAdminData = [...state.sseAdminData].filter(
         item => item.notificationId !== action.payload
@@ -43,6 +54,8 @@ export const {
   setUserSSE,
   deleteAdminSseData,
   deleteUserSseData,
+  deleteAllAdminSseMsg,
+  deleteAllUerSseMsg,
 } = sseSlice.actions;
 
 export default sseSlice.reducer;
