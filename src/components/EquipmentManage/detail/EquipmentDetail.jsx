@@ -107,9 +107,9 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
     setDisposeModal(false);
   };
 
-  const handleFromRequest = e => {
+  const handleFromRequest = (e, supplyId, supplyName) => {
     const { value } = e.target;
-    dispatch(setRequestData(REQUEST_PAGES[value]));
+    dispatch(setRequestData({ ...REQUEST_PAGES[value], supplyId, supplyName }));
     navigate(ROUTER.PATH.USER.REQUEST);
   };
 
