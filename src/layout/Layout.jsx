@@ -56,7 +56,7 @@ export default function DashBoardLayout() {
         <LayoutWrapper>
           <SidebarBtnContainer onClick={handleSidebarToggle}>
             <HamburgerIcon />
-            <CloseIcon $isHidden={isSidebarHidden} />
+            <CloseIcon hide={isSidebarHidden.toString()} />
           </SidebarBtnContainer>
 
           <Header
@@ -123,14 +123,6 @@ const fadeIn = keyframes`
   }
 `;
 
-const IconAnimation = condition => css`
-  animation: ${({ $isHidden }) => (condition($isHidden) ? fadeIn : 'none')} 0.2s
-    linear;
-  opacity: ${({ $isHidden }) => (condition($isHidden) ? 1 : 0)};
-  transition: opacity 0.3s linear;
-  ${props => props.theme.CursorActive};
-`;
-
 const HamburgerIcon = styled(Hamburger)`
   animation: 0.2s linear 0s 1 normal none running crbsY;
   opacity: 1;
@@ -148,7 +140,10 @@ const CloseIcon = styled(Close)`
   path {
     stroke: black;
   }
-  ${IconAnimation($isHidden => !$isHidden)};
+  animation: ${props => (props.hide === 'true' ? 'none' : fadeIn)} 0.2s linear;
+  opacity: ${props => (props.hide === 'true' ? 0 : 1)};
+  transition: opacity 0.3s linear;
+  ${props => props.theme.CursorActive};
   @media (max-width: ${props => props.theme.screen.desktop}) {
     display: block;
   }
