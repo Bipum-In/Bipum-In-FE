@@ -36,9 +36,7 @@ export default function CheckPwPage({ setEditPage }) {
           <Logo />
           <SetUserInputContainer>
             <styles.TypeBox>
-              <styles.TypeTitle requiredinput="true">
-                2차 비밀번호
-              </styles.TypeTitle>
+              <TypeTitles requiredinput="true">2차 비밀번호</TypeTitles>
               <Input
                 value={password}
                 setState={e => setPassword(e.target.value)}
@@ -46,6 +44,7 @@ export default function CheckPwPage({ setEditPage }) {
                 type="password"
                 placeholder="6자리 비밀번호"
                 maxLength={6}
+                autoComplete="off"
               />
             </styles.TypeBox>
           </SetUserInputContainer>
@@ -64,6 +63,9 @@ export default function CheckPwPage({ setEditPage }) {
   );
 }
 
+const TypeTitles = styled.div`
+  width: 12.75rem;
+`;
 const LoginWrapper = styled.form`
   display: flex;
   justify-content: center;
