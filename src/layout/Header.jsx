@@ -129,8 +129,16 @@ export default function Header() {
             <IconContainer>
               <Alaram />
               {isAdmin
-                ? sseAdminLength && <AlaramCount>{sseAdminLength}</AlaramCount>
-                : sseUserLength && <AlaramCount>{sseUserLength}</AlaramCount>}
+                ? sseAdminLength && (
+                    <AlaramCount>
+                      <span>{sseAdminLength}</span>
+                    </AlaramCount>
+                  )
+                : sseUserLength && (
+                    <AlaramCount>
+                      <span>{sseUserLength}</span>
+                    </AlaramCount>
+                  )}
             </IconContainer>
             {/* 드롭다운 컨테이너 */}
             <LoginUserInfoDropDown
@@ -264,12 +272,23 @@ const AlaramCount = styled.div`
   position: absolute;
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
-  width: 0.9375rem;
-  height: 0.9375rem;
-  color: white;
-  border-radius: 50%;
-  background-color: red;
+  background: ${props => props.theme.color.blue.brandColor7};
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0.625rem;
   transform: translate(0.7rem, -0.7rem);
+  border-radius: 50%;
+  span {
+    ${props => props.theme.FlexRow};
+    ${props => props.theme.FlexCenter};
+    font-size: 0.75rem;
+    padding: 0.625rem;
+    width: 0.9375rem;
+    height: 0.9375rem;
+    color: white;
+    background-color: red;
+    border-radius: 50%;
+  }
 `;
 
 const SearchInput = styled.input`
