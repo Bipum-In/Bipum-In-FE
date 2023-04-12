@@ -76,9 +76,7 @@ export default function Header() {
 
   useEffect(() => {
     if (searchValue === '') return;
-    axios.get('/api/admin/main/search').then(res => {
-      console.log(res.data.data);
-    });
+    axios.get('/api/admin/main/search');
   }, [dispatch, searchValue]);
 
   const handleModalShow = () => setLogoutModal();

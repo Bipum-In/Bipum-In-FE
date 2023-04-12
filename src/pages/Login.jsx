@@ -161,9 +161,7 @@ export default function Login() {
               </styles.TypeBox>
 
               <styles.TypeBox>
-                <styles.TypeTitle requiredinput="true">
-                  사용자 이름
-                </styles.TypeTitle>
+                <TypeTitles requiredinput="true">사용자 이름</TypeTitles>
                 <Input
                   type="text"
                   value={empName}
@@ -173,9 +171,7 @@ export default function Login() {
               </styles.TypeBox>
 
               <styles.TypeBox>
-                <styles.TypeTitle requiredinput="true">
-                  핸드폰 번호
-                </styles.TypeTitle>
+                <TypeTitles requiredinput="true">핸드폰 번호</TypeTitles>
                 <Input
                   value={phone}
                   setState={handleChangePhone}
@@ -184,9 +180,7 @@ export default function Login() {
                 />
               </styles.TypeBox>
               <styles.TypeBox>
-                <styles.TypeTitle requiredinput="true">
-                  비밀번호
-                </styles.TypeTitle>
+                <TypeTitles requiredinput="true">비밀번호</TypeTitles>
                 <Input
                   value={inputPw}
                   setState={inputPwHandler}
@@ -201,9 +195,7 @@ export default function Login() {
               </styles.TypeBox>
 
               <styles.TypeBox>
-                <styles.TypeTitle requiredinput="true">
-                  비밀번호 확인
-                </styles.TypeTitle>
+                <TypeTitles requiredinput="true">비밀번호 확인</TypeTitles>
                 <Input
                   value={inputCheckPw}
                   setState={checkSame}
@@ -236,6 +228,10 @@ export default function Login() {
     </>
   );
 }
+
+const TypeTitles = styled(styles.TypeTitle)`
+  width: 12.75rem;
+`;
 
 const LoginWrapper = styled.div`
   display: flex;
