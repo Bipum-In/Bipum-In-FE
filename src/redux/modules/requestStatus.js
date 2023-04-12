@@ -16,6 +16,8 @@ const initialState = {
   requestData: {
     selectStatus: '',
     menuType: '',
+    supplyId: '',
+    supplyName: '',
     menu: [
       { name: '전체', type: '', status: true },
       { name: '비품 요청', type: 'SUPPLY', status: false },
@@ -53,23 +55,37 @@ const requestStatusSlice = Redux.slice(
     initDetail: (state, _) => {
       state.requestDetail.getDetail = null;
     },
-    initRequestData: (state, _) => {
-      state.requestData.menu = current(state.requestData.menu).map(menu =>
-        menu.name === '전체'
-          ? { ...menu, status: true }
-          : { ...menu, status: false }
-      );
-      state.requestData.menuType = '';
-      state.requestData.selectStatus = '';
+    initRequestData: (state, action) => {
+      !action.payload?.menu &&
+        (state.requestData.menu = current(state.requestData.menu).map(menu =>
+          menu.name === '전체'
+            ? { ...menu, status: true }
+            : { ...menu, status: false }
+        ));
+      !action.payload?.menuType && (state.requestData.menuType = '');
+      !action.payload?.selectStatus && (state.requestData.selectStatus = '');
+      !action.payload?.supplyId && (state.requestData.supplyId = '');
+      !action.payload?.supplyName && (state.requestData.supplyName = '');
     },
     setRequestData: (state, action) => {
-      state.requestData.menu = current(state.requestData.menu).map(menu =>
-        menu.name === action.payload.name
-          ? { ...menu, status: true }
-          : { ...menu, status: false }
-      );
-      state.requestData.menuType = action.payload.type;
-      state.requestData.selectStatus = action.payload.status;
+      state.requestData.menu =
+        current(state.requestData.menu).map(menu =>
+          menu.name === action.payload.name
+            ? { ...menu, status: true }
+            : { ...menu, status: false }
+        ) || state.requestData.menu;
+
+      state.requestData.menuType =
+        action.payload.type || state.requestData.menuType;
+
+      state.requestData.selectStatus =
+        action.payload.status || state.requestData.selectStatus;
+
+      state.requestData.supplyId =
+        action.payload.supplyId || state.requestData.supplyId;
+
+      state.requestData.supplyName =
+        action.payload.supplyName || state.requestData.supplyName;
     },
   },
   bulider => {
