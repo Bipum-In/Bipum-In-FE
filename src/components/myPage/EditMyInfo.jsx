@@ -22,7 +22,7 @@ import logout from 'utils/logout';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export default function MyDetails({ getUserInfo }) {
+export default function EditMyInfo({ getUserInfo }) {
   const {
     empName: myName,
     phone: myPhone,
@@ -44,18 +44,7 @@ export default function MyDetails({ getUserInfo }) {
   const [userImg, setUserImg] = useState(myImage);
   const [preview, setPreview] = useState([myImage]);
   const [checkedAlarm, setCheckedAlarm] = useState(myAlarm);
-
-  // const [state, setState] = useState({
-  //   departmentList: '',
-  //   departmentId: '',
-  //   empName: myName,
-  //   phone: myPhone,
-  //   departmentName: myDeptName,
-  //   formImage: null,
-  //   userImg: myImage,
-  //   preview: [myImage],
-  //   checkedAlarm: false,
-  // });
+  const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
     axios.get(`/api/dept`).then(res => {
@@ -117,7 +106,10 @@ export default function MyDetails({ getUserInfo }) {
           'Content-Type': 'multipart/form-data',
         },
       })
-      .then(() => alertModal(true, '정보가 성공적으로 수정되었습니다.', 2));
+      .then(() => {
+        alertModal(true, '정보가 성공적으로 수정되었습니다.', 2);
+        setEditMode(false);
+      });
   };
 
   const parseMyDeptId = (deptList, deptName) => {
@@ -160,7 +152,7 @@ export default function MyDetails({ getUserInfo }) {
   const handlePhoneClear = () => setPhone('');
   const showDeleteAccountModal = () => toggleDeleteAccountModal();
   const hideDeleteAccountModal = () => toggleDeleteAccountModal(false);
-  console.log('checkedAlarm', checkedAlarm);
+
   return (
     <>
       <AddComponentsContainer>
@@ -171,40 +163,52 @@ export default function MyDetails({ getUserInfo }) {
                 {/* 이름 */}
                 <styles.TypeBox>
                   <MyTypeTitle>이름</MyTypeTitle>
-                  <MypageInput
-                    type="text"
-                    value={empName}
-                    setState={handleEmpNameBlur}
-                    placeholder="이름을 입력해주세요"
-                    maxLength="15"
-                  />
-                  <ClearInputBtn onClick={handleEmpNameClear} />
+                  {editMode ? (
+                    <MypageInput
+                      type="text"
+                      value={empName}
+                      setState={handleEmpNameBlur}
+                      placeholder="이름을 입력해주세요"
+                      maxLength="15"
+                    />
+                  ) : (
+                    <MyinfoSpan>{empName}</MyinfoSpan>
+                  )}
+                  {editMode && <ClearInputBtn onClick={handleEmpNameClear} />}
                 </styles.TypeBox>
                 {/* 전화번호 */}
                 <styles.TypeBox>
                   <MyTypeTitle>전화번호</MyTypeTitle>
-                  <MypageInput
-                    value={phone}
-                    setState={handleChangePhone}
-                    placeholder="번호를 입력해 주세요"
-                    maxLength="11"
-                  />
-                  <ClearInputBtn onClick={handlePhoneClear} />
+                  {editMode ? (
+                    <MypageInput
+                      value={phone}
+                      setState={handleChangePhone}
+                      placeholder="번호를 입력해 주세요"
+                      maxLength="11"
+                    />
+                  ) : (
+                    <MyinfoSpan>{phone}</MyinfoSpan>
+                  )}
+                  {editMode && <ClearInputBtn onClick={handlePhoneClear} />}
                 </styles.TypeBox>
                 {/* 부서 */}
                 <styles.TypeBox>
                   <MyTypeTitle>부서</MyTypeTitle>
                   <styles.PartnerCompany>
-                    <styles.SelectBox>
-                      <SelectCategory
-                        category={departmentList}
-                        optionName={'deptName'}
-                        optionNullName={departmentName}
-                        optionKey={'deptName'}
-                        optionValueKey={'deptId'}
-                        onChangeCategory={handleChangeDepartmentId}
-                      />
-                    </styles.SelectBox>
+                    {editMode ? (
+                      <styles.SelectBox>
+                        <SelectCategory
+                          category={departmentList}
+                          optionName={'deptName'}
+                          optionNullName={departmentName}
+                          optionKey={'deptName'}
+                          optionValueKey={'deptId'}
+                          onChangeCategory={handleChangeDepartmentId}
+                        />
+                      </styles.SelectBox>
+                    ) : (
+                      <MyinfoSpan>{myDeptName}</MyinfoSpan>
+                    )}
                   </styles.PartnerCompany>
                 </styles.TypeBox>
                 {/* 알림 */}
@@ -214,6 +218,7 @@ export default function MyDetails({ getUserInfo }) {
                     role="switch"
                     checked={checkedAlarm}
                     onChange={handleChange}
+                    editMode={editMode}
                   />
                 </styles.TypeBox>
               </styles.EquipmentLeftContainer>
@@ -222,22 +227,47 @@ export default function MyDetails({ getUserInfo }) {
                 preview={preview}
                 onChangeimge={onChangeimge}
                 onDeleteImage={handleDeleteImage}
+                editMode={editMode}
               />
             </styles.EquipmentDetailContainer>
             <styles.SubminPostContainer>
-              <Button type="button" cancel onClick={showDeleteAccountModal}>
-                회원 탈퇴
-              </Button>
-              <Button
-                type="button"
-                submit
-                onClick={handleLoginInfoAdd}
-                disabled={
-                  !departmentId || empName?.length < 2 || phone?.length < 11
-                }
-              >
-                저장
-              </Button>
+              {editMode ? (
+                <>
+                  <Button
+                    type="button"
+                    cancel
+                    onClick={() => setEditMode(false)}
+                  >
+                    취소
+                  </Button>
+                  <Button
+                    type="button"
+                    submit
+                    onClick={handleLoginInfoAdd}
+                    disabled={
+                      !departmentId ||
+                      empName?.length < 2 ||
+                      phone?.length < 11 ||
+                      preview.length < 1
+                    }
+                  >
+                    저장
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button type="button" cancel onClick={showDeleteAccountModal}>
+                    회원 탈퇴
+                  </Button>
+                  <Button
+                    type="button"
+                    submit
+                    onClick={() => setEditMode(true)}
+                  >
+                    수정
+                  </Button>
+                </>
+              )}
             </styles.SubminPostContainer>
           </styles.AddEquipmentArticle>
         </styles.AddEquipmentWrapper>
@@ -308,7 +338,7 @@ const CheckBox = styled.input.attrs({ type: 'checkbox' })`
   background: ${props => props.theme.color.grey.brandColor2} !important;
   cursor: pointer;
   transition: background 0.15s ease;
-
+  pointer-events: ${props => (props.editMode ? 'auto' : 'none')};
   &:before {
     content: '';
     position: absolute;
@@ -329,4 +359,8 @@ const CheckBox = styled.input.attrs({ type: 'checkbox' })`
   &:checked::before {
     left: 2.6em;
   }
+`;
+
+const MyinfoSpan = styled.span`
+  width: 11rem;
 `;

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
-import styled, { keyframes, css } from 'styled-components';
+import styled, { keyframes, useTheme } from 'styled-components';
 import { ReactComponent as Hamburger } from 'styles/sidebarIcon/hamburger.svg';
 import { ReactComponent as Close } from 'styles/commonIcon/close.svg';
 
@@ -14,6 +14,7 @@ import STRING from 'constants/string';
 
 export default function DashBoardLayout() {
   const navigate = useNavigate();
+  const theme = useTheme();
   const { pathname } = useLocation();
   const { checkUser } = getEncryptionStorage();
   const [isSidebarHidden, setIsSidebarHidden] = useState(true);
@@ -23,6 +24,22 @@ export default function DashBoardLayout() {
       navigate(ROUTER.PATH.MAIN);
     }
   }, [checkUser, navigate]);
+
+  const desktopSize = theme.screen.desktopSize;
+  useEffect(() => {
+    const handleWindowResize = () => {
+      if (window.innerWidth <= desktopSize) {
+        setIsSidebarHidden(true);
+      } else {
+        setIsSidebarHidden(false);
+      }
+    };
+    window.addEventListener('resize', handleWindowResize);
+    handleWindowResize();
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, [setIsSidebarHidden, desktopSize]);
 
   const { isAdmin } = getEncryptionStorage();
   const isAdminStr = STRING.IS_ADMIN(isAdmin);

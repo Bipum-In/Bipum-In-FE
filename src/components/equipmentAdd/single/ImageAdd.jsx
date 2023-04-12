@@ -15,6 +15,7 @@ export default function ImageAdd({
   onChangeimge,
   onDeleteImage,
   children,
+  editMode,
 }) {
   const { pathname } = useLocation();
   const [isCurrent, setIsCurrent] = useState('');
@@ -86,7 +87,11 @@ export default function ImageAdd({
           </DragAndDropIcon>
         )}
         {preview.length ? (
-          <ImageCarousel imageUrlList={preview} onDeleteImage={onDeleteImage} />
+          <ImageCarousel
+            imageUrlList={preview}
+            onDeleteImage={onDeleteImage}
+            editMode={editMode}
+          />
         ) : (
           <DefaultImgWrapper onClick={handlerInputFile}>
             <DefaultImage />
@@ -98,7 +103,7 @@ export default function ImageAdd({
           </DefaultImgWrapper>
         )}
       </ImageContainer>
-      <ImageinputFile>
+      <ImageinputFile editMode={editMode}>
         파일 선택하기
         <input
           ref={inputRef}
@@ -183,7 +188,7 @@ const ImageinputFile = styled.label`
   font-size: 1rem;
   background-color: #e4f0ff;
   cursor: pointer;
-
+  display: ${props => (props.editMode ? 'flex' : 'none')};
   input {
     display: none;
   }
