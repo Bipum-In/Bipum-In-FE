@@ -33,6 +33,11 @@ function validRoopExcelSheet(sheetNames, excel) {
     column => new Set(column).size !== 1
   );
 
+  if (parseEmptyColumn.length > 100) {
+    result.push(`총 100개 이하의 column만 등록해야 합니다.`);
+    return result;
+  }
+
   if (parseEmptyColumn.length < 2) {
     result.push(`2개 이상의 column을 등록해야 합니다.`);
     return result;
