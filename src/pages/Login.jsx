@@ -188,8 +188,8 @@ export default function Login() {
                   singupInput
                   type="password"
                   placeholder="2차 비밀번호를 입력해주세요"
-                  minLength={8}
-                  autoComplete="new-password"
+                  maxLength="6"
+                  autoComplete="false"
                 />
                 <LoginAlertSpan isCurrent={checkPwRegex}>
                   {alertPw}
@@ -204,8 +204,8 @@ export default function Login() {
                   singupInput
                   type="password"
                   placeholder="2차 비밀번호 확인"
-                  minLength={8}
-                  autoComplete="new-password"
+                  maxLength="6"
+                  autoComplete="false"
                 />
                 <LoginAlertSpan isCurrent={doubleCheckPwRegex}>
                   {alertCheckPw}
