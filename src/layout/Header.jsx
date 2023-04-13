@@ -132,11 +132,7 @@ export default function Header() {
             <IconContainer search="true">
               <Search />
             </IconContainer>
-            <SearchInput
-              value={searchValue}
-              setState={handleOnChagneSearch}
-              placeholder="검색어를 입력하세요."
-            />
+            <SearchInput placeholder="검색어를 입력하세요." />
           </SearchContainer>
           {/* 헤더 오른쪽 아이템 */}
           <HeaderRightContainer>
