@@ -10,10 +10,12 @@ import Valid from 'validation/validation';
 import alertModal from 'utils/alertModal';
 
 import Axios from 'api/axios';
+import ScreenViewLoading from 'components/common/ScreenViewLoading';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function AddMultipleItem() {
+  const [isLoading, setIsLoading] = useState(false);
   const [multiImageList, setMultiImageList] = useState([]);
   const [showImageModal, setShowImageModal] = useState({
     show: false,
@@ -196,9 +198,13 @@ export default function AddMultipleItem() {
 
   const getCrawlingImg = async (modelNameToString, sheetLengthArr) => {
     let response = null;
+    setIsLoading(true);
     await axios
       .get(`api/supply/search?modelNameList=${modelNameToString}`)
-      .then(res => (response = sliceData(res.data.data, sheetLengthArr)));
+      .then(res => {
+        response = sliceData(res.data.data, sheetLengthArr);
+        setIsLoading(false);
+      });
 
     return response;
   };
@@ -369,6 +375,7 @@ export default function AddMultipleItem() {
         onDeleteImage={handleDeleteImage}
         onImageDetail={handleImageDetail}
       />
+      <ScreenViewLoading isLoading={isLoading} />
     </MultipleWrapper>
   );
 }
