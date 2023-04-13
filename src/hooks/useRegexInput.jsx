@@ -37,13 +37,17 @@ const useRegexInput = (reject, success, Reg, samePw = null) => {
     [Reg, reject, success]
   );
 
+  const reset = () => {
+    setInput('');
+  };
+
   useEffect(() => {
     if (samePw !== null) {
       checkSamePw({ target: { value: input } });
     }
   }, [samePw, input, checkSamePw]);
 
-  return [input, setInputHandler, alert, checkReg, checkSamePw];
+  return [input, setInputHandler, alert, checkReg, checkSamePw, reset];
 };
 
 export default useRegexInput;
