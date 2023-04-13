@@ -9,7 +9,7 @@ export default function TenthPage() {
       <styles.Fullpage>
         <styles.RendingWrapper>
           <styles.RendingTopContainer>
-            <UseageTitle num="❸">
+            <UseageTitle num="3">
               요청한 내역과 처리 결과를
               <br />
               쉽게 확인할 수 있어요

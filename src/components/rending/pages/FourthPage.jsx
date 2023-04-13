@@ -9,7 +9,7 @@ export default function FourthPage() {
       <styles.Fullpage>
         <styles.RendingWrapper>
           <styles.RendingTopContainer>
-            <UseageTitle adminUseage="true" num="❶">
+            <UseageTitle adminUseage="true" num="1">
               대시보드에서
               <br />
               비품 관리 사항을

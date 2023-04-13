@@ -9,7 +9,7 @@ export default function EighthPage() {
       <styles.Fullpage>
         <styles.RendingWrapper>
           <styles.RendingTopContainer>
-            <UseageTitle num="❶">
+            <UseageTitle num="1">
               대시보드에서 요청 내역과
               <br />
               사용중인 비품을

@@ -9,7 +9,7 @@ export default function SeventhPage() {
       <styles.Fullpage>
         <styles.RendingWrapper reverse>
           <styles.RendingTopContainer>
-            <UseageTitle adminUseage="true" num="❹">
+            <UseageTitle adminUseage="true" num="4">
               비품 여러개를 한 번에
               <br />
               등록할 수 있어요

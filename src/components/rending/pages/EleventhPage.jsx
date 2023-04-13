@@ -9,7 +9,7 @@ export default function EleventhPage() {
       <styles.Fullpage>
         <styles.RendingWrapper reverse>
           <styles.RendingTopContainer>
-            <UseageTitle num="❹">
+            <UseageTitle num="4">
               회사에 등록된 비품 재고를
               <br />
               쉽게 확인할 수 있어요

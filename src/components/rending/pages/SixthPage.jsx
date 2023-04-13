@@ -9,7 +9,7 @@ export default function SixthPage() {
       <styles.Fullpage>
         <styles.RendingWrapper>
           <styles.RendingTopContainer>
-            <UseageTitle adminUseage="true" num="❸">
+            <UseageTitle adminUseage="true" num="3">
               비품을 카테고리별로
               <br />
               관리할 수 있어요
