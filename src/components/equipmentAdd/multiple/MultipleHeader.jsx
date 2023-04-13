@@ -1,16 +1,13 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
-
+import styled from 'styled-components';
+import { ReactComponent as AddImgIcon } from 'styles/commonIcon/addImg.svg';
 import Button from 'elements/Button';
 import Input from 'elements/Input';
-
 import { v4 as uuidv4 } from 'uuid';
 
 export default function MultipleHeader({
-  sheetList,
   readExcel,
   downLoadToExcel,
-  onChangeSheet,
   onAddMultiData,
   onAddMultiImage,
 }) {
@@ -30,8 +27,13 @@ export default function MultipleHeader({
         </InputFile>
       </SheetListContainer>
       <InputFileContainer>
-        <Button onClick={onAddMultiImage}>사진 자동 등록</Button>
-        <Button onClick={onAddMultiData}>복수 등록 완료</Button>
+        <Button mainBtn="border" onClick={onAddMultiImage}>
+          <AddImgIcon />
+          사진 자동 첨부
+        </Button>
+        <Button mainBtn="fill" onClick={onAddMultiData}>
+          복수 등록 완료
+        </Button>
       </InputFileContainer>
     </MultipleHeaderContainer>
   );
@@ -70,15 +72,15 @@ const InputFileContainer = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
   gap: 0.5rem;
-
   button {
-    width: auto;
-    height: 2.3125rem;
-    border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
-    color: white;
-    background-color: ${props => props.theme.color.blue.brandColor6};
-    font-weight: 600;
-    font-size: 1rem;
+    height: 2.1875rem;
+  }
+  svg {
+    width: 1.1875rem;
+    height: 1.1875rem;
+    path {
+      stroke: ${props => props.theme.color.blue.brandColor6};
+    }
   }
 `;
 
