@@ -3,13 +3,34 @@ import styled from 'styled-components';
 import { ReactComponent as ScrollUp } from 'styles/commonIcon/scrollUp.svg';
 import SecondPage from './SecondPage';
 import FirstPage from './FirstPage';
+import ThirdPage from './ThirdPage';
+import FourthPage from './FourthPage';
+import FifthPage from './FifthPage';
+import SixthPage from './SixthPage';
+import SeventhPage from './SeventhPage';
+import EighthPage from './EighthPage';
+import NinthPage from './NinthPage';
+import TenthPage from './TenthPage';
+import EleventhPage from './EleventhPage';
 
 export default function RendingScrollPage({
   pageIndex,
   setPageCount,
   onclick,
 }) {
-  const pages = [<FirstPage />, <SecondPage />];
+  const pages = [
+    <FirstPage />,
+    <SecondPage />,
+    <ThirdPage />,
+    <FourthPage />,
+    <FifthPage />,
+    <SixthPage />,
+    <SeventhPage />,
+    <EighthPage />,
+    <NinthPage />,
+    <TenthPage />,
+    <EleventhPage />,
+  ];
 
   useEffect(() => {
     setPageCount(pages.length);

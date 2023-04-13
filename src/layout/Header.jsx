@@ -74,13 +74,6 @@ export default function Header() {
     };
   }, [dispatch]);
 
-  useEffect(() => {
-    if (searchValue === '') return;
-    axios.get('/api/admin/main/search').then(res => {
-      console.log(res.data.data);
-    });
-  }, [dispatch, searchValue]);
-
   const handleModalShow = () => setLogoutModal();
   const handleModalClose = () => setLogoutModal(false);
   const handleOnChagneSearch = e => setSearchValue(e.target.value);
@@ -134,11 +127,7 @@ export default function Header() {
             <IconContainer search="true">
               <Search />
             </IconContainer>
-            <SearchInput
-              value={searchValue}
-              setState={handleOnChagneSearch}
-              placeholder="검색어를 입력하세요."
-            />
+            <SearchInput placeholder="검색어를 입력하세요." />
           </SearchContainer>
           {/* 헤더 오른쪽 아이템 */}
           <HeaderRightContainer>

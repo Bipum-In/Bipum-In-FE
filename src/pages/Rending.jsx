@@ -24,7 +24,7 @@ export default function Rending() {
   const navigate = useNavigate();
   const isLoggedIn = useIsLoggedIn();
 
-  useThrottleCallBack(handleScroll, 200, 'wheel');
+  useThrottleCallBack(handleScroll, 400, 'wheel');
 
   const currentUrl =
     document.location.href === 'http://localhost:3000/'
