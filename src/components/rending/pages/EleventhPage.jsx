@@ -1,44 +1,55 @@
 import React from 'react';
 import styled from 'styled-components';
 import { styles } from './RendingPageStyled';
-import RendingImg from 'styles/rendingIcon/rendingElevenImg.svg';
+import RendingImg from 'styles/rendingIcon/rendingElevenImg.png';
+import UseageTitle from '../UseageTitle';
+import { ReactComponent as ScrollUp } from 'styles/commonIcon/scrollUp.svg';
 
-export default function EleventhPage() {
+export default function EleventhPage({ onclick }) {
   return (
     <>
       <styles.Fullpage>
-        <styles.RendingWrapper col="true">
-          <RendingTopContainer>
-            <Descriptiontitle>
-              <span>비품을 효과적으로 관리하는 최고의 시스템,</span> 비품인!
-            </Descriptiontitle>
-          </RendingTopContainer>
-          <RendingBottomContainer bg={RendingImg}></RendingBottomContainer>
+        <styles.RendingWrapper reverse>
+          <styles.RendingTopContainer>
+            <UseageTitle num="❹">
+              회사에 등록된 비품 재고를
+              <br />
+              쉽게 확인할 수 있어요
+            </UseageTitle>
+          </styles.RendingTopContainer>
+          <styles.RendingBottomContainer
+            bg={RendingImg}
+          ></styles.RendingBottomContainer>
+          <ScrollToTopContainer>
+            <ScrollToTopIcon onClick={onclick} />
+          </ScrollToTopContainer>
         </styles.RendingWrapper>
       </styles.Fullpage>
     </>
   );
 }
 
-const RendingTopContainer = styled.div`
-  ${props => props.theme.FlexRow};
-  ${props => props.theme.FlexCenter};
-  align-items: flex-end;
-  padding: 0 2rem;
-  height: 13.5rem;
+const ScrollToTopContainer = styled.div`
+  position: absolute;
+  bottom: 20px;
+  right: 10px;
+  z-index: 1;
 `;
 
-const Descriptiontitle = styled.span`
+const ScrollToTopIcon = styled(ScrollUp)`
+  width: 50px;
+  height: 50px;
   color: ${props => props.theme.color.blue.brandColor6};
-  font-size: 2rem;
-  span {
-    font-weight: 700;
+  cursor: pointer;
+  transition: color 0.2s, opacity 0.2s, transform 0.3s;
+  filter: drop-shadow(2px 4px 2px rgba(0, 0, 0, 0.269));
+  &:active {
+    transform: scale(0.9);
   }
-`;
-
-const RendingBottomContainer = styled.div`
-  position: relative;
-  height: calc(100vh - 14.5rem);
-  width: 100%;
-  background: url(${props => props.bg}) no-repeat center center/contain;
+  :hover {
+    transform: scale(1.1);
+    svg {
+      filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.269));
+    }
+  }
 `;

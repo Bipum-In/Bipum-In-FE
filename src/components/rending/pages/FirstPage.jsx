@@ -9,7 +9,7 @@ export default function FirstPage() {
   const textList = ['비품인', 'Bipum-In'];
   return (
     <>
-      <styles.Fullpage>
+      <Fullpage>
         <RendingWrapper>
           <RendingLeftContainer>
             <Description>세상에서 가장 쉬운 비품관리</Description>
@@ -20,11 +20,14 @@ export default function FirstPage() {
           </RendingLeftContainer>
           <RendingRightContainer bg={Rending01} />
         </RendingWrapper>
-      </styles.Fullpage>
+      </Fullpage>
     </>
   );
 }
 
+const Fullpage = styled(styles.Fullpage)`
+  height: calc(100vh - 18.25rem);
+`;
 const RendingWrapper = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
@@ -52,6 +55,7 @@ const RendingRightContainer = styled.div`
     position: absolute;
     opacity: 0.4;
     filter: blur(0.625rem);
+    margin-top: 0;
   }
 `;
 const Description = styled.span`
