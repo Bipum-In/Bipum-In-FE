@@ -80,17 +80,19 @@ export default function AlertStatus({ isAdmin }) {
       }
     });
   };
+
   const putRequest = (notificationId, requestId) => {
     axios.put(`/api/main/read/${notificationId}`).then(() => {
-      if (isAdmin) {
-        dispatch(deleteAdminAlertData(notificationId));
-        dispatch(deleteAdminSseData(notificationId));
-      } else {
-        dispatch(deleteUserAlertData(notificationId));
-        dispatch(deleteUserSseData(notificationId));
-      }
+      setModal({ show: true, detailId: requestId });
     });
-    setModal({ show: true, detailId: requestId });
+
+    if (isAdmin) {
+      dispatch(deleteAdminAlertData(notificationId));
+      dispatch(deleteAdminSseData(notificationId));
+    } else {
+      dispatch(deleteUserAlertData(notificationId));
+      dispatch(deleteUserSseData(notificationId));
+    }
   };
 
   return (
