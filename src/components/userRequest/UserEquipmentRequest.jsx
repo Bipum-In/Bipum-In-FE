@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
 import { styles } from '../common/commonStyled';
 
 import Button from 'elements/Button';
@@ -15,7 +14,7 @@ const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 export default function UserEquipmentRequest({
   type,
   supplyId: supplyIdProps,
-  supplyName,
+  modelName,
   category,
   largeCategory,
 }) {
@@ -40,12 +39,12 @@ export default function UserEquipmentRequest({
   const isDisabled = () => {
     let isDisabled = null;
 
-    if (!supplyName && type === 'SUPPLY') {
+    if (!modelName && type === 'SUPPLY') {
       isDisabled = !messageValue || !smallCategory || !useType;
       return isDisabled;
     }
 
-    if (!supplyName && type !== 'SUPPLY') {
+    if (!modelName && type !== 'SUPPLY') {
       isDisabled =
         !messageValue ||
         !smallCategory ||
@@ -55,7 +54,7 @@ export default function UserEquipmentRequest({
       return isDisabled;
     }
 
-    if (supplyName) {
+    if (modelName) {
       isDisabled = !messageValue || !formImage.length;
       return isDisabled;
     }
@@ -263,7 +262,7 @@ export default function UserEquipmentRequest({
                       category={Object.keys(STRING.USE_TYPE)}
                       optionNullName={optionNullList.useType}
                       onChangeCategory={handleChangeUseType}
-                      disabled={supplyName}
+                      disabled={modelName}
                     />
                   </styles.SelectCaregoryConteiner>
                 </styles.TypeBox>
@@ -293,7 +292,7 @@ export default function UserEquipmentRequest({
                         handleChangeLargeCategory,
                         handleChangeSmallCategory,
                       ]}
-                      disabled={supplyName}
+                      disabled={modelName}
                     />
                   </styles.SelectCaregoryConteiner>
                 </styles.TypeBox>
@@ -306,7 +305,7 @@ export default function UserEquipmentRequest({
                       <SelectCategory
                         category={mySupply}
                         optionName={'modelName'}
-                        optionNullName={supplyName || optionNullList.supply}
+                        optionNullName={modelName || optionNullList.supply}
                         optionKey={'supplyId'}
                         optionValueKey={'supplyId'}
                         onChangeCategory={handleChangeMySupply}

@@ -25,7 +25,7 @@ export function alertModalButton(completeStyle, message, callback) {
   const handleUnmountButton = () => {
     root.unmount(root);
     root = null;
-    callback();
+    callback && callback();
   };
 
   if (!root) {

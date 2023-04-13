@@ -1,16 +1,17 @@
 import styled from 'styled-components';
+import { getEncryptionStorage } from 'utils/encryptionStorage';
 
 export default function UserInfo({
   userImage,
   deptName,
   empName,
   username,
-  phone,
-  isAdmin,
+  phoneNum,
 }) {
+  const { isAdmin } = getEncryptionStorage();
   return (
     <UserInfoWrapper>
-      <UserInfoTitle>요청자 정보</UserInfoTitle>
+      <UserInfoTitle>{isAdmin ? '요청자 정보' : '관리자 정보'}</UserInfoTitle>
       <UserInfoContainer>
         <Img src={userImage} alt="userImage" />
         <UserInfoContent>
@@ -33,7 +34,7 @@ export default function UserInfo({
             ) : (
               <>
                 <span>전화번호</span>
-                {phone}
+                {phoneNum}
               </>
             )}
           </UserName>

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
 export default function UserContent({
+  useType,
   content,
   serialNum,
   modelName,
@@ -17,7 +18,7 @@ export default function UserContent({
         </UserContentContainer>
         <UserContentContainer>
           <ContentName>사용처</ContentName>
-          <ContentType>개인</ContentType>
+          <ContentType>{useType}</ContentType>
         </UserContentContainer>
         <UserContentContainer>
           <ContentName>제품명</ContentName>

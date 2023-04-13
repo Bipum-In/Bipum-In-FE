@@ -16,6 +16,7 @@ const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function RequestDetail({ isClose, detail }) {
   const {
+    acceptResult,
     categoryId,
     requestId,
     requestType,
@@ -29,10 +30,11 @@ export default function RequestDetail({ isClose, detail }) {
     deptName,
     empName,
     username,
-    phone,
+    phoneNum,
     comment,
     createdAt,
     modifiedAt,
+    useType,
   } = detail;
 
   const [stockList, setStockList] = useState({ data: null, check: false });
@@ -106,7 +108,11 @@ export default function RequestDetail({ isClose, detail }) {
     <>
       {stockList.check && (
         <DetailContainer>
-          <ModalHeader isClose={isClose} requestType={requestType} />
+          <ModalHeader
+            isClose={isClose}
+            requestType={requestType}
+            status={acceptResult}
+          />
           <ContentContainer>
             <RequestContainer>
               <UserInfo
@@ -114,9 +120,10 @@ export default function RequestDetail({ isClose, detail }) {
                 deptName={deptName}
                 username={username}
                 userImage={userImage}
-                phone={phone}
+                phoneNum={phoneNum}
               />
               <UserContent
+                useType={useType}
                 content={content}
                 serialNum={serialNum}
                 modelName={modelName}
