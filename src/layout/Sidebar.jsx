@@ -43,11 +43,8 @@ export default function Sidebar({
 
   return (
     <>
-      <SidebarWrapper isSidebarVisible={isSidebarHidden} ref={dropDownRef}>
-        <CloseIcon
-          hide={isSidebarHidden.toString()}
-          onClick={handleSidebarToggle}
-        />
+      <SidebarWrapper hide={`${isSidebarHidden}`} ref={dropDownRef}>
+        <CloseIcon hide={`${isSidebarHidden}`} onClick={handleSidebarToggle} />
         <LogoContainer onClick={handleClickCategory}>
           <Logo />
         </LogoContainer>
@@ -100,8 +97,8 @@ const SidebarWrapper = styled.aside`
   z-index: 1000;
   transition: transform 0.3s ease-in-out;
   @media (max-width: ${props => props.theme.screen.desktop}) {
-    transform: ${({ isSidebarVisible }) =>
-      isSidebarVisible ? 'translateX(-100%)' : 'none'};
+    transform: ${props =>
+      props.hide === 'true' ? 'translateX(-100%)' : 'none'};
   }
 `;
 
