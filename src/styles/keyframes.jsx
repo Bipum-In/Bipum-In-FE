@@ -28,8 +28,20 @@ const fadeIn = keyframes`
   }
 `;
 
+const fadeInRotate = keyframes`
+  0% {
+    opacity: 0;
+    transform: rotate(0deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(180deg);
+  }
+`;
+
 export const Keyframe = {
   floating,
   starAnimation,
   fadeIn,
+  fadeInRotate,
 };

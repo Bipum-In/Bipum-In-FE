@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
+import defaultLogo from 'styles/commonIcon/defaultLogo.svg';
 
 export default function UserInfo({
   userImage,
@@ -13,7 +14,11 @@ export default function UserInfo({
     <UserInfoWrapper>
       <UserInfoTitle>{isAdmin ? '요청자 정보' : '관리자 정보'}</UserInfoTitle>
       <UserInfoContainer>
-        <Img src={userImage} alt="userImage" />
+        {userImage ? (
+          <Img src={userImage} alt="userImage" />
+        ) : (
+          <Img src={defaultLogo} nouser alt="userImage" />
+        )}
         <UserInfoContent>
           <UserInfoDeptAndName>
             <DeptName>
@@ -107,5 +112,6 @@ const Img = styled.img`
   max-height: 8.25rem;
   border-radius: 50%;
   margin-right: 2.25rem;
-  object-fit: cover;
+  object-fit: ${props => (props.nouser ? 'scale-down' : 'cover')};
+  background: ${props => props.nouser && props.theme.color.blue.brandColor2};
 `;

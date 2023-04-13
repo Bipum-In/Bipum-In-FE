@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { useTheme } from 'styled-components';
+import { Keyframe } from 'styles/keyframes';
 import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { CategoryItemLeft } from 'components/layout/CategoryItem';
@@ -12,7 +13,7 @@ import { ReactComponent as Dashboard } from 'styles/sidebarIcon/dashboard.svg';
 import { ReactComponent as List } from 'styles/sidebarIcon/list.svg';
 import { ReactComponent as Management } from 'styles/sidebarIcon/management.svg';
 import { ReactComponent as Setting } from 'styles/headerIcon/setting.svg';
-// import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
+import { ReactComponent as Close } from 'styles/commonIcon/close.svg';
 
 import ROUTER from 'constants/routerConst';
 import STRING from 'constants/string';
@@ -23,6 +24,7 @@ export default function Sidebar({
   isSidebarHidden,
   setIsSidebarHidden,
   handleClickCategory,
+  handleSidebarToggle,
   isAdmin,
   isAdminStr,
   pathname,
@@ -42,6 +44,10 @@ export default function Sidebar({
   return (
     <>
       <SidebarWrapper isSidebarVisible={isSidebarHidden} ref={dropDownRef}>
+        <CloseIcon
+          hide={isSidebarHidden.toString()}
+          onClick={handleSidebarToggle}
+        />
         <LogoContainer onClick={handleClickCategory}>
           <Logo />
         </LogoContainer>
@@ -102,9 +108,10 @@ const SidebarWrapper = styled.aside`
 const LogoContainer = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
-  height: 6.25rem;
+  height: 3.25rem;
   width: 100%;
-  margin: 1.875rem 0;
+  margin: 2.875rem 0;
+  z-index: 1;
   ${props => props.theme.CursorActive};
   svg {
     width: 70%;
@@ -125,4 +132,25 @@ const ManageManetContainer = styled.div`
   width: 100%;
   margin-top: auto;
   margin-bottom: 3.625rem;
+`;
+
+const CloseIcon = styled(Close)`
+  display: none;
+  position: absolute;
+  top: 1.375rem;
+  left: 1.5rem;
+  path {
+    stroke: ${props => props.theme.color.blue.brandColor7};
+  }
+  animation: ${props =>
+      props.hide === 'true' ? 'none' : Keyframe.fadeInRotate}
+    0.2s linear 0.2s;
+  opacity: ${props => (props.hide === 'true' ? 0 : 1)};
+  transition: opacity 0.3s linear;
+  cursor: pointer;
+  z-index: 2;
+  ${props => props.theme.CursorActive};
+  @media (max-width: ${props => props.theme.screen.desktop}) {
+    display: block;
+  }
 `;

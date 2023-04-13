@@ -3,7 +3,6 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
 import styled, { keyframes, useTheme } from 'styled-components';
 import { ReactComponent as Hamburger } from 'styles/sidebarIcon/hamburger.svg';
-import { ReactComponent as Close } from 'styles/commonIcon/close.svg';
 
 import Header from './Header';
 import Sidebar from './Sidebar';
@@ -72,10 +71,8 @@ export default function DashBoardLayout() {
       {checkUser && (
         <LayoutWrapper>
           <SidebarBtnContainer onClick={handleSidebarToggle}>
-            <HamburgerIcon />
-            <CloseIcon hide={isSidebarHidden.toString()} />
+            <HamburgerIcon isSidebarHidden={isSidebarHidden} />
           </SidebarBtnContainer>
-
           <Header
             isSidebarHidden={isSidebarHidden}
             setIsSidebarHidden={setIsSidebarHidden}
@@ -87,6 +84,7 @@ export default function DashBoardLayout() {
             isAdmin={isAdmin}
             isAdminStr={isAdminStr}
             pathname={pathname}
+            handleSidebarToggle={handleSidebarToggle}
           />
           <OutletContainer>
             <Outlet />
@@ -129,39 +127,13 @@ const SidebarBtnContainer = styled.div`
   }
 `;
 
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-    transform: rotate(0deg);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(180deg);
-  }
-`;
-
 const HamburgerIcon = styled(Hamburger)`
   animation: 0.2s linear 0s 1 normal none running crbsY;
   opacity: 1;
+  display: ${props => (props.isSidebarHidden ? 'block' : 'none')};
   transition: opacity 0.3s linear 0s;
   path {
     stroke: white;
   }
   ${props => props.theme.CursorActive};
-`;
-
-const CloseIcon = styled(Close)`
-  display: none;
-  position: absolute;
-  top: 1rem;
-  path {
-    stroke: black;
-  }
-  animation: ${props => (props.hide === 'true' ? 'none' : fadeIn)} 0.2s linear;
-  opacity: ${props => (props.hide === 'true' ? 0 : 1)};
-  transition: opacity 0.3s linear;
-  ${props => props.theme.CursorActive};
-  @media (max-width: ${props => props.theme.screen.desktop}) {
-    display: block;
-  }
 `;
