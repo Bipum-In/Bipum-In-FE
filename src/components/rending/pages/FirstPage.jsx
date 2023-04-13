@@ -5,8 +5,9 @@ import Rending01 from 'styles/rendingIcon/rendingFirstImg.svg';
 import Button from 'elements/Button';
 import Typing from '../Typing';
 
-export default function FirstPage() {
+export default function FirstPage({ setPageIndex }) {
   const textList = ['비품인', 'Bipum-In'];
+
   return (
     <>
       <Fullpage>
@@ -16,7 +17,9 @@ export default function FirstPage() {
             <CompanyTitle>
               <Typing textList={textList} />
             </CompanyTitle>
-            <Button submit>알아보기</Button>
+            <Button submit onClick={() => setPageIndex(2)}>
+              알아보기
+            </Button>
           </RendingLeftContainer>
           <RendingRightContainer bg={Rending01} />
         </RendingWrapper>
