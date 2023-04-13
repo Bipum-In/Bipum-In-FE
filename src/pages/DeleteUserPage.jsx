@@ -10,17 +10,14 @@ const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 export default function DeleteUserPage() {
   const { search } = useLocation();
   const navigate = useNavigate();
-  console.log(search.split('=')[1]);
 
   useEffect(() => {
-    console.log(1);
     const code = search.split('=')[1];
     const currentUrl = document.location.href.split('//')[1].substring(0, 5);
     fetchDeleteUser(code, currentUrl);
   }, []);
 
   const fetchDeleteUser = async (code, urlType) => {
-    console.log(code, urlType);
     try {
       await axios.post(`/api/user/delete?code=${code}&urlType=${urlType}`);
       logout();
