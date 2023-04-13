@@ -112,9 +112,8 @@ const Imgs = styled.div`
 `;
 
 const Img = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  width: 23.75rem;
+  height: 17.8125rem;
 `;
 
 const Dots = styled.ul`
