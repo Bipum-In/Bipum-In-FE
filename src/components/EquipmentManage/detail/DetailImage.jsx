@@ -14,7 +14,11 @@ export default function DetailImage({ detail, preview, onChangeImage }) {
         {image ? (
           <img src={image} alt="Img" onClick={handleClick} />
         ) : (
-          <ImageAdd preview={preview} onChangeimge={onChangeImage} />
+          <ImageAdd
+            editMode={'true'}
+            preview={preview}
+            onChangeimge={onChangeImage}
+          />
         )}
       </ImgContainer>
       <ImgDetailModal src={image} isOpen={showModal} onClose={handleClick} />

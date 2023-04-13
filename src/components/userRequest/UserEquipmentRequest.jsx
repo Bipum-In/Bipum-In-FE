@@ -326,6 +326,7 @@ export default function UserEquipmentRequest({
               {type !== 'SUPPLY' && (
                 <styles.ImageContainer>
                   <ImageAdd
+                    editMode={'true'}
                     preview={preview}
                     onChangeimge={handleChangeimge}
                     onDeleteImage={handleDeleteImage}

@@ -27,7 +27,7 @@ export default function CategoryItems({
           ))}
       </CategoryItemsWrapper>
       {getSmallCategory && (
-        <CategoryWrapper show={getSmallCategory.show}>
+        <CategoryWrapper show={getSmallCategory.show.toString()}>
           <SmallCategoryItemsWrapper>
             {getSmallCategory.list.map(item => (
               <SmallCategoryItemContainer key={item.categoryId}>
@@ -70,7 +70,7 @@ const CategoryWrapper = styled.div`
   width: 100%;
   height: 3rem;
   ${props =>
-    props.show
+    props.show === 'true'
       ? css`
           transform: translateY(0rem);
           opacity: 1;

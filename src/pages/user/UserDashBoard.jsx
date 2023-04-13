@@ -45,7 +45,7 @@ export default function UserDashBoard() {
       prevShowCommonSupplyDtos => !prevShowCommonSupplyDtos
     );
     if (!showCommonSupplyDtos) {
-      dispatch(commonSupplyDtos());
+      dispatch(commonSupplyDtos(''));
     }
   };
 

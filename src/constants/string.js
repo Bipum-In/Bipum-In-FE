@@ -67,7 +67,7 @@ const CATEGORY_ENG = {
 
 const MANAGEMENT_TITLE = {
   CATEGORY: '카테고리 관리',
-  DEPTAUTH: '부서 및 권환 관리',
+  DEPTAUTH: '부서 및 권한 관리',
   PARTNER: '협력 업체 관리',
 };
 

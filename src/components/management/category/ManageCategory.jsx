@@ -97,7 +97,7 @@ export default function ManageCategory({
         setActiveCategory={onClickMenu}
       />
       {getSmallCategory && (
-        <CategoryWrapper show={getSmallCategory.show}>
+        <CategoryWrapper>
           <SmallCategoryItemsWrapper>
             <SmallCategoryRow>
               {getSmallCategory.list.map(item =>
@@ -124,6 +124,20 @@ export default function ManageCategory({
                             setDeleteModal(true);
                           }}
                         />
+                        <CustomModal
+                          isOpen={
+                            deleteModal && idModalCategory === item.categoryId
+                          }
+                          onClose={deleteModalClose}
+                          submit={() => {
+                            handleDeleteCategory(item.categoryId);
+                            setDeleteModal(false);
+                            setIdModalCategory(null);
+                          }}
+                          text={'삭제 완료'}
+                        >
+                          정말 삭제 하시겠습니까?
+                        </CustomModal>
                       </IconBox>
                     </Test>
                   </SmallCategoryItemContainer>
@@ -262,6 +276,7 @@ const CategoryContainer = styled.div`
 const CategoryWrapper = styled.div`
   ${props => props.theme.wh100};
 `;
+
 const SmallCategoryRow = styled.div`
   ${props => props.theme.FlexRow};
   flex-wrap: wrap;
