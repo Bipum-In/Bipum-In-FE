@@ -2,7 +2,7 @@ const PATH = {
   MAIN: '/',
   SIGNUP: '/signup',
   LOGIN: '/login',
-  GOOGLE: '/login/oauth2/code/google',
+  DELETE_USER: '/delete-user',
   MYPAGE: '/mypage',
   BACK: -1,
   FRONT: 1,

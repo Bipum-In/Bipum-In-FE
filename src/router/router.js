@@ -18,6 +18,7 @@ import RequestStatus from 'pages/admin/RequestStatus';
 import UserDashBoard from 'pages/user/UserDashBoard';
 import UserRequest from 'pages/user/UserRequest';
 import UserStockView from 'pages/user/UserStockView';
+import DeleteUserPage from 'pages/DeleteUserPage';
 
 const router = createBrowserRouter([
   {
@@ -38,8 +39,8 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: ROUTER.PATH.GOOGLE,
-        element: <Login />,
+        path: ROUTER.PATH.DELETE_USER,
+        element: <DeleteUserPage />,
       },
       {
         element: <Layout />,
