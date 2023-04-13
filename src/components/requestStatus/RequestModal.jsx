@@ -16,13 +16,19 @@ export default function RequestModal({ isClose, detailId, path, isAdmin }) {
     dispatch(requestDetail({ path, detailId }));
   }, [path, detailId, dispatch]);
 
+  useEffect(() => {
+    if (isDetailError) {
+      isClose();
+    }
+  }, [isDetailError]);
+
   return (
     <RequestModalWrapper>
-      {isDetailError && <div>에러</div>}
-      {getDetail && isAdmin && (
+      {/* {isDetailError && <div>에러</div>} */}
+      {getDetail && isAdmin && !isDetailError && (
         <AdminRequestDetail isClose={isClose} detail={getDetail} />
       )}
-      {getDetail && !isAdmin && (
+      {getDetail && !isAdmin && !isDetailError && (
         <UserRequestDetail isClose={isClose} detail={getDetail} />
       )}
     </RequestModalWrapper>
