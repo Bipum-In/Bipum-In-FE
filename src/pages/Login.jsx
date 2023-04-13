@@ -254,11 +254,12 @@ const LoginWrapper = styled.div`
 const SetUserInfo = styled.div`
   position: absolute;
   ${props => props.theme.FlexCol};
+  ${props => props.theme.FlexCenter}
   ${props => props.theme.Boxshadow};
   width: 30.375rem;
-  height: 36.9375rem;
+  height: 42rem;
   background: white;
-  padding: 5rem 6.5625rem;
+  /* padding: 5rem 6.5625rem; */
   > svg {
     display: flex;
     align-items: center;
@@ -270,9 +271,8 @@ const SetUserInfo = styled.div`
 const SetUserInputContainer = styled.div`
   ${props => props.theme.FlexCol};
   align-items: flex-start;
-  margin-top: auto;
+  margin: 3rem 0;
   gap: 2.5rem;
-  padding-bottom: 4.5625rem;
 `;
 
 const SetUserSubmitContainer = styled.div`
