@@ -71,7 +71,7 @@ export default function DashBoardLayout() {
       {checkUser && (
         <LayoutWrapper>
           <SidebarBtnContainer onClick={handleSidebarToggle}>
-            <HamburgerIcon isSidebarHidden={isSidebarHidden} />
+            <HamburgerIcon hide={`${isSidebarHidden}`} />
           </SidebarBtnContainer>
           <Header
             isSidebarHidden={isSidebarHidden}
@@ -122,15 +122,14 @@ const SidebarBtnContainer = styled.div`
   z-index: 1001;
   margin-left: 2rem;
   @media (max-width: ${props => props.theme.screen.desktopSize}) {
-    transform: ${({ isSidebarVisible }) =>
-      isSidebarVisible ? 'none' : 'block'};
+    transform: ${props => (props.hide === 'true' ? 'none' : 'block')};
   }
 `;
 
 const HamburgerIcon = styled(Hamburger)`
   animation: 0.2s linear 0s 1 normal none running crbsY;
   opacity: 1;
-  display: ${props => (props.isSidebarHidden ? 'block' : 'none')};
+  display: ${props => (props.hide === 'true' ? 'block' : 'none')};
   transition: opacity 0.3s linear 0s;
   path {
     stroke: white;
