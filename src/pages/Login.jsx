@@ -177,6 +177,7 @@ export default function Login() {
                   setState={handleChangePhone}
                   placeholder="번호를 입력해 주세요"
                   maxLength="11"
+                  autoComplete="false"
                 />
               </styles.TypeBox>
               <styles.TypeBox>
@@ -186,8 +187,9 @@ export default function Login() {
                   setState={inputPwHandler}
                   singupInput
                   type="password"
-                  placeholder="비밀번호를 입력해주세요"
+                  placeholder="2차 비밀번호를 입력해주세요"
                   minLength={8}
+                  autoComplete="new-password"
                 />
                 <LoginAlertSpan isCurrent={checkPwRegex}>
                   {alertPw}
@@ -201,8 +203,9 @@ export default function Login() {
                   setState={checkSame}
                   singupInput
                   type="password"
-                  placeholder="비밀번호 확인"
+                  placeholder="2차 비밀번호 확인"
                   minLength={8}
+                  autoComplete="new-password"
                 />
                 <LoginAlertSpan isCurrent={doubleCheckPwRegex}>
                   {alertCheckPw}
