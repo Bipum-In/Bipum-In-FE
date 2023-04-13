@@ -177,6 +177,7 @@ export default function Login() {
                   setState={handleChangePhone}
                   placeholder="번호를 입력해 주세요"
                   maxLength="11"
+                  autoComplete="false"
                 />
               </styles.TypeBox>
               <styles.TypeBox>
@@ -186,8 +187,9 @@ export default function Login() {
                   setState={inputPwHandler}
                   singupInput
                   type="password"
-                  placeholder="비밀번호를 입력해주세요"
+                  placeholder="2차 비밀번호를 입력해주세요"
                   minLength={8}
+                  autoComplete="new-password"
                 />
                 <LoginAlertSpan isCurrent={checkPwRegex}>
                   {alertPw}
@@ -201,8 +203,9 @@ export default function Login() {
                   setState={checkSame}
                   singupInput
                   type="password"
-                  placeholder="비밀번호 확인"
+                  placeholder="2차 비밀번호 확인"
                   minLength={8}
+                  autoComplete="new-password"
                 />
                 <LoginAlertSpan isCurrent={doubleCheckPwRegex}>
                   {alertCheckPw}
@@ -250,11 +253,12 @@ const LoginWrapper = styled.div`
 const SetUserInfo = styled.div`
   position: absolute;
   ${props => props.theme.FlexCol};
+  ${props => props.theme.FlexCenter}
   ${props => props.theme.Boxshadow};
   width: 30.375rem;
-  height: 36.9375rem;
+  height: 42rem;
   background: white;
-  padding: 5rem 6.5625rem;
+  /* padding: 5rem 6.5625rem; */
   > svg {
     display: flex;
     align-items: center;
@@ -266,9 +270,8 @@ const SetUserInfo = styled.div`
 const SetUserInputContainer = styled.div`
   ${props => props.theme.FlexCol};
   align-items: flex-start;
-  margin-top: auto;
+  margin: 3rem 0;
   gap: 2.5rem;
-  padding-bottom: 4.5625rem;
 `;
 
 const SetUserSubmitContainer = styled.div`

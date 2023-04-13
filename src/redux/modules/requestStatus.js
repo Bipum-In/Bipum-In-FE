@@ -17,7 +17,7 @@ const initialState = {
     selectStatus: '',
     menuType: '',
     supplyId: '',
-    supplyName: '',
+    modelName: '',
     menu: [
       { name: '전체', type: '', status: true },
       { name: '비품 요청', type: 'SUPPLY', status: false },
@@ -65,7 +65,7 @@ const requestStatusSlice = Redux.slice(
       !action.payload?.menuType && (state.requestData.menuType = '');
       !action.payload?.selectStatus && (state.requestData.selectStatus = '');
       !action.payload?.supplyId && (state.requestData.supplyId = '');
-      !action.payload?.supplyName && (state.requestData.supplyName = '');
+      !action.payload?.modelName && (state.requestData.modelName = '');
     },
     setRequestData: (state, action) => {
       state.requestData.menu =
@@ -84,8 +84,8 @@ const requestStatusSlice = Redux.slice(
       state.requestData.supplyId =
         action.payload.supplyId || state.requestData.supplyId;
 
-      state.requestData.supplyName =
-        action.payload.supplyName || state.requestData.supplyName;
+      state.requestData.modelName =
+        action.payload.modelName || state.requestData.modelName;
     },
   },
   bulider => {

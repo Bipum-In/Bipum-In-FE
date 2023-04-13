@@ -33,8 +33,9 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
     adminImage,
     createdAt,
     modifiedAt,
+    comment,
+    useType,
   } = detail;
-
   const [editMode, setEditMode] = useState(false);
   const [newContent, setNewContent] = useState(content);
   const [formImage, setFormformImage] = useState(null);
@@ -125,7 +126,11 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
   return (
     <>
       <DetailContainer>
-        <ModalHeader isClose={isClose} requestType={requestType} />
+        <ModalHeader
+          isClose={isClose}
+          requestType={requestType}
+          status={acceptResult}
+        />
         <ContentContainer>
           <RequestContainer>
             <RequestTopWrapper>
@@ -154,6 +159,7 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
 
             {/* 부폼 관련 정보 */}
             <UserRequestItem
+              useType={useType}
               editMode={editMode}
               categoryName={categoryName}
               content={content}
@@ -176,22 +182,35 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
               </>
             )}
 
-            {/* 비품 요청서 (승인) */}
-            {acceptResult === STRING.REQUEST_STATUS.ACCEPT && (
+            {/* 비품 요청서 (승인,거절) */}
+            {acceptResult && (
               <>
-                <Hr />
-                <RequestTopWrapper>
-                  <DetailTitle>관리자 답변 정보</DetailTitle>
-                </RequestTopWrapper>
-                {requestType === STRING.REQUEST_NAME.SUPPLY &&
-                  acceptResult === STRING.REQUEST_STATUS.ACCEPT && (
+                {(comment || allocatedModel || allocatedImage) && (
+                  <>
+                    <Hr />
+                    <RequestTopWrapper>
+                      <DetailTitle>관리자 답변 정보</DetailTitle>
+                    </RequestTopWrapper>
+                  </>
+                )}
+                <>
+                  {comment && (
+                    <SendMessegeContainer>
+                      <span>남긴 메시지</span>
+                      <SendMessege>{comment}</SendMessege>
+                    </SendMessegeContainer>
+                  )}
+
+                  <RequestDetailWrapper>
+                    {allocatedModel && (
+                      <ItemContainer>
+                        <TypeTitle>제공받은 비품</TypeTitle>
+                        <TypeDetailTitle>{allocatedModel}</TypeDetailTitle>
+                      </ItemContainer>
+                    )}
+                  </RequestDetailWrapper>
+                  {allocatedImage && (
                     <>
-                      <RequestDetailWrapper>
-                        <ItemContainer>
-                          <TypeTitle>제공받은 비품</TypeTitle>
-                          <TypeDetailTitle>{allocatedModel}</TypeDetailTitle>
-                        </ItemContainer>
-                      </RequestDetailWrapper>
                       <AllocatedImg
                         src={allocatedImage}
                         alt=""
@@ -203,22 +222,22 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
                         isOpen={showModal}
                         onClose={handleClick}
                       />
-                      <Hr />
                     </>
                   )}
-
+                  <Hr />
+                </>
                 <UserInfo
                   phoneNum={adminPhone}
                   userImage={adminImage}
                   deptName={adminDeptName}
                   empName={adminName}
-                  isAdmin={isAdmin}
                 />
                 <RequestDate>
                   처리일: {FormatKoreanTime(modifiedAt)}
                 </RequestDate>
               </>
             )}
+
             <RequestDate>요청일: {FormatKoreanTime(createdAt)}</RequestDate>
           </RequestContainer>
         </ContentContainer>
@@ -303,4 +322,20 @@ const RequestContainer = styled.div`
   align-items: center;
   width: 100%;
   font-weight: 600;
+`;
+
+const SendMessegeContainer = styled.div`
+  ${props => props.theme.FlexCol};
+  color: ${props => props.theme.color.grey.brandColor5};
+  margin-top: 1.5rem;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  gap: 0.375rem;
+`;
+
+const SendMessege = styled.div`
+  color: black;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  margin: 1rem 0;
 `;

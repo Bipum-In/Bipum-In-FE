@@ -6,5 +6,5 @@ export default function logout(callback) {
   removeCookie(QUERY.COOKIE.COOKIE_NAME);
   removeCookie(QUERY.COOKIE.REFRESH_NAME);
   Storage.clearLocalStorage();
-  callback();
+  callback && callback();
 }

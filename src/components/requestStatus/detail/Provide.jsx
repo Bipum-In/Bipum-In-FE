@@ -21,9 +21,9 @@ export default function Provide({
           <SelectWrapper>
             <Select onChange={handleChangeSelect}>
               {stockList.lenght !== 0 ? (
-                <option>선택</option>
+                <option value="">선택</option>
               ) : (
-                <option>재고가 없습니다</option>
+                <option value="">재고가 없습니다</option>
               )}
               {stockList.map(stock => (
                 <option key={stock.supplyId} value={stock.supplyId}>

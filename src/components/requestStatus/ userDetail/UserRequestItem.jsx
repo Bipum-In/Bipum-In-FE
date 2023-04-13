@@ -11,6 +11,7 @@ import STRING from 'constants/string';
 import Input from 'elements/Input';
 
 export default function UserRequestItem({
+  useType,
   editMode,
   categoryName,
   content,
@@ -27,7 +28,7 @@ export default function UserRequestItem({
         </ItemContainer>
         <ItemContainer>
           <TypeTitle>사용처</TypeTitle>
-          <TypeDetailTitle>개인</TypeDetailTitle>
+          <TypeDetailTitle>{useType}</TypeDetailTitle>
         </ItemContainer>
         {requestType !== STRING.REQUEST_NAME.SUPPLY && (
           <ItemContainer>
