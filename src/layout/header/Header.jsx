@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styled, { css } from 'styled-components';
-import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
 import { ReactComponent as Alaram } from 'styles/commonIcon/alarm.svg';
 import { ReactComponent as Rotate } from 'styles/headerIcon/rotate.svg';
 import { ReactComponent as Useinfo } from 'styles/headerIcon/useinfo.svg';
@@ -16,6 +15,7 @@ import STRING from 'constants/string';
 import QUERY from 'constants/query';
 import ROUTER from 'constants/routerConst';
 
+import Search from 'layout/header/Search';
 import { CustomModal } from 'elements/Modal';
 import useOutsideClick from 'hooks/useOutsideClick';
 import { useModalState } from 'hooks/useModalState';
@@ -27,10 +27,10 @@ import {
 
 import SSE from 'api/sse';
 import { setAdminSSE, setUserSSE } from 'redux/modules/sseSlice';
-import { userInfoSlice } from '../redux/modules/userInfoSlice';
-import Input from 'elements/Input';
+import { userInfoSlice } from '../../redux/modules/userInfoSlice';
 import Axios from 'api/axios';
 import logout from 'utils/logout';
+import { getSearch } from 'redux/modules/searchHeader';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -46,9 +46,13 @@ export default function Header() {
 
   const { isAdmin, userRole } = getEncryptionStorage();
 
-  const { sseAdminLength, sseUserLength } = useSelector(
-    state => state.sseSlice
-  );
+  const {
+    sseSlice: { sseAdminLength, sseUserLength },
+    searchHeader: {
+      searchData: { search },
+    },
+  } = useSelector(state => state);
+
   const { getUserInfo } = useSelector(state => state.userInfo.userInfoList);
   const { empName, deptName, image } = getUserInfo || {};
 
@@ -76,8 +80,9 @@ export default function Header() {
 
   useEffect(() => {
     if (searchValue === '') return;
-    axios.get('/api/admin/main/search');
-  }, [dispatch, searchValue]);
+    const isAdminPath = isAdmin ? '/admin' : '';
+    dispatch(getSearch({ isAdmin: isAdminPath, keyword: searchValue }));
+  }, [dispatch, searchValue, isAdmin]);
 
   const handleModalShow = () => setLogoutModal();
   const handleModalClose = () => setLogoutModal(false);
@@ -128,12 +133,7 @@ export default function Header() {
       <HeaderContainer>
         <ItemContainer>
           {/* 검색창 */}
-          <SearchContainer>
-            <IconContainer search="true">
-              <Search />
-            </IconContainer>
-            <SearchInput placeholder="검색어를 입력하세요." />
-          </SearchContainer>
+          <Search search={search} onChagneSearch={handleOnChagneSearch} />
           {/* 헤더 오른쪽 아이템 */}
           <HeaderRightContainer>
             <IconContainer>
@@ -247,20 +247,6 @@ const ItemContainer = styled.div`
   }
 `;
 
-const SearchContainer = styled.div`
-  ${props => props.theme.FlexRow};
-  align-items: center;
-  min-width: 25.875rem;
-  width: 28.375rem;
-  height: 3.125rem;
-  background-color: white;
-  border-radius: 0.5rem;
-  margin-right: 2rem;
-  @media (max-width: ${props => props.theme.screen.desktop}) {
-    margin-left: 2rem;
-  }
-`;
-
 const IconContainer = styled.div`
   position: relative;
   ${props => props.theme.FlexRow};
@@ -299,14 +285,6 @@ const AlaramCount = styled.div`
     background-color: red;
     border-radius: 50%;
   }
-`;
-
-const SearchInput = styled(Input)`
-  border: none;
-  width: 100%;
-  line-height: 1.3125rem;
-  font-size: 1rem;
-  color: ${props => props.theme.color.grey.brandColor7};
 `;
 
 const HeaderRightContainer = styled.div`
