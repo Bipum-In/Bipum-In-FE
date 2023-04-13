@@ -21,9 +21,9 @@ export default function AnchorBtn({
           <>
             <AllDeleteSvg
               onClick={() => setDeleteToggle(prev => !prev)}
-              show={isDeleteShow.toString()}
+              show={`${isDeleteShow}`}
             />
-            <AllDeleteMsgBtn onClick={allDeleteAlarm} show={isDeleteShow}>
+            <AllDeleteMsgBtn onClick={allDeleteAlarm} show={`${isDeleteShow}`}>
               모든 알림 삭제
             </AllDeleteMsgBtn>
           </>

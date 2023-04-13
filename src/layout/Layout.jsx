@@ -4,7 +4,7 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import styled, { keyframes, useTheme } from 'styled-components';
 import { ReactComponent as Hamburger } from 'styles/sidebarIcon/hamburger.svg';
 
-import Header from './Header';
+import Header from './header/Header';
 import Sidebar from './Sidebar';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
 

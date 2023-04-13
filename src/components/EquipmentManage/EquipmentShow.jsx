@@ -105,22 +105,18 @@ const EquipmentAddConatiner = styled.div`
   margin-right: 1rem;
 
   button:first-child {
-    width: 5.5625rem;
     height: 2.125rem;
     color: white;
     background-color: ${props => props.theme.color.blue.brandColor5};
   }
 
   button:last-child {
-    width: 5.5625rem;
     height: 2.125rem;
     color: white;
     background-color: #3aa471;
   }
 
   svg {
-    width: 1.125rem;
-    height: 1.125rem;
-    margin-right: 0.3125rem;
+    width: 1.5rem;
   }
 `;
