@@ -9,6 +9,7 @@ import authReducer from '../modules/authSlice';
 import sseSlice from '../modules/sseSlice';
 import sseAlertList from '../modules/sseAlertList';
 import userInfo from '../modules/userInfoSlice';
+import searchHeader from '../modules/searchHeader';
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     sseSlice,
     sseAlertList,
     userInfo,
+    searchHeader,
   },
 });
 
