@@ -14,6 +14,7 @@ import { setUserInfo } from 'redux/modules/userInfoSlice';
 import alertModal from 'utils/alertModal';
 import { CustomModal } from 'elements/Modal';
 import { useModalState } from 'hooks/useModalState';
+import useRegexInput from 'hooks/useRegexInput';
 
 import ImageAdd from 'components/equipmentAdd/single/ImageAdd';
 import SelectCategory from 'components/common/SelectCategory';
@@ -35,6 +36,7 @@ export default function EditMyInfo({ getUserInfo }) {
   const dispatch = useDispatch();
 
   const [deleteAccountModal, toggleDeleteAccountModal] = useModalState();
+  const [editPasswordModal, toggleEditPasswordModal] = useModalState();
   const [departmentList, setDepartmentList] = useState('');
   const [departmentId, setDepartmentId] = useState('');
   const [empName, setEmpName] = useState(myName);
@@ -151,7 +153,33 @@ export default function EditMyInfo({ getUserInfo }) {
   const handleEmpNameClear = () => setEmpName('');
   const handlePhoneClear = () => setPhone('');
   const showDeleteAccountModal = () => toggleDeleteAccountModal();
+  const showEditPasswordModal = () => toggleEditPasswordModal();
   const hideDeleteAccountModal = () => toggleDeleteAccountModal(false);
+  const hideEditPasswordModal = () => toggleEditPasswordModal(false);
+
+  const pwRegex = /^\d{6}$/;
+  const [inputPw, inputPwHandler, alertPw, checkPwRegex, reset] = useRegexInput(
+    '6자리 숫자로 이루어진 비밀번호를 입력해주세요.',
+    '사용 가능한 비밀번호 입니다.',
+    pwRegex
+  );
+
+  const [inputCheckPw, , alertCheckPw, doubleCheckPwRegex, checkSame] =
+    useRegexInput(
+      '비밀번호가 같지 않습니다. 다시 입력해주세요.',
+      '비밀번호가 같습니다.',
+      pwRegex,
+      inputPw
+    );
+
+  const handleSecondPwEdit = () => {
+    axios.put(`/api/user/password`, { password: inputPw }).then(() => {
+      alertModal(true, '2차 비밀번호가 성공적으로 수정되었습니다.', 2);
+      setEditMode(false);
+      toggleEditPasswordModal(false);
+      reset();
+    });
+  };
 
   return (
     <>
@@ -214,12 +242,16 @@ export default function EditMyInfo({ getUserInfo }) {
                 {/* 알림 */}
                 <styles.TypeBox>
                   <MyTypeTitle>알림</MyTypeTitle>
-                  <CheckBox
-                    role="switch"
-                    checked={checkedAlarm}
-                    onChange={handleChange}
-                    editMode={editMode}
-                  />
+                  {editMode ? (
+                    <CheckBox
+                      role="switch"
+                      checked={checkedAlarm}
+                      onChange={handleChange}
+                      editMode={editMode}
+                    />
+                  ) : (
+                    !editMode && (checkedAlarm ? '활성화' : '비활성화')
+                  )}
                 </styles.TypeBox>
               </styles.EquipmentLeftContainer>
               <styles.Hr />
@@ -256,9 +288,66 @@ export default function EditMyInfo({ getUserInfo }) {
                 </>
               ) : (
                 <>
-                  <Button type="button" cancel onClick={showDeleteAccountModal}>
+                  <DeleteButton
+                    type="button"
+                    cancel
+                    onClick={showDeleteAccountModal}
+                  >
                     회원 탈퇴
+                  </DeleteButton>
+
+                  <Button type="button" cancel onClick={showEditPasswordModal}>
+                    2차 비밀번호 변경
                   </Button>
+                  <CustomModal
+                    width={'26rem'}
+                    isOpen={editPasswordModal}
+                    onClose={hideEditPasswordModal}
+                    text={'완료'}
+                    submit={handleSecondPwEdit}
+                    disabled={
+                      !(departmentId && checkPwRegex && doubleCheckPwRegex) ||
+                      empName.length < 2 ||
+                      phone.replace(/-/g, '').length < 11
+                    }
+                  >
+                    <ChangePwContainer>
+                      <p>2차 비밀번호 변경</p>
+                      <ChangePwBox>
+                        <ChangePw>
+                          <span>새 2차 비밀번호</span>
+                          <Input
+                            value={inputPw}
+                            setState={inputPwHandler}
+                            singupInput
+                            type="password"
+                            placeholder="6자리 비밀번호"
+                            minLength={6}
+                          />
+                        </ChangePw>
+                        <LoginAlertSpan isCurrent={checkPwRegex}>
+                          {alertPw}
+                        </LoginAlertSpan>
+                      </ChangePwBox>
+                      <ChangePwBox>
+                        <ChangePw>
+                          <span>새 2차 비밀번호 확인</span>
+
+                          <Input
+                            value={inputCheckPw}
+                            setState={checkSame}
+                            singupInput
+                            type="password"
+                            placeholder="6자리 비밀번호"
+                            minLength={6}
+                          />
+                        </ChangePw>
+                        <LoginAlertSpan isCurrent={doubleCheckPwRegex}>
+                          {alertCheckPw}
+                        </LoginAlertSpan>
+                      </ChangePwBox>
+                    </ChangePwContainer>
+                  </CustomModal>
                   <Button
                     type="button"
                     submit
@@ -311,6 +400,8 @@ const MypageInput = styled(Input)`
 const MyTypeTitle = styled(styles.TypeTitle)`
   width: 4.375rem;
   margin-right: 2rem;
+  font-weight: 600;
+  color: ${props => props.theme.color.blue.brandColor6};
 `;
 
 const WarningMessageContainer = styled.div`
@@ -363,4 +454,53 @@ const CheckBox = styled.input.attrs({ type: 'checkbox' })`
 
 const MyinfoSpan = styled.span`
   width: 11rem;
+`;
+
+const DeleteButton = styled(Button)`
+  border: 0.0625rem solid #e91111;
+  color: #e91111;
+`;
+
+const LoginAlertSpan = styled.div`
+  bottom: -2rem;
+  left: 0.5rem;
+  display: flex;
+  text-align: start;
+  font-size: 0.8rem;
+  padding: 0.2rem;
+  color: ${props => (props.isCurrent ? '#58793e' : 'tomato')};
+`;
+
+const ChangePwContainer = styled.div`
+  ${props => props.theme.FlexCol};
+
+  gap: 0.75rem;
+  p {
+    color: ${props => props.theme.color.blue.brandColor7};
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin: 0 0 2rem;
+  }
+`;
+
+const ChangePwBox = styled.div`
+  ${props => props.theme.FlexCol};
+  justify-content: center;
+  height: 3.75rem;
+
+  span {
+    color: ${props => props.theme.color.blue.brandColor6};
+    font-weight: 600;
+  }
+  input {
+    margin-left: auto;
+    width: 7.3125rem;
+    height: 2.5625rem;
+    background: ${props => props.theme.color.grey.brandColor1};
+  }
+`;
+
+const ChangePw = styled.div`
+  ${props => props.theme.FlexRow};
+  align-items: center;
 `;
