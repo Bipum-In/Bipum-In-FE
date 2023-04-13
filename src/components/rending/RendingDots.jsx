@@ -21,7 +21,7 @@ const DotsContainer = styled.div`
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 `;
 
 const Dot = styled.div`

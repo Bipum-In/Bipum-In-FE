@@ -7,25 +7,27 @@ export default function SecondPage() {
   return (
     <>
       <styles.Fullpage>
-        <styles.RendingWrapper col="true">
+        <RendingWrapper>
           <RendingTopContainer>
             <Descriptiontitle>
               <span>비품을 효과적으로 관리하는 최고의 시스템,</span> 비품인!
             </Descriptiontitle>
           </RendingTopContainer>
           <RendingBottomContainer bg={RendingImg}></RendingBottomContainer>
-        </styles.RendingWrapper>
+        </RendingWrapper>
       </styles.Fullpage>
     </>
   );
 }
 
+const RendingWrapper = styled(styles.RendingWrapper)`
+  flex-direction: column;
+`;
 const RendingTopContainer = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
   align-items: flex-end;
   padding: 0 2rem;
-  height: 13.5rem;
 `;
 
 const Descriptiontitle = styled.span`

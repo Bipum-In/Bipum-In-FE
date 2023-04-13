@@ -14,7 +14,7 @@ const SelectCaregoryConteiner = styled.div`
 
 const TypeTitle = styled.span`
   font-size: 1rem;
-  width: ${props => (props.dept ? '7rem' : '12.75rem')};
+  width: ${props => (props.dept ? '7rem' : '8.75rem')};
   margin-right: ${props => (props.kakao ? '1.5rem' : 0)};
   ${props =>
     props.requiredinput === 'true' &&
