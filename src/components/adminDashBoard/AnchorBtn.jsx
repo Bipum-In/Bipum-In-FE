@@ -21,7 +21,7 @@ export default function AnchorBtn({
           <>
             <AllDeleteSvg
               onClick={() => setDeleteToggle(prev => !prev)}
-              show={isDeleteShow}
+              show={isDeleteShow.toString()}
             />
             <AllDeleteMsgBtn onClick={allDeleteAlarm} show={isDeleteShow}>
               모든 알림 삭제
@@ -54,8 +54,8 @@ const CategoryBtnContainer = styled.div`
 const AllDeleteSvg = styled(DeleteIcon)`
   position: absolute;
   right: 1rem;
-  opacity: ${props => (props.show ? '0' : '1')};
-  pointer-events: ${props => (props.show ? 'none' : 'auto')};
+  opacity: ${props => (props.show === 'true' ? '0' : '1')};
+  pointer-events: ${props => (props.show === 'true' ? 'none' : 'auto')};
   transform: rotate(-90deg);
   transition: opacity 0.1s ease-in-out;
 `;
@@ -64,7 +64,7 @@ const AllDeleteMsgBtn = styled(Button)`
   background: ${props => props.theme.color.blue.brandColor2};
   color: ${props => props.theme.color.blue.brandColor6};
   font-weight: ${props => props.theme.fontWeight.weight7};
-  opacity: ${props => (props.show ? '1' : '0')};
-  pointer-events: ${props => (props.show ? 'auto' : 'none')};
+  opacity: ${props => (props.show === 'true' ? '1' : '0')};
+  pointer-events: ${props => (props.show === 'true' ? 'auto' : 'none')};
   transition: opacity 0.1s ease-in-out;
 `;

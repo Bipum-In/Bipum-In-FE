@@ -317,6 +317,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
               </styles.EquipmentLeftContainer>
               <styles.Hr />
               <ImageAdd
+                editMode={'true'}
                 preview={preview}
                 onChangeimge={onChangeimge}
                 onDeleteImage={handleDeleteImage}
