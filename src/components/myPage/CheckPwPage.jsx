@@ -25,6 +25,7 @@ export default function CheckPwPage({ setEditPage }) {
         moveEditMyInfo();
       } else {
         alertModal(false, '비밀번호가 일치하지 않습니다.', 2);
+        setPassword('');
       }
     });
   };
