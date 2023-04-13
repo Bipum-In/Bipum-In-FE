@@ -11,7 +11,7 @@ import AnchorBtn from '../AnchorBtn';
 import ROUTER from 'constants/routerConst';
 import UseageStar from '../UseageStar';
 
-export default function UseageCard() {
+export default function UseageCard({ isAdmin }) {
   const navigate = useNavigate();
 
   return (
@@ -29,7 +29,15 @@ export default function UseageCard() {
             <span>효율적인 비품 관리의 사작! 비품인에 대해 알아볼까요?</span>
           </UseageTitleContainer>
           <UseageBtnContainer>
-            <Button onClick={() => navigate(ROUTER.PATH.MAIN)}>
+            <Button
+              onClick={() =>
+                navigate(
+                  `${ROUTER.PATH.MAIN}?${
+                    isAdmin ? 'pageIndex=3' : 'pageIndex=7'
+                  }`
+                )
+              }
+            >
               더 알아보기
             </Button>
           </UseageBtnContainer>
