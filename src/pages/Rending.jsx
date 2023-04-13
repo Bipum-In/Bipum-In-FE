@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import RendingHeader from 'components/rending/RendingHeader';
 import RendingDots from 'components/rending/RendingDots';
@@ -23,6 +23,13 @@ export default function Rending() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useIsLoggedIn();
+
+  const [searchParams] = useSearchParams();
+  const initialPageIndex = Number(searchParams.get('pageIndex')) || 0;
+
+  useEffect(() => {
+    setPageIndex(initialPageIndex);
+  }, [initialPageIndex]);
 
   useThrottleCallBack(handleScroll, 400, 'wheel');
 
