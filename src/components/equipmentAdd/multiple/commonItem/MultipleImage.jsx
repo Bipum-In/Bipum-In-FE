@@ -25,13 +25,13 @@ export default function MultipleImage({
           >
             <DeleteImg />
           </Button>
-          <div
+          <ImgContainer
             onClick={() => {
               onImageDetail(column['이미지']);
             }}
           >
             <img src={column['이미지']} alt="multipleImg" />
-          </div>
+          </ImgContainer>
         </ImageContainer>
       ) : (
         <>
@@ -105,4 +105,8 @@ const ImageinputFile = styled.label`
   input {
     display: none;
   }
+`;
+
+const ImgContainer = styled.div`
+  display: flex;
 `;
