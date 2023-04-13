@@ -43,11 +43,10 @@ const Dots = styled.div`
 
 const UseageDetail = styled.div`
   ${props => props.theme.FlexRow};
-  padding: 0 1rem;
   h1 {
     font-size: 2.25rem;
     color: ${props => props.theme.color.blue.brandColor6};
-    line-height: normal;
+    line-height: 1.4;
     white-space: pre;
   }
 `;

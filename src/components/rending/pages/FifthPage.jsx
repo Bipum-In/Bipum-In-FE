@@ -9,7 +9,7 @@ export default function FifthPage() {
       <styles.Fullpage>
         <styles.RendingWrapper reverse>
           <styles.RendingTopContainer>
-            <UseageTitle adminUseage="true" num="❷">
+            <UseageTitle adminUseage="true" num="2">
               사원이 보낸 요청 현황을
               <br />
               쉽게 확인할 수 있어요

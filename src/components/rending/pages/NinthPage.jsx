@@ -9,7 +9,7 @@ export default function NinthPage() {
       <styles.Fullpage>
         <styles.RendingWrapper reverse>
           <styles.RendingTopContainer>
-            <UseageTitle num="❷">
+            <UseageTitle num="2">
               비품관련 요청을
               <br />
               간편하게 할 수 있어요
