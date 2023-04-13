@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ReactComponent as ClearIcon } from 'styles/commonIcon/cancelInput.svg';
 
 import Input from 'elements/Input';
 import Button from 'elements/Button';
-import ROUTER from 'constants/routerConst';
 
 import Axios from 'api/axios';
 import { useDispatch } from 'react-redux';
@@ -19,7 +17,6 @@ import useRegexInput from 'hooks/useRegexInput';
 import ImageAdd from 'components/equipmentAdd/single/ImageAdd';
 import SelectCategory from 'components/common/SelectCategory';
 import { styles } from 'components/common/commonStyled';
-import logout from 'utils/logout';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -32,7 +29,6 @@ export default function EditMyInfo({ getUserInfo }) {
     alarm: myAlarm,
   } = getUserInfo;
 
-  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [deleteAccountModal, toggleDeleteAccountModal] = useModalState();
@@ -140,14 +136,19 @@ export default function EditMyInfo({ getUserInfo }) {
     reader.readAsDataURL(img);
   };
 
-  const handleDeleteAccount = async () => {
-    try {
-      await axios.post(`/api/user/delete`);
-      await axios.post(`/api/user/logout`);
+  const currentUrl = () => {
+    const sliceUrl = document.location.href.split('//')[1].slice(0, 5);
+    const href = sliceUrl === 'local';
 
-      alertModal(false, '회원 탈퇴가 완료되었습니다.', 4);
-      logout(navigate(ROUTER.PATH.MAIN));
-    } catch (error) {}
+    return href
+      ? process.env.REACT_APP_LOCALHOST_URL
+      : process.env.REACT_APP_S3_URL;
+  };
+
+  const handleDeleteAccount = async () => {
+    window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${
+      process.env.REACT_APP_GOOGLE_CLIENT_ID
+    }&response_type=code&redirect_uri=${currentUrl()}/delete-user&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
   };
 
   const handleEmpNameClear = () => setEmpName('');
@@ -241,7 +242,7 @@ export default function EditMyInfo({ getUserInfo }) {
                 </styles.TypeBox>
                 {/* 알림 */}
                 <styles.TypeBox>
-                  <MyTypeTitle>알림</MyTypeTitle>
+                  <MyTypeTitle>문자 알림</MyTypeTitle>
                   {editMode ? (
                     <CheckBox
                       role="switch"
