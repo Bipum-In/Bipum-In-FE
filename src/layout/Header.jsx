@@ -74,6 +74,11 @@ export default function Header() {
     };
   }, [dispatch]);
 
+  useEffect(() => {
+    if (searchValue === '') return;
+    axios.get('/api/admin/main/search');
+  }, [dispatch, searchValue]);
+
   const handleModalShow = () => setLogoutModal();
   const handleModalClose = () => setLogoutModal(false);
   const handleOnChagneSearch = e => setSearchValue(e.target.value);
