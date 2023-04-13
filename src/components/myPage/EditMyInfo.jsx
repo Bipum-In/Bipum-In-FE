@@ -323,7 +323,7 @@ export default function EditMyInfo({ getUserInfo }) {
                             singupInput
                             type="password"
                             placeholder="6자리 비밀번호"
-                            minLength={6}
+                            maxLength={6}
                           />
                         </ChangePw>
                         <LoginAlertSpan isCurrent={checkPwRegex}>
@@ -340,7 +340,7 @@ export default function EditMyInfo({ getUserInfo }) {
                             singupInput
                             type="password"
                             placeholder="6자리 비밀번호"
-                            minLength={6}
+                            maxLength={6}
                           />
                         </ChangePw>
                         <LoginAlertSpan isCurrent={doubleCheckPwRegex}>
@@ -485,9 +485,8 @@ const ChangePwContainer = styled.div`
 `;
 
 const ChangePwBox = styled.div`
-  ${props => props.theme.FlexCol};
   justify-content: center;
-  height: 3.75rem;
+  height: 4.6875rem;
 
   span {
     color: ${props => props.theme.color.blue.brandColor6};
@@ -504,4 +503,6 @@ const ChangePwBox = styled.div`
 const ChangePw = styled.div`
   ${props => props.theme.FlexRow};
   align-items: center;
+  justify-content: center;
+  height: 3.125rem;
 `;

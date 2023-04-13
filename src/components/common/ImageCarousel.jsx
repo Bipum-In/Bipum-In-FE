@@ -112,6 +112,7 @@ const Imgs = styled.div`
 `;
 
 const Img = styled.img`
+  object-fit: contain;
   width: 23.75rem;
   height: 17.8125rem;
 `;
