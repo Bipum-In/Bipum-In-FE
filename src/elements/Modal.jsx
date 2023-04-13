@@ -55,10 +55,11 @@ export function CustomModal({
   submit,
   disabled,
   text,
+  width,
 }) {
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalMsgContainer width={'313px'}>
+      <ModalMsgContainer width={width ? width : '313px'}>
         {children}
         <CloseContainer>
           <Button onClick={onClose} mainBtn="border" type="button">
