@@ -208,13 +208,15 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
             handleModalClose={handleModalClose}
             handleDispose={handleDispose}
           />
-          <DetailBodyTitle detail={getDetail} />
           <DetailBodyContainer>
-            <DetailImage
-              detail={getDetail}
-              preview={preview}
-              onChangeImage={handleChangeimge}
-            />
+            <ImageContainer>
+              <DetailBodyTitle detail={getDetail} />
+              <DetailImage
+                detail={getDetail}
+                preview={preview}
+                onChangeImage={handleChangeimge}
+              />
+            </ImageContainer>
             <DetailContentContainer>
               <DetailInfoContainer>
                 <DetailInfo>
@@ -245,6 +247,7 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
 }
 
 const DetailWrapper = styled.main`
+  ${props => props.theme.flexCol}
   padding: 0 6.375rem;
 `;
 
@@ -253,6 +256,7 @@ const DetailBodyContainer = styled.section`
   height: 40rem;
   overflow-x: hidden;
   overflow-y: auto;
+  gap: 3.125rem;
 
   @media (max-width: 86.25rem) {
     flex-direction: column;
@@ -270,13 +274,20 @@ const DetailInfoContainer = styled.div`
 
 const DetailContentContainer = styled.article`
   width: 100%;
+  margin-top: calc(3.3988rem + 1.1719rem);
 
   @media (max-width: 86.25rem) {
     display: flex;
     flex-direction: column;
     align-items: center;
-
     margin: 3rem 0;
+  }
+`;
+
+const ImageContainer = styled.div`
+  @media (max-width: 119.9375rem) {
+    position: sticky;
+    top: 0;
   }
 `;
 
@@ -285,7 +296,7 @@ const DetailInfo = styled.div`
   border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
   gap: 2.875rem;
 
-  @media (max-width: 106.25rem) {
+  @media (max-width: 119.9375rem) {
     flex-direction: column;
   }
 `;
@@ -294,7 +305,7 @@ const History = styled.div`
   display: flex;
   gap: 3.125rem;
 
-  @media (max-width: 106.25rem) {
+  @media (max-width: 119.9375rem) {
     flex-direction: column;
     margin-top: 2rem;
   }

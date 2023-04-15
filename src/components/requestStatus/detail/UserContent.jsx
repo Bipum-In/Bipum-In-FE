@@ -63,8 +63,8 @@ const ContentName = styled.span`
   font-weight: 500;
 `;
 
-const ContentType = styled.span`
+const ContentType = styled.pre`
   font-size: 0.9375rem;
   font-weight: 500;
-  word-wrap: break-word;
+  white-space: pre-wrap;
 `;

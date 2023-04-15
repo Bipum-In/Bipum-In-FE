@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 import ModalImgCarousel from './ModalImgCarousel';
+import { styles } from 'components/common/commonStyled';
 
 export default function Provide({
   image,
@@ -50,7 +51,10 @@ export default function Provide({
           <TextArea
             value={declineComment}
             onChange={e => setDeclineComment(e.target.value)}
+            placeholder="100글자 이내로 메시지를 남겨주세요."
+            maxLength={100}
           />
+          <styles.TextLength>{declineComment.length}/100</styles.TextLength>
         </MessegeAndRefuse>
       ) : (
         comment && (
@@ -94,6 +98,7 @@ const ProvideEquipment = styled.div`
 `;
 
 const MessegeAndRefuse = styled.div`
+  position: relative;
   ${props => props.theme.FlexRow};
   font-size: 0.9375rem;
   font-weight: 600;
@@ -113,15 +118,16 @@ const SendMessegeContainer = styled.div`
   gap: 0.375rem;
 `;
 
-const SendMessege = styled.div`
+const SendMessege = styled.pre`
   color: black;
   font-size: 0.9375rem;
   font-weight: 500;
+  white-space: pre-wrap;
 `;
 
 const TextArea = styled.textarea`
   width: 22.0625rem;
-  height: 5rem;
+  height: 6rem;
   background-color: ${props => props.theme.color.grey.brandColor1};
   border: none;
   padding: 0.5rem;

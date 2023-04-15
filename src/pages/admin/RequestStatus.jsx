@@ -77,6 +77,10 @@ export default function RequestStatus() {
 
   const handleChangeKeyword = e => {
     setKeyword(e.target.value);
+
+    if (page !== 1) {
+      setPage(1);
+    }
   };
 
   const handleClickDetail = id => {

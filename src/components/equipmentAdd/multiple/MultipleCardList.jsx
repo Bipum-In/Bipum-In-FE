@@ -7,6 +7,7 @@ import MultipleImage from './commonItem/MultipleImage';
 
 export default function MultipleCardList({
   excel,
+  sheetList,
   onDeleteRow,
   onAddImage,
   onDeleteImage,
@@ -14,7 +15,7 @@ export default function MultipleCardList({
 }) {
   return (
     <MultipleBodyContainer>
-      {excel.data &&
+      {!!sheetList.length &&
         excel.data[excel.sheetItem]?.map((column, columnIndex) => (
           <CardContainer key={uuidv4()}>
             <ImageWrapper>
@@ -52,9 +53,9 @@ const MultipleBodyContainer = styled.section`
   justify-content: flex-start;
   flex-wrap: wrap;
   width: 100%;
-  height: calc(44.6875rem - 6.7112rem);
+  height: calc(100vh - 16.6875rem - 6.2925rem);
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const CardContainer = styled.div`

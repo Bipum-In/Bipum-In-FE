@@ -6,8 +6,9 @@ import Input from 'elements/Input';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function MultipleHeader({
-  readExcel,
+  inputRef,
   downLoadToExcel,
+  onReadExcel,
   onAddMultiData,
   onAddMultiImage,
 }) {
@@ -19,9 +20,10 @@ export default function MultipleHeader({
         <InputFile>
           엑셀 첨부
           <Input
+            inputRef={inputRef}
             key={uuidv4()}
             type="file"
-            setState={readExcel}
+            setState={onReadExcel}
             accept=".xlsx"
           />
         </InputFile>

@@ -6,16 +6,24 @@ import MultipleCardList from './MultipleCardList';
 
 import { ImgDetailModal } from 'elements/ImgModal';
 import styled, { css } from 'styled-components';
+import DragAndDrop from 'components/common/DragAndDrop';
+import DragAndDropFile from 'components/common/DragAndDropFile';
+
 export default function MultipleList({
   excel,
+  inputRef,
   sheetList,
   showImageModal,
+  onReadExcel,
   onChangeSheet,
   onDeleteRow,
   onAddImage,
   onDeleteImage,
   onImageDetail,
 }) {
+  const dropType = [
+    'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  ];
   return (
     <MultipleBodyWrapper>
       <SheetList>
@@ -47,18 +55,38 @@ export default function MultipleList({
         onDeleteImage={onDeleteImage}
         onImageDetail={onImageDetail}
       />
-      <ImgDetailModal
-        src={showImageModal.image}
-        isOpen={showImageModal.show}
-        onClose={onImageDetail}
-      />
+      {sheetList.length === 0 && (
+        <>
+          <DragAndDrop
+            inputRef={inputRef}
+            data={sheetList || []}
+            type={dropType}
+            onChangeData={onReadExcel}
+          >
+            <DragAndDropFile />
+          </DragAndDrop>
+          <ImgDetailModal
+            src={showImageModal.image}
+            isOpen={showImageModal.show}
+            onClose={onImageDetail}
+          />
+        </>
+      )}
     </MultipleBodyWrapper>
   );
 }
 
 const MultipleBodyWrapper = styled.div`
+  position: relative;
   display: flex;
   width: 100%;
+
+  & > label {
+    position: absolute;
+    width: 100%;
+    height: calc(100vh - 16.6875rem - 6.2925rem - 2.93rem);
+    background-color: white;
+  }
 
   table {
     width: 100%;

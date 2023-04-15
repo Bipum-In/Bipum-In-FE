@@ -89,6 +89,10 @@ export default function StockView({ category: { category, largeCategory } }) {
 
   const handleChangeKeyword = e => {
     setKeyword(e.target.value);
+
+    if (page !== 1) {
+      setPage(1);
+    }
   };
 
   const handleDetailModal = id => {

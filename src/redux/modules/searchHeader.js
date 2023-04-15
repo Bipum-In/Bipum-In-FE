@@ -22,16 +22,27 @@ const setSearch = (state, payload) => {
   return { [searchKey]: payload };
 };
 
-const searchHeader = Redux.slice('Search', initialState, {}, bulider => {
-  Redux.extraReducer(
-    bulider,
-    getSearch,
-    'searchData',
-    '',
-    'search',
-    'isSearchError',
-    setSearch
-  );
-});
+const searchHeader = Redux.slice(
+  'Search',
+  initialState,
+  {
+    initSearchHeader: state => {
+      state.searchData.search = null;
+      state.searchData.isSearchError = false;
+    },
+  },
+  bulider => {
+    Redux.extraReducer(
+      bulider,
+      getSearch,
+      'searchData',
+      '',
+      'search',
+      'isSearchError',
+      setSearch
+    );
+  }
+);
 
+export const { initSearchHeader } = searchHeader.actions;
 export default searchHeader.reducer;

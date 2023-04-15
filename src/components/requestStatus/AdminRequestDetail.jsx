@@ -131,17 +131,23 @@ export default function RequestDetail({ isClose, detail }) {
                 categoryName={categoryName}
                 requestStatus={requestStatus}
               />
+
+              <Provide
+                image={imageList}
+                comment={comment}
+                stockList={stockList.data}
+                requestType={requestType}
+                requestStatus={requestStatus}
+                declineComment={declineComment}
+                setDeclineComment={setDeclineComment}
+                handleChangeSelect={handleChangeSelect}
+              />
+              <CreatedAtFormatDate
+                createdAt={createdAt}
+                modifiedAt={modifiedAt}
+                requestStatus={requestStatus}
+              />
             </RequestContainer>
-            <Provide
-              image={imageList}
-              comment={comment}
-              stockList={stockList.data}
-              requestType={requestType}
-              requestStatus={requestStatus}
-              declineComment={declineComment}
-              setDeclineComment={setDeclineComment}
-              handleChangeSelect={handleChangeSelect}
-            />
           </ContentContainer>
           <CustomModal
             isOpen={disposeModal}
@@ -168,11 +174,6 @@ export default function RequestDetail({ isClose, detail }) {
             handleModalShow={handleModalShow}
             handleRepairModalShow={handleRepairModalShow}
           />
-          <CreatedAtFormatDate
-            createdAt={createdAt}
-            modifiedAt={modifiedAt}
-            requestStatus={requestStatus}
-          />
         </DetailContainer>
       )}
     </>
@@ -189,12 +190,16 @@ const ContentContainer = styled.div`
   ${props => props.theme.FlexCol};
   ${props => props.theme.FlexCenter};
   width: 100%;
-  padding: 1.875rem 3.9375rem;
+  max-height: 80vh;
 `;
 
 const RequestContainer = styled.div`
   ${props => props.theme.FlexCow};
   align-items: center;
   width: 100%;
+  max-height: calc(90vh);
+  padding: 1.875rem 3.9375rem;
   font-weight: 600;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;

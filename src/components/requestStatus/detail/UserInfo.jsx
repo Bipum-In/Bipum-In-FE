@@ -93,6 +93,7 @@ const DeptName = styled.div`
 
 const EmpName = styled.div`
   ${props => props.theme.FlexCol};
+  width: 10rem;
   font-size: 0.9375rem;
   font-weight: 500;
   gap: 0.375rem;

@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function Input({ value, setState, ...props }) {
-  return <InputStyle {...props} value={value} onChange={setState} />;
+export default function Input({ inputRef, value, setState, ...props }) {
+  return (
+    <InputStyle {...props} ref={inputRef} value={value} onChange={setState} />
+  );
 }
 
 Input.defaultProps = {

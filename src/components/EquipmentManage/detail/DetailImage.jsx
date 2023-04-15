@@ -28,11 +28,10 @@ export default function DetailImage({ detail, preview, onChangeImage }) {
 
 const ImgContainer = styled.div`
   display: flex;
-  margin-right: 5.9375rem;
   cursor: pointer;
   img {
-    width: 23.25rem;
-    height: 23.25rem;
+    width: 26.6875rem;
+    height: 26.6875rem;
     border: 1px solid ${props => props.theme.color.grey.brandColor2};
     border-radius: 0.375rem;
   }

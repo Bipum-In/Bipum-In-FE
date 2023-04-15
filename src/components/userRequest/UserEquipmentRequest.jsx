@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { styles } from '../common/commonStyled';
 
 import Button from 'elements/Button';
@@ -18,6 +18,7 @@ export default function UserEquipmentRequest({
   category,
   largeCategory,
 }) {
+  const sendCheck = useRef(false);
   const [useType, setUseType] = useState('');
   const [supplyId, setSupplyId] = useState('');
   const [categoryId, setCategoryId] = useState('');
@@ -60,11 +61,8 @@ export default function UserEquipmentRequest({
     }
   };
 
-  useEffect(() => {
-    initData();
-  }, [type]);
-
   const initData = () => {
+    sendCheck.current = false;
     setUseType('');
     setSupplyId('');
     setCategoryId('');
@@ -79,6 +77,10 @@ export default function UserEquipmentRequest({
       supply: '선택',
       useType: '선택',
     });
+  };
+
+  const handleChagneMessage = e => {
+    setMessageValue(e.target.value);
   };
 
   const handleChangeMySupply = e => {
@@ -103,6 +105,8 @@ export default function UserEquipmentRequest({
     }
 
     setUseType(STRING.USE_TYPE[text]);
+    setSmallCategory(null);
+    setMysupply(null);
   };
 
   const handleChangeLargeCategory = e => {
@@ -145,6 +149,9 @@ export default function UserEquipmentRequest({
 
   const setFormData = e => {
     e.preventDefault();
+    if (sendCheck.current) return;
+    sendCheck.current = true;
+
     const formData = new FormData();
 
     formData.append('requestType', type);
@@ -211,7 +218,8 @@ export default function UserEquipmentRequest({
   const sendFormData = formData => {
     axios
       .post(`/api/requests`, [formData, `${STRING.REQUEST_NAME[type]} 완료`])
-      .then(() => initData());
+      .then(() => initData())
+      .catch(() => (sendCheck.current = false));
   };
 
   const getMySupply = categoryId => {
@@ -317,22 +325,30 @@ export default function UserEquipmentRequest({
                   <styles.TypeTitle requiredinput="true">
                     {type === 'SUPPLY' ? '요청 메시지' : '요청 사유'}
                   </styles.TypeTitle>
-                  <styles.TextArea
-                    value={messageValue}
-                    onChange={e => setMessageValue(e.target.value)}
-                  />
+                  <styles.TextAreaContainer>
+                    <styles.TextArea
+                      value={messageValue}
+                      onChange={handleChagneMessage}
+                      placeholder="100자 이내로 작성해주세요."
+                      maxLength={100}
+                    />
+                    <styles.TextLength>
+                      <span>{messageValue.length}/100</span>
+                    </styles.TextLength>
+                  </styles.TextAreaContainer>
                 </styles.TypeBox>
               </styles.EquipmentLeftContainer>
               {type !== 'SUPPLY' && (
                 <styles.ImageContainer>
+                  <styles.TypeTitle requiredinput="true">
+                    사진첨부
+                  </styles.TypeTitle>
                   <ImageAdd
                     editMode={'true'}
                     preview={preview}
                     onChangeimge={handleChangeimge}
                     onDeleteImage={handleDeleteImage}
-                  >
-                    <styles.TypeTitle>사진 첨부</styles.TypeTitle>
-                  </ImageAdd>
+                  />
                 </styles.ImageContainer>
               )}
             </styles.EquipmentDetailContainer>

@@ -6,6 +6,7 @@ import MultipleTableItem from './MultipleTableItem';
 
 export default function MultipleTableList({
   excel,
+  sheetList,
   onDeleteRow,
   onAddImage,
   onDeleteImage,
@@ -14,20 +15,22 @@ export default function MultipleTableList({
   return (
     <MultipleBodyContainer>
       <table>
-        <MultipleShowListTitle>
-          <tr>
-            <th>순번</th>
-            {ARRAY.MULTIPLE_HEADER.map((header, index) => (
-              <th key={index}>{header}</th>
-            ))}
-            <th>이미지</th>
-            <th />
-          </tr>
-        </MultipleShowListTitle>
+        {!!sheetList.length && (
+          <MultipleShowListTitle>
+            <tr>
+              <th>순번</th>
+              {ARRAY.MULTIPLE_HEADER.map((header, index) => (
+                <th key={index}>{header}</th>
+              ))}
+              <th>이미지</th>
+              <th />
+            </tr>
+          </MultipleShowListTitle>
+        )}
       </table>
       <MultipleShowList>
         <table>
-          {excel.data &&
+          {!!sheetList.length &&
             excel.data[excel.sheetItem]?.map((column, index) => (
               <MultipleTableItem
                 key={uuidv4()}
@@ -51,9 +54,9 @@ const MultipleBodyContainer = styled.section`
 `;
 
 const MultipleShowList = styled.div`
-  height: 57.55vh;
+  height: calc(100vh - 16.6875rem - 6.2925rem - 2.93rem);
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 const MultipleShowListTitle = styled.thead`

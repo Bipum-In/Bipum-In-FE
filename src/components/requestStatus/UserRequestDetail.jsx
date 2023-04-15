@@ -289,10 +289,10 @@ const RequestDate = styled.div`
   font-size: 0.75rem;
   padding-top: 0.5rem;
 `;
+
 const Hr = styled.div`
-  height: 0.0625rem;
   width: 100%;
-  background-color: ${props => props.theme.color.grey.brandColor2};
+  border-top: 2px solid ${props => props.theme.color.grey.brandColor2};
   margin: 1rem 0 2rem 0;
 `;
 
@@ -313,15 +313,16 @@ const ContentContainer = styled.div`
   ${props => props.theme.FlexCol};
   ${props => props.theme.FlexCenter};
   width: 100%;
-  height: 100%;
-  padding: 1.875rem 3.9375rem;
+  max-height: 90vh;
 `;
 
 const RequestContainer = styled.div`
-  ${props => props.theme.FlexCow};
-  align-items: center;
+  ${props => props.theme.FlexCol};
   width: 100%;
+  max-height: calc(90vh - 3.6331rem);
+  padding: 1.875rem 3.9375rem;
   font-weight: 600;
+  overflow-y: auto;
 `;
 
 const SendMessegeContainer = styled.div`
@@ -333,9 +334,10 @@ const SendMessegeContainer = styled.div`
   gap: 0.375rem;
 `;
 
-const SendMessege = styled.div`
+const SendMessege = styled.pre`
   color: black;
   font-size: 0.9375rem;
   font-weight: 500;
   margin: 1rem 0;
+  white-space: pre-wrap;
 `;

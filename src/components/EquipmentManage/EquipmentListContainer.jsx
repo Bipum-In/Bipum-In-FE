@@ -114,6 +114,10 @@ export default function EquipmentListContainer({
   };
 
   const handleChangeKeyword = e => {
+    if (page !== 1) {
+      setPage(1);
+    }
+
     setKeyword(e.target.value);
   };
 

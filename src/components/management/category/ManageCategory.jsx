@@ -275,10 +275,11 @@ const CategoryContainer = styled.div`
 
 const CategoryWrapper = styled.div`
   ${props => props.theme.wh100};
+  height: calc(100vh - 22.5rem);
 `;
 
 const SmallCategoryRow = styled.div`
-  ${props => props.theme.FlexRow};
+  display: flex;
   flex-wrap: wrap;
   gap: 0.875rem;
   button {
@@ -291,9 +292,13 @@ const SmallCategoryRow = styled.div`
 `;
 const SmallCategoryItemsWrapper = styled.div`
   ${props => props.theme.FlexRow};
+  align-items: flex-start;
   color: ${props => props.theme.color.grey.brandColor5};
   position: relative;
+  height: 100%;
   padding: 1.625rem 2.0625rem;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;
 
 const SmallCategoryItemContainer = styled.div`

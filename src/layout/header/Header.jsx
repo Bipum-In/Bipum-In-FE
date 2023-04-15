@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,10 +15,13 @@ import STRING from 'constants/string';
 import QUERY from 'constants/query';
 import ROUTER from 'constants/routerConst';
 
+import SearchDetailModal from './SearchDetailModal';
 import Search from 'layout/header/Search';
 import { CustomModal } from 'elements/Modal';
-import useOutsideClick from 'hooks/useOutsideClick';
 import { useModalState } from 'hooks/useModalState';
+import useOutsideClick from 'hooks/useOutsideClick';
+import useThrottleCallback from 'hooks/useThrottleCallback';
+import useDebouncedCallback from 'hooks/useDebounce';
 
 import {
   getEncryptionStorage,
@@ -26,11 +29,13 @@ import {
 } from 'utils/encryptionStorage';
 
 import SSE from 'api/sse';
-import { setAdminSSE, setUserSSE } from 'redux/modules/sseSlice';
-import { userInfoSlice } from '../../redux/modules/userInfoSlice';
 import Axios from 'api/axios';
 import logout from 'utils/logout';
-import { getSearch } from 'redux/modules/searchHeader';
+
+import { userInfoSlice } from '../../redux/modules/userInfoSlice';
+import { setAdminSSE, setUserSSE } from 'redux/modules/sseSlice';
+import { getSearch, initSearchHeader } from 'redux/modules/searchHeader';
+import { getCategoryList } from 'redux/modules/equipmentStatus';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -38,11 +43,25 @@ export default function Header() {
   const [logoutModal, setLogoutModal] = useModalState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const dropDownRef = useOutsideClick(() => setIsDropdownVisible(false));
 
   const [searchValue, setSearchValue] = useState('');
+  const [showModal, setShowModal] = useState({
+    supplyShow: false,
+    requestShow: false,
+    id: null,
+  });
+
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
   const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
+
+  const dropDownRef = useOutsideClick(
+    () => setIsDropdownVisible(false),
+    isDropdownVisible
+  );
+  const searchOutsideRef = useOutsideClick(() => {
+    initSearchData();
+    setShowModal({ supplyShow: false, requestShow: false, id: null });
+  }, searchValue);
 
   const { isAdmin, userRole } = getEncryptionStorage();
 
@@ -51,10 +70,41 @@ export default function Header() {
     searchHeader: {
       searchData: { search },
     },
+    equipmentStatus: {
+      category: { getCategory },
+    },
   } = useSelector(state => state);
 
   const { getUserInfo } = useSelector(state => state.userInfo.userInfoList);
   const { empName, deptName, image } = getUserInfo || {};
+
+  const singleAddLargeCategory = Object.values(STRING.CATEGORY_ENG).map(
+    value => {
+      return { name: value };
+    }
+  );
+
+  const throttledDispatch = useThrottleCallback(
+    useCallback(() => {
+      const isAdminPath = isAdmin ? '/admin' : '';
+      dispatch(getSearch({ isAdmin: isAdminPath, keyword: searchValue }));
+    }, [dispatch, isAdmin, searchValue]),
+    400
+  );
+
+  const debouncedSearch = useDebouncedCallback(
+    useCallback(() => {
+      const isAdminPath = isAdmin ? '/admin' : '';
+      dispatch(getSearch({ isAdmin: isAdminPath, keyword: searchValue }));
+    }, [dispatch, isAdmin, searchValue]),
+    500
+  );
+
+  useEffect(() => {
+    if (searchValue === '') return;
+    throttledDispatch();
+    debouncedSearch();
+  }, [dispatch, searchValue, isAdmin, debouncedSearch, throttledDispatch]);
 
   useEffect(() => {
     const url = `${process.env.REACT_APP_SERVER_URL}/api/subscribe`;
@@ -67,10 +117,6 @@ export default function Header() {
       data && !data.acceptResult && dispatch(setAdminSSE(data));
     });
 
-    sse.onError(error => {
-      console.log(error);
-    });
-
     dispatch(userInfoSlice());
 
     return () => {
@@ -79,14 +125,26 @@ export default function Header() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (searchValue === '') return;
-    const isAdminPath = isAdmin ? '/admin' : '';
-    dispatch(getSearch({ isAdmin: isAdminPath, keyword: searchValue }));
-  }, [dispatch, searchValue, isAdmin]);
+    dispatch(getCategoryList());
+  }, [dispatch, showModal]);
+
+  const initSearchData = () => {
+    setSearchValue('');
+    dispatch(initSearchHeader());
+  };
 
   const handleModalShow = () => setLogoutModal();
+
   const handleModalClose = () => setLogoutModal(false);
-  const handleOnChagneSearch = e => setSearchValue(e.target.value);
+
+  const handleOnChagneSearch = e => {
+    const { value } = e.target;
+    if (!value) {
+      dispatch(initSearchHeader());
+    }
+
+    setSearchValue(value);
+  };
 
   const headerData = [
     {
@@ -123,20 +181,49 @@ export default function Header() {
 
   const handleLogoutBtn = async e => {
     e.preventDefault();
-    await axios.post('/api/user/logout').then(() => {
-      logout(navigate('/'));
-    });
+
+    try {
+      axios.post('/api/user/logout');
+      logout(() => {
+        navigate(ROUTER.PATH.MAIN);
+      });
+    } catch (error) {
+      logout(() => {
+        window.location.reload();
+      });
+    }
+  };
+
+  const handleSearchDetail = item => {
+    const supplyId = item['supplyId'];
+    const requestId = item['requestId'];
+    const showType = supplyId ? 'supplyShow' : 'requestShow';
+    const id = supplyId || requestId;
+    if (id) {
+      setShowModal({ ...showModal, [showType]: true, id });
+    } else {
+      setShowModal({ supplyShow: false, requestShow: false, id: null });
+    }
+
+    initSearchData();
   };
 
   return (
-    <HeaderWrapper>
-      <HeaderContainer>
-        <ItemContainer>
-          {/* 검색창 */}
-          <Search search={search} onChagneSearch={handleOnChagneSearch} />
-          {/* 헤더 오른쪽 아이템 */}
-          <HeaderRightContainer>
-            <IconContainer>
+    <>
+      <HeaderWrapper>
+        <HeaderContainer>
+          <ItemContainer>
+            {/* 검색창 */}
+            <Search
+              searchOutsideRef={searchOutsideRef}
+              search={search}
+              searchValue={searchValue}
+              onChagneSearch={handleOnChagneSearch}
+              onSearchDetail={handleSearchDetail}
+            />
+            {/* 헤더 오른쪽 아이템 */}
+            <HeaderRightContainer>
+              {/* <IconContainer>
               <Alaram />
               {isAdmin
                 ? sseAdminLength && (
@@ -149,50 +236,58 @@ export default function Header() {
                       <span>{sseUserLength}</span>
                     </AlaramCount>
                   )}
-            </IconContainer>
-            {/* 드롭다운 컨테이너 */}
-            <LoginUserInfoDropDown
-              onClick={toggleDropdown}
-              className={isDropdownVisible ? 'visible' : ''}
-              ref={dropDownRef}
-            >
-              <UserImgContainer userImg={image} />
-              <UserInfoDetailContainer>
-                <InfoCompanyTitle>{deptName}</InfoCompanyTitle>
-                <InfoUserName>
-                  {empName} {isAdmin && '관리자'}님
-                </InfoUserName>
-              </UserInfoDetailContainer>
-              <UserDropDown isRotated={isDropdownVisible}>
-                <ArrowDown />
-              </UserDropDown>
-              {/* 드롭다운 디테일 */}
-              <DropdownContainer>
-                <DropdownBox>
-                  {headerData.map(item => (
-                    <DropdownList
-                      key={uuidv4()}
-                      onClick={item.onclick || (() => navigate(item.path))}
+            </IconContainer> */}
+              {/* 드롭다운 컨테이너 */}
+              <LoginUserInfoDropDown
+                onClick={toggleDropdown}
+                className={isDropdownVisible ? 'visible' : ''}
+                ref={dropDownRef}
+              >
+                <UserImgContainer userImg={image} />
+                <UserInfoDetailContainer>
+                  <InfoCompanyTitle>{deptName}</InfoCompanyTitle>
+                  <InfoUserName>
+                    {empName} {isAdmin && '관리자'}님
+                  </InfoUserName>
+                </UserInfoDetailContainer>
+                <UserDropDown isRotated={isDropdownVisible}>
+                  <ArrowDown />
+                </UserDropDown>
+                {/* 드롭다운 디테일 */}
+                <DropdownContainer>
+                  <DropdownBox>
+                    {headerData.map(item => (
+                      <DropdownList
+                        key={uuidv4()}
+                        onClick={item.onclick || (() => navigate(item.path))}
+                      >
+                        {item.icon}
+                        {item.text}
+                      </DropdownList>
+                    ))}
+                    <CustomModal
+                      isOpen={logoutModal}
+                      onClose={handleModalClose}
+                      submit={handleLogoutBtn}
+                      text={'로그아웃'}
                     >
-                      {item.icon}
-                      {item.text}
-                    </DropdownList>
-                  ))}
-                  <CustomModal
-                    isOpen={logoutModal}
-                    onClose={handleModalClose}
-                    submit={handleLogoutBtn}
-                    text={'로그아웃'}
-                  >
-                    정말 로그아웃 하시겠습니까?
-                  </CustomModal>
-                </DropdownBox>
-              </DropdownContainer>
-            </LoginUserInfoDropDown>
-          </HeaderRightContainer>
-        </ItemContainer>
-      </HeaderContainer>
-    </HeaderWrapper>
+                      정말 로그아웃 하시겠습니까?
+                    </CustomModal>
+                  </DropdownBox>
+                </DropdownContainer>
+              </LoginUserInfoDropDown>
+            </HeaderRightContainer>
+          </ItemContainer>
+        </HeaderContainer>
+      </HeaderWrapper>
+      <SearchDetailModal
+        isAdmin={isAdmin}
+        showModal={showModal}
+        category={getCategory?.category}
+        largeCategory={singleAddLargeCategory}
+        onDetailModal={handleSearchDetail}
+      ></SearchDetailModal>
+    </>
   );
 }
 const HeaderWrapper = styled.header`

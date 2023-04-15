@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import RendingHeader from 'components/rending/RendingHeader';
 import RendingDots from 'components/rending/RendingDots';
 import RendingScrollPage from 'components/rending/pages/RendingScrollPage';
+import { ReactComponent as ScrollUp } from 'styles/commonIcon/scrollUp.svg';
 
 import { useIsLoggedIn } from 'hooks/useIsLoggedIn';
 import { logoutSuccess } from 'redux/modules/authSlice';
@@ -14,6 +15,7 @@ import ROUTER from 'constants/routerConst';
 import useThrottleCallBack from 'hooks/useThrottleCallback';
 import Axios from 'api/axios';
 import logout from 'utils/logout';
+import styled from 'styled-components';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -31,7 +33,7 @@ export default function Rending() {
     setPageIndex(initialPageIndex);
   }, [initialPageIndex]);
 
-  useThrottleCallBack(handleScroll, 400, 'wheel');
+  useThrottleCallBack(handleScroll, 1200, 'wheel');
 
   const currentUrl =
     document.location.href === 'http://localhost:3000/'
@@ -68,7 +70,11 @@ export default function Rending() {
       await axios.post(`/api/user/logout`);
       dispatch(logoutSuccess());
       logout(() => navigate(ROUTER.PATH.MAIN));
-    } catch (error) {}
+    } catch (error) {
+      logout(() => {
+        window.location.reload();
+      });
+    }
   };
 
   const handleBackToFirstPage = () => setPageIndex(0);
@@ -86,13 +92,42 @@ export default function Rending() {
         pageIndex={pageIndex}
         setPageCount={setTotalPages}
         setPageIndex={setPageIndex}
-        onclick={handleBackToFirstPage}
       />
       <RendingDots
         pageIndex={pageIndex}
         totalPages={totalPages}
         setPageIndex={setPageIndex}
       />
+      {pageIndex !== 0 && (
+        <ScrollToTopContainer>
+          <ScrollToTopIcon onClick={handleBackToFirstPage} />
+        </ScrollToTopContainer>
+      )}
     </>
   );
 }
+
+const ScrollToTopContainer = styled.div`
+  position: fixed;
+  bottom: 20px;
+  right: 80px;
+  z-index: 1;
+`;
+
+const ScrollToTopIcon = styled(ScrollUp)`
+  width: 50px;
+  height: 50px;
+  color: ${props => props.theme.color.blue.brandColor6};
+  cursor: pointer;
+  transition: color 0.2s, opacity 0.2s, transform 0.3s;
+  filter: drop-shadow(2px 4px 2px rgba(0, 0, 0, 0.269));
+  &:active {
+    transform: scale(0.9);
+  }
+  :hover {
+    transform: scale(1.1);
+    svg {
+      filter: drop-shadow(2px 4px 10px rgba(0, 0, 0, 0.269));
+    }
+  }
+`;

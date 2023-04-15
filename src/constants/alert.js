@@ -9,6 +9,9 @@ const ALERT = {
 
             ${errorArray.join(' ')}`;
   },
+  CHECK_INPUT_KO_AND_ENG_AND_NUM(name) {
+    return `${name}은 한글(자음,모음 제외), 영문, 숫자만 입력 가능합니다.`;
+  },
 };
 
 export default ALERT;
