@@ -6,26 +6,43 @@ import { v4 as uuidv4 } from 'uuid';
 import Input from 'elements/Input';
 import SearchItem from './SearchItem';
 
-export default function Search({ search, onChagneSearch }) {
+export default function Search({
+  search,
+  searchValue,
+  searchOutsideRef,
+  onChagneSearch,
+  onSearchDetail,
+}) {
   const searchData = search?.supplySearchDtoList;
   const searchList = searchData && Object.values(searchData);
   return (
-    <SearchContainer>
+    <SearchContainer ref={searchOutsideRef}>
       <IconContainer search="true">
         <SearchIcon />
       </IconContainer>
       <SearchInput
+        value={searchValue}
         setState={onChagneSearch}
-        placeholder="기능 개발중 입니다."
-        disabled
+        placeholder="검색어를 입력해 주세요."
       />
-      {/* {searchList.length && (
+      {searchValue && (
         <SearchList>
-          {searchList?.map(data => (
-            <SearchItem key={uuidv4()} search={data} />
+          {searchList?.map((data, index) => (
+            <>
+              {data.length !== 0 && (
+                <SearchListTitle key={uuidv4()}>
+                  {index ? '요청 검색' : '재고 검색'}
+                </SearchListTitle>
+              )}
+              <SearchItem
+                key={uuidv4()}
+                search={data}
+                onSearchDetail={onSearchDetail}
+              />
+            </>
           ))}
         </SearchList>
-      )} */}
+      )}
     </SearchContainer>
   );
 }
@@ -40,19 +57,30 @@ const SearchContainer = styled.div`
   background-color: white;
   border-radius: 0.5rem;
   margin-right: 2rem;
+
+  header:nth-child(1) {
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+
   @media (max-width: ${props => props.theme.screen.desktop}) {
     margin-left: 2rem;
   }
+`;
+
+const SearchListTitle = styled.header`
+  width: 100%;
+  color: white;
+  background-color: ${props => props.theme.color.blue.brandColor6};
+  padding: 1rem;
+  font-size: 1rem;
+  font-weight: 600;
 `;
 
 const SearchList = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  /* width: 100%; */
-  /* height: 100%; */
   border-radius: 1rem;
-  padding: 1rem;
   background-color: white;
   ${props => props.theme.Boxshadow}
   transform: translate(0, 4rem);
