@@ -44,7 +44,6 @@ const EquipmentImageContainer = styled.div`
   ${props => props.theme.FlexCol};
   color: ${props => props.theme.color.blue.brandColor6};
   padding-bottom: 1rem;
-  overflow: hidden;
   span {
     padding-bottom: 1rem;
   }
