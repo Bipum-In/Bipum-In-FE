@@ -7,8 +7,8 @@ export default function useThrottleCallback(callback, delay, eventType) {
     e => {
       if (!throttleRef.current) {
         throttleRef.current = true;
+        callback(e);
         setTimeout(() => {
-          callback(e);
           throttleRef.current = false;
         }, delay);
       }
