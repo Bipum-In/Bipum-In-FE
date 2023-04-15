@@ -31,7 +31,9 @@ export default function StatusList({
           content.content.map(list => (
             <RequestShowList
               key={uuidv4()}
-              onClick={() => onDetail(list.requestId || list.supplyId)}
+              onClick={() =>
+                onDetail(list.requestId || list.supplyId || list.partnersId)
+              }
             >
               <StatusItem
                 isAdmin={isAdmin}
