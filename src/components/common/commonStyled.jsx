@@ -138,6 +138,10 @@ const ImageContainer = styled.div`
   }
 `;
 
+const TextAreaContainer = styled.div`
+  position: relative;
+`;
+
 const TextArea = styled.textarea`
   width: 30.875rem;
   height: 10rem;
@@ -148,6 +152,13 @@ const TextArea = styled.textarea`
   border-radius: 0.25rem;
   border: none;
   resize: none;
+`;
+
+const TextLength = styled.div`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: 0.5rem;
 `;
 
 export const styles = {
@@ -164,5 +175,7 @@ export const styles = {
   CategoryInputContainer,
   PartnerCompany,
   ImageContainer,
+  TextAreaContainer,
   TextArea,
+  TextLength,
 };
