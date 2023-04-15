@@ -21,3 +21,10 @@ export const TypeDetailTitle = styled.span`
   font-size: 0.9375rem;
   line-height: 3;
 `;
+
+export const TypeDetailMessage = styled.pre`
+  margin-top: 0.5rem;
+  font-size: 0.9375rem;
+  line-height: 2;
+  white-space: pre-wrap;
+`;

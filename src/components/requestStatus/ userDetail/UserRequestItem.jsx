@@ -5,6 +5,7 @@ import {
   ItemContainer,
   TypeTitle,
   TypeDetailTitle,
+  TypeDetailMessage,
 } from './Styled';
 
 import STRING from 'constants/string';
@@ -43,7 +44,7 @@ export default function UserRequestItem({
             요청
             {requestType !== STRING.REQUEST_NAME.SUPPLY ? '사유' : '메시지'}
           </TypeTitle>
-          <TypeDetailTitle>
+          <TypeDetailMessage>
             {editMode ? (
               <ContentInput>
                 <Input defaultValue={content} setState={handleContentChange} />
@@ -51,7 +52,7 @@ export default function UserRequestItem({
             ) : (
               content
             )}
-          </TypeDetailTitle>
+          </TypeDetailMessage>
         </InputItemContainer>
       </InputDetailWrapper>
     </>
