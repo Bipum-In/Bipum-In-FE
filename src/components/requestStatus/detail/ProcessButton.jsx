@@ -41,6 +41,7 @@ const ApproveAndRefuse = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
+  margin-top: 0.5rem;
   margin-bottom: 1.5rem;
   padding: 0 3.9375rem;
   gap: 1rem;
