@@ -1,17 +1,17 @@
 import { useCallback, useEffect, useRef } from 'react';
 
-const useOutsideClick = (onClickOutside, desktopSize = true) => {
+const useOutsideClick = (onClickOutside, useOutside = false) => {
   const ref = useRef(null);
 
   const handleClick = useCallback(
     e => {
-      if (!ref.current || !desktopSize) return;
+      if (!ref.current || !useOutside) return;
       const inside = ref.current.contains(e.target);
 
       if (inside) return;
       onClickOutside();
     },
-    [onClickOutside, ref, desktopSize]
+    [onClickOutside, ref, useOutside]
   );
 
   useEffect(() => {
