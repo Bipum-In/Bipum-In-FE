@@ -58,9 +58,13 @@ export default function DetailUseHistory({ detail }) {
               <span>{item.history}</span>
             </DetailUseHistoryContent>
           ))}
-          <InfiniteScrollCheck ref={ref}>
-            {isUserLoading ? <InfiniteCross /> : '마지막 페이지 입니다.'}
-          </InfiniteScrollCheck>
+          {firstContent.length === 0 ? (
+            <EmptyContent>수리 내역이 없습니다.</EmptyContent>
+          ) : (
+            <InfiniteScrollCheck ref={ref}>
+              마지막 페이지 입니다
+            </InfiniteScrollCheck>
+          )}
         </InfiniteScroll>
       )}
     </DetailUseHistoryContainer>
@@ -123,6 +127,7 @@ const DetailUseHistoryContent = styled(DetailUseHistoryHeader)`
 
 const InfiniteScroll = styled.div`
   height: 15rem;
+  background-color: ${props => props.theme.color.blue.brandColor1};
   overflow-x: hidden;
   overflow-y: auto;
 
@@ -137,6 +142,17 @@ const InfiniteScroll = styled.div`
   }
 `;
 
+const EmptyContent = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: ${props => props.theme.color.grey.brandColor5};
+  font-weight: 500;
+  font-size: 13px;
+`;
+
 const InfiniteScrollCheck = styled.div`
   display: flex;
   justify-content: center;
@@ -147,29 +163,4 @@ const InfiniteScrollCheck = styled.div`
   border-radius: 0 0 0.5rem 0.5rem;
   font-weight: 500;
   font-size: 13px;
-`;
-
-const InfiniteCross = styled.div`
-  display: inline-block;
-
-  :after {
-    content: ' ';
-    display: block;
-    width: 0.8rem;
-    height: 0.8rem;
-    border-radius: 50%;
-    border: 3px solid;
-    border-color: ${props => props.theme.color.blue.brandColor5} transparent
-      ${props => props.theme.color.blue.brandColor5} transparent;
-    animation: lds-dual-ring 1.2s linear infinite;
-  }
-
-  @keyframes lds-dual-ring {
-    0% {
-      transform: rotate(0deg);
-    }
-    100% {
-      transform: rotate(360deg);
-    }
-  }
 `;
