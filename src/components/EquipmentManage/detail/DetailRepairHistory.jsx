@@ -78,8 +78,7 @@ export default function DetailRepairHistory({ detail }) {
 }
 
 const DetailRepairHistoryContainer = styled.div`
-  max-width: 25.3125rem;
-  width: 100%;
+  min-width: 25.375rem;
   height: 17.5rem;
   margin: 1.6875rem 0;
   border-radius: 0.5rem;
@@ -112,15 +111,18 @@ const DetailRepairHistoryHeader = styled.div`
   }
 
   span:nth-child(1) {
-    max-width: 4.875rem;
+    min-width: 4.875rem;
+    margin-right: 2rem;
   }
 
   span:nth-child(2) {
-    max-width: 6.25rem;
+    min-width: 6.25rem;
+    margin-right: 2rem;
   }
 
   span:nth-child(3) {
-    max-width: 6.25rem;
+    min-width: 6.25rem;
+    margin-right: 2rem;
   }
 `;
 
@@ -135,6 +137,7 @@ const DetailRepairHistoryContent = styled(DetailRepairHistoryHeader)`
 const InfiniteScroll = styled.div`
   height: 15rem;
   background-color: ${props => props.theme.color.blue.brandColor1};
+  border-radius: 0 0 0.5rem 0.5rem;
   overflow-x: hidden;
   overflow-y: auto;
 

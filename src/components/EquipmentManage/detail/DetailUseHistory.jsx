@@ -72,7 +72,7 @@ export default function DetailUseHistory({ detail }) {
 }
 
 const DetailUseHistoryContainer = styled.div`
-  width: 20.4375rem;
+  min-width: 20.4375rem;
   height: 17.5rem;
   margin: 1.6875rem 0;
   border-radius: 0.5rem;
@@ -84,15 +84,10 @@ const DetailUseHistoryContainer = styled.div`
     font-weight: 500;
     font-size: 13px;
   }
-
-  @media (max-width: 106.25rem) {
-    width: 25.3125rem;
-  }
 `;
 
 const DetailUseHistoryHeader = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
   height: 2.5rem;
   color: white;
@@ -103,16 +98,24 @@ const DetailUseHistoryHeader = styled.div`
   padding: 0 2rem;
   gap: 2rem;
 
+  span {
+    width: 100%;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
   span:nth-child(1) {
     min-width: 4.875rem;
+    margin-right: 2rem;
   }
 
   span:nth-child(2) {
     min-width: 6.25rem;
+    margin-right: 2rem;
   }
 
   span:nth-child(3) {
-    min-width: 6.25rem;
+    min-width: 1.3125rem;
   }
 `;
 
@@ -120,7 +123,7 @@ const DetailUseHistoryContent = styled(DetailUseHistoryHeader)`
   height: 2.5rem;
   color: black;
   background-color: ${props => props.theme.color.blue.brandColor1};
-  border-radius: 0;
+  border-radius: 0 0 0.5rem 0.5rem;
   font-weight: 500;
   font-size: 12px;
 `;
