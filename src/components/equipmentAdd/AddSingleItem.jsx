@@ -12,6 +12,7 @@ import ImageAdd from './single/ImageAdd';
 import STRING from 'constants/string';
 import Input from 'elements/Input';
 import alertModal from 'utils/alertModal';
+import Valid from 'validation/validation';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -98,7 +99,11 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
   };
 
   const handleChangeSerialValue = e => {
-    setSerialValue(e.target.value);
+    const serialNumber = e.target.value;
+    const maxLength = 30;
+
+    if (!Valid.inputByteCheck(serialNumber, maxLength)) return;
+    setSerialValue(serialNumber);
   };
 
   const handleChangeLargeCategory = e => {
@@ -198,6 +203,18 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
 
   const setFormData = e => {
     e.preventDefault();
+    if (
+      !Valid.inputCheck(
+        [
+          [nameValue, '제품명'],
+          [serialValue, '시리얼 넘버'],
+        ],
+        /[A-Za-z0-9가-힣]/g
+      )
+    ) {
+      return;
+    }
+
     const formData = new FormData();
 
     formData.append('largeCategory', largeCategory);
@@ -316,12 +333,15 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
                 </styles.TypeBox>
               </styles.EquipmentLeftContainer>
               <styles.Hr />
-              <ImageAdd
-                editMode={'true'}
-                preview={preview}
-                onChangeimge={onChangeimge}
-                onDeleteImage={handleDeleteImage}
-              />
+              <div>
+                <styles.TypeTitle requiredinput="true">이미지</styles.TypeTitle>
+                <ImageAdd
+                  editMode={'true'}
+                  preview={preview}
+                  onChangeimge={onChangeimge}
+                  onDeleteImage={handleDeleteImage}
+                />
+              </div>
             </styles.EquipmentDetailContainer>
             <styles.SubminPostContainer>
               <Button submit post onClick={setFormData} disabled={isDisabled}>

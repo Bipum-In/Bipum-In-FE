@@ -12,8 +12,10 @@ export default function EquipmentInput({ value, setValue, onCrawling }) {
       <TypeBox>
         <TypeTitle requiredinput="true">제품명</TypeTitle>
         <Input
+          type="text"
           value={value[0]}
           setState={setValue[0]}
+          maxLength="30"
           placeholder="제품명을 기입해주세요"
         />
         <Button
