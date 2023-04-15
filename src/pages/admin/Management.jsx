@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
+import { getPartnersList } from 'redux/modules/partnersList';
 
 import useSelectMenu from 'hooks/useSelectMenu';
 import StatusMenu from 'components/common/status/StatusMenu';
@@ -11,12 +12,25 @@ import STRING from 'constants/string';
 import { useDispatch, useSelector } from 'react-redux';
 import {} from 'redux/modules/requestStatus';
 import { getCategoryList } from 'redux/modules/equipmentStatus';
-
 export default function Management() {
   const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+
   const { getCategory, isCategoryError } = useSelector(
     state => state.equipmentStatus.category
   );
+
+  const { getPartners } = useSelector(state => state.partnersList.partnersList);
+
+  useEffect(() => {
+    dispatch(getPartnersList({ page, size: 10 }));
+  }, [page, dispatch]);
+
+  useEffect(() => {
+    if (getPartners && getPartners.content.length === 0) {
+      setPage(state => (state > 1 ? state - 1 : 1));
+    }
+  }, [getPartners]);
 
   useEffect(() => {
     dispatch(getCategoryList());
@@ -28,20 +42,35 @@ export default function Management() {
     { name: STRING.MANAGEMENT_TITLE.PARTNER, status: false },
   ]);
 
+  const handleClickMenu = (e, innerText) => {
+    setPage(1);
+    clickMenu(e, innerText);
+  };
+
+  const handlePage = e => {
+    setPage(e);
+  };
+
   if (isCategoryError) return <div>에러 발생</div>;
   return (
     <>
       {getCategory && (
         <ManagementWrapper>
           <ManagementBtnContainer>
-            <StatusMenu menuStyle={menuStyle} onClickMenu={clickMenu} />
+            <StatusMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
           </ManagementBtnContainer>
           <ManagementComponentsContainer>
             {menuStyle[0].status && (
               <CategoryManagement category={getCategory} />
             )}
             {menuStyle[1].status && <DeptManagement />}
-            {menuStyle[2].status && <PartnerManagement />}
+            {menuStyle[2].status && getPartners && (
+              <PartnerManagement
+                partners={getPartners}
+                page={page}
+                onPage={handlePage}
+              />
+            )}
           </ManagementComponentsContainer>
         </ManagementWrapper>
       )}
