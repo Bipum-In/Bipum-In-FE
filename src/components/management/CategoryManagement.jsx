@@ -57,7 +57,6 @@ export default function CategoryManagement({
       <ManagementType>
         <Title>{STRING.MANAGEMENT_TITLE.CATEGORY}</Title>
       </ManagementType>
-
       <ManageCategory
         activeCategory={activeCategory}
         getCategory={menuStyle}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import styled from 'styled-components';
 import * as XLSX from 'xlsx';
 
@@ -15,6 +15,7 @@ import ScreenViewLoading from 'components/common/ScreenViewLoading';
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function AddMultipleItem() {
+  const inputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
   const [multiImageList, setMultiImageList] = useState([]);
   const [showImageModal, setShowImageModal] = useState({
@@ -23,7 +24,7 @@ export default function AddMultipleItem() {
   });
   const [excel, setExcel] = useState({
     data: null,
-    sheetList: null,
+    sheetList: [],
     sheetName: null,
     sheetItem: 0,
   });
@@ -32,7 +33,7 @@ export default function AddMultipleItem() {
     setMultiImageList([]);
     setExcel({
       data: null,
-      sheetList: null,
+      sheetList: [],
       sheetName: null,
       sheetItem: 0,
     });
@@ -359,13 +360,16 @@ export default function AddMultipleItem() {
   return (
     <MultipleWrapper>
       <MultipleHeader
-        readExcel={handleReadExcel}
+        inputRef={inputRef}
         downLoadToExcel={handleDownLoadToExcel}
+        onReadExcel={handleReadExcel}
         onAddMultiData={handleAddMultiData}
         onAddMultiImage={handleAddMultiImage}
       />
       <MultipleList
+        inputRef={inputRef}
         excel={excel}
+        onReadExcel={handleReadExcel}
         sheetList={excel.sheetList}
         showImageModal={showImageModal}
         multiImageList={multiImageList}
