@@ -1,14 +1,14 @@
 import React from 'react';
-import { styles } from './RendingPageStyled';
+import { rendingStyles } from './RendingPageStyled';
 import RendingImg from 'styles/rendingIcon/rendingDashBoradImg.png';
 import UseageTitle from '../UseageTitle';
 
 export default function FourthPage() {
   return (
     <>
-      <styles.Fullpage>
-        <styles.RendingWrapper>
-          <styles.RendingTopContainer>
+      <rendingStyles.Fullpage>
+        <rendingStyles.RendingWrapper>
+          <rendingStyles.RendingTopContainer>
             <UseageTitle adminUseage="true" num="1">
               대시보드에서
               <br />
@@ -16,12 +16,12 @@ export default function FourthPage() {
               <br />
               한눈에 볼 수 있어요
             </UseageTitle>
-          </styles.RendingTopContainer>
-          <styles.RendingBottomContainer
+          </rendingStyles.RendingTopContainer>
+          <rendingStyles.RendingBottomContainer
             bg={RendingImg}
-          ></styles.RendingBottomContainer>
-        </styles.RendingWrapper>
-      </styles.Fullpage>
+          ></rendingStyles.RendingBottomContainer>
+        </rendingStyles.RendingWrapper>
+      </rendingStyles.Fullpage>
     </>
   );
 }
