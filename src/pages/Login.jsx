@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { styles } from 'components/common/commonStyled';
+import { rendingStyles } from 'components/rending/pages/RendingPageStyled';
 
 import Axios from 'api/axios';
 import ROUTER from 'constants/routerConst';
@@ -140,7 +141,7 @@ export default function Login() {
   return (
     <>
       {!writeUser && checkCode && (
-        <LoginWrapper bg={KakaoUserInfo}>
+        <rendingStyles.LoginWrapper bg={KakaoUserInfo}>
           <SetUserInfo>
             <Logo />
             <SetUserInputContainer>
@@ -226,7 +227,7 @@ export default function Login() {
               </Button>
             </SetUserSubmitContainer>
           </SetUserInfo>
-        </LoginWrapper>
+        </rendingStyles.LoginWrapper>
       )}
     </>
   );
@@ -234,20 +235,6 @@ export default function Login() {
 
 const TypeTitles = styled(styles.TypeTitle)`
   width: 12.75rem;
-`;
-
-const LoginWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100vw;
-  height: 100vh;
-  ::before {
-    content: '';
-    background: url(${props => props.bg}) no-repeat center center/cover;
-    width: 100%;
-    height: 100%;
-  }
 `;
 
 const SetUserInfo = styled.div`
