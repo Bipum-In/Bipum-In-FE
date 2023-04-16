@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
-import { styles } from './RendingPageStyled';
+import { rendingStyles } from './RendingPageStyled';
 import RendingImg from 'styles/rendingIcon/rendingSecImg.svg';
 
 export default function SecondPage() {
   return (
     <>
-      <styles.Fullpage>
+      <rendingStyles.Fullpage>
         <RendingWrapper>
           <RendingTopContainer>
             <Descriptiontitle>
@@ -15,12 +15,12 @@ export default function SecondPage() {
           </RendingTopContainer>
           <RendingBottomContainer bg={RendingImg}></RendingBottomContainer>
         </RendingWrapper>
-      </styles.Fullpage>
+      </rendingStyles.Fullpage>
     </>
   );
 }
 
-const RendingWrapper = styled(styles.RendingWrapper)`
+const RendingWrapper = styled(rendingStyles.RendingWrapper)`
   flex-direction: column;
 `;
 const RendingTopContainer = styled.div`
