@@ -4,12 +4,9 @@ import QUERY from 'constants/query';
 
 const DEFAULT_STORAGE_DATA = {
   checkUser: null,
-  deptName: null,
-  empName: null,
-  image: null,
   isAdmin: null,
-  userId: null,
   userRole: null,
+  checkDept: null,
 };
 
 export function getEncryptionStorage() {
