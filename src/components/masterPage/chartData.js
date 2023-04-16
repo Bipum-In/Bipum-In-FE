@@ -1,0 +1,28 @@
+const chartData = [
+  { team: '경영지원팀' },
+  { team: '인사부' },
+  { team: '총무부' },
+  { team: '회계부' },
+  { team: '구매부' },
+  { team: '영업부' },
+  { team: '해외영업부' },
+  { team: '마케팅부' },
+  { team: '광고부' },
+  { team: '기획팀' },
+  { team: '홍보팀' },
+  { team: '고객만족팀' },
+  { team: '전략팀' },
+  { team: '연구실' },
+  { team: '연구개발팀' },
+  { team: '기술지원팀' },
+  { team: '생산관리팀' },
+  { team: '품질관리팀' },
+  { team: '전산팀' },
+  { team: '개발팀' },
+  { team: '기술팀' },
+  { team: '디자인팀' },
+  { team: '생산팀' },
+  { team: '대표실' },
+];
+
+export default chartData;
