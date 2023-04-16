@@ -1,49 +1,109 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import { useNavigate } from 'react-router-dom';
 import AnchorBtn from '../AnchorBtn';
-import { ReactComponent as RequestIcon } from '../../../styles/commonIcon/requestIcon.svg';
-import { ReactComponent as ArrowIcon } from '../../../styles/commonIcon/arrowDown.svg';
+import { ReactComponent as RequestIcon } from 'styles/commonIcon/requestIcon.svg';
+import { ReactComponent as ArrowIcon } from 'styles/commonIcon/arrowDown.svg';
+import { ReactComponent as List } from 'styles/commonIcon/list.svg';
 import { ManagementCards } from '../ManagementCard';
-import ROUTER from '../../../constants/routerConst';
-import { REQUEST_PAGES } from '../../../constants/string';
+import ROUTER from 'constants/routerConst';
+import STRING, { REQUEST_PAGES } from 'constants/string';
 import { useDispatch } from 'react-redux';
-import { setRequestData } from '../../../redux/modules/requestStatus';
+import { initRequest, setRequestData } from 'redux/modules/requestStatus';
 
-export default function ManagementStatus({ getDashboard }) {
+export default function ManagementStatus({ isAdmin, getDashboard }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { requestsCountDto } = getDashboard.data;
+  const isAdminStr = STRING.IS_ADMIN(isAdmin);
+  const {
+    requestsCountDto: { countMap, modifiedAtMap },
+  } = getDashboard.data;
 
-  const moveToUnprocessed = () => {
-    dispatch(setRequestData(REQUEST_PAGES.UNPROCESSED));
-    navigate(ROUTER.PATH.ADMIN_REQUEST_STATUS);
+  const requestTypeKey = useRef(
+    Object.values(STRING.REQUEST_TYPES).filter(item => item !== 'ALL')
+  ).current;
+
+  const moveToRequset = key => {
+    dispatch(initRequest());
+    dispatch(setRequestData(REQUEST_PAGES[key]));
+    navigate(
+      ROUTER.PATH[isAdminStr][isAdmin ? 'REQUEST_STATUS' : 'REQUEST_LIST']
+    );
   };
-
   return (
     <>
-      {requestsCountDto && (
-        <styleds.EquipmentTopContainer col="true">
+      {getDashboard && (
+        <styleds.EquipmentTopContainer col="true" manage>
           <AnchorBtn
-            onClick={() => navigate(ROUTER.PATH.ADMIN_EQUIPMENT_MANAGEMENT)}
+            onClick={() =>
+              navigate(
+                ROUTER.PATH[isAdminStr][
+                  isAdmin ? 'REQUEST_STATUS' : 'REQUEST_LIST'
+                ]
+              )
+            }
           >
-            관리 현황 <ArrowIcon />
+            {isAdmin ? '요청 현황' : '요청 내역'}
+            <ArrowIcon />
           </AnchorBtn>
           <ManagementWrapper>
             <ManagementAlertTopContainer>
-              <NewAlertContainer onClick={moveToUnprocessed}>
-                <RequestIcon />
-                <NewAlertTitle>처리대기 요청</NewAlertTitle>
+              <NewAlertContainer
+                onClick={() => {
+                  moveToRequset('UNPROCESSED');
+                }}
+              >
+                {isAdmin ? <RequestIcon /> : <List />}
+                <NewAlertTitle>
+                  {isAdmin ? '처리대기 요청' : '전체 요청 내역'}
+                </NewAlertTitle>
                 <NewAlertNum>
-                  {requestsCountDto.countMap.UnProcessedRequests}건
+                  {isAdmin
+                    ? countMap.UnProcessedRequests
+                    : countMap.UnProcessedUserRequests}
+                  건
                 </NewAlertNum>
               </NewAlertContainer>
             </ManagementAlertTopContainer>
             <ManagementAlertBottomContainer>
               <ManagementCards
-                requestsCountData={requestsCountDto.countMap}
-                requestsDate={requestsCountDto.modifiedAtMap}
+                requestTypeKey={requestTypeKey}
+                requestsCountData={countMap}
+                requestsDate={modifiedAtMap}
+                moveToRequset={moveToRequset}
+                requestKey={
+                  isAdmin
+                    ? [
+                        'supplyRequests',
+
+                        'returnRequests',
+                        'repairRequests',
+                        'ReportRequests',
+                      ]
+                    : [
+                        'userCountSupply',
+
+                        'userCountReturn',
+                        'userCountRepair',
+                        'userCountReport',
+                      ]
+                }
+                modifiedAtKey={
+                  isAdmin
+                    ? [
+                        'supplyModifiedAt',
+                        'returnModifiedAt',
+                        'repairModifiedAt',
+                        'ReportModifiedAt',
+                      ]
+                    : [
+                        'supplyUserModifiedAt',
+                        'returnUserModifiedAt',
+                        'repairUserModifiedAt',
+                        'ReportUserModifiedAt',
+                      ]
+                }
               />
             </ManagementAlertBottomContainer>
           </ManagementWrapper>

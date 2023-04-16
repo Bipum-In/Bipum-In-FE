@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import Axios from '../../api/axios';
+import Axios from 'api/axios';
 
 import ModalHeader from '../common/ModalHeader';
 import Provide from './detail/Provide';
@@ -9,16 +9,18 @@ import UserContent from './detail/UserContent';
 import ProcessButton from './detail/ProcessButton';
 import CreatedAtFormatDate from './detail/CreatedAtFormatDate';
 
+import { CustomModal } from 'elements/Modal';
+import { useModalState } from 'hooks/useModalState';
+
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function RequestDetail({ isClose, detail }) {
   const {
+    acceptResult,
     categoryId,
     requestId,
-    isAdmin,
     requestType,
     requestStatus,
-    acceptResult,
     categoryName,
     modelName,
     serialNum,
@@ -28,16 +30,22 @@ export default function RequestDetail({ isClose, detail }) {
     deptName,
     empName,
     username,
+    phoneNum,
     comment,
     createdAt,
     modifiedAt,
+    useType,
   } = detail;
 
   const [stockList, setStockList] = useState({ data: null, check: false });
   const [declineComment, setDeclineComment] = useState('');
+
+  const [disposeModal, setDisposeModal] = useModalState();
+  const [repairModal, setRepairModal] = useModalState();
+
   const data = useRef({
     acceptResult: '',
-    supplyId: 0,
+    supplyId: '',
     comment: '',
   }).current;
 
@@ -54,7 +62,6 @@ export default function RequestDetail({ isClose, detail }) {
   const handleChangeSelect = e => {
     const { value } = e.target;
     data.supplyId = value;
-    console.log(data);
   };
 
   const handleAccept = () => {
@@ -64,6 +71,7 @@ export default function RequestDetail({ isClose, detail }) {
     }
 
     data.acceptResult = 'ACCEPT';
+    data.comment = declineComment;
     putRequest(data);
   };
 
@@ -92,11 +100,19 @@ export default function RequestDetail({ isClose, detail }) {
     axios.put(`/api/admin/requests/${requestId}`, data).then(() => isClose());
   };
 
+  const handleModalShow = () => setDisposeModal();
+  const handleModalClose = () => setDisposeModal(false);
+  const handleRepairModalShow = () => setRepairModal();
+  const handleRepairClose = () => setRepairModal(false);
   return (
     <>
       {stockList.check && (
         <DetailContainer>
-          <ModalHeader isClose={isClose} requestType={requestType} />
+          <ModalHeader
+            isClose={isClose}
+            requestType={requestType}
+            status={acceptResult}
+          />
           <ContentContainer>
             <RequestContainer>
               <UserInfo
@@ -104,8 +120,10 @@ export default function RequestDetail({ isClose, detail }) {
                 deptName={deptName}
                 username={username}
                 userImage={userImage}
+                phoneNum={phoneNum}
               />
               <UserContent
+                useType={useType}
                 content={content}
                 serialNum={serialNum}
                 modelName={modelName}
@@ -113,30 +131,48 @@ export default function RequestDetail({ isClose, detail }) {
                 categoryName={categoryName}
                 requestStatus={requestStatus}
               />
+
+              <Provide
+                image={imageList}
+                comment={comment}
+                stockList={stockList.data}
+                requestType={requestType}
+                requestStatus={requestStatus}
+                declineComment={declineComment}
+                setDeclineComment={setDeclineComment}
+                handleChangeSelect={handleChangeSelect}
+              />
+              <CreatedAtFormatDate
+                createdAt={createdAt}
+                modifiedAt={modifiedAt}
+                requestStatus={requestStatus}
+              />
             </RequestContainer>
-            <Provide
-              image={imageList}
-              comment={comment}
-              stockList={stockList.data}
-              requestType={requestType}
-              requestStatus={requestStatus}
-              declineComment={declineComment}
-              setDeclineComment={setDeclineComment}
-              handleChangeSelect={handleChangeSelect}
-            />
           </ContentContainer>
+          <CustomModal
+            isOpen={disposeModal}
+            onClose={handleModalClose}
+            submit={handleDispose}
+            text={'페기'}
+          >
+            비품을 폐기하시겠습니까?
+          </CustomModal>
+          <CustomModal
+            isOpen={repairModal}
+            onClose={handleRepairClose}
+            submit={handleRepairComplete}
+            text={'완료'}
+          >
+            수리가 완료된 비품입니까?
+          </CustomModal>
           <ProcessButton
+            declineComment={declineComment}
             requestType={requestType}
             requestStatus={requestStatus}
             handleAccept={handleAccept}
             handleDecline={handleDecline}
-            handleDispose={handleDispose}
-            handleRepairComplete={handleRepairComplete}
-          />
-          <CreatedAtFormatDate
-            createdAt={createdAt}
-            modifiedAt={modifiedAt}
-            requestStatus={requestStatus}
+            handleModalShow={handleModalShow}
+            handleRepairModalShow={handleRepairModalShow}
           />
         </DetailContainer>
       )}
@@ -147,19 +183,23 @@ export default function RequestDetail({ isClose, detail }) {
 const DetailContainer = styled.main`
   ${props => props.theme.FlexCol};
   ${props => props.theme.FlexCenter};
-  margin-bottom: 1.875rem;
+  padding-bottom: 1rem;
 `;
 
 const ContentContainer = styled.div`
   ${props => props.theme.FlexCol};
   ${props => props.theme.FlexCenter};
   width: 100%;
-  padding: 1.875rem 3.9375rem;
+  max-height: 80vh;
 `;
 
 const RequestContainer = styled.div`
   ${props => props.theme.FlexCow};
   align-items: center;
   width: 100%;
+  max-height: calc(90vh);
+  padding: 1.875rem 3.9375rem;
   font-weight: 600;
+  overflow-x: hidden;
+  overflow-y: auto;
 `;

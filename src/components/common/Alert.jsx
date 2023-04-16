@@ -1,12 +1,17 @@
 import { useEffect } from 'react';
-import { ErrorModal } from '../../elements/AlertModal';
-import { useModalState } from '../../hooks/useModalState';
+import AlertModal from 'elements/AlertModal';
+import { useModalState } from 'hooks/useModalState';
 
-export default function Alert({ message, duration }) {
+export default function Alert({
+  completeStyle,
+  message,
+  duration,
+  onUnmountButton,
+}) {
   const [isErrorModalOpen, toggleErrorModal] = useModalState(true);
 
   useEffect(() => {
-    if (isErrorModalOpen) {
+    if (isErrorModalOpen && !onUnmountButton) {
       const progressBarTimer = setTimeout(() => {
         toggleErrorModal(false);
       }, duration);
@@ -15,14 +20,15 @@ export default function Alert({ message, duration }) {
         clearTimeout(progressBarTimer);
       };
     }
-  }, [duration, isErrorModalOpen, toggleErrorModal]);
+  }, [duration, isErrorModalOpen, toggleErrorModal, onUnmountButton]);
 
   return (
-    <ErrorModal
+    <AlertModal
+      completeStyle={completeStyle}
       isOpen={isErrorModalOpen}
-      toggle={() => toggleErrorModal(false)}
       message={message}
       progressBarDuration={duration}
+      onUnmountButton={onUnmountButton}
     />
   );
 }

@@ -2,11 +2,7 @@ import React from 'react';
 import styled, { css } from 'styled-components';
 
 export default function Button(props) {
-  return (
-    <ButtonWrapper {...props}>
-      <BtnContainer>{props.children}</BtnContainer>
-    </ButtonWrapper>
-  );
+  return <ButtonWrapper {...props}>{props.children}</ButtonWrapper>;
 }
 Button.defaultProps = {
   padding: '.5rem',
@@ -24,6 +20,7 @@ const ButtonWrapper = styled.button`
   width: ${props => props.w};
   height: ${props => props.h};
   font-size: ${props => props.size};
+  gap: 4px;
 
   //기본 값
   padding: ${props => props.padding};
@@ -37,34 +34,28 @@ const ButtonWrapper = styled.button`
   white-space: nowrap;
 
   ${props =>
-    props.submit &&
+    (props.mainBtn === 'border' || props.mainBtn === 'fill') &&
     css`
-      padding: 0rem 0.625rem;
-      font-size: ${props => (props.post === 'true' ? '1.375rem' : '1rem')};
-      width: ${props => (props.post ? '20.5em;' : '15rem')};
-      height: 3.5rem;
-      text-align: center;
+      padding: 0.5rem 1.0625rem;
+    `}
+
+  ${props =>
+    props.mainBtn === 'border' &&
+    css`
+      color: ${props => props.theme.color.blue.brandColor6};
+      border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
+    `}
+
+${props =>
+    props.mainBtn === 'fill' &&
+    css`
       color: white;
       background: ${props =>
         props.disabled
           ? props.theme.color.grey.brandColor3
           : props.theme.color.blue.brandColor6};
+      font-weight: 400;
     `}
-
-  ${props =>
-    props.cancel &&
-    css`
-      padding: 0rem 0.625rem;
-      font-size: 1rem;
-      width: 15rem;
-      height: 3.5rem;
-      text-align: center;
-      color: ${props => props.theme.color.blue.brandColor6};
-      border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
-      background-color: white;
-      margin-right: 1.25rem;
-    `}
-
 
   ${props =>
     props.showAll &&
@@ -83,7 +74,6 @@ const ButtonWrapper = styled.button`
       font-weight: 600;
     `}
 
-
   ${props =>
     (props.menuStyle === true || props.menuStyle === false) &&
     css`
@@ -96,7 +86,7 @@ const ButtonWrapper = styled.button`
       font-size: 1rem;
     `}
 
-${props =>
+  ${props =>
     props.menuStyle === true &&
     css`
       color: white;
@@ -104,7 +94,7 @@ ${props =>
       font-weight: 600;
     `}
 
-${props =>
+  ${props =>
     props.menuStyle === false &&
     css`
       color: ${props => props.theme.color.grey.brandColor7};
@@ -112,6 +102,50 @@ ${props =>
       font-weight: 400;
     `}
 
+  ${props =>
+    props.multipleStyle === true &&
+    css`
+      color: white;
+      background-color: ${props => props.theme.color.blue.brandColor5};
+    `}
+
+  ${props =>
+    props.multipleStyle === false &&
+    css`
+      color: ${props => props.theme.color.blue.brandColor5};
+      background-color: white;
+    `}
+
+    ${props =>
+    props.submit &&
+    css`
+      padding: 0rem 0.625rem;
+      font-size: ${props => (props.post === 'true' ? '1.375rem' : '1rem')};
+      width: ${props => (props.post ? '20.5em;' : '15rem')};
+      height: ${props => (props.crawling ? '100%' : '3.5rem;')};
+      gap: ${props => (props.crawling ? '.25rem' : 'unset')};
+      font-weight: bold;
+      text-align: center;
+      color: white;
+      background: ${props =>
+        props.disabled
+          ? props.theme.color.grey.brandColor3
+          : props.theme.color.blue.brandColor6};
+    `}
+  ${props =>
+    props.cancel &&
+    css`
+      padding: 0rem 0.625rem;
+      font-size: 1rem;
+      font-weight: 700;
+      width: 15rem;
+      height: 3.5rem;
+      text-align: center;
+      color: ${props => props.theme.color.blue.brandColor6};
+      border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
+      background-color: white;
+      margin-right: 1.25rem;
+    `}
 
   & {
     cursor: pointer;
@@ -121,8 +155,4 @@ ${props =>
   &:hover {
     opacity: 0.9;
   }
-`;
-
-const BtnContainer = styled.div`
-  ${props => props.theme.FlexRow};
 `;

@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
-import { ReactComponent as ArrowDown } from '../../../styles/commonIcon/arrowDown.svg';
+import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
+import ModalImgCarousel from './ModalImgCarousel';
+import { styles } from 'components/common/commonStyled';
 
 export default function Provide({
   image,
@@ -20,9 +22,9 @@ export default function Provide({
           <SelectWrapper>
             <Select onChange={handleChangeSelect}>
               {stockList.lenght !== 0 ? (
-                <option>선택</option>
+                <option value="">선택</option>
               ) : (
-                <option>재고가 없습니다</option>
+                <option value="">재고가 없습니다</option>
               )}
               {stockList.map(stock => (
                 <option key={stock.supplyId} value={stock.supplyId}>
@@ -36,14 +38,12 @@ export default function Provide({
           </SelectWrapper>
         </ProvideEquipment>
       ) : (
-        <EquipmentImageContainer>
-          <span>비품 사진</span>
-          <ImageContainer>
-            {image.map(img => (
-              <img key={uuidv4()} src={img} alt="equipmentImg" />
-            ))}
-          </ImageContainer>
-        </EquipmentImageContainer>
+        requestType !== '비품 요청' && (
+          <EquipmentImageContainer>
+            <span>비품 사진</span>
+            <ModalImgCarousel image={image} />
+          </EquipmentImageContainer>
+        )
       )}
       {requestStatus === '처리전' ? (
         <MessegeAndRefuse>
@@ -51,13 +51,18 @@ export default function Provide({
           <TextArea
             value={declineComment}
             onChange={e => setDeclineComment(e.target.value)}
+            placeholder="100글자 이내로 메시지를 남겨주세요."
+            maxLength={100}
           />
+          <styles.TextLength>{declineComment.length}/100</styles.TextLength>
         </MessegeAndRefuse>
       ) : (
-        <SendMessegeContainer>
-          <span>남긴 메시지</span>
-          <SendMessege>{comment}</SendMessege>
-        </SendMessegeContainer>
+        comment && (
+          <SendMessegeContainer>
+            <span>남긴 메시지</span>
+            <SendMessege>{comment}</SendMessege>
+          </SendMessegeContainer>
+        )
       )}
     </ProvideContainer>
   );
@@ -71,22 +76,15 @@ const ProvideContainer = styled.div`
 `;
 
 const EquipmentImageContainer = styled.div`
+  position: relative;
   ${props => props.theme.FlexCol};
   color: ${props => props.theme.color.blue.brandColor6};
-  padding: 1.5rem 0;
-  border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
-
-  img {
-    width: 8.25rem;
-    height: 8.25rem;
-    border-radius: 0.375rem;
-    margin-top: 1.5rem;
+  margin-top: 1rem;
+  padding-bottom: 1rem;
+  overflow: hidden;
+  span {
+    padding-bottom: 1rem;
   }
-`;
-
-const ImageContainer = styled.div`
-  ${props => props.theme.FlexRow};
-  justify-content: flex-start;
 `;
 
 const ProvideEquipment = styled.div`
@@ -100,6 +98,7 @@ const ProvideEquipment = styled.div`
 `;
 
 const MessegeAndRefuse = styled.div`
+  position: relative;
   ${props => props.theme.FlexRow};
   font-size: 0.9375rem;
   font-weight: 600;
@@ -119,19 +118,21 @@ const SendMessegeContainer = styled.div`
   gap: 0.375rem;
 `;
 
-const SendMessege = styled.div`
+const SendMessege = styled.pre`
   color: black;
   font-size: 0.9375rem;
   font-weight: 500;
+  white-space: pre-wrap;
 `;
 
 const TextArea = styled.textarea`
   width: 22.0625rem;
-  height: 5rem;
+  height: 6rem;
   background-color: ${props => props.theme.color.grey.brandColor1};
   border: none;
   padding: 0.5rem;
   resize: none;
+  white-space: pre-wrap;
 `;
 
 const Select = styled.select`

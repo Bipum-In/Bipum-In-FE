@@ -1,4 +1,4 @@
-export default function formatAgo(createdDate, modifiedDate) {
+export function formatAgo(createdDate, modifiedDate) {
   const nowDate = new Date();
   const date = new Date(modifiedDate ? modifiedDate : createdDate);
   const year = nowDate.getFullYear() - date.getFullYear();
@@ -6,23 +6,23 @@ export default function formatAgo(createdDate, modifiedDate) {
   const day = nowDate.getDate() - date.getDate();
   const h = nowDate.getHours() - date.getHours();
   const m = nowDate.getMinutes() - date.getMinutes();
+
   if (year) {
     return ` · ${year}년 전`;
   }
   if (month) {
-    return ` · ${month}달 전`;
+    return `${month}달 전`;
   }
   if (day) {
-    return ` · ${day}일 전`;
+    return `${day}일 전`;
   }
   if (h) {
-    return ` · ${h}시간 전`;
+    return `${h}시간 전`;
   }
   if (m) {
-    return ` · ${m}분 전`;
+    return `${m}분 전`;
   }
-
-  return ` · 1분 전`;
+  return `지금`;
 }
 
 export function FormatDateToDot(dateStr) {
@@ -36,6 +36,19 @@ export function FormatDateToDot(dateStr) {
   const monthStr = month < 10 ? `0${month}` : `${month}`;
   const dayStr = day < 10 ? `0${day}` : `${day}`;
   return `${year}.${monthStr}.${dayStr}`;
+}
+
+export function FormatDateToKoShort(dateStr) {
+  if (!dateStr) {
+    return '';
+  }
+  const date = new Date(dateStr);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const monthStr = month < 10 ? `0${month}` : `${month}`;
+  const dayStr = day < 10 ? `0${day}` : `${day}`;
+  return `${year}년 ${monthStr}월 ${dayStr}일`;
 }
 
 export function FormatKoreanTime(dateStr) {

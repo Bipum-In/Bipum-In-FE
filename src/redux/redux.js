@@ -7,7 +7,7 @@ const Redux = {
         .then(response => {
           let fulfillData = null;
 
-          fulfillFn && (fulfillData = fulfillFn(response));
+          fulfillFn && (fulfillData = fulfillFn(response, payload));
 
           return thunkAPI.fulfillWithValue(
             fulfillData ? fulfillData : response.data
@@ -31,7 +31,15 @@ const Redux = {
     });
   },
 
-  extraReducer(bulider, thunk, stateKey, loadingKey, dataKey, errorkey) {
+  extraReducer(
+    bulider,
+    thunk,
+    stateKey,
+    loadingKey,
+    dataKey,
+    errorkey,
+    actionFn
+  ) {
     bulider.addCase(thunk.pending, (state, _) => {
       state[stateKey][loadingKey] = true;
       state[stateKey][errorkey] = false;
@@ -39,7 +47,9 @@ const Redux = {
     bulider.addCase(thunk.fulfilled, (state, action) => {
       state[stateKey][loadingKey] = false;
       state[stateKey][errorkey] = false;
-      state[stateKey][dataKey] = action.payload;
+      state[stateKey][dataKey] = actionFn
+        ? actionFn(state[stateKey][dataKey], action.payload)
+        : action.payload;
     });
     bulider.addCase(thunk.rejected, (state, _) => {
       state[stateKey][loadingKey] = false;

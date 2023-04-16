@@ -1,11 +1,24 @@
 import styled from 'styled-components';
+import { getEncryptionStorage } from 'utils/encryptionStorage';
+import defaultLogo from 'styles/commonIcon/defaultLogo.svg';
 
-export default function UserInfo({ userImage, deptName, empName, username }) {
+export default function UserInfo({
+  userImage,
+  deptName,
+  empName,
+  username,
+  phoneNum,
+}) {
+  const { isAdmin } = getEncryptionStorage();
   return (
     <UserInfoWrapper>
-      <UserInfoTitle>신청자 정보</UserInfoTitle>
+      <UserInfoTitle>{isAdmin ? '요청자 정보' : '관리자 정보'}</UserInfoTitle>
       <UserInfoContainer>
-        <Img src={userImage} alt="userImage" />
+        {userImage ? (
+          <Img src={userImage} alt="userImage" />
+        ) : (
+          <Img src={defaultLogo} nouser alt="userImage" />
+        )}
         <UserInfoContent>
           <UserInfoDeptAndName>
             <DeptName>
@@ -18,8 +31,17 @@ export default function UserInfo({ userImage, deptName, empName, username }) {
             </EmpName>
           </UserInfoDeptAndName>
           <UserName>
-            <span>이메일</span>
-            {username}
+            {isAdmin ? (
+              <>
+                <span>이메일</span>
+                {username}
+              </>
+            ) : (
+              <>
+                <span>전화번호</span>
+                {phoneNum}
+              </>
+            )}
           </UserName>
         </UserInfoContent>
       </UserInfoContainer>
@@ -29,7 +51,8 @@ export default function UserInfo({ userImage, deptName, empName, username }) {
 
 const UserInfoWrapper = styled.div`
   padding-bottom: 1.5rem;
-  border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
+  border-bottom: ${props =>
+    props.isAdmin ? `1px solid ${props.theme.color.grey.brandColor2}` : 'none'};
 `;
 
 const UserInfoTitle = styled.div`
@@ -52,7 +75,7 @@ const UserInfoContent = styled.div`
 
   span {
     color: ${props => props.theme.color.grey.brandColor5};
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
 `;
 
@@ -63,28 +86,33 @@ const UserInfoDeptAndName = styled.div`
 
 const DeptName = styled.div`
   ${props => props.theme.FlexCol};
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 500;
   gap: 0.375rem;
 `;
 
 const EmpName = styled.div`
   ${props => props.theme.FlexCol};
-  font-size: 15px;
+  width: 10rem;
+  font-size: 0.9375rem;
   font-weight: 500;
   gap: 0.375rem;
 `;
 
 const UserName = styled.div`
   ${props => props.theme.FlexCol};
-  font-size: 15px;
+  font-size: 0.9375rem;
   font-weight: 500;
   gap: 0.375rem;
 `;
 
 const Img = styled.img`
-  width: 8.25rem;
-  height: 8.25rem;
+  max-width: 8.25rem;
+  min-width: 8.25rem;
+  min-height: 8.25rem;
+  max-height: 8.25rem;
   border-radius: 50%;
   margin-right: 2.25rem;
+  object-fit: ${props => (props.nouser ? 'scale-down' : 'cover')};
+  background: ${props => props.nouser && props.theme.color.blue.brandColor2};
 `;

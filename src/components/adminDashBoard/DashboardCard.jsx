@@ -8,10 +8,14 @@ export default function DashboardCard({
   useCount,
   repairCount,
   stockCount,
+  handleCategoryClick,
+  categoryId,
 }) {
   return (
     <>
-      <CardWrapper>
+      <CardWrapper
+        onClick={() => handleCategoryClick(categoryId, categoryName)}
+      >
         <CategoryContainer>
           <CategoryTitle>{categoryName}</CategoryTitle>
           <TotalCountTitle>
@@ -48,6 +52,7 @@ const CardWrapper = styled.div`
   background-color: white;
   border: 0.0625rem solid ${props => props.theme.color.grey.brandColor2};
   ${props => props.theme.Boxshadow};
+  ${props => props.theme.CursorActive};
 `;
 
 const CategoryContainer = styled.div`

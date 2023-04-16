@@ -1,56 +1,22 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import Input from '../../../elements/Input';
-import SelectCategoryList from '../../equipmentAdd/single/SelectCategoryList';
+import { FormatDateToKoShort } from '../../../utils/formatDate';
 
-export default function DetailInfoProduct({
-  edit,
-  value,
-  detail,
-  category,
-  onChangeCategory,
-  onChangeValue,
-}) {
-  const { modelName, serialNum } = detail.supplyDetail;
+export default function DetailInfoProduct({ edit, detail }) {
+  const { createdAt, modelName, serialNum } = detail.supplyDetail;
   return (
     <DetailInfoContentContainer>
       <TextType>
-        <span>비품 종류</span>
-        {edit ? (
-          <SelectCategoryList
-            category={category}
-            optionName={['name', 'categoryName']}
-            optionNullName={['대분류', '소분류']}
-            optionKey={['name', 'categoryName']}
-            optionValueKey={['name', 'categoryName']}
-            onChangeCategory={onChangeCategory}
-          />
-        ) : (
-          <span>하드 코딩부분 수정해야함</span>
-        )}
+        <span>등록 일자</span>
+        <CreatedAt edit={edit}>{FormatDateToKoShort(createdAt)}</CreatedAt>
       </TextType>
       <TextType>
         <span>제품명</span>
-        {edit ? (
-          <Input
-            value={value[0]}
-            setState={onChangeValue[0]}
-            placeholder="제품명을 기입해주세요"
-          />
-        ) : (
-          <span>{modelName}</span>
-        )}
+        <ModelName edit={edit}>{modelName}</ModelName>
       </TextType>
       <TextType>
         <span>시리얼 넘버</span>
-        {edit ? (
-          <Input
-            value={value[1]}
-            setState={onChangeValue[1]}
-            placeholder="시리얼넘버를 기입해주세요"
-          />
-        ) : (
-          <span>{serialNum}</span>
-        )}
+        <SerialNum edit={edit}>{serialNum}</SerialNum>
       </TextType>
     </DetailInfoContentContainer>
   );
@@ -103,4 +69,33 @@ const TextType = styled.div`
     font-weight: 500;
     font-size: 13px;
   }
+`;
+
+const CreatedAt = styled.span`
+  ${props =>
+    props.edit &&
+    css`
+      display: flex;
+      align-items: center;
+      height: 2rem;
+    `}
+`;
+
+const ModelName = styled.span`
+  ${props =>
+    props.edit &&
+    css`
+      display: flex;
+      align-items: center;
+      height: 2rem;
+    `}
+`;
+const SerialNum = styled.span`
+  ${props =>
+    props.edit &&
+    css`
+      display: flex;
+      align-items: center;
+      height: 2rem;
+    `}
 `;

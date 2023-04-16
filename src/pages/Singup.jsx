@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import Input from '../elements/Input';
-import Button from '../elements/Button';
+import Input from 'elements/Input';
+import Button from 'elements/Button';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,9 +15,7 @@ export default function Signup() {
     watch,
   } = useForm();
 
-  console.log(watch('email'));
-  const onSubmit = async (data) => {
-    console.log(data);
+  const onSubmit = async data => {
     reset();
     navigate('/');
   };
@@ -63,26 +61,26 @@ const LoginLayout = styled.div`
   position: relative;
 `;
 const LoginWrapper = styled.div`
-  ${(props) => props.theme.FlexRow}
-  ${(props) => props.theme.wh100}
+  ${props => props.theme.FlexRow}
+  ${props => props.theme.wh100}
   flex: auto;
 `;
 
 const LoginLeftSection = styled.div`
-  ${(props) => props.theme.FlexCol}
-  ${(props) => props.theme.FlexCenter}
+  ${props => props.theme.FlexCol}
+  ${props => props.theme.FlexCenter}
   flex: 5;
 `;
 
 const LoginRightSection = styled.div`
-  ${(props) => props.theme.FlexRow}
-  ${(props) => props.theme.FlexCenter}
+  ${props => props.theme.FlexRow}
+  ${props => props.theme.FlexCenter}
   flex: 5;
-  background: ${(props) => props.theme.color.blue};
+  background: ${props => props.theme.color.blue};
 `;
 
 const LoginForm = styled.form`
-  ${(props) => props.theme.FlexCol}
+  ${props => props.theme.FlexCol}
   justify-content: flex-start;
   gap: 1rem 0;
 `;
@@ -99,7 +97,7 @@ const LoginTitle = styled.h1`
 `;
 
 const LoginInputContainer = styled.div`
-  ${(props) => props.theme.FlexRow}
-  ${(props) => props.theme.FlexCenter}
+  ${props => props.theme.FlexRow}
+  ${props => props.theme.FlexCenter}
   width: 100%;
 `;

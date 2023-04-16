@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { __dashboardStatus } from '../../redux/modules/dashboardStatus';
-import { getCategoryList } from '../../redux/modules/equipmentStatus';
-import ScrollToTop from '../../components/common/ScrollToTop';
-import ManagementStatus from '../../components/adminDashBoard/status/ManagementStatus';
-import AlertStatus from '../../components/adminDashBoard/status/AlertStatus';
-import TestStatus from '../../components/adminDashBoard/status/TestStatus';
-import CategoryStatus from '../../components/adminDashBoard/status/CategoryStatus';
+import { adminDashboardStatus } from 'redux/modules/dashboardStatus';
+import { getCategoryList } from 'redux/modules/equipmentStatus';
+import ScrollToTop from 'components/common/ScrollToTop';
+import ManagementStatus from 'components/adminDashBoard/status/ManagementStatus';
+import AlertStatus from 'components/adminDashBoard/status/AlertStatus';
+import UseageCard from 'components/adminDashBoard/status/UseageCard';
+import CategoryStatus from 'components/adminDashBoard/status/CategoryStatus';
+import { getEncryptionStorage } from '../../utils/encryptionStorage';
 
 export default function AdminDashBoard() {
   const dispatch = useDispatch();
   const [status, setStatus] = useState('');
+
+  const { isAdmin } = getEncryptionStorage();
   const { getDashboard, isDashboardError } = useSelector(
-    state => state.dashboardStatus.dashboardStatus
+    state => state.dashboardStatus.adminDashboard
   );
 
   useEffect(() => {
-    dispatch(__dashboardStatus({ status }));
+    dispatch(adminDashboardStatus({ path: '/admin', status }));
     dispatch(getCategoryList());
   }, [dispatch, status]);
 
@@ -27,12 +30,18 @@ export default function AdminDashBoard() {
       {getDashboard && (
         <AdminDashBoardWrapper id="scrollable-div">
           <TopSideContainer>
-            <ManagementStatus getDashboard={getDashboard} />
-            <AlertStatus />
-            <TestStatus />
+            <ManagementStatus isAdmin={isAdmin} getDashboard={getDashboard} />
+            <AlertAndUseagesConteinr>
+              <AlertStatus isAdmin={isAdmin} getDashboard={getDashboard} />
+              <UseageCard isAdmin={isAdmin} />
+            </AlertAndUseagesConteinr>
           </TopSideContainer>
           <BottomSideContainer>
-            <CategoryStatus setStatus={setStatus} getDashboard={getDashboard} />
+            <CategoryStatus
+              isAdmin={isAdmin}
+              setStatus={setStatus}
+              getDashboard={getDashboard}
+            />
           </BottomSideContainer>
           <ScrollToTop targetSelector="#scrollable-div" />
         </AdminDashBoardWrapper>
@@ -43,10 +52,10 @@ export default function AdminDashBoard() {
 
 const AdminDashBoardWrapper = styled.div`
   ${props => props.theme.FlexCol};
-  height: calc(100vh - 100px);
+  height: calc(100vh - 5.4rem);
   overflow: auto;
-  margin: -3.25rem -3.25rem 0 0;
-  padding: 3.25rem 0;
+  margin: -4.1rem -3.75rem;
+  padding: 3.75rem 0px 3.75rem 3.75rem;
 `;
 
 const TopSideContainer = styled.div`
@@ -54,12 +63,9 @@ const TopSideContainer = styled.div`
   width: 100%;
   padding: 0 3.25rem 2.5rem 0;
   gap: 3.5rem;
-  @media (max-width: ${props => props.theme.screen.dashboardFullWidth}) {
-    ${props => props.theme.FlexRow};
-    flex-wrap: wrap;
-  }
-  @media (max-width: ${props => props.theme.screen.fullWideDesktop}) {
+  @media (max-width: ${props => props.theme.screen.dashboardDesktopMaxWidth}) {
     ${props => props.theme.FlexCol};
+    flex-wrap: wrap;
   }
 `;
 
@@ -69,4 +75,9 @@ const BottomSideContainer = styled.div`
   align-items: flex-start;
   width: 100%;
   padding-right: 3.25rem;
+`;
+
+const AlertAndUseagesConteinr = styled.div`
+  ${props => props.theme.FlexRow};
+  gap: 2.625rem;
 `;

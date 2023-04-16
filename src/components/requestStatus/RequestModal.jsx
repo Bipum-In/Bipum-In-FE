@@ -1,24 +1,36 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
-import { initDetail, requestDetail } from '../../redux/modules/requestStatus';
-import RequestDetail from './RequestDetail';
+import { initDetail, requestDetail } from 'redux/modules/requestStatus';
+import AdminRequestDetail from './AdminRequestDetail';
+import UserRequestDetail from './UserRequestDetail';
 
-export default function RequestModal({ isClose, detailId }) {
+export default function RequestModal({ isClose, detailId, path, isAdmin }) {
   const dispatch = useDispatch();
-  const { getDetail, isDetailLoading, isDetailError } = useSelector(
+  const { getDetail, isDetailError } = useSelector(
     state => state.requestStatus.requestDetail
   );
 
   useEffect(() => {
     dispatch(initDetail());
-    dispatch(requestDetail(detailId));
-  }, [detailId, dispatch]);
+    dispatch(requestDetail({ path, detailId }));
+  }, [path, detailId, dispatch]);
+
+  useEffect(() => {
+    if (isDetailError) {
+      isClose();
+    }
+  }, [isDetailError]);
 
   return (
     <RequestModalWrapper>
-      {isDetailError && <div>에러</div>}
-      {getDetail && <RequestDetail isClose={isClose} detail={getDetail} />}
+      {/* {isDetailError && <div>에러</div>} */}
+      {getDetail && isAdmin && !isDetailError && (
+        <AdminRequestDetail isClose={isClose} detail={getDetail} />
+      )}
+      {getDetail && !isAdmin && !isDetailError && (
+        <UserRequestDetail isClose={isClose} detail={getDetail} />
+      )}
     </RequestModalWrapper>
   );
 }

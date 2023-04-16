@@ -1,90 +1,156 @@
 import styled from 'styled-components';
 import SelectCategory from '../../common/SelectCategory';
-import SelectDate from '../../equipmentAdd/single/SelectDate';
 import SelectUser from '../../equipmentAdd/single/SelectUser';
+import SelectCategoryList from '../../equipmentAdd/single/SelectCategoryList';
+import Button from 'elements/Button';
 
 export default function DetailInfoRequester({
   edit,
-  dateValue,
+  optionNullList,
+  editRequester,
   deptValue,
   detail,
   partners,
-  setDateState,
-  onChangeDate,
   onChangeDept,
   onChangePartners,
+  onEditRequester,
 }) {
-  const { createdAt, partnersName, deptName, empName } = detail.supplyDetail;
+  const {
+    partnersName,
+    deptName,
+    empName,
+    category: smallCategory,
+  } = detail.supplyDetail;
   return (
     <DetailInfoContentContainer>
-      <TextType>
-        <span>등록 일자</span>
-        {edit ? (
-          <Date>
-            <SelectDate
-              year={dateValue[0]}
-              month={dateValue[1]}
-              setSelect={setDateState}
-              handleChange={onChangeDate}
-            />
-          </Date>
-        ) : (
-          <span>{createdAt}</span>
+      <CategoryContainer>
+        <TextType edit={edit}>
+          <span>비품 종류</span>
+          <span>{smallCategory}</span>
+        </TextType>
+      </CategoryContainer>
+      <PartnersContainer>
+        <TextType>
+          <span>협력업체</span>
+          {editRequester.partners ? (
+            <Partners>
+              <SelectCategory
+                category={partners}
+                optionNullName={optionNullList.partners}
+                optionKey={'partnersName'}
+                optionValueKey={'partnersId'}
+                optionName={'partnersName'}
+                onChangeCategory={onChangePartners}
+              />
+            </Partners>
+          ) : (
+            <span>{partnersName || ''}</span>
+          )}
+        </TextType>
+        {edit && (
+          <Button value={'partners'} onClick={onEditRequester}>
+            수정
+          </Button>
         )}
-      </TextType>
-      <TextType>
-        <span>협력업체</span>
-        {edit ? (
-          <Partners>
-            <SelectCategory
-              category={partners}
-              optionNullName="회사명"
-              optionKey={'partnersName'}
-              optionValueKey={'partnersId'}
-              optionName={'partnersName'}
-              onChangeCategory={onChangePartners}
-            />
-          </Partners>
-        ) : (
-          <span>{partnersName}</span>
+      </PartnersContainer>
+      <DeptUserContainer>
+        <TextType>
+          <span>사용자</span>
+          {editRequester.deptUser ? (
+            <DeptUser>
+              <SelectUser
+                category={deptValue}
+                optionNullName={[optionNullList.dept, optionNullList.user]}
+                optionKey={['deptName', 'empName']}
+                optionValueKey={['deptId', 'userId']}
+                optionName={['deptName', 'empName']}
+                onChangeCategory={onChangeDept}
+              />
+            </DeptUser>
+          ) : (
+            <span>{deptName && empName ? `${deptName} / ${empName}` : ''}</span>
+          )}
+        </TextType>
+        {edit && (
+          <Button value={'deptUser'} onClick={onEditRequester}>
+            수정
+          </Button>
         )}
-      </TextType>
-      <TextType>
-        <span>사용자</span>
-        {edit ? (
-          <DeptUser>
-            <SelectUser
-              category={deptValue}
-              optionNullName={['부서명', '사원명']}
-              optionKey={['deptName', 'empName']}
-              optionValueKey={['deptId', 'userId']}
-              optionName={['deptName', 'empName']}
-              onChangeCategory={onChangeDept}
-            />
-          </DeptUser>
-        ) : (
-          <span>{`${deptName} / ${empName}`}</span>
-        )}
-      </TextType>
+      </DeptUserContainer>
     </DetailInfoContentContainer>
   );
 }
 
 const DetailInfoContentContainer = styled.div`
-  div:first-child {
+  /* div:first-child {
     padding: 0;
     padding-bottom: 1.125rem;
   }
 
   div:last-child {
     border-bottom: none;
+  } */
+`;
+
+const CategoryContainer = styled.section`
+  display: flex;
+  article {
+    padding: 0;
+    padding-bottom: 1.125rem;
+  }
+
+  button {
+    height: 2rem;
+    border-bottom: 1px solid transparent;
+    margin: 0;
+    padding: 0 1rem;
+    font-weight: 500;
+    font-size: 13px;
   }
 `;
 
-const TextType = styled.div`
+const PartnersContainer = styled(CategoryContainer)`
+  article {
+    padding-bottom: 0;
+    padding: 1.125rem 0;
+  }
+
+  select {
+    padding: 0;
+  }
+
+  button {
+    height: 2rem;
+    border-bottom: 1px solid transparent;
+    margin: 0;
+    margin: 1.125rem 0rem;
+    font-weight: 500;
+    font-size: 13px;
+  }
+`;
+
+const DeptUserContainer = styled(CategoryContainer)`
+  article {
+    padding-bottom: 0;
+    padding: 1.125rem 0;
+    border-bottom: 0;
+  }
+
+  button {
+    height: 2rem;
+    border-bottom: 1px solid transparent;
+    margin: 0;
+    margin: 1.125rem 0rem;
+    font-weight: 500;
+    font-size: 13px;
+  }
+`;
+
+const TextType = styled.article`
   display: flex;
   align-items: center;
-  min-width: 13rem;
+  height: ${props => props.edit && '3.1875rem'};
+  min-width: 18.75rem;
   padding: 1.125rem 0;
   border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
 
@@ -119,7 +185,11 @@ const TextType = styled.div`
   }
 `;
 
-const Date = styled.div`
+const Partners = styled.div`
+  min-width: 5rem;
+`;
+
+const DeptUser = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -129,17 +199,8 @@ const Date = styled.div`
   }
 
   div {
-    width: 100%;
-    height: 100%;
+    display: flex;
+    align-items: center;
+    height: 2rem;
   }
-`;
-
-const Partners = styled.div`
-  min-width: 5rem;
-`;
-
-const DeptUser = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
 `;

@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { ReactComponent as Search } from '../../../styles/commonIcon/search.svg';
-import { ReactComponent as ArrowDown } from '../../../styles/commonIcon/arrowDown.svg';
-import Input from '../../../elements/Input';
-import Button from '../../../elements/Button';
+import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
+import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
+import Input from 'elements/Input';
+import Button from 'elements/Button';
 
 export default function StatusListHeader({
   setSelectName,
@@ -32,18 +32,20 @@ export default function StatusListHeader({
             placeholder="검색어를 입력해주세요 (신청자,담당부서 등)"
           />
         </SearchContainer>
-        <SelectWrapper>
-          <Select value={status} onChange={setStatus}>
-            {selectBoxList.name.map((value, index) => (
-              <option key={value} value={selectBoxList.type[index]}>
-                {value}
-              </option>
-            ))}
-          </Select>
-          <SelectArrow>
-            <ArrowDown />
-          </SelectArrow>
-        </SelectWrapper>
+        {setStatus && (
+          <SelectWrapper>
+            <Select value={status} onChange={setStatus}>
+              {selectBoxList.name.map((value, index) => (
+                <option key={value} value={selectBoxList.type[index]}>
+                  {value}
+                </option>
+              ))}
+            </Select>
+            <SelectArrow>
+              <ArrowDown />
+            </SelectArrow>
+          </SelectWrapper>
+        )}
       </SearchSelect>
     </RequestShowTitle>
   );
@@ -60,19 +62,23 @@ const Title = styled.div`
   font-weight: 600;
   font-size: 1.25rem;
   margin-top: 1.75rem;
-  margin-left: 2.5rem;
+  margin: 1.75rem 2.5rem 0 2.5rem;
+  white-space: nowrap;
 `;
 
 const SearchSelect = styled.div`
   ${props => props.theme.FlexRow}
-  ${props => props.theme.FlexCenter}
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
   margin-top: 1.5rem;
 `;
 
 const SearchContainer = styled.div`
   ${props => props.theme.FlexRow}
   ${props => props.theme.FlexCenter}
-  width: 28.375rem;
+  max-width: 28.375rem;
+  width: 100%;
   height: 2.125rem;
   background-color: ${props => props.theme.color.grey.brandColor1};
   margin: 0;
@@ -80,8 +86,20 @@ const SearchContainer = styled.div`
   border-radius: 0.5rem;
 
   input {
+    width: 100%;
     font-size: 1rem;
     padding: 0.5rem 0.5rem 0.5rem 0;
+  }
+
+  @media (max-width: 64.5625rem) {
+    width: 15rem;
+
+    input::-webkit-input-placeholder {
+      color: transparent;
+    }
+    input:-ms-input-placeholder {
+      color: transparent;
+    }
   }
 `;
 
@@ -107,6 +125,10 @@ const Select = styled.select`
   appearance: none;
   padding: 0.3125rem 0.625rem;
   padding-right: 1.5625rem;
+
+  @media (max-width: 64.5625rem) {
+    color: transparent;
+  }
 `;
 
 const SelectWrapper = styled.div`
@@ -116,6 +138,12 @@ const SelectWrapper = styled.div`
   width: 5.6rem;
   height: 2.5rem;
   margin-right: 1.9375rem;
+
+  @media (max-width: 64.5625rem) {
+    justify-content: end;
+    width: 2rem;
+    color: transparent;
+  }
 `;
 
 const SelectArrow = styled.div`

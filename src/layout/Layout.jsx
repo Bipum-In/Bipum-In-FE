@@ -1,25 +1,36 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Outlet } from 'react-router-dom';
-import styled, { useTheme, keyframes, css } from 'styled-components';
-import Header from './Header';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
+
+import styled, { keyframes, useTheme } from 'styled-components';
+import { ReactComponent as Hamburger } from 'styles/sidebarIcon/hamburger.svg';
+
+import Header from './header/Header';
 import Sidebar from './Sidebar';
-import { ReactComponent as Alaram } from '../styles/commonIcon/alarm.svg';
-import { ReactComponent as ArrowDown } from '../styles/commonIcon/arrowDown.svg';
+import { getEncryptionStorage } from 'utils/encryptionStorage';
+
+import ROUTER from 'constants/routerConst';
+import STRING from 'constants/string';
 
 export default function DashBoardLayout() {
-  const [isSidebarHidden, setIsSidebarHidden] = useState(false);
-  const [isMobileView, setIsMobileView] = useState(false);
+  const navigate = useNavigate();
   const theme = useTheme();
-  const desktopSize = theme.screen.desktopSize;
+  const { pathname } = useLocation();
+  const { checkUser } = getEncryptionStorage();
+  const [isSidebarHidden, setIsSidebarHidden] = useState(true);
 
+  useEffect(() => {
+    if (!checkUser) {
+      navigate(ROUTER.PATH.MAIN);
+    }
+  }, [checkUser, navigate]);
+
+  const desktopSize = theme.screen.desktopSize;
   useEffect(() => {
     const handleWindowResize = () => {
       if (window.innerWidth <= desktopSize) {
         setIsSidebarHidden(true);
-        setIsMobileView(true);
       } else {
         setIsSidebarHidden(false);
-        setIsMobileView(false);
       }
     };
     window.addEventListener('resize', handleWindowResize);
@@ -27,35 +38,60 @@ export default function DashBoardLayout() {
     return () => {
       window.removeEventListener('resize', handleWindowResize);
     };
-  }, [setIsSidebarHidden, setIsMobileView, desktopSize]);
+  }, [setIsSidebarHidden, desktopSize]);
+
+  const { isAdmin } = getEncryptionStorage();
+  const isAdminStr = STRING.IS_ADMIN(isAdmin);
 
   const handleSidebarToggle = useCallback(e => {
     e.stopPropagation();
     setIsSidebarHidden(prev => !prev);
   }, []);
 
-  return (
-    <LayoutWrapper>
-      {isMobileView && (
-        <SidebarBtnContainer onClick={handleSidebarToggle}>
-          <AlaramIcon $isHidden={isSidebarHidden} />
-          <ArrowDownIcon $isHidden={isSidebarHidden} />
-        </SidebarBtnContainer>
-      )}
+  const handleClickCategory = e => {
+    const name = e.target.innerText;
+    if (!name) {
+      const targetPath = isAdmin
+        ? ROUTER.PATH.ADMIN.DASHBOARD
+        : ROUTER.PATH.USER.DASHBOARD;
+      navigate(targetPath);
+    }
+    const routerPathArray = Object.values(ROUTER.PATH[isAdminStr]);
+    const index = Object.values(STRING.SIDEBAR[isAdminStr]).findIndex(
+      sidebarName => sidebarName === name
+    );
+    if (index >= 0) {
+      navigate(routerPathArray[index]);
+    }
+    setIsSidebarHidden(prev => !prev);
+  };
 
-      <Header
-        isSidebarHidden={isSidebarHidden}
-        setIsSidebarHidden={setIsSidebarHidden}
-        isMobileView={isMobileView}
-      />
-      <Sidebar
-        isSidebarHidden={isSidebarHidden}
-        setIsSidebarHidden={setIsSidebarHidden}
-      />
-      <OutletContainer>
-        <Outlet />
-      </OutletContainer>
-    </LayoutWrapper>
+  return (
+    <>
+      {checkUser && (
+        <LayoutWrapper>
+          <SidebarBtnContainer onClick={handleSidebarToggle}>
+            <HamburgerIcon hide={`${isSidebarHidden}`} />
+          </SidebarBtnContainer>
+          <Header
+            isSidebarHidden={isSidebarHidden}
+            setIsSidebarHidden={setIsSidebarHidden}
+          />
+          <Sidebar
+            isSidebarHidden={isSidebarHidden}
+            setIsSidebarHidden={setIsSidebarHidden}
+            handleClickCategory={handleClickCategory}
+            isAdmin={isAdmin}
+            isAdminStr={isAdminStr}
+            pathname={pathname}
+            handleSidebarToggle={handleSidebarToggle}
+          />
+          <OutletContainer>
+            <Outlet />
+          </OutletContainer>
+        </LayoutWrapper>
+      )}
+    </>
   );
 }
 
@@ -69,6 +105,7 @@ const OutletContainer = styled.div`
   width: calc(100% - 12.5rem);
   height: 100%;
   max-height: 100vh;
+  min-width: 52.5rem;
   margin-left: auto;
   padding: 9.375rem 3.75rem 3.4375rem 3.75rem;
   background-color: ${props => props.theme.color.blue.brandColor1};
@@ -78,34 +115,24 @@ const OutletContainer = styled.div`
 `;
 
 const SidebarBtnContainer = styled.div`
-  position: relative;
+  position: fixed;
   display: flex;
-  z-index: 2;
-`;
-
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-    transform: rotate(0deg);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(360deg);
+  align-items: center;
+  height: 6.25rem;
+  z-index: 1001;
+  margin-left: 2rem;
+  @media (max-width: ${props => props.theme.screen.desktopSize}) {
+    transform: ${props => (props.hide === 'true' ? 'none' : 'block')};
   }
 `;
 
-const IconAnimation = condition => css`
-  position: absolute;
-  animation: ${({ $isHidden }) => (condition($isHidden) ? fadeIn : 'none')} 0.2s
-    linear;
-  opacity: ${({ $isHidden }) => (condition($isHidden) ? 1 : 0)};
-  transition: opacity 0.3s linear;
-`;
-
-const AlaramIcon = styled(Alaram)`
-  ${IconAnimation($isHidden => $isHidden)}
-`;
-
-const ArrowDownIcon = styled(ArrowDown)`
-  ${IconAnimation($isHidden => !$isHidden)}
+const HamburgerIcon = styled(Hamburger)`
+  animation: 0.2s linear 0s 1 normal none running crbsY;
+  opacity: 1;
+  display: ${props => (props.hide === 'true' ? 'block' : 'none')};
+  transition: opacity 0.3s linear 0s;
+  path {
+    stroke: white;
+  }
+  ${props => props.theme.CursorActive};
 `;

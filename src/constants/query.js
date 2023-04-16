@@ -1,6 +1,10 @@
 const COOKIE = {
-  COOKIE_NAME: 'myToken',
-  REFRESH_NAME: 'myRefreshToken',
+  COOKIE_NAME: 'DboongToken',
+  REFRESH_NAME: 'DboongTokenRefreshToken',
+};
+
+const STORAGE = {
+  LOCAL_NAME: 'E123QWEFDFA',
 };
 
 const AXIOS_PATH = {
@@ -13,6 +17,7 @@ const AXIOS_PATH = {
 const QUERY = {
   AXIOS_PATH,
   COOKIE,
+  STORAGE,
 };
 
 export default QUERY;

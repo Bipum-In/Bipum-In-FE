@@ -1,5 +1,7 @@
-import Axios from '../../api/axios';
+import Axios from 'api/axios';
+import NUMBER from 'constants/number';
 import Redux from '../redux';
+import { current } from '@reduxjs/toolkit';
 
 const initialState = {
   equipmentStatus: {
@@ -21,6 +23,14 @@ const initialState = {
     categoryIdData: '',
     categoryNameData: '전체',
   },
+  supplyHistory: {
+    history: {
+      user: { content: [], lastPage: false },
+      repair: { content: [], lastPage: false },
+    },
+    isUserLoading: false,
+    isUserError: false,
+  },
 };
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
@@ -29,14 +39,17 @@ export const getEquipmentList = Redux.asyncThunk(
   'EQUIPMENT',
   payload =>
     axios.get(
-      `/api/admin/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
+      `/api${payload.path}/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
     ),
   response => response.data.data
 );
 
 export const getEquipmentDetail = Redux.asyncThunk(
   'EQUIPMENT_DETAIL',
-  payload => axios.get(`/api/supply/${payload}`),
+  payload =>
+    axios.get(
+      `/api${payload.path}/supply/${payload.supplyId}?size=${NUMBER.INT.SIX}`
+    ),
   response => response.data.data
 );
 
@@ -47,6 +60,18 @@ export const getCategoryList = Redux.asyncThunk(
     const parseLargeCategory = largeCategory(response);
     return { largeCategory: parseLargeCategory, category: response.data.data };
   }
+);
+
+export const getHistory = Redux.asyncThunk(
+  'HISTORY',
+  payload =>
+    axios.get(
+      `/api/supply/history/${payload.history}/${payload.supplyId}?page=${payload.page}&size=${payload.size}`
+    ),
+  (response, payload) =>
+    payload.history === 'user'
+      ? { user: response.data.data }
+      : { repair: response.data.data }
 );
 
 const largeCategory = response => {
@@ -73,9 +98,50 @@ const equipmentStatusSlice = Redux.slice(
   'Equipment',
   initialState,
   {
+    initHistory: (state, _) => {
+      state.supplyHistory.history.user = { content: [], lastPage: false };
+      state.supplyHistory.history.repair = { content: [], lastPage: false };
+    },
+    initEquipmentDetail: (state, _) => {
+      state.equipmentDetail.getDetail = null;
+      state.equipmentDetail.isDetailLoading = false;
+      state.equipmentDetail.isDetailError = false;
+    },
     setCategoryData: (state, action) => {
       state.categoryData.categoryIdData = action.payload.categoryId;
       state.categoryData.categoryNameData = action.payload.categoryName;
+    },
+    setSmallCategoryData: (state, action) => {
+      const { largeCategory, categoryName } = action.payload;
+
+      state.category = {
+        ...state.category,
+        getCategory: {
+          ...state.category.getCategory,
+          category: [
+            ...state.category.getCategory.category,
+            {
+              largeCategory,
+              categoryName,
+            },
+          ],
+        },
+      };
+    },
+    editCategoryData: (state, action) => {
+      const { largeCategory, categoryName, prevCategory } = action.payload;
+
+      state.category = {
+        ...state.category,
+        getCategory: {
+          ...state.category.getCategory,
+          category: [...state.category.getCategory.category].map(category =>
+            category.categoryName === prevCategory
+              ? { largeCategory: largeCategory, categoryName: categoryName }
+              : category
+          ),
+        },
+      };
     },
   },
   bulider => {
@@ -103,8 +169,34 @@ const equipmentStatusSlice = Redux.slice(
       'getCategory',
       'isCategoryError'
     );
+    Redux.extraReducer(
+      bulider,
+      getHistory,
+      'supplyHistory',
+      'isUserLoading',
+      'history',
+      'isUserError',
+      (state, payload) => {
+        const historyKey = Object.keys(payload)[0];
+        return {
+          ...state,
+          [historyKey]: {
+            content: [...state[historyKey].content].concat(
+              payload[historyKey].content
+            ),
+            lastPage: payload[historyKey].last,
+          },
+        };
+      }
+    );
   }
 );
 
-export const { setCategoryData } = equipmentStatusSlice.actions;
+export const {
+  initHistory,
+  initEquipmentDetail,
+  setCategoryData,
+  setSmallCategoryData,
+  editCategoryData,
+} = equipmentStatusSlice.actions;
 export default equipmentStatusSlice.reducer;

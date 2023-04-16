@@ -11,7 +11,7 @@ body {
   background-color: ${props => props.theme.color.blue.brandColor1};
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
@@ -19,11 +19,11 @@ body {
   background-clip: padding-box;
   border: 0 solid transparent;
   border-radius: 10px;
-  background-color: ${props => props.theme.color.blue.brandColor6};
+  background-color: ${props => props.theme.color.grey.brandColor3};
 }
 ::-webkit-scrollbar-track {
   background-color: transparent;
-}
+} */
 
 img {
   -webkit-user-select: none;
@@ -35,6 +35,13 @@ img {
   -khtml-user-drag: none;
   -moz-user-drag: none;
   -o-user-drag: none;
+}
+
+textarea {
+  border: none;
+  padding: 0.5rem;
+  resize: none;
+  white-space: pre-wrap;
 }
 
 html,
@@ -106,9 +113,6 @@ path{
   font-family: 'Pretendard';
 }
 
-
-
-
 *:focus {
     outline: none !important;
   }
@@ -123,32 +127,9 @@ code {
   height: 100vh;
 }
 
-
- @media (max-width: 1620px) {
-  html {
-    font-size: 15px;
-  }
+html {
+  font-size: 15px
 }
-@media (max-width: 1520px) {
-  html {
-    font-size: 14px;
-  }
-}
-@media (max-width: 1420px) {
-  html {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 1280px) {
-  html {
-    font-size: 14px;
-  }
-}
-
-
-
-
 `;
 
 export default GlobalStyle;

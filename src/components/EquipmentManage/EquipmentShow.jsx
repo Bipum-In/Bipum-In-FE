@@ -2,10 +2,11 @@ import styled from 'styled-components';
 import StatusListHeader from '../common/status/StatusListHeader';
 import StatusList from '../common/status/StatusList';
 import PaginationList from '../common/PaginationList';
-import { ReactComponent as Plus } from '../../styles/commonIcon/plus.svg';
-import Button from '../../elements/Button';
+import { ReactComponent as Plus } from 'styles/commonIcon/plus.svg';
+import Button from 'elements/Button';
 
 export default function EquipmentShow({
+  isAdmin,
   requestData,
   setSelectName,
   page,
@@ -41,7 +42,7 @@ export default function EquipmentShow({
     'serialNum',
     'createdAt',
     'partners',
-    'username',
+    'empName',
     'deptName',
     'status',
   ];
@@ -69,6 +70,7 @@ export default function EquipmentShow({
         </EquipmentAddConatiner>
       </StatusListHeader>
       <StatusList
+        isAdmin={isAdmin}
         headerList={headerList}
         listHeaderRef={resizeRef.listHeaderRef}
         listRef={resizeRef.listRef}
@@ -103,22 +105,18 @@ const EquipmentAddConatiner = styled.div`
   margin-right: 1rem;
 
   button:first-child {
-    width: 5.5625rem;
     height: 2.125rem;
     color: white;
     background-color: ${props => props.theme.color.blue.brandColor5};
   }
 
   button:last-child {
-    width: 5.5625rem;
     height: 2.125rem;
     color: white;
     background-color: #3aa471;
   }
 
   svg {
-    width: 1.125rem;
-    height: 1.125rem;
-    margin-right: 0.3125rem;
+    width: 1.5rem;
   }
 `;

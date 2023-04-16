@@ -1,121 +1,196 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getEquipmentDetail } from '../../../redux/modules/equipmentStatus';
+import { useNavigate } from 'react-router-dom';
+import {
+  getEquipmentDetail,
+  initEquipmentDetail,
+  initHistory,
+} from 'redux/modules/equipmentStatus';
+import { setRequestData } from 'redux/modules/requestStatus';
+import { useModalState } from 'hooks/useModalState';
 
 import styled from 'styled-components';
-import Axios from '../../../api/axios';
-import useSetEquipmentAddDate from '../../../hooks/useSetEquipmentAddDate';
+import Axios from 'api/axios';
+import STRING, { REQUEST_PAGES } from 'constants/string';
+import ROUTER from 'constants/routerConst';
 
+import DetailImage from './DetailImage';
 import DetailHeader from './DetailHeader';
 import DetailBodyTitle from './DetailBodyTitle';
-import DetailInfoProduct from './DetailInfoProduct';
-import DetailInfoRequester from './DetailInfoRequester';
 import DetailUseHistory from './DetailUseHistory';
+import DetailInfoProduct from './DetailInfoProduct';
 import DetailRepairHistory from './DetailRepairHistory';
+import DetailInfoRequester from './DetailInfoRequester';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
-const equipmentData = {
-  largeCategory: '',
-  categoryName: '',
-  modelName: '',
-  serialNum: '',
-  createdAt: '',
-  partnersId: null,
-  userId: null,
-};
 
-export default function EquipmentDetail({
-  category,
-  largeCategory,
-  detailId,
-  isClose,
-}) {
+export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [edit, setEdit] = useState(false);
-  const [day, setDay] = useState(null);
-  const [year, setYear] = useState(null);
-  const [month, setMonth] = useState(null);
+  const [disposeModal, setDisposeModal] = useModalState();
+  const [editRequester, setEditRequester] = useState({
+    category: false,
+    partners: false,
+    deptUser: false,
+  });
   const [dept, setDept] = useState(null);
-  const [user, setUser] = useState(null);
-  const [partners, setPartners] = useState(null);
-  const [modelName, setModelName] = useState('');
-  const [serialNum, setSerialNum] = useState('');
-  const [smallCategory, setSmallCategory] = useState(null);
-  const parseLargeCategory = useRef(largeCategory.filter((_, i) => i)).current;
-
-  const [setSelectYear, setSelectMonth, setSelectDaysInMonth] =
-    useSetEquipmentAddDate();
+  const [user, setUser] = useState('');
+  const [deptId, setDeptId] = useState('');
+  const [userId, setUserId] = useState('');
+  const [useType, setUseType] = useState('');
+  const [partnersId, setPartnersId] = useState('');
+  const [imageForm, setImageForm] = useState(null);
+  const [preview, setPreview] = useState('');
+  const [partners, setPartners] = useState('');
+  const [optionNullList, setOptionNullList] = useState({
+    partners: '회사명',
+    dept: '부서명',
+    user: '공용',
+  });
 
   const { getDetail, isDetailError } = useSelector(
     state => state.equipmentStatus.equipmentDetail
   );
 
   useEffect(() => {
-    dispatch(getEquipmentDetail(detailId));
-    axios.get(`/api/dept`).then(res => setDept(res.data.data));
-    axios.get(`/api/partners`).then(res => setPartners(res.data.data));
-  }, [detailId, dispatch]);
+    const path = isAdmin ? '/admin' : '';
+    dispatch(initHistory());
+    dispatch(initEquipmentDetail());
+    dispatch(getEquipmentDetail({ path, supplyId: detailId }));
 
-  const handleEdit = () => setEdit(true);
+    axios
+      .get(`/api/dept`)
+      .then(res =>
+        setDept([{ deptId: '', deptName: '선택 안함' }, ...res.data.data])
+      );
+    axios
+      .get(`/api/partners`)
+      .then(res =>
+        setPartners([
+          { partnersId: '', partnersName: '선택 안함' },
+          ...res.data.data,
+        ])
+      );
+  }, [dispatch]);
+
+  const handleEdit = () => {
+    const { partnersId, userId, deptId } = getDetail.supplyDetail;
+    setEdit(true);
+
+    if (partnersId) {
+      setPartnersId(partnersId);
+    }
+
+    if (userId) {
+      setUserId(userId);
+      setUseType(STRING.USE_TYPE['개인']);
+      return;
+    }
+
+    if (deptId && !userId) {
+      setDeptId(deptId);
+      setUseType(STRING.USE_TYPE['공용']);
+      return;
+    }
+  };
+
+  const handleEditRequester = e => {
+    const value = e.target.value;
+    setEditRequester({ ...editRequester, [value]: !editRequester[value] });
+  };
+
+  const handleSave = supplyId => sendFormData(supplyId);
 
   const handleDispose = supplyId => {
     axios.delete(`/api/supply/${supplyId}`).then(() => isClose());
+    setDisposeModal(false);
   };
 
-  const handleChangeLargeCategory = e => {
-    const { ko, eng } = JSON.parse(e.target.value);
-    equipmentData.largeCategory = eng;
-    setSmallCategory(parseCategoryData(ko, category));
-  };
-
-  const handleChangeSmallCategory = e => {
-    const { ko } = JSON.parse(e.target.value);
-    equipmentData.categoryName = ko;
-  };
-
-  const handleChangeNameValue = e => setModelName(e.target.value);
-
-  const handleChangeSerialValue = e => setSerialNum(e.target.value);
-
-  const handleChangeYear = e => {
-    const year = e.target.value;
-    const parseYear = Number(year.split('년')[0]);
-    setYear(parseYear);
-  };
-
-  const handleChangeMonth = e => {
-    const month = e.target.value;
-    const parseMonth = Number(month.split('월')[0]);
-    setMonth(parseMonth);
-  };
-
-  const handleChangeDay = e => {
-    const day = e.target.value;
-    const parseDay = Number(day.split('일')[0]);
-    setDay(parseDay);
+  const handleFromRequest = (e, supplyId, modelName) => {
+    const { value } = e.target;
+    dispatch(setRequestData({ ...REQUEST_PAGES[value], supplyId, modelName }));
+    navigate(ROUTER.PATH.USER.REQUEST);
   };
 
   const handleChangePartners = e => {
     const { ko: partners } = JSON.parse(e.target.value);
-    equipmentData.partnersId = partners;
+    const text = e.target.options[e.target.selectedIndex].innerText;
+
+    setOptionNullList(state => ({ ...state, partners: text }));
+    setPartnersId(partners);
   };
 
   const handleChangeDept = e => {
     const { ko: dept } = JSON.parse(e.target.value);
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, dept: text, user: '공용' }));
+
+    if (!dept) {
+      setUseType('');
+      return;
+    }
+
     getUserData(dept);
+    setDeptId(dept);
+    setUserId('');
+    setUseType(STRING.USE_TYPE['공용']);
   };
 
   const handleChangeUser = e => {
     const { ko: user } = JSON.parse(e.target.value);
-    equipmentData.userId = user;
-  };
+    const text = e.target.options[e.target.selectedIndex].innerText;
+    setOptionNullList(state => ({ ...state, user: text }));
 
-  const parseCategoryData = (name, getCategory) => {
-    return getCategory.filter(item => item.largeCategory === name);
+    setDeptId('');
+    setUserId(user);
+    setUseType(STRING.USE_TYPE['개인']);
   };
 
   const getUserData = deptId =>
     axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
+
+  const sendFormData = supplyId => {
+    const formData = new FormData();
+    const { largeCategory, category, image, modelName, serialNum } =
+      getDetail.supplyDetail;
+
+    formData.append('largeCategory', STRING.CATEGORY[largeCategory]);
+    formData.append('categoryName', category);
+    formData.append('modelName', modelName);
+    formData.append('serialNum', serialNum);
+    formData.append('partnersId', partnersId);
+    formData.append('userId', userId);
+    formData.append('deptId', deptId);
+    formData.append('useType', useType);
+
+    if (imageForm) {
+      formData.append('multipartFile', imageForm);
+    } else {
+      formData.append('image', image);
+    }
+    sendEditData(supplyId, formData);
+  };
+
+  const sendEditData = (supplyId, formData) =>
+    axios.put(`/api/supply/${supplyId}`, formData).then(() => isClose());
+
+  const handleChangeimge = e => {
+    const img = e.target.files[0];
+    setImageForm(img);
+    setPreviewImage(img);
+  };
+
+  const setPreviewImage = img => {
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setPreview(reader.result);
+    };
+    reader.readAsDataURL(img);
+  };
+
+  const handleModalOpen = () => setDisposeModal();
+  const handleModalClose = () => setDisposeModal(false);
 
   return (
     <>
@@ -126,48 +201,36 @@ export default function EquipmentDetail({
             edit={edit}
             detail={getDetail}
             onEdit={handleEdit}
-            onDispose={handleDispose}
+            onSave={handleSave}
+            onDispose={handleModalOpen}
+            disposeModal={disposeModal}
+            onFromRequest={handleFromRequest}
+            handleModalClose={handleModalClose}
+            handleDispose={handleDispose}
           />
-          <DetailBodyTitle detail={getDetail} />
           <DetailBodyContainer>
-            <ImgContainer>
-              <img src={getDetail.supplyDetail.image} alt="detailImg" />
-            </ImgContainer>
-            <div>
+            <ImageContainer>
+              <DetailBodyTitle detail={getDetail} />
+              <DetailImage
+                detail={getDetail}
+                preview={preview}
+                onChangeImage={handleChangeimge}
+              />
+            </ImageContainer>
+            <DetailContentContainer>
               <DetailInfoContainer>
                 <DetailInfo>
-                  <DetailInfoProduct
-                    edit={edit}
-                    value={[modelName, serialNum]}
-                    detail={getDetail}
-                    category={[parseLargeCategory, smallCategory]}
-                    onChangeCategory={[
-                      handleChangeLargeCategory,
-                      handleChangeSmallCategory,
-                    ]}
-                    onChangeValue={[
-                      handleChangeNameValue,
-                      handleChangeSerialValue,
-                    ]}
-                  />
+                  <DetailInfoProduct edit={edit} detail={getDetail} />
                   <DetailInfoRequester
                     edit={edit}
-                    dateValue={[year, month]}
+                    optionNullList={optionNullList}
+                    editRequester={editRequester}
                     deptValue={[dept, user]}
                     detail={getDetail}
                     partners={partners}
-                    setDateState={[
-                      setSelectYear,
-                      setSelectMonth,
-                      setSelectDaysInMonth,
-                    ]}
                     onChangeDept={[handleChangeDept, handleChangeUser]}
-                    onChangeDate={[
-                      handleChangeYear,
-                      handleChangeMonth,
-                      handleChangeDay,
-                    ]}
                     onChangePartners={handleChangePartners}
+                    onEditRequester={handleEditRequester}
                   />
                 </DetailInfo>
               </DetailInfoContainer>
@@ -175,7 +238,7 @@ export default function EquipmentDetail({
                 <DetailUseHistory detail={getDetail} />
                 <DetailRepairHistory detail={getDetail} />
               </History>
-            </div>
+            </DetailContentContainer>
           </DetailBodyContainer>
         </DetailWrapper>
       )}
@@ -190,17 +253,18 @@ const DetailWrapper = styled.main`
 
 const DetailBodyContainer = styled.section`
   display: flex;
-`;
+  height: 40rem;
+  overflow-x: hidden;
+  overflow-y: auto;
+  gap: 3.125rem;
 
-const ImgContainer = styled.div`
-  display: flex;
-  margin-right: 5.9375rem;
+  @media (max-width: 86.25rem) {
+    flex-direction: column;
+    align-items: center;
 
-  img {
-    width: 23.25rem;
-    height: 23.25rem;
-    border: 1px solid ${props => props.theme.color.grey.brandColor2};
-    border-radius: 0.375rem;
+    div:first-child {
+      margin: 0;
+    }
   }
 `;
 
@@ -208,19 +272,41 @@ const DetailInfoContainer = styled.div`
   display: flex;
 `;
 
+const DetailContentContainer = styled.article`
+  width: 100%;
+  margin-top: calc(3.3988rem + 1.1719rem);
+
+  @media (max-width: 86.25rem) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 3rem 0;
+  }
+`;
+
+const ImageContainer = styled.div`
+  @media (max-width: 119.9375rem) {
+    position: sticky;
+    top: 0;
+  }
+`;
+
 const DetailInfo = styled.div`
   display: flex;
   border-bottom: 1px solid ${props => props.theme.color.grey.brandColor2};
   gap: 2.875rem;
+
+  @media (max-width: 119.9375rem) {
+    flex-direction: column;
+  }
 `;
 
 const History = styled.div`
   display: flex;
   gap: 3.125rem;
-`;
 
-// const InfiniteScrollCheck = styled.div`
-//   height: 2.5rem;
-//   background-color: ${props => props.theme.color.blue.brandColor1};
-//   border-radius: 0 0 0.5rem 0.5rem;
-// `;
+  @media (max-width: 119.9375rem) {
+    flex-direction: column;
+    margin-top: 2rem;
+  }
+`;

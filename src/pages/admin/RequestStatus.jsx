@@ -1,17 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import StatusMenu from 'components/common/status/StatusMenu';
+import RequestShow from 'components/requestStatus/RequestShow';
+import RequestModal from 'components/requestStatus/RequestModal';
+import Modal from 'elements/Modal';
 
-import StatusMenu from '../../components/common/status/StatusMenu';
-import RequestShow from '../../components/requestStatus/RequestShow';
-import RequestModal from '../../components/requestStatus/RequestModal';
-import Modal from '../../elements/Modal';
-
-import useSelectMenu from '../../hooks/useSelectMenu';
-import useSetStateChange from '../../hooks/useSetStateChange';
-import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
+import useSelectMenu from 'hooks/useSelectMenu';
+import useSetStateChange from 'hooks/useSetStateChange';
+import useResizeGetPageSize from 'hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { __requestStatus } from '../../redux/modules/requestStatus';
+import { initRequestData, __requestStatus } from 'redux/modules/requestStatus';
+import { getEncryptionStorage } from '../../utils/encryptionStorage';
 
 export default function RequestStatus() {
   const dispatch = useDispatch();
@@ -27,13 +27,26 @@ export default function RequestStatus() {
   const [keyword, setKeyword] = useState('');
   const [modal, setModal] = useState({ show: false, detailId: null });
 
-  const [menuStyle, clickMenu] = useSelectMenu(menu);
+  const editMenu = useRef(
+    menu.map(item =>
+      item.name === '보고서 결재' ? { ...item, name: '보고서 결재 요청' } : item
+    )
+  ).current;
+  const [menuStyle, clickMenu] = useSelectMenu(editMenu);
+
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
+  const { isAdmin } = getEncryptionStorage();
+  const path = isAdmin ? '/admin' : '';
+
+  useEffect(() => {
+    dispatch(initRequestData());
+  }, [dispatch]);
+
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
-    dispatch(__requestStatus({ keyword, type, status, page, size }));
+    dispatch(__requestStatus({ path, keyword, type, status, page, size }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,
@@ -47,7 +60,7 @@ export default function RequestStatus() {
   ]);
 
   const handleClickMenu = useSetStateChange(
-    ['전체', '비품 요청', '반납 요청', '수리 요청', '보고서 결재'],
+    ['전체', '비품 요청', '반납 요청', '수리 요청', '보고서 결재 요청'],
     ['', 'SUPPLY', 'RETURN', 'REPAIR', 'REPORT'],
     setType,
     e => {
@@ -64,6 +77,10 @@ export default function RequestStatus() {
 
   const handleChangeKeyword = e => {
     setKeyword(e.target.value);
+
+    if (page !== 1) {
+      setPage(1);
+    }
   };
 
   const handleClickDetail = id => {
@@ -84,6 +101,7 @@ export default function RequestStatus() {
           onClickMenu={handleClickMenu}
         />
         <RequestShow
+          isAdmin={isAdmin}
           requestData={getRequest}
           setSelectName={categoryTitle}
           page={page}
@@ -97,10 +115,15 @@ export default function RequestStatus() {
           resizeRef={resizeRef}
         />
       </RequestStatusWrapper>
-      <Modal isOpen={modal.show}>
+      <Modal
+        isOpen={modal.show}
+        onClose={() => setModal({ ...modal, show: false })}
+      >
         <RequestModal
           isClose={() => setModal({ ...modal, show: false })}
           detailId={modal.detailId}
+          path={path}
+          isAdmin={isAdmin}
         />
       </Modal>
     </>

@@ -7,6 +7,7 @@ export default function SelectCategoryList({
   optionKey,
   optionValueKey,
   onChangeCategory,
+  disabled,
 }) {
   return (
     <>
@@ -17,6 +18,7 @@ export default function SelectCategoryList({
         optionKey={optionKey[0]}
         optionValueKey={optionValueKey[0]}
         onChangeCategory={onChangeCategory[0]}
+        disabled={disabled}
       />
       <SelectCategory
         category={category[1]}
@@ -25,6 +27,7 @@ export default function SelectCategoryList({
         optionKey={optionKey[1]}
         optionValueKey={optionValueKey[1]}
         onChangeCategory={onChangeCategory[1]}
+        disabled={disabled}
       />
     </>
   );

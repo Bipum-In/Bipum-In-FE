@@ -1,47 +1,42 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
-//npm install framer-motion
+
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './Button';
 import ModalPortal from './ModalPortal';
 
 export default function Modal({ isOpen, onClose, children }) {
-  const backdropVariants = {
-    visible: { opacity: 1 },
-    hidden: { opacity: 0 },
-  };
-
-  const modalVariants = {
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.1, ease: 'easeInOut' },
-    },
-    hidden: { opacity: 0, scale: 0.9 },
-  };
-
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      const handleKeyDown = event => {
+        if (event.key === 'Escape') onClose();
+      };
+      document.addEventListener('keydown', handleKeyDown);
+      return () => {
+        document.removeEventListener('keydown', handleKeyDown);
+      };
     }
-  }, [isOpen]);
+  }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>
       {isOpen && (
         <ModalPortal>
           <Backdrop
-            variants={backdropVariants}
-            initial="hidden"
-            animate="visible"
-            exit="hidden"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             onClick={onClose}
           >
             <ModalContainer
-              variants={modalVariants}
-              initial="hidden"
-              animate="visible"
-              exit="hidden"
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{
+                opacity: 1,
+                scale: 1,
+                transition: { duration: 0.1, ease: 'easeInOut' },
+              }}
+              exit={{ opacity: 0, scale: 0.9 }}
               onClick={e => e.stopPropagation()}
             >
               {children}
@@ -60,20 +55,26 @@ export function CustomModal({
   submit,
   disabled,
   text,
+  width,
 }) {
   return (
-    <Modal isOpen={isOpen}>
-      <ModalMsgContainer width={'500px'}>{children}</ModalMsgContainer>
-      <CloseContainer>
-        <CloseButtonContainer>
-          <Button onClick={submit} submit type="button" disabled={disabled}>
-            {text}
-          </Button>
-          <Button onClick={onClose} cancel type="button">
+    <Modal isOpen={isOpen} onClose={onClose}>
+      <ModalMsgContainer width={width ? width : '313px'}>
+        {children}
+        <CloseContainer>
+          <Button onClick={onClose} mainBtn="border" type="button">
             취소
           </Button>
-        </CloseButtonContainer>
-      </CloseContainer>
+          <Button
+            onClick={submit}
+            mainBtn="fill"
+            type="button"
+            disabled={disabled}
+          >
+            {text}
+          </Button>
+        </CloseContainer>
+      </ModalMsgContainer>
     </Modal>
   );
 }
@@ -86,49 +87,38 @@ const Backdrop = styled(motion.div)`
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
+  overflow: hidden;
   background-color: rgba(0, 0, 0, 0.4);
 `;
 
 const ModalContainer = styled(motion.div)`
   background-color: white;
-  margin: auto; /* 추가 */
+  margin: auto;
   border-radius: 1rem;
   > div {
     overflow: hidden;
   }
-
-  /* filter: drop-shadow(rgba(0, 0, 0, 0.8) 2px 2px 20px); */
 `;
 
 const CloseContainer = styled.div`
   display: flex;
-  justify-content: flex-start;
-  border-bottom-left-radius: 0.375rem;
-  border-bottom-right-radius: 0.375rem;
-  border-top: 0.0625rem solid rgb(247, 247, 247);
-  min-height: 3.5rem;
-  padding: ${props => props.padding};
-  margin-top: 0;
+  justify-content: center;
+  margin-top: 1.5625rem;
   align-items: center;
+  gap: 1rem;
+
+  button {
+    width: 5rem;
+    height: 2.5rem;
+  }
 `;
 
 const ModalMsgContainer = styled.div`
+  ${props => props.theme.FlexCol};
   font-size: 1rem;
-  padding: 2.5rem 1.875rem;
+  padding: 3.125rem 4.0625rem;
   text-align: center;
   letter-spacing: -0.5px;
   white-space: pre-line;
-  line-height: 1.3125rem;
-  font-weight: bold;
   min-width: ${props => props.width};
-  color: #333333;
-`;
-
-const CloseButtonContainer = styled.div`
-  margin: 1rem;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
 `;

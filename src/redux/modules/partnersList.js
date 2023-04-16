@@ -1,4 +1,4 @@
-import Axios from '../../api/axios';
+import Axios from 'api/axios';
 import Redux from '../redux';
 
 const initialState = {
@@ -11,8 +11,11 @@ const initialState = {
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export const __partnersList = Redux.asyncThunk('PARTNERS', () =>
-  axios.get(`/api/partners`)
+export const getPartnersList = Redux.asyncThunk(
+  'PARTNERS',
+  payload =>
+    axios.get(`/api/partners/admin?page=${payload.page}&size=${payload.size}`),
+  response => response.data.data
 );
 
 const partnersListSlice = Redux.slice(
@@ -22,7 +25,7 @@ const partnersListSlice = Redux.slice(
   bulider => {
     Redux.extraReducer(
       bulider,
-      __partnersList,
+      getPartnersList,
       'partnersList',
       'isPartnersLoading',
       'getPartners',

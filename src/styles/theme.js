@@ -20,20 +20,24 @@ const grey = {
   brandColor7: '#5F5F5F',
 };
 
+const fontWeight = {
+  weight5: '500',
+  weight6: '600',
+  weight7: '700',
+};
+
 const color = {
   blue,
   grey,
   trans: 'transparent',
-};
-
-const fontWeight = {
-  bold: 700,
-  semi_bold: 600,
-  regular: 400,
+  accpet: '#2b9936',
+  reject: '#C73939',
+  remove: '#746336',
 };
 
 const screen = {
-  dashboardFullWidth: '2458px',
+  dashboardMaxWidth: '2458px',
+  dashboardDesktopMaxWidth: '1960px',
   fullWideDesktop: '1630px',
   wide_desktop: '1400px',
   desktop: '1280px',

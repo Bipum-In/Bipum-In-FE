@@ -1,31 +1,36 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
-import { v4 as uuidv4 } from 'uuid';
-import Button from '../../elements/Button';
+import Button from 'elements/Button';
 
 export default function CategoryItems({
   getCategory,
   getSmallCategory,
+  categoryOutsideRef,
   onClickMenu,
   onClickCategory,
 }) {
   return (
     <>
-      <CategoryItemsWrapper>
+      <CategoryItemsWrapper ref={categoryOutsideRef}>
         {getCategory &&
           getCategory.map(item => (
-            <CategoryItemContainer key={uuidv4()}>
-              <Button category={item.status} onClick={e => onClickMenu(e)}>
+            <CategoryItemContainer key={item.name}>
+              <Button
+                category={item.status}
+                onClick={e => {
+                  onClickMenu(e);
+                }}
+              >
                 {item.name}
               </Button>
             </CategoryItemContainer>
           ))}
       </CategoryItemsWrapper>
       {getSmallCategory && (
-        <CategoryWrapper show={getSmallCategory.show}>
+        <CategoryWrapper show={getSmallCategory.show.toString()}>
           <SmallCategoryItemsWrapper>
             {getSmallCategory.list.map(item => (
-              <SmallCategoryItemContainer key={uuidv4()}>
+              <SmallCategoryItemContainer key={item.categoryId}>
                 <Button onClick={e => onClickCategory(e)}>
                   {item.categoryName}
                 </Button>
@@ -54,16 +59,9 @@ const CategoryItemContainer = styled.div`
   ${props => props.theme.FlexCenter};
   padding-right: 2rem;
   font-size: 0.875rem;
-  &:before {
-    content: '';
-    position: absolute;
-    right: 1rem;
-    height: 100%;
-    width: 1px;
-    background-color: ${props => props.theme.color.grey.brandColor2};
-  }
-  &:last-child:before {
-    display: none;
+
+  button {
+    font-weight: 600;
   }
 `;
 
@@ -72,7 +70,7 @@ const CategoryWrapper = styled.div`
   width: 100%;
   height: 3rem;
   ${props =>
-    props.show
+    props.show === 'true'
       ? css`
           transform: translateY(0rem);
           opacity: 1;
@@ -80,9 +78,10 @@ const CategoryWrapper = styled.div`
       : css`
           transform: translateY(-0.3rem);
           opacity: 0;
+          pointer-events: none;
         `}
 
-  z-index: 1000;
+  z-index: 2;
   transition: all 0.3s ease;
 `;
 

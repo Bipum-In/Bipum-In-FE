@@ -1,159 +1,156 @@
-import ALERT from '../constants/alert';
+import ALERT from 'constants/alert';
+import ARRAY from 'constants/array';
+import alertModal, { alertModalButton } from 'utils/alertModal';
 
 const Valid = {
-  signUp(id, pw, pwCheck, nickName, isIdDone, isNickNameDone) {
-    if (!formEmpty(id, pw, pwCheck, nickName)) {
-      alert(ALERT.CHECK_EMPTY);
-      return false;
-    }
-    if (!pwDifferentCheck(pw, pwCheck)) {
-      alert(ALERT.CHECK_DIFF_PW);
-      return false;
-    }
-    if (!idLength(id)) {
-      alert('아이디는 4글자 이상 10이하만 입력 가능 합니다.');
-      return false;
-    }
-    if (!idType(id)) {
-      alert('아이디는 숫자, 문자만 입력 가능 합니다.');
-      return false;
-    }
-    if (!nickNameLength(nickName)) {
-      alert('닉네임은 2글자 이상 10글자 이하만 입력 가능 합니다.');
-      return false;
-    }
-    if (!pwLength(pw)) {
-      alert('비밀번호는 8글자 이상 15글자 이하만 입력 가능 합니다.');
-      return false;
-    }
-    if (!pwType(pw)) {
-      alert('비밀번호는 숫자, 문자, 대문자 특수문자만 입력 가능 합니다.');
-      return false;
-    }
-    if (!idDoneCheck(isIdDone)) {
-      alert('아이디 중복 체크 확인 바랍니다.');
-      return false;
-    }
-    if (!nickNameDoneCheck(isNickNameDone)) {
-      alert('닉네임 중복 체크 확인 바랍니다.');
+  imgLengthCheck(img, length) {
+    if (img.length > length) {
+      alertModal(false, ALERT.CHECK_IMAGE_LENGTH(length), 2);
       return false;
     }
 
     return true;
   },
 
-  login(id, pw) {
-    if (!formEmpty(id, pw)) {
-      alert(ALERT.CHECK_EMPTY);
-      return false;
-    }
-    if (!idLength(id)) {
-      alert('아이디는 4글자 이상 10이하만 입력 가능 합니다.');
-      return false;
-    }
-    if (!idType(id)) {
-      alert('아이디는 숫자, 문자만 입력 가능 합니다.');
-      return false;
-    }
-    if (!pwLength(pw)) {
-      alert('비밀번호는 8글자 이상 15글자 이하만 입력 가능 합니다.');
-      return false;
-    }
-    if (!pwType(pw)) {
-      alert('비밀번호는 숫자, 문자, 대문자 특수문자만 입력 가능 합니다.');
+  excelSheetCheck(sheetName, excel) {
+    const errorArray = validRoopExcelSheet(sheetName, excel);
+
+    if (errorArray.length) {
+      alertModalButton(false, ALERT.CHECK_EXCEL_SHEET(errorArray));
       return false;
     }
 
     return true;
   },
 
-  emptyPostAddCheck(img, ...input) {
-    if (!formEmpty(...input)) {
-      alert('공백은 추가할수 없습니다.');
-      return false;
-    }
-    if (!imgEmpty(img)) {
-      alert('이미지를 추가해 주세요.');
-      return false;
+  inputCheck(strArr, regex) {
+    for (let i = 0; i < strArr.length; i++) {
+      if (!isValidInput(strArr[i][0], regex)) {
+        alertModal(
+          false,
+          ALERT.CHECK_INPUT_KO_AND_ENG_AND_NUM(strArr[i][1]),
+          2
+        );
+        return false;
+      }
     }
 
     return true;
   },
 
-  addLenghCheck(title, content) {
-    if (!titleLength(title)) {
-      alert('제목은 20자 이상 입력할 수 없습니다.');
+  inputByteCheck(str, length) {
+    if (getByteLength(str) > length) {
       return false;
     }
-    if (!contentLength(content)) {
-      alert('내용은 200자 이상 입력할 수 없습니다.');
-      return false;
-    }
-
     return true;
   },
 };
 
-function imgEmpty(img) {
-  if (img.length <= 0) return false;
-  return true;
+function validRoopExcelSheet(sheetNames, excel) {
+  const result = [];
+  const flatExcel = excel
+    .map(sheet => sheet.filter((_, index) => index))
+    .flat();
+  const parseEmptyColumn = flatExcel.filter(
+    column => new Set(column).size !== 1
+  );
+
+  if (parseEmptyColumn.length > 100) {
+    result.push(`총 100개 이하의 column만 등록해야 합니다.`);
+    return result;
+  }
+
+  if (parseEmptyColumn.length < 2) {
+    result.push(`2개 이상의 column을 등록해야 합니다.`);
+    return result;
+  }
+
+  sheetNames.forEach((sheetName, index) => {
+    const errorArray = validExcelSheet(excel[index]);
+    if (errorArray.length) {
+      result.push(`
+      sheet: ${sheetName} 
+      cell : ${errorArray.join(', ')}
+      `);
+    }
+  });
+
+  return result;
 }
 
-function titleLength(text) {
-  if (text.length > 20) return false;
-  return true;
+function validExcelSheet(excel) {
+  const errorArray = [];
+  const columnArray = ARRAY.EXCEL_COLUMN;
+  const columnTitleArray = ARRAY.MULTIPLE_HEADER;
+
+  let columnCnt = 0;
+  let rowCnt = 0;
+
+  const parseEmptyColumn = excel.filter(column => new Set(column).size !== 1);
+  const rowLength = parseEmptyColumn.length;
+
+  while (columnCnt < columnArray.length) {
+    const checkRow = parseEmptyColumn[rowCnt][columnCnt];
+
+    if (checkRow) {
+      if (rowCnt === 0 && columnTitleArray[columnCnt] !== checkRow) {
+        errorArray.push(`${columnArray[columnCnt]}${rowCnt + 11}`);
+      }
+
+      rowCnt++;
+    }
+
+    if (!checkRow) {
+      if (rowCnt === 0 || columnCnt < 3) {
+        errorArray.push(`${columnArray[columnCnt]}${rowCnt + 11}`);
+      }
+
+      rowCnt++;
+    }
+
+    if (rowCnt === rowLength) {
+      columnCnt++;
+      rowCnt = 0;
+    }
+  }
+
+  return errorArray;
 }
 
-function contentLength(text) {
-  if (text.length > 200) return false;
-  return true;
+function isCompleteHangul(char) {
+  const charCode = char.charCodeAt(0);
+  return charCode >= 0xac00 && charCode <= 0xd7a3;
 }
 
-function formEmpty(...text) {
-  const textArr = text.filter(v => v === '');
-  if (textArr.length !== 0) return false;
-  return true;
+function isValidInput(str, regex) {
+  const matched = str.match(regex);
+  return matched && matched.length === str.length;
 }
 
-function idLength(id) {
-  if (id.length < 4 || id.length > 10) return false;
-  return true;
-}
+function getByteLength(str) {
+  let byteLength = 0;
 
-function idType(id) {
-  if (!/[a-zA-Z0-9]/.test(id)) return false;
-  return true;
-}
+  for (let i = 0; i < str.length; i++) {
+    const charCode = str.charCodeAt(i);
 
-function nickNameLength(nickName) {
-  if (nickName.length < 2 || nickName.length > 10) return false;
-  return true;
-}
+    if (charCode <= 0x7f) {
+      // ASCII 문자
+      byteLength += 1;
+    } else if (charCode <= 0x7ff) {
+      // 라틴 문자 등
+      byteLength += 2;
+    } else if (
+      (charCode >= 0xac00 && charCode <= 0xd7a3) ||
+      (charCode >= 0x800 && charCode <= 0xffff)
+    ) {
+      // 한글 및 기타 문자
+      byteLength += 2;
+    } else {
+      byteLength += 3; // UTF-8에서 한글을 3바이트로 계산하는 경우
+    }
+  }
 
-function pwLength(pw) {
-  if (pw.length < 8 || pw.length > 15) return false;
-  return true;
-}
-
-function pwType(pw) {
-  const regExp = /[?.,;:|*~`!^\-_+<>@#$%&]/g;
-  if (!/[a-zA-Z0-9]/gi.test(pw) && !regExp.test(pw)) return false;
-  return true;
-}
-
-function pwDifferentCheck(...text) {
-  if (new Set([...text]).size === text.length) return false;
-  return true;
-}
-
-function idDoneCheck(id) {
-  if (!id) return false;
-  return true;
-}
-
-function nickNameDoneCheck(nickName) {
-  if (!nickName) return false;
-  return true;
+  return byteLength;
 }
 
 export default Valid;

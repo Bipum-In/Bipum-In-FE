@@ -2,18 +2,23 @@ import React, { useEffect, useState } from 'react';
 
 import styled from 'styled-components';
 
-import CategoryItems from '../../components/common/CategoryItems';
-import EquipmentShow from '../../components/EquipmentManage/EquipmentShow';
+import CategoryItems from 'components/common/CategoryItems';
+import EquipmentShow from 'components/EquipmentManage/EquipmentShow';
 
-import useSelectMenu from '../../hooks/useSelectMenu';
-import useResizeGetPageSize from '../../hooks/useResizeGetPageSize';
+import useSelectMenu from 'hooks/useSelectMenu';
+import useResizeGetPageSize from 'hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getEquipmentList } from '../../redux/modules/equipmentStatus';
-import EquipmentModal from './EquipmentModal';
+import { getEquipmentList } from 'redux/modules/equipmentStatus';
+import useOutsideClick from 'hooks/useOutsideClick';
 
 export default function EquipmentListContainer({
   category: { category, largeCategory },
+  isAdmin,
+  showModal,
+  onClickDetail,
+  onClickSingleModal,
+  onClickMultiModal,
 }) {
   const dispatch = useDispatch();
   const {
@@ -26,26 +31,57 @@ export default function EquipmentListContainer({
   const [keyword, setKeyword] = useState('');
   const [categoryId, setCategoryId] = useState(categoryIdData);
   const [categoryTitle, setCategoryTitle] = useState(categoryNameData);
-  const [showDetailModal, setShowDetailModal] = useState({
-    show: false,
-    id: null,
-  });
-  const [showSingleModal, setShowSingleModal] = useState(false);
-  const [showMultipleModal, setShowMultipleModal] = useState(false);
   const [categoryList, setCategoryList] = useState({
     show: false,
-    list: [category],
+    list: category,
   });
 
   const [menuStyle, clickMenu] = useSelectMenu(largeCategory);
   const [resizeRef, pageSize, firstPageSize, handleResize] =
     useResizeGetPageSize();
 
+  const categoryOutsideRef = useOutsideClick(
+    () => setCategoryList(state => ({ ...state, show: false })),
+    categoryList.show
+  );
+
   useEffect(() => {
     const size = pageSize || firstPageSize || handleResize();
-    dispatch(getEquipmentList({ keyword, categoryId, status, page, size }));
+    dispatch(
+      getEquipmentList({
+        path: '/admin',
+        keyword,
+        categoryId,
+        status,
+        page,
+        size,
+      })
+    );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, keyword, categoryId, page, status, pageSize, handleResize]);
+  }, [
+    dispatch,
+    keyword,
+    categoryId,
+    page,
+    status,
+    pageSize,
+    handleResize,
+    showModal,
+  ]);
+
+  useEffect(() => {
+    if (getEquipment && getEquipment.content.length === 0) {
+      setPage(state => (state > 1 ? state - 1 : 1));
+    }
+  }, [getEquipment]);
+
+  const initEquipmentList = () => {
+    setCategoryList({ show: false, list: categoryList.list });
+    setCategoryId('');
+    setPage(1);
+    setKeyword('');
+    setCategoryTitle('전체');
+  };
 
   const handleClickMenu = e => {
     const name = e.target.innerText;
@@ -53,11 +89,7 @@ export default function EquipmentListContainer({
     clickMenu(e);
 
     if (name === '전체') {
-      setCategoryList({ show: false, list: categoryList.list });
-      setCategoryId('');
-      setPage(1);
-      setKeyword('');
-      setCategoryTitle('전체');
+      initEquipmentList();
       return;
     }
     setCategoryList({ show: true, list: parseCategoryList });
@@ -82,15 +114,12 @@ export default function EquipmentListContainer({
   };
 
   const handleChangeKeyword = e => {
+    if (page !== 1) {
+      setPage(1);
+    }
+
     setKeyword(e.target.value);
   };
-
-  const handleDetailModal = id =>
-    setShowDetailModal(state => ({ show: !state.show, id: id }));
-
-  const handleSingleModal = () => setShowSingleModal(state => !state);
-
-  const handleMultipleModal = () => setShowMultipleModal(state => !state);
 
   const getCategoryList = (name, categoryList) => {
     return categoryList.filter(list => list.largeCategory === name);
@@ -110,11 +139,13 @@ export default function EquipmentListContainer({
           <CategoryItems
             getCategory={menuStyle}
             getSmallCategory={categoryList}
+            categoryOutsideRef={categoryOutsideRef}
             onClickMenu={handleClickMenu}
             onClickCategory={handleClickCategory}
           />
         </CategoryContainer>
         <EquipmentShow
+          isAdmin={isAdmin}
           requestData={getEquipment}
           setSelectName={categoryTitle}
           page={page}
@@ -124,20 +155,12 @@ export default function EquipmentListContainer({
           setStatus={handleChangeState}
           keyword={keyword}
           setKeyword={handleChangeKeyword}
-          onClickDetail={handleDetailModal}
-          onClickSingleModal={handleSingleModal}
-          onClickMultiModal={handleMultipleModal}
+          onClickDetail={onClickDetail}
+          onClickSingleModal={onClickSingleModal}
+          onClickMultiModal={onClickMultiModal}
           resizeRef={resizeRef}
         />
       </EquipmentListWrapper>
-      <EquipmentModal
-        showDetialModal={showDetailModal}
-        showSingleModal={showSingleModal}
-        handleDetailModal={handleDetailModal}
-        handleSingleModal={handleSingleModal}
-        category={category}
-        largeCategory={largeCategory}
-      />
     </>
   );
 }

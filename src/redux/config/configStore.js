@@ -5,6 +5,11 @@ import equipmentStatus from '../modules/equipmentStatus';
 import partnersList from '../modules/partnersList';
 import deptList from '../modules/deptList';
 import deptUserList from '../modules/deptUserList';
+import authReducer from '../modules/authSlice';
+import sseSlice from '../modules/sseSlice';
+import sseAlertList from '../modules/sseAlertList';
+import userInfo from '../modules/userInfoSlice';
+import searchHeader from '../modules/searchHeader';
 
 const store = configureStore({
   reducer: {
@@ -14,6 +19,11 @@ const store = configureStore({
     requestStatus,
     dashboardStatus,
     equipmentStatus,
+    authReducer,
+    sseSlice,
+    sseAlertList,
+    userInfo,
+    searchHeader,
   },
 });
 
