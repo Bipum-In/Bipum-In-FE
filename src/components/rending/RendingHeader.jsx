@@ -13,6 +13,8 @@ export default function RendingHeader({
   loginClick,
   moveDashboard,
   logoutClick,
+  isMaster,
+  navigate,
 }) {
   return (
     <HeaderStyles>
@@ -22,16 +24,29 @@ export default function RendingHeader({
         </HeaderLogoContainer>
         <LoginContainer>
           {!isLoggedIn ? (
-            <GoogleLoginBtn onClick={loginClick}>
-              <GoogleIcon />
-              구글 계정으로 로그인
-            </GoogleLoginBtn>
+            <>
+              <ReturnDashboardBtn onClick={() => navigate('/masterpage')}>
+                마스터 계정으로 로그인
+              </ReturnDashboardBtn>
+              <GoogleLoginBtn onClick={loginClick}>
+                <GoogleIcon />
+                구글 계정으로 로그인
+              </GoogleLoginBtn>
+            </>
           ) : (
             <>
-              <ReturnDashboardBtn onClick={moveDashboard}>
-                비품인으로 돌아가기
-                <ReturnIcon />
-              </ReturnDashboardBtn>
+              {isMaster ? (
+                <ReturnDashboardBtn onClick={() => navigate('/masterpage')}>
+                  관리자 선임으로 돌아가기
+                  <ReturnIcon />
+                </ReturnDashboardBtn>
+              ) : (
+                <ReturnDashboardBtn onClick={moveDashboard}>
+                  비품인으로 돌아가기
+                  <ReturnIcon />
+                </ReturnDashboardBtn>
+              )}
+
               <LogoutBtn onClick={logoutClick}>로그아웃</LogoutBtn>
             </>
           )}
@@ -87,11 +102,11 @@ const GoogleLoginBtn = styled(HeaderBtnStyle)`
 const ReturnDashboardBtn = styled(HeaderBtnStyle)`
   background-color: ${props => props.theme.color.blue.brandColor6};
   color: white;
-  height: 2.8125rem;
+  height: 3rem;
 `;
 
 const LogoutBtn = styled(HeaderBtnStyle)`
   border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
   color: ${props => props.theme.color.blue.brandColor6};
-  height: 2.8125rem;
+  height: 3rem;
 `;
