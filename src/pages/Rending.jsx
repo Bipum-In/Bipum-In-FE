@@ -38,7 +38,7 @@ export default function Rending() {
   const currentUrl =
     document.location.href === 'http://localhost:3000/'
       ? process.env.REACT_APP_LOCALHOST_URL
-      : process.env.REACT_APP_S3_URL;
+      : process.env.REACT_APP_VERCEL_URL;
 
   function handleScroll(e) {
     if (e.deltaY > 0) {
