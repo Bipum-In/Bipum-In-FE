@@ -1,5 +1,19 @@
 import styled from 'styled-components';
 
+const LoginWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  ::before {
+    content: '';
+    background: url(${props => props.bg}) no-repeat center center/cover;
+    width: 100%;
+    height: 100%;
+  }
+`;
+
 const Fullpage = styled.div`
   width: 100vw;
 `;
@@ -43,9 +57,10 @@ const RendingBottomContainer = styled.div`
   }
 `;
 
-export const styles = {
+export const rendingStyles = {
   Fullpage,
   RendingWrapper,
   RendingTopContainer,
   RendingBottomContainer,
+  LoginWrapper,
 };
