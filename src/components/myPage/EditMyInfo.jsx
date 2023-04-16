@@ -142,7 +142,7 @@ export default function EditMyInfo({ getUserInfo }) {
 
     return href
       ? process.env.REACT_APP_LOCALHOST_URL
-      : process.env.REACT_APP_S3_URL;
+      : process.env.REACT_APP_VERCEL_URL;
   };
 
   const handleDeleteAccount = async () => {
