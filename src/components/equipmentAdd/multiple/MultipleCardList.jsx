@@ -53,7 +53,7 @@ const MultipleBodyContainer = styled.section`
   justify-content: flex-start;
   flex-wrap: wrap;
   width: 100%;
-  height: calc(100vh - 16.6875rem - 6.2925rem);
+  height: calc(100vh - 16.6875rem - 6.7rem);
   overflow-x: hidden;
   overflow-y: auto;
 `;
