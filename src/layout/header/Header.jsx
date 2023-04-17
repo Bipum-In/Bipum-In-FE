@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
 import styled, { css } from 'styled-components';
-import { ReactComponent as Alaram } from 'styles/commonIcon/alarm.svg';
+
 import { ReactComponent as Rotate } from 'styles/headerIcon/rotate.svg';
 import { ReactComponent as Useinfo } from 'styles/headerIcon/useinfo.svg';
 import { ReactComponent as Logout } from 'styles/sidebarIcon/logout.svg';
@@ -29,9 +29,16 @@ import Axios from 'api/axios';
 import logout from 'utils/logout';
 
 import { userInfoSlice } from '../../redux/modules/userInfoSlice';
-import { setAdminSSE, setUserSSE } from 'redux/modules/sseSlice';
+import {
+  deleteAllAdminSseLength,
+  deleteAllUerSseLength,
+  setAdminSSE,
+  setSSECount,
+  setUserSSE,
+} from 'redux/modules/sseSlice';
 import { getSearch, initSearchHeader } from 'redux/modules/searchHeader';
 import { getCategoryList } from 'redux/modules/equipmentStatus';
+import Alarm from './Alarm';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -40,6 +47,7 @@ export default function Header({ isAdmin, userRole }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [showAlarm, setShowAlarm] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [showModal, setShowModal] = useState({
     supplyShow: false,
@@ -54,10 +62,15 @@ export default function Header({ isAdmin, userRole }) {
     () => setIsDropdownVisible(false),
     isDropdownVisible
   );
+
   const searchOutsideRef = useOutsideClick(() => {
     initSearchData();
     setShowModal({ supplyShow: false, requestShow: false, id: null });
   }, searchValue);
+
+  const alarmOutsideRef = useOutsideClick(() => {
+    setShowAlarm(false);
+  }, showAlarm);
 
   const {
     sseSlice: { sseAdminLength, sseUserLength },
@@ -95,6 +108,15 @@ export default function Header({ isAdmin, userRole }) {
   );
 
   useEffect(() => {
+    dispatch(userInfoSlice());
+    getSSECount();
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getCategoryList());
+  }, [dispatch, showModal]);
+
+  useEffect(() => {
     if (searchValue === '') return;
     throttledDispatch();
     debouncedSearch();
@@ -111,16 +133,10 @@ export default function Header({ isAdmin, userRole }) {
       data && !data.acceptResult && dispatch(setAdminSSE(data));
     });
 
-    dispatch(userInfoSlice());
-
     return () => {
       sse.close();
     };
   }, [dispatch]);
-
-  useEffect(() => {
-    dispatch(getCategoryList());
-  }, [dispatch, showModal]);
 
   const initSearchData = () => {
     setSearchValue('');
@@ -212,6 +228,21 @@ export default function Header({ isAdmin, userRole }) {
     initSearchData();
   };
 
+  const handleClickAlaram = () => {
+    setShowAlarm(state => !state);
+    if (isAdmin) {
+      dispatch(deleteAllAdminSseLength());
+    } else {
+      dispatch(deleteAllUerSseLength());
+    }
+  };
+
+  const getSSECount = () => {
+    axios.get(`/api/notification/count`).then(res => {
+      dispatch(setSSECount(res.data.data));
+    });
+  };
+
   return (
     <>
       <HeaderWrapper>
@@ -229,20 +260,14 @@ export default function Header({ isAdmin, userRole }) {
             )}
             {/* 헤더 오른쪽 아이템 */}
             <HeaderRightContainer>
-              {/* <IconContainer>
-              <Alaram />
-              {isAdmin
-                ? sseAdminLength && (
-                    <AlaramCount>
-                      <span>{sseAdminLength}</span>
-                    </AlaramCount>
-                  )
-                : sseUserLength && (
-                    <AlaramCount>
-                      <span>{sseUserLength}</span>
-                    </AlaramCount>
-                  )}
-            </IconContainer> */}
+              <Alarm
+                isAdmin={isAdmin}
+                showAlarm={showAlarm}
+                alarmOutsideRef={alarmOutsideRef}
+                sseAdminLength={sseAdminLength}
+                sseUserLength={sseUserLength}
+                onClickAlaram={handleClickAlaram}
+              />
               {/* 드롭다운 컨테이너 */}
               <LoginUserInfoDropDown
                 onClick={toggleDropdown}
@@ -347,46 +372,6 @@ const ItemContainer = styled.div`
   margin: 0 3.25rem;
   * svg {
     cursor: pointer;
-  }
-`;
-
-const IconContainer = styled.div`
-  position: relative;
-  ${props => props.theme.FlexRow};
-  ${props => props.theme.FlexCenter};
-  width: 1.875rem;
-  height: 1.875rem;
-  ${props =>
-    props.search === 'true' &&
-    css`
-      margin: 0 0.8125rem 0 1.3125rem;
-    `}
-  svg {
-    width: 1.75rem;
-    height: 1.75rem;
-  }
-`;
-
-const AlaramCount = styled.div`
-  position: absolute;
-  ${props => props.theme.FlexRow};
-  ${props => props.theme.FlexCenter};
-  background: ${props => props.theme.color.blue.brandColor7};
-  width: 1.5rem;
-  height: 1.5rem;
-  padding: 0.625rem;
-  transform: translate(0.7rem, -0.7rem);
-  border-radius: 50%;
-  span {
-    ${props => props.theme.FlexRow};
-    ${props => props.theme.FlexCenter};
-    font-size: 0.75rem;
-    padding: 0.625rem;
-    width: 0.9375rem;
-    height: 0.9375rem;
-    color: white;
-    background-color: red;
-    border-radius: 50%;
   }
 `;
 
