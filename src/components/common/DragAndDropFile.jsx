@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { Keyframe } from 'styles/keyframes';
-import { ReactComponent as DefaultImage } from 'styles/commonIcon/addImgIcon2.svg';
+import { ReactComponent as Excel } from 'styles/commonIcon/excel.svg';
 import { ReactComponent as DragIcon } from 'styles/commonIcon/drag.svg';
 import { ReactComponent as CurrentImg } from 'styles/commonIcon/dragImg.svg';
 import { ReactComponent as EmptyImg } from 'styles/commonIcon/emptyImg.svg';
@@ -30,7 +30,7 @@ export default function DragAndDropFile({
         </CurrentImgContainer>
       )}
       <DefaultImgWrapper onClick={onChangeInputFile}>
-        <DefaultImage />
+        <Excel />
         <DefulatDesc>
           {invalidFile
             ? '형식에 맞지 않은 엑셀 파일입니다'
@@ -42,8 +42,9 @@ export default function DragAndDropFile({
 }
 
 const DefaultImgWrapper = styled.div`
-  ${props => props.theme.FlexCol};
+  ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
+  gap: 1.5rem;
   &:before {
     content: '';
     ${props => props.theme.wh100};
@@ -53,11 +54,11 @@ const DefaultImgWrapper = styled.div`
 `;
 
 const DefulatDesc = styled.span`
-  font-size: 1.125rem;
+  color: ${props => props.theme.color.grey.brandColor4};
   padding-top: 1.125rem;
   white-space: pre-line;
-  text-align: center;
-  color: ${props => props.theme.color.grey.brandColor4};
+  font-size: 1.75rem;
+  font-weight: 500;
 `;
 
 const CurrentImgContainer = styled.div`

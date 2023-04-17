@@ -41,19 +41,19 @@ const Redux = {
     actionFn
   ) {
     bulider.addCase(thunk.pending, (state, _) => {
-      state[stateKey][loadingKey] = true;
-      state[stateKey][errorkey] = false;
+      loadingKey && (state[stateKey][loadingKey] = true);
+      errorkey && (state[stateKey][errorkey] = false);
     });
     bulider.addCase(thunk.fulfilled, (state, action) => {
-      state[stateKey][loadingKey] = false;
-      state[stateKey][errorkey] = false;
+      loadingKey && (state[stateKey][loadingKey] = false);
+      errorkey && (state[stateKey][errorkey] = false);
       state[stateKey][dataKey] = actionFn
         ? actionFn(state[stateKey][dataKey], action.payload)
         : action.payload;
     });
     bulider.addCase(thunk.rejected, (state, _) => {
-      state[stateKey][loadingKey] = false;
-      state[stateKey][errorkey] = true;
+      loadingKey && (state[stateKey][loadingKey] = false);
+      errorkey && (state[stateKey][errorkey] = true);
     });
   },
 };
