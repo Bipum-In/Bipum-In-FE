@@ -52,33 +52,35 @@ export default function AlertStatus({ isAdmin }) {
 
   const { sseAdminData, sseUserData } = useSelector(state => state.sseSlice);
 
-  const sseData = isAdmin ? sseAdminData : sseUserData;
   const [ref, inView] = useInView({ threshold: 0 }); //inView
-  const page = useRef(1);
-  const size = page.current === 1 ? NUMBER.INT.FIVE : NUMBER.INT.TEN;
+  const [page, setPage] = useState(1);
+  const sseData = isAdmin ? sseAdminData : sseUserData;
 
   useEffect(() => {
     if (!isLastPage && inView) {
       isAdmin
-        ? dispatch(__adminSseAlert({ page: page.current, size }))
-        : dispatch(__userSseAlert({ page: page.current, size }));
-      page.current += 1;
+        ? dispatch(__adminSseAlert({ page, size: 5 }))
+        : dispatch(__userSseAlert({ page, size: 5 }));
+      setPage(state => state + 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, inView, isAdmin]);
 
   const allDeleteAlarm = () => {
     setDeleteToggle(prev => !prev);
-    axios.delete('/api/notification').then(() => {
-      content.length > 0 && alertModal(false, '모든 알림이 삭제되었습니다.', 2);
-      if (isAdmin) {
-        dispatch(deleteAllAdminMsg());
-        dispatch(deleteAllAdminSseMsg());
-      } else {
-        dispatch(deleteAllUerMsg());
-        dispatch(deleteAllUerSseMsg());
-      }
-    });
+    axios
+      .delete(`/api/notification?role=${STRING.IS_ADMIN(isAdmin)}`)
+      .then(() => {
+        content.length > 0 &&
+          alertModal(false, '모든 알림이 삭제되었습니다.', 2);
+        if (isAdmin) {
+          dispatch(deleteAllAdminMsg());
+          dispatch(deleteAllAdminSseMsg());
+        } else {
+          dispatch(deleteAllUerMsg());
+          dispatch(deleteAllUerSseMsg());
+        }
+      });
   };
 
   const putRequest = (notificationId, requestId) => {
@@ -96,17 +98,19 @@ export default function AlertStatus({ isAdmin }) {
   };
 
   return (
-    <>
+    <AlertStatusWrapper>
       {content && (
         <styleds.EquipmentTopContainer col="true">
-          <AnchorBtn
-            isAlert={true}
-            allDeleteAlarm={allDeleteAlarm}
-            isDeleteShow={isDeleteShow}
-            setDeleteToggle={setDeleteToggle}
-          >
-            알림
-          </AnchorBtn>
+          <AnchorContainer>
+            <AnchorBtn
+              isAlert={true}
+              allDeleteAlarm={allDeleteAlarm}
+              isDeleteShow={isDeleteShow}
+              setDeleteToggle={setDeleteToggle}
+            >
+              알림
+            </AnchorBtn>
+          </AnchorContainer>
           <styleds.AlertAndAddContainer>
             {sseData.length === 0 && content.length === 0 && isLastPage && (
               <EmptyAlarm />
@@ -150,13 +154,11 @@ export default function AlertStatus({ isAdmin }) {
                 </AlertDetailContainer>
               </AlertListContainer>
             ))}
-            {content && (
-              <InfinityContainer ref={ref}>
-                {isLastPage && content.length > 4 && (
-                  <span>마지막 페이지 입니다.</span>
-                )}
-              </InfinityContainer>
-            )}
+            <InfinityContainer ref={ref}>
+              {isLastPage && content.length > 4 && (
+                <span>마지막 페이지 입니다.</span>
+              )}
+            </InfinityContainer>
           </styleds.AlertAndAddContainer>
         </styleds.EquipmentTopContainer>
       )}
@@ -172,9 +174,14 @@ export default function AlertStatus({ isAdmin }) {
           path={path}
         />
       </Modal>
-    </>
+    </AlertStatusWrapper>
   );
 }
+
+const AlertStatusWrapper = styled.article`
+  width: 100%;
+  height: 100%;
+`;
 
 const AlertListContainer = styled.div`
   position: relative;
@@ -242,6 +249,8 @@ const Status = styled.div`
     `}
 `;
 
+const AnchorContainer = styled.article``;
+
 const AlertImg = styled.img`
   object-fit: cover;
   ${props => props.theme.wh100};
@@ -267,6 +276,7 @@ const InfinityContainer = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
   width: 100%;
+  height: 3.75rem;
   span {
     color: ${props => props.theme.color.grey.brandColor5};
     padding: 1rem;
