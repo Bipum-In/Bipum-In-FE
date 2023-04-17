@@ -35,7 +35,6 @@ export default function DetailRepairHistory({ detail }) {
       page.current += 1;
     }
   }, [dispatch, inView, lastPage, size, supplyId]);
-  console.log(content, content.length);
   return (
     <DetailRepairHistoryContainer>
       <p>수리 내역</p>
