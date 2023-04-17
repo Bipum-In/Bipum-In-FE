@@ -9,7 +9,9 @@ import Login from 'pages/Login';
 import EmptyPage from 'pages/EmptyPage';
 import MyPage from '../pages/MyPage';
 
-import MasterPage from 'pages/admin/MasterPage';
+import MasterPage from 'pages/master/MasterPage';
+import AppointmentManager from 'pages/master/AppointmentManager';
+
 import AdminDashBoard from 'pages/admin/AdminDashBoard';
 import Management from 'pages/admin/Management';
 import EquipmentAdd from 'pages/admin/EquipmentAdd';
@@ -40,9 +42,10 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
-        path: ROUTER.PATH.ADMIN.MASTERPAGE,
+        path: ROUTER.PATH.MASTER.MASTERPAGE,
         element: <MasterPage />,
       },
+
       {
         path: ROUTER.PATH.DELETE_USER,
         element: <DeleteUserPage />,
@@ -89,6 +92,10 @@ const router = createBrowserRouter([
           {
             path: ROUTER.PATH.MYPAGE,
             element: <MyPage />,
+          },
+          {
+            path: ROUTER.PATH.MASTER.APPOINTMENT,
+            element: <AppointmentManager />,
           },
         ],
       },
