@@ -6,6 +6,7 @@ import STRING from 'constants/string';
 import DeptSidebar from './dept/DeptSidebar';
 import { useModalState } from 'hooks/useModalState';
 import UserShowBody from './dept/UserShowBody';
+import { getEncryptionStorage } from 'utils/encryptionStorage';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -95,7 +96,7 @@ export default function DeptManagement() {
           />
         </DeptHeaderWrapper>
         <ContentWrapper>
-          <Sidebar>
+          <Sidebar ismaster={`${getEncryptionStorage().userRole}`}>
             <DeptSidebar
               deptList={deptList}
               setSelectedDeptId={setSelectedDeptId}
@@ -138,7 +139,10 @@ const ContentWrapper = styled.div`
 const Sidebar = styled.div`
   width: 14.75rem;
   ${props => props.theme.FlexCol};
-  height: calc(100vh - 21.5rem);
+  height: ${props =>
+    props.ismaster === 'MASTER'
+      ? 'calc(100vh - 18.3rem)'
+      : 'calc(100vh - 21.5rem)'};
   border-right: 0.0625rem solid ${props => props.theme.color.grey.brandColor3};
   overflow-y: overlay;
   &::-webkit-scrollbar {
