@@ -6,6 +6,7 @@ import STRING from 'constants/string';
 import DeptSidebar from './dept/DeptSidebar';
 import { useModalState } from 'hooks/useModalState';
 import UserShowBody from './dept/UserShowBody';
+
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function DeptManagement() {
@@ -14,6 +15,7 @@ export default function DeptManagement() {
   const [deptName, setDeptName] = useState('');
   const [editedDeptName, setEditedDeptName] = useState('');
   const [selectedDeptId, setSelectedDeptId] = useState(1);
+
   const [employeeList, setEmployeeList] = useState([]);
   const [idModalDept, setIdModalDept] = useState(null);
   const [filteredEmployeeList, setFilteredEmployeeList] = useState([]);
@@ -22,17 +24,15 @@ export default function DeptManagement() {
   const updateDeptList = () =>
     axios.get('/api/dept').then(response => setDeptList(response.data.data));
   const handleSubmit = () =>
-    axios
-      .post('/api/dept', { deptName })
-      .then(() => {
-        updateDeptList();
-        setDeptName('');
-      })
-      .catch(console.error);
+    axios.post('/api/dept', { deptName }).then(() => {
+      updateDeptList();
+      setDeptName('');
+    });
 
   useEffect(() => {
     updateDeptList();
   }, []);
+
   useEffect(() => {
     if (selectedDeptId !== null) {
       axios.get(`/api/dept/${selectedDeptId}`).then(response => {
@@ -42,16 +42,11 @@ export default function DeptManagement() {
   }, [selectedDeptId]);
 
   const handleDeleteUser = userId => {
-    axios
-      .delete(`/api/user/${userId}`)
-      .then(response => {
-        setEmployeeList(prevList =>
-          prevList.filter(emp => emp.userId !== userId)
-        );
-      })
-      .catch(error => {
-        console.error(error);
-      });
+    axios.delete(`/api/user/${userId}`).then(() => {
+      setEmployeeList(prevList =>
+        prevList.filter(emp => emp.userId !== userId)
+      );
+    });
   };
 
   const handleAssignRole = userId => {
@@ -140,6 +135,15 @@ const ContentWrapper = styled.div`
 const Sidebar = styled.div`
   width: 14.75rem;
   ${props => props.theme.FlexCol};
-  height: 100%;
+  height: calc(100vh - 21.5rem);
   border-right: 0.0625rem solid ${props => props.theme.color.grey.brandColor3};
+  overflow-y: overlay;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: ${props => props.theme.color.grey.brandColor2};
+    border-radius: 20px;
+  }
 `;
