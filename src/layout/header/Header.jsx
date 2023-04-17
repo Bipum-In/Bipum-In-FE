@@ -155,7 +155,6 @@ export default function Header({ isAdmin, userRole }) {
     setSearchValue(value);
   };
 
-  console.log(userRole);
   let headerData;
   if (userRole !== 'MASTER') {
     headerData = [

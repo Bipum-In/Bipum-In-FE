@@ -46,7 +46,11 @@ export default function StatusList({
         ) : (
           <tbody>
             <tr>
-              <td />
+              <td>
+                <EmptyItemContainer>
+                  내역이 존재하지 않습니다.
+                </EmptyItemContainer>
+              </td>
             </tr>
           </tbody>
         )}
@@ -54,6 +58,18 @@ export default function StatusList({
     </RequestShowBody>
   );
 }
+
+const EmptyItemContainer = styled.div`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 85%;
+  font-size: 1.125rem;
+`;
 
 const RequestShowBody = styled.div`
   width: 100%;
