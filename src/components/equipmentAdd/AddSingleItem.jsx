@@ -204,9 +204,18 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
     e.preventDefault();
 
     if (
+      categoryInput &&
+      !Valid.inputCheck(
+        [[categoryInput, '카테고리']],
+        /^(?=.*[A-Za-z0-9가-힣])[A-Za-z0-9가-힣\s]+$/
+      )
+    ) {
+      return;
+    }
+
+    if (
       !Valid.inputCheck(
         [
-          [categoryInput, '카테고리'],
           [nameValue, '제품명'],
           [serialValue, '시리얼 넘버'],
         ],
