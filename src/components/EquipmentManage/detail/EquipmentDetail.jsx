@@ -289,6 +289,10 @@ const ImageContainer = styled.div`
     position: sticky;
     top: 0;
   }
+
+  @media (max-width: 86.25rem) {
+    position: static;
+  }
 `;
 
 const DetailInfo = styled.div`

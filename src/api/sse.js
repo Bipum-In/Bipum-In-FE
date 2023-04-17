@@ -6,9 +6,6 @@ export default class SSE {
   #eventSource;
   constructor(url, timeoutMinute) {
     this.#eventSource = new EventSourcePolyfill(url, {
-      headers: {
-        Authorization: `Bearer ${getCookie(QUERY.COOKIE.COOKIE_NAME)}`,
-      },
       heartbeatTimeout: timeoutMinute ? timeoutMinute * 60 * 1000 : 60 * 1000,
     });
   }
