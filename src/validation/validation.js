@@ -123,8 +123,7 @@ function isCompleteHangul(char) {
 }
 
 function isValidInput(str, regex) {
-  const matched = str.match(regex);
-  return matched && matched.length === str.length;
+  return regex.test(str);
 }
 
 function getByteLength(str) {

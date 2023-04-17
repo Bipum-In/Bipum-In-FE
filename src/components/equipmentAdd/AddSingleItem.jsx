@@ -209,7 +209,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
           [nameValue, '제품명'],
           [serialValue, '시리얼 넘버'],
         ],
-        /[A-Za-z0-9가-힣]/g
+        /^(?=.*[A-Za-z0-9가-힣])[A-Za-z0-9가-힣\s]+$/
       )
     ) {
       return;
