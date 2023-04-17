@@ -13,6 +13,7 @@ export default class Axios {
       headers: {
         'Access-Control-Allow-Origin': `${process.env.REACT_APP_SERVER_URL}`,
       },
+      withCredentials: true,
       baseURL: url,
     });
 
