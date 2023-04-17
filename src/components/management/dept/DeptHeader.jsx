@@ -5,7 +5,7 @@ import Input from 'elements/Input';
 import Button from 'elements/Button';
 import { ReactComponent as WhiteAdd } from 'styles/commonIcon/whiteAdd.svg';
 import { ReactComponent as CancelInput } from 'styles/commonIcon/cancelInput.svg';
-
+import { getEncryptionStorage } from 'utils/encryptionStorage';
 import { useModalState } from 'hooks/useModalState';
 import { CustomModal } from 'elements/Modal';
 
@@ -23,15 +23,21 @@ export default function DeptHeader({
   const handleDeptClear = () => setDeptName('');
   const handleChangeKeyword = e => setKeyword(e.target.value);
   const [keyword, setKeyword] = useState('');
+
   useEffect(() => {
     const filteredList = employeeList.filter(employee =>
       employee.empName.includes(keyword)
     );
     setFilteredEmployeeList(filteredList);
   }, [employeeList, keyword]);
+
   return (
     <RequestShowTitle ref={containerHeaderRef}>
-      <Title>{setSelectName}</Title>
+      <Title>
+        {getEncryptionStorage().userRole !== 'MASTER'
+          ? setSelectName
+          : '비품 총괄 관리자 선임'}
+      </Title>
       <SearchSelect>
         <SearchContainer>
           <SearchIconContainer>
