@@ -25,11 +25,9 @@ const DeptSidebar = ({
     });
 
   const handleSaveClick = deptId =>
-    axios
-      .put(`/api/dept/${deptId}`, { deptName: editedDeptName })
-      .then(response => {
-        updateDeptList();
-      });
+    axios.put(`/api/dept/${deptId}`, { deptName: editedDeptName }).then(() => {
+      updateDeptList();
+    });
 
   const [idModalDept, setIdModalDept] = useState(null);
   const [idModalEdit, setIdModalEdit] = useState(null);
