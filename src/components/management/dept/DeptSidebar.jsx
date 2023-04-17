@@ -8,15 +8,15 @@ import { CustomModal } from 'elements/Modal';
 import Input from 'elements/Input';
 import Axios from 'api/axios';
 
-// import { LargeTypeContainer, LargeType } from '../styled-components/typography';
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 const DeptSidebar = ({
   deptList,
   setSelectedDeptId,
-
+  activeDeptId,
   editedDeptName,
   setEditedDeptName,
+
   updateDeptList,
 }) => {
   const handleDeleteDept = deptId =>
@@ -30,6 +30,7 @@ const DeptSidebar = ({
       .then(response => {
         updateDeptList();
       });
+
   const [idModalDept, setIdModalDept] = useState(null);
   const [idModalEdit, setIdModalEdit] = useState(null);
   const deleteModalClose = () => setDeleteModal(false);
@@ -37,17 +38,19 @@ const DeptSidebar = ({
   const handleEditClear = () => setEditedDeptName('');
   const [deleteModal, setDeleteModal] = useModalState();
   const [editModal, setEditModal] = useModalState();
+
   return (
     <>
       {deptList.map(dept => (
         <LargeTypeContainer key={dept.deptId}>
           <LargeType
+            active={dept.deptId === activeDeptId}
             onClick={() => {
               setSelectedDeptId(dept.deptId);
             }}
           >
-            {dept.deptName}
-            <IconBox>
+            <p>{dept.deptName}</p>
+            <IconBox active={dept.deptId === activeDeptId}>
               <Edit
                 onClick={() => {
                   setIdModalEdit(dept.deptId);
@@ -143,8 +146,15 @@ const IconBox = styled.div`
   flex-direction: row;
   gap: 1rem;
   margin-right: 1.6875rem;
+  svg {
+    path {
+      stroke: ${props =>
+        props.active
+          ? props.theme.color.blue.brandColor1
+          : props.theme.color.blue.brandColor6};
+    }
+  }
 `;
-
 const LargeTypeContainer = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
@@ -164,11 +174,16 @@ const LargeType = styled.div`
   height: 4.5rem;
   border-bottom: 0.0625rem solid ${props => props.theme.color.grey.brandColor4};
   cursor: pointer;
+
   ${props =>
     props.active &&
     css`
-      color: white;
-      background-color: ${props.theme.color.blue.brandColor5};
+      background-color: ${props => props.theme.color.blue.brandColor5};
+      color: ${props => props.theme.color.white};
+      p {
+        color: white;
+        font-weight: 600;
+      }
     `}
   svg {
     display: none;
