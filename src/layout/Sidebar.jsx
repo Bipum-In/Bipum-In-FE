@@ -14,6 +14,7 @@ import { ReactComponent as List } from 'styles/sidebarIcon/list.svg';
 import { ReactComponent as Management } from 'styles/sidebarIcon/management.svg';
 import { ReactComponent as Setting } from 'styles/headerIcon/setting.svg';
 import { ReactComponent as Close } from 'styles/commonIcon/close.svg';
+import { ReactComponent as Manager } from 'styles/sidebarIcon/manager.svg';
 
 import ROUTER from 'constants/routerConst';
 import STRING from 'constants/string';
@@ -26,6 +27,7 @@ export default function Sidebar({
   handleClickCategory,
   handleSidebarToggle,
   isAdmin,
+  userRole,
   isAdminStr,
   pathname,
 }) {
@@ -49,20 +51,32 @@ export default function Sidebar({
           <Logo />
         </LogoContainer>
         <SidebarCategoryContainer>
-          {Object.values(STRING.SIDEBAR[isAdminStr]).map(
-            (sidebarName, index) => (
-              <CategoryItemLeft
-                key={uuidv4()}
-                onClick={handleClickCategory}
-                category={`${
-                  ARRAY.SIDEBAR.SIDEBAR_STYLE(pathname, isAdmin)[index]
-                }`}
-                title={sidebarName}
-              >
-                {categoryIcons[index]}
-              </CategoryItemLeft>
-            )
+          {userRole === 'MASTER' && (
+            <CategoryItemLeft
+              onClick={handleClickCategory}
+              category={`${
+                pathname === ROUTER.PATH.MASTER.APPOINTMENT && true
+              }`}
+              title="관리자 선임"
+            >
+              <Manager />
+            </CategoryItemLeft>
           )}
+          {userRole !== 'MASTER' &&
+            Object.values(STRING.SIDEBAR[isAdminStr]).map(
+              (sidebarName, index) => (
+                <CategoryItemLeft
+                  key={uuidv4()}
+                  onClick={handleClickCategory}
+                  category={`${
+                    ARRAY.SIDEBAR.SIDEBAR_STYLE(pathname, isAdmin)[index]
+                  }`}
+                  title={sidebarName}
+                >
+                  {categoryIcons[index]}
+                </CategoryItemLeft>
+              )
+            )}
           {isAdmin && (
             <ManageManetContainer onClick={handleClickCategory}>
               <CategoryItemLeft
