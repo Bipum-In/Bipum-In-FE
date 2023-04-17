@@ -4,10 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import Button from 'elements/Button';
 import Axios from 'api/axios';
 import chartData from './chartData';
+import ROUTER from 'constants/routerConst';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export default function OrganizationChart({ setSettingPg }) {
+export default function OrganizationChart({ navigate }) {
   const [currentBtnData, setCurrentBtnData] = useState([]);
 
   const handleCurrentChart = e => {
@@ -25,7 +26,7 @@ export default function OrganizationChart({ setSettingPg }) {
   const handlePostChart = () => {
     axios
       .post(`/api/master/dept`, { deptList: currentBtnData })
-      .then(() => setSettingPg('chart'));
+      .then(() => navigate(ROUTER.PATH.MASTER.APPOINTMENT));
   };
 
   return (
