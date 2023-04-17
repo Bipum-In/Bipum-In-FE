@@ -18,9 +18,9 @@ import { getEncryptionStorage } from 'utils/encryptionStorage';
 import ROUTER from 'constants/routerConst';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+
 export default function MasterPage() {
   const navigate = useNavigate();
-
   const [state, setState] = useState({
     username: '',
     password: '',
@@ -30,8 +30,10 @@ export default function MasterPage() {
   });
 
   useEffect(() => {
-    if (state.userRole && state.checkDept) {
+    if (state.userRole === 'MASTER' && state.checkDept) {
       navigate(ROUTER.PATH.MASTER.APPOINTMENT);
+    } else if (state.userRole === 'USER' || state.userRole === 'ADMIN') {
+      navigate(ROUTER.PATH.MAIN);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.checkDept, state.settingPg, state.userRole]);

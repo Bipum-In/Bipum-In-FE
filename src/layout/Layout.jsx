@@ -21,10 +21,15 @@ export default function DashBoardLayout() {
   useEffect(() => {
     if (userRole === 'MASTER') {
       navigate(ROUTER.PATH.MASTER.APPOINTMENT);
+    } else if (
+      pathname === ROUTER.PATH.MASTER.APPOINTMENT &&
+      userRole !== 'MASTER'
+    ) {
+      navigate(ROUTER.PATH.MAIN);
     } else if (!checkUser) {
       navigate(ROUTER.PATH.MAIN);
     }
-  }, [checkUser, navigate, userRole]);
+  }, [checkUser, navigate, pathname, userRole]);
 
   const desktopSize = theme.screen.desktopSize;
   useEffect(() => {

@@ -1,10 +1,11 @@
 import { removeCookie } from 'utils/cookie';
 import Storage from 'utils/localStorage';
 import QUERY from 'constants/query';
+import Axios from 'api/axios';
 
 export default function logout(callback) {
-  removeCookie(QUERY.COOKIE.COOKIE_NAME);
-  removeCookie(QUERY.COOKIE.REFRESH_NAME);
+  const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+  axios.post('api/user/deleteAllCookies');
   Storage.clearLocalStorage();
   callback && callback();
 }

@@ -1,14 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import { getEncryptionStorage } from 'utils/encryptionStorage';
 import DeptManagement from 'components/management/DeptManagement';
 
 export default function AppointmentManager() {
   return (
     <>
-      <ManagementComponentsContainer>
-        <DeptManagement />
-      </ManagementComponentsContainer>
+      {getEncryptionStorage().userRole === 'MASTER' && (
+        <ManagementComponentsContainer>
+          <DeptManagement />
+        </ManagementComponentsContainer>
+      )}
     </>
   );
 }
