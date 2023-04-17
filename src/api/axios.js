@@ -10,8 +10,11 @@ let message = null;
 export default class Axios {
   constructor(url) {
     this.instance = axios.create({
-      baseURL: url,
+      headers: {
+        'Access-Control-Allow-Origin': `${process.env.REACT_APP_SERVER_URL}`,
+      },
       withCredentials: true,
+      baseURL: url,
     });
 
     this.instance.interceptors.request.use(request => {
@@ -69,25 +72,57 @@ export default class Axios {
   }
 
   async get(path) {
-    return this.instance.get(path);
+    const cookie = getCookie(QUERY.COOKIE.COOKIE_NAME);
+    const option = {
+      headers: {
+        Authorization: `Bearer ${cookie ? cookie : ''}`,
+      },
+    };
+    return this.instance.get(path, option);
   }
 
   async post(path, payload) {
-    return this.instance.post(path, payload);
+    const cookie = getCookie(QUERY.COOKIE.COOKIE_NAME);
+    const option = {
+      headers: {
+        Authorization: `Bearer ${cookie ? cookie : ''}`,
+      },
+    };
+    return this.instance.post(path, payload, option);
   }
 
   async delete(path) {
-    return this.instance.delete(`${path}`);
+    const cookie = getCookie(QUERY.COOKIE.COOKIE_NAME);
+    const option = {
+      headers: {
+        Authorization: `Bearer ${cookie ? cookie : ''}`,
+      },
+    };
+    return this.instance.delete(`${path}`, option);
   }
 
   async put(path, payload) {
-    return this.instance.put(`${path}`, payload);
+    const cookie = getCookie(QUERY.COOKIE.COOKIE_NAME);
+    const option = {
+      headers: {
+        Authorization: `Bearer ${cookie ? cookie : ''}`,
+      },
+    };
+    return this.instance.put(`${path}`, payload, option);
   }
 
   #getAccessToken = mem(
     async () => {
       try {
-        const response = await this.instance.post(`/api/user/reissue`);
+        const response = await this.instance.post(
+          `/api/user/reissue`, // refresh url
+          '',
+          {
+            headers: {
+              Refresh: `Bearer ${getCookie(QUERY.COOKIE.REFRESH_NAME)}`,
+            },
+          }
+        );
 
         const accessToken = response.headers.authorization;
 
