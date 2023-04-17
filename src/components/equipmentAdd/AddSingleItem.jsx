@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
 import { styles } from '../common/commonStyled';
 import Button from 'elements/Button';
 
@@ -203,9 +202,11 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
 
   const setFormData = e => {
     e.preventDefault();
+
     if (
       !Valid.inputCheck(
         [
+          [categoryInput, '카테고리'],
           [nameValue, '제품명'],
           [serialValue, '시리얼 넘버'],
         ],
@@ -290,6 +291,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
                         value={categoryInput}
                         setState={handleChangeCategoryInput}
                         placeholder="직접 입력하세요."
+                        maxLength={10}
                       />
                     </styles.CategoryInputContainer>
                   )}
