@@ -28,7 +28,7 @@ export default function SearchItem({ search, onSearchDetail }) {
               ) : (
                 <Item key={uuidv4()} status={value}>
                   <StatusColor status={value} />
-                  {value || '-'}
+                  <TextOverflow>{value || '-'}</TextOverflow>
                 </Item>
               )
             )}
@@ -61,9 +61,6 @@ const Item = styled.div`
   align-items: center;
   width: 5rem;
   height: 5rem;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
 
   ${props =>
     props.status === '승인' &&
@@ -97,6 +94,19 @@ const Item = styled.div`
       border: 1px solid ${props => props.theme.color.remove};
       border-radius: 0.5rem;
     `}
+`;
+
+const TextOverflow = styled.div`
+  display: -webkit-box;
+  line-height: 1.2;
+  max-width: 5rem;
+  max-height: 5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 `;
 
 const StatusColor = styled.div`
