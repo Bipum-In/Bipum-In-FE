@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
-import styled, { keyframes, useTheme } from 'styled-components';
+import styled, { useTheme } from 'styled-components';
 import { ReactComponent as Hamburger } from 'styles/sidebarIcon/hamburger.svg';
 
 import Header from './header/Header';
@@ -15,14 +15,16 @@ export default function DashBoardLayout() {
   const navigate = useNavigate();
   const theme = useTheme();
   const { pathname } = useLocation();
-  const { checkUser } = getEncryptionStorage();
+  const { checkUser, isAdmin, userRole } = getEncryptionStorage();
   const [isSidebarHidden, setIsSidebarHidden] = useState(true);
 
   useEffect(() => {
-    if (!checkUser) {
+    if (userRole === 'MASTER') {
+      navigate(ROUTER.PATH.MASTER.APPOINTMENT);
+    } else if (!checkUser) {
       navigate(ROUTER.PATH.MAIN);
     }
-  }, [checkUser, navigate]);
+  }, [checkUser, navigate, userRole]);
 
   const desktopSize = theme.screen.desktopSize;
   useEffect(() => {
@@ -40,7 +42,6 @@ export default function DashBoardLayout() {
     };
   }, [setIsSidebarHidden, desktopSize]);
 
-  const { isAdmin } = getEncryptionStorage();
   const isAdminStr = STRING.IS_ADMIN(isAdmin);
 
   const handleSidebarToggle = useCallback(e => {
@@ -51,9 +52,14 @@ export default function DashBoardLayout() {
   const handleClickCategory = e => {
     const name = e.target.innerText;
     if (!name) {
-      const targetPath = isAdmin
-        ? ROUTER.PATH.ADMIN.DASHBOARD
-        : ROUTER.PATH.USER.DASHBOARD;
+      let targetPath = '';
+      if (isAdmin) {
+        targetPath = ROUTER.PATH.ADMIN.DASHBOARD;
+      } else if (userRole === 'MASTER') {
+        targetPath = ROUTER.PATH.MAIN;
+      } else {
+        targetPath = ROUTER.PATH.USER.DASHBOARD;
+      }
       navigate(targetPath);
     }
     const routerPathArray = Object.values(ROUTER.PATH[isAdminStr]);
@@ -68,20 +74,25 @@ export default function DashBoardLayout() {
 
   return (
     <>
-      {checkUser && (
+      {userRole && (
         <LayoutWrapper>
           <SidebarBtnContainer onClick={handleSidebarToggle}>
             <HamburgerIcon hide={`${isSidebarHidden}`} />
           </SidebarBtnContainer>
+
           <Header
             isSidebarHidden={isSidebarHidden}
             setIsSidebarHidden={setIsSidebarHidden}
+            userRole={userRole}
+            isAdmin={isAdmin}
           />
+
           <Sidebar
             isSidebarHidden={isSidebarHidden}
             setIsSidebarHidden={setIsSidebarHidden}
             handleClickCategory={handleClickCategory}
             isAdmin={isAdmin}
+            userRole={userRole}
             isAdminStr={isAdminStr}
             pathname={pathname}
             handleSidebarToggle={handleSidebarToggle}
