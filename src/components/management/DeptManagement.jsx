@@ -22,7 +22,10 @@ export default function DeptManagement() {
   const [userdeleteModal, setUserDeleteModal] = useModalState();
 
   const updateDeptList = () =>
-    axios.get('/api/dept').then(response => setDeptList(response.data.data));
+    axios.get('/api/dept').then(response => {
+      setDeptList(response.data.data);
+      setSelectedDeptId(response.data.data[0].deptId);
+    });
   const handleSubmit = () =>
     axios.post('/api/dept', { deptName }).then(() => {
       updateDeptList();
