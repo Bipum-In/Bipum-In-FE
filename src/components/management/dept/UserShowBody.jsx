@@ -20,16 +20,28 @@ export default function UserShowBody({
   return (
     <>
       <RequestShowBody>
-        {filteredEmployeeList.map(employee => (
-          <ListTable key={uuidv4()}>
-            <ListBody>
-              <tr>
+        <ListTable>
+          <ListBody>
+            <ListBodyTopTrContainer>
+              <td></td>
+              <td>이름</td>
+              <td>전화번호</td>
+              <td>이메일</td>
+              <td>권한</td>
+              <td></td>
+            </ListBodyTopTrContainer>
+            {filteredEmployeeList.map(employee => (
+              <tr key={uuidv4()}>
                 <td>
                   <img src={employee.image} alt={employee.empName} />
                 </td>
                 <td>{employee.empName}</td>
                 <td>{employee.phone}</td>
-                <td>{employee.username}</td>
+                <td>
+                  {employee.username.length > 24
+                    ? `${employee.username.slice(0, 24)}...`
+                    : employee.username}
+                </td>
 
                 <td>
                   {employee.authority === null && (
@@ -57,10 +69,12 @@ export default function UserShowBody({
                     </Button>
                   )}
                   {employee.authority === '비품 총괄 관리자' && (
-                    <Span>비품 총괄 관리자</Span>
+                    <AuthTitle>비품 총괄 관리자</AuthTitle>
                   )}
                   {employee.authority === '공용 비품 책임자' && (
-                    <Span>공용 비품 책임자</Span>
+                    <AuthTitleCanHide canhide="true">
+                      공용 비품 책임자
+                    </AuthTitleCanHide>
                   )}
                 </td>
                 <td>
@@ -108,13 +122,50 @@ export default function UserShowBody({
                   </CustomModal>
                 </td>
               </tr>
-            </ListBody>
-          </ListTable>
-        ))}
+            ))}
+          </ListBody>
+        </ListTable>
       </RequestShowBody>
     </>
   );
 }
+
+const AuthTitle = styled.div`
+  background-color: ${props => props.theme.color.blue.brandColor6};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+  width: 112px;
+  height: 41px;
+  color: white;
+`;
+
+const ListBodyTopTrContainer = styled.tr`
+  position: sticky;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  gap: 2.3125rem;
+  height: 3.125rem;
+  padding: 13px 16px;
+  width: 100%;
+  color: ${props => props.theme.color.blue.brandColor6};
+  border-bottom: 0.0625rem solid ${props => props.theme.color.grey.brandColor2};
+  background-color: ${props => props.theme.color.blue.brandColor1};
+  top: 0;
+  z-index: 1;
+  td {
+    min-width: 120px;
+  }
+
+  td:nth-child(5) {
+    min-width: 9.6875rem;
+  }
+`;
+
+const AuthTitleCanHide = styled(AuthTitle.withComponent('div'))``;
 
 const RequestShowBody = styled.div`
   width: 100%;
@@ -129,72 +180,77 @@ const RequestShowBody = styled.div`
     justify-content: center;
   }
 
-  tr {
+  tr:not(:first-child) {
     display: flex;
     justify-content: center;
     align-items: center;
     margin: 0 auto;
-    gap: 1.875rem;
-    line-height: 3.3125rem;
-    padding: 0.8125rem 8.6875rem;
+    gap: 30px;
+    line-height: 53px;
+    padding: 13px 16px;
     width: 100%;
-    border-bottom: 0.0625rem solid
-      ${props => props.theme.color.grey.brandColor4};
-    :hover {
+    border-bottom: 1px solid ${props => props.theme.color.grey.brandColor4};
+    &:hover:not(:first-child) {
       background-color: ${props => props.theme.color.blue.brandColor2};
       Button {
         display: block;
         background-color: white;
+        height: 2.5625rem;
       }
     }
-
+    &:hover ${AuthTitleCanHide} {
+      display: none;
+    }
     Button {
       display: none;
     }
+    td {
+      display: flex;
+      text-align: center;
+      text-overflow: ellipsis;
+      font-size: 14px;
+      overflow: hidden;
+      white-space: nowrap;
+      position: relative;
+    }
+    td:nth-child(1),
+    td:nth-child(2),
+    td:nth-child(3) {
+      min-width: 100px;
+    }
+    td:nth-child(4) {
+      min-width: 180px;
+      max-width: 180px;
+    }
+    td:nth-child(5) {
+      min-width: 160px;
+    }
+    td:nth-child(6) {
+      min-width: 80px;
+    }
   }
-
-  td {
-    flex: 1;
-    text-align: center;
-    text-overflow: ellipsis;
-    font-size: 0.875rem;
-    overflow: hidden;
-    white-space: nowrap;
-    position: relative;
-  }
-
   td img {
     display: flex;
-    width: 4.75rem;
-    height: 4.75rem;
-    border-radius: 0.375rem;
+    width: 76px;
+    height: 76px;
+    border-radius: 6px;
   }
-`;
-
-const Span = styled.div`
-  background-color: ${props => props.theme.color.blue.brandColor6};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 0.375rem;
-  width: 7rem;
-  height: 2.5625rem;
-  color: white;
 `;
 
 const DeleteBtn = styled.button`
-  width: 2.8125rem;
-  height: 2.0625rem;
-  border-radius: 0.375rem;
-  border: 0.0625rem solid red;
+  width: 45px;
+  height: 33px;
+  border-radius: 6px;
+  border: 1px solid red;
   color: red;
   cursor: pointer;
 `;
 
 const ListBody = styled.tbody`
-  ${props => props.theme.FlexRow};
+  ${props => props.theme.FlexCol};
 `;
 
 const ListTable = styled.table`
   ${props => props.theme.FlexCol};
+  height: calc(100vh - 21.5rem);
 `;
