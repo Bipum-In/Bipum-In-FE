@@ -68,57 +68,25 @@ export default class Axios {
   }
 
   async get(path) {
-    const cookie = getCookie(QUERY.COOKIE.COOKIE_NAME);
-    const option = {
-      headers: {
-        Authorization: `Bearer ${cookie ? cookie : ''}`,
-      },
-    };
-    return this.instance.get(path, option);
+    return this.instance.get(path);
   }
 
   async post(path, payload) {
-    const cookie = getCookie(QUERY.COOKIE.COOKIE_NAME);
-    const option = {
-      headers: {
-        Authorization: `Bearer ${cookie ? cookie : ''}`,
-      },
-    };
-    return this.instance.post(path, payload, option);
+    return this.instance.post(path, payload);
   }
 
   async delete(path) {
-    const cookie = getCookie(QUERY.COOKIE.COOKIE_NAME);
-    const option = {
-      headers: {
-        Authorization: `Bearer ${cookie ? cookie : ''}`,
-      },
-    };
-    return this.instance.delete(`${path}`, option);
+    return this.instance.delete(`${path}`);
   }
 
   async put(path, payload) {
-    const cookie = getCookie(QUERY.COOKIE.COOKIE_NAME);
-    const option = {
-      headers: {
-        Authorization: `Bearer ${cookie ? cookie : ''}`,
-      },
-    };
-    return this.instance.put(`${path}`, payload, option);
+    return this.instance.put(`${path}`, payload);
   }
 
   #getAccessToken = mem(
     async () => {
       try {
-        const response = await this.instance.post(
-          `/api/user/reissue`, // refresh url
-          '',
-          {
-            headers: {
-              Refresh: `Bearer ${getCookie(QUERY.COOKIE.REFRESH_NAME)}`,
-            },
-          }
-        );
+        const response = await this.instance.post(`/api/user/reissue`);
 
         const accessToken = response.headers.authorization;
 
