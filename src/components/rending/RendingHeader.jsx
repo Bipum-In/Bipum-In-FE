@@ -35,7 +35,7 @@ export default function RendingHeader({
             </>
           ) : (
             <>
-              {isMaster ? (
+              {isMaster === 'MASTER' ? (
                 <ReturnDashboardBtn onClick={() => navigate('/masterpage')}>
                   관리자 선임으로 돌아가기
                   <ReturnIcon />

@@ -33,7 +33,7 @@ export default function DeptManagement() {
   const handleSubmit = () =>
     axios
       .post('/api/dept', { deptName })
-      .then(response => {
+      .then(() => {
         updateDeptList();
         setDeptName('');
       })
@@ -49,7 +49,6 @@ export default function DeptManagement() {
     if (selectedDeptId !== null) {
       axios.get(`/api/dept/${selectedDeptId}`).then(response => {
         setEmployeeList(response.data.data);
-        console.log(response.data.data);
       });
     }
   }, [selectedDeptId]);

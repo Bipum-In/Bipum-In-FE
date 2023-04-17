@@ -23,23 +23,23 @@ export default function UserInfo({
           <UserInfoDeptAndName>
             <DeptName>
               <span>부서</span>
-              {deptName}
+              <TextOverflow>{deptName}</TextOverflow>
             </DeptName>
             <EmpName>
               <span>이름</span>
-              {empName}
+              <TextOverflow>{empName}</TextOverflow>
             </EmpName>
           </UserInfoDeptAndName>
           <UserName>
             {isAdmin ? (
               <>
                 <span>이메일</span>
-                {username}
+                <TextOverflow>{username}</TextOverflow>
               </>
             ) : (
               <>
                 <span>전화번호</span>
-                {phoneNum}
+                <TextOverflow>{phoneNum}</TextOverflow>
               </>
             )}
           </UserName>
@@ -77,6 +77,17 @@ const UserInfoContent = styled.div`
     color: ${props => props.theme.color.grey.brandColor5};
     font-size: 0.8125rem;
   }
+`;
+
+const TextOverflow = styled.div`
+  display: -webkit-box;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 `;
 
 const UserInfoDeptAndName = styled.div`

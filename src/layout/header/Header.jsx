@@ -12,7 +12,6 @@ import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 import { ReactComponent as Setting } from 'styles/headerIcon/setting.svg';
 
 import STRING from 'constants/string';
-import QUERY from 'constants/query';
 import ROUTER from 'constants/routerConst';
 
 import SearchDetailModal from './SearchDetailModal';
@@ -23,10 +22,7 @@ import useOutsideClick from 'hooks/useOutsideClick';
 import useThrottleCallback from 'hooks/useThrottleCallback';
 import useDebouncedCallback from 'hooks/useDebounce';
 
-import {
-  getEncryptionStorage,
-  updateEncryptionStorage,
-} from 'utils/encryptionStorage';
+import { updateEncryptionStorage } from 'utils/encryptionStorage';
 
 import SSE from 'api/sse';
 import Axios from 'api/axios';
@@ -39,7 +35,7 @@ import { getCategoryList } from 'redux/modules/equipmentStatus';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export default function Header() {
+export default function Header({ isAdmin, userRole }) {
   const [logoutModal, setLogoutModal] = useModalState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -62,8 +58,6 @@ export default function Header() {
     initSearchData();
     setShowModal({ supplyShow: false, requestShow: false, id: null });
   }, searchValue);
-
-  const { isAdmin, userRole } = getEncryptionStorage();
 
   const {
     sseSlice: { sseAdminLength, sseUserLength },
@@ -134,7 +128,6 @@ export default function Header() {
   };
 
   const handleModalShow = () => setLogoutModal();
-
   const handleModalClose = () => setLogoutModal(false);
 
   const handleOnChagneSearch = e => {
@@ -146,30 +139,41 @@ export default function Header() {
     setSearchValue(value);
   };
 
-  const headerData = [
-    {
-      icon: <Useinfo />,
-      text: STRING.HEADER_DROPDOWN.USERINFO,
-      path: ROUTER.PATH.MYPAGE,
-    },
-    {
-      icon: <Rotate />,
-      text: isAdmin
-        ? STRING.HEADER_DROPDOWN.USERMODE
-        : STRING.HEADER_DROPDOWN.ADMINMODE,
-      onclick: () => {
-        updateEncryptionStorage({ isAdmin: !isAdmin });
-        navigate(
-          isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
-        );
+  let headerData;
+  if (userRole !== 'MASTER') {
+    headerData = [
+      {
+        icon: <Useinfo />,
+        text: STRING.HEADER_DROPDOWN.USERINFO,
+        path: ROUTER.PATH.MYPAGE,
       },
-    },
-    {
-      icon: <Logout />,
-      text: STRING.HEADER_DROPDOWN.LOGOOUT,
-      onclick: handleModalShow,
-    },
-  ];
+      {
+        icon: <Rotate />,
+        text: isAdmin
+          ? STRING.HEADER_DROPDOWN.USERMODE
+          : STRING.HEADER_DROPDOWN.ADMINMODE,
+        onclick: () => {
+          updateEncryptionStorage({ isAdmin: !isAdmin });
+          navigate(
+            isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
+          );
+        },
+      },
+      {
+        icon: <Logout />,
+        text: STRING.HEADER_DROPDOWN.LOGOOUT,
+        onclick: handleModalShow,
+      },
+    ];
+  } else {
+    headerData = [
+      {
+        icon: <Logout />,
+        text: STRING.HEADER_DROPDOWN.LOGOOUT,
+        onclick: handleModalShow,
+      },
+    ];
+  }
 
   if (isAdmin) {
     headerData.splice(2, 0, {
@@ -214,13 +218,15 @@ export default function Header() {
         <HeaderContainer>
           <ItemContainer>
             {/* 검색창 */}
-            <Search
-              searchOutsideRef={searchOutsideRef}
-              search={search}
-              searchValue={searchValue}
-              onChagneSearch={handleOnChagneSearch}
-              onSearchDetail={handleSearchDetail}
-            />
+            {userRole !== 'MASTER' && (
+              <Search
+                searchOutsideRef={searchOutsideRef}
+                search={search}
+                searchValue={searchValue}
+                onChagneSearch={handleOnChagneSearch}
+                onSearchDetail={handleSearchDetail}
+              />
+            )}
             {/* 헤더 오른쪽 아이템 */}
             <HeaderRightContainer>
               {/* <IconContainer>
@@ -243,11 +249,13 @@ export default function Header() {
                 className={isDropdownVisible ? 'visible' : ''}
                 ref={dropDownRef}
               >
-                <UserImgContainer userImg={image} />
+                <UserImgContainer userImg={image} userRole={userRole} />
                 <UserInfoDetailContainer>
                   <InfoCompanyTitle>{deptName}</InfoCompanyTitle>
                   <InfoUserName>
-                    {empName} {isAdmin && '관리자'}님
+                    {userRole !== 'MASTER' &&
+                      (isAdmin ? `${empName} 관리자` : `${empName} 님`)}
+                    {userRole === 'MASTER' && `${empName} 계정`}
                   </InfoUserName>
                 </UserInfoDetailContainer>
                 <UserDropDown isRotated={isDropdownVisible}>
@@ -408,8 +416,19 @@ const UserImgContainer = styled.div`
   width: 3rem;
   height: 3rem;
   border-radius: 0.375rem;
-  background: url(${props => props.userImg}) no-repeat center center / cover,
-    ${props => props.theme.color.grey.brandColor2};
+  ${props =>
+    props.userRole !== 'MASTER'
+      ? css`
+          background: url(${props => props.userImg}) no-repeat center center /
+              cover,
+            ${props => props.theme.color.grey.brandColor2};
+        `
+      : css`
+          background: url(${props => props.userImg}) no-repeat
+            ${props => props.theme.color.blue.brandColor2};
+          background-size: 70%;
+          background-position: center;
+        `}
 `;
 
 const UserInfoDetailContainer = styled.div`

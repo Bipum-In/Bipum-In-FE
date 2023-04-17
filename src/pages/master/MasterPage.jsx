@@ -7,7 +7,6 @@ import KakaoUserInfo from 'styles/rendingIcon/kakaoUserInfo.svg';
 import MasterHeader from '../../components/masterPage/MasterHeader';
 import OrganizationChart from 'components/masterPage/OrganizationChart';
 import MasterLogin from 'components/masterPage/MasterLogin';
-import AppointmentManager from 'components/masterPage/AppointmentManager';
 
 import Axios from 'api/axios';
 import logout from 'utils/logout';
@@ -16,10 +15,12 @@ import { encrypt } from '../../utils/encryption';
 import Storage from 'utils/localStorage';
 import QUERY from 'constants/query';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
+import ROUTER from 'constants/routerConst';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 export default function MasterPage() {
   const navigate = useNavigate();
+
   const [state, setState] = useState({
     username: '',
     password: '',
@@ -30,7 +31,7 @@ export default function MasterPage() {
 
   useEffect(() => {
     if (state.userRole && state.checkDept) {
-      setState({ ...state, settingPg: 'appointmentManager' });
+      navigate(ROUTER.PATH.MASTER.APPOINTMENT);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.checkDept, state.settingPg, state.userRole]);
@@ -103,7 +104,6 @@ export default function MasterPage() {
             }
           />
         )}
-        {state.settingPg === 'appointmentManager' && <AppointmentManager />}
       </rendingStyles.LoginWrapper>
     </>
   );
