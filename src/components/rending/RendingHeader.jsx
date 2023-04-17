@@ -25,9 +25,9 @@ export default function RendingHeader({
         <LoginContainer>
           {!isLoggedIn ? (
             <>
-              <ReturnDashboardBtn onClick={() => navigate('/masterpage')}>
+              <MasterLogindBtn onClick={() => navigate('/masterpage')}>
                 마스터 계정으로 로그인
-              </ReturnDashboardBtn>
+              </MasterLogindBtn>
               <GoogleLoginBtn onClick={loginClick}>
                 <GoogleIcon />
                 구글 계정으로 로그인
@@ -95,7 +95,8 @@ const HeaderBtnStyle = styled(Button)`
 `;
 const GoogleLoginBtn = styled(HeaderBtnStyle)`
   background-color: white;
-  border: 1px solid ${props => props.theme.color.grey.brandColor7};
+  border: 1px solid ${props => props.theme.color.blue.brandColor6};
+  color: ${props => props.theme.color.blue.brandColor6};
   height: 3rem;
 `;
 
@@ -108,5 +109,11 @@ const ReturnDashboardBtn = styled(HeaderBtnStyle)`
 const LogoutBtn = styled(HeaderBtnStyle)`
   border: 0.0625rem solid ${props => props.theme.color.blue.brandColor6};
   color: ${props => props.theme.color.blue.brandColor6};
+  height: 3rem;
+`;
+
+const MasterLogindBtn = styled(HeaderBtnStyle)`
+  background-color: white;
+  border: 1px solid ${props => props.theme.color.grey.brandColor7};
   height: 3rem;
 `;

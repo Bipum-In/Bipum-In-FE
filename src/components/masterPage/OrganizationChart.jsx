@@ -5,10 +5,12 @@ import Button from 'elements/Button';
 import Axios from 'api/axios';
 import chartData from './chartData';
 import ROUTER from 'constants/routerConst';
+import { useNavigate } from 'react-router-dom';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export default function OrganizationChart({ navigate }) {
+export default function OrganizationChart() {
+  const navigate = useNavigate();
   const [currentBtnData, setCurrentBtnData] = useState([]);
 
   const handleCurrentChart = e => {

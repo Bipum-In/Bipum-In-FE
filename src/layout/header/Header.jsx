@@ -155,6 +155,7 @@ export default function Header({ isAdmin, userRole }) {
     setSearchValue(value);
   };
 
+  console.log(userRole);
   let headerData;
   if (userRole !== 'MASTER') {
     headerData = [
@@ -164,23 +165,36 @@ export default function Header({ isAdmin, userRole }) {
         path: ROUTER.PATH.MYPAGE,
       },
       {
-        icon: <Rotate />,
-        text: isAdmin
-          ? STRING.HEADER_DROPDOWN.USERMODE
-          : STRING.HEADER_DROPDOWN.ADMINMODE,
-        onclick: () => {
-          updateEncryptionStorage({ isAdmin: !isAdmin });
-          navigate(
-            isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
-          );
-        },
-      },
-      {
         icon: <Logout />,
         text: STRING.HEADER_DROPDOWN.LOGOOUT,
         onclick: handleModalShow,
       },
     ];
+
+    if (userRole === 'ADMIN') {
+      const adminItems = [
+        {
+          icon: <Rotate />,
+          text: isAdmin
+            ? STRING.HEADER_DROPDOWN.USERMODE
+            : STRING.HEADER_DROPDOWN.ADMINMODE,
+          onclick: () => {
+            updateEncryptionStorage({ isAdmin: !isAdmin });
+            navigate(
+              isAdmin ? ROUTER.PATH.USER.DASHBOARD : ROUTER.PATH.ADMIN.DASHBOARD
+            );
+          },
+        },
+      ];
+      headerData.splice(1, 0, ...adminItems);
+    }
+    if (isAdmin) {
+      headerData.splice(2, 0, {
+        icon: <Setting />,
+        text: STRING.HEADER_DROPDOWN.SETTINGS,
+        path: ROUTER.PATH.ADMIN.MANAGEMENT,
+      });
+    }
   } else {
     headerData = [
       {
@@ -189,14 +203,6 @@ export default function Header({ isAdmin, userRole }) {
         onclick: handleModalShow,
       },
     ];
-  }
-
-  if (isAdmin) {
-    headerData.splice(2, 0, {
-      icon: <Setting />,
-      text: STRING.HEADER_DROPDOWN.SETTINGS,
-      path: ROUTER.PATH.ADMIN.MANAGEMENT,
-    });
   }
 
   const handleLogoutBtn = async e => {

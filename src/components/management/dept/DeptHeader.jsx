@@ -1,31 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
 import { ReactComponent as WhiteAdd } from 'styles/commonIcon/whiteAdd.svg';
 import { ReactComponent as CancelInput } from 'styles/commonIcon/cancelInput.svg';
-
+import { getEncryptionStorage } from 'utils/encryptionStorage';
 import { useModalState } from 'hooks/useModalState';
-import Axios from 'api/axios';
 import { CustomModal } from 'elements/Modal';
 
 export default function DeptHeader({
   setSelectName,
   containerHeaderRef,
-  keyword,
-  setKeyword,
   handleSubmit,
   setDeptName,
   deptName,
+  employeeList,
+  setFilteredEmployeeList,
 }) {
   const [addPatnerModal, setAddPatnerModal] = useModalState();
   const handleModalClose = () => setAddPatnerModal(false);
   const handleDeptClear = () => setDeptName('');
+  const handleChangeKeyword = e => setKeyword(e.target.value);
+  const [keyword, setKeyword] = useState('');
+
+  useEffect(() => {
+    const filteredList = employeeList.filter(employee =>
+      employee.empName.includes(keyword)
+    );
+    setFilteredEmployeeList(filteredList);
+  }, [employeeList, keyword]);
 
   return (
     <RequestShowTitle ref={containerHeaderRef}>
-      <Title>{setSelectName}</Title>
+      <Title>
+        {getEncryptionStorage().userRole !== 'MASTER'
+          ? setSelectName
+          : '비품 총괄 관리자 선임'}
+      </Title>
       <SearchSelect>
         <SearchContainer>
           <SearchIconContainer>
@@ -35,7 +47,7 @@ export default function DeptHeader({
           </SearchIconContainer>
           <Input
             value={keyword}
-            setState={setKeyword}
+            setState={handleChangeKeyword}
             placeholder="검색어를 입력해주세요 (이름, 전화번호 등)"
           />
         </SearchContainer>
