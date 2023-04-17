@@ -11,6 +11,7 @@ export default class Axios {
   constructor(url) {
     this.instance = axios.create({
       baseURL: url,
+      withCredentials: true,
     });
 
     this.instance.interceptors.request.use(request => {
