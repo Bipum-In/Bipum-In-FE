@@ -4,6 +4,8 @@ import Button from 'elements/Button';
 import { useModalState } from 'hooks/useModalState';
 import { CustomModal } from 'elements/Modal';
 import { useState } from 'react';
+import { getEncryptionStorage } from 'utils/encryptionStorage';
+
 export default function UserShowBody({
   filteredEmployeeList,
   setUserDeleteModal,
@@ -16,6 +18,7 @@ export default function UserShowBody({
   const [authModal, setAuthModal] = useModalState();
   const [idauthModal, setIdauthModal] = useState(null);
   const authModalClose = () => setAuthModal(false);
+  const { userRole } = getEncryptionStorage();
 
   return (
     <>
@@ -53,7 +56,9 @@ export default function UserShowBody({
                         setAuthModal(true);
                       }}
                     >
-                      공용 비품 책임자 선임
+                      {userRole === 'MASTER'
+                        ? '비품 총괄 관리자 선임'
+                        : '공용 비품 책임자 선임'}
                     </Button>
                   )}
                   {employee.authority === '공용 비품 책임자' && (
@@ -65,16 +70,32 @@ export default function UserShowBody({
                         setAuthModal(true);
                       }}
                     >
-                      공용 비품 책임자 해임
+                      {userRole === 'MASTER'
+                        ? '비품 총괄 관리자 해임'
+                        : '공용 비품 책임자 해임'}
                     </Button>
                   )}
+                  {userRole === 'MASTER' &&
+                    employee.authority === '비품 총괄 관리자' && (
+                      <Button
+                        mainBtn="border"
+                        type="button"
+                        onClick={() => {
+                          setIdauthModal(employee.userId);
+                          setAuthModal(true);
+                        }}
+                      >
+                        {userRole === 'MASTER'
+                          ? '비품 총괄 관리자 해임'
+                          : '공용 비품 책임자 해임'}
+                      </Button>
+                    )}
                   {employee.authority === '비품 총괄 관리자' && (
-                    <AuthTitle>비품 총괄 관리자</AuthTitle>
+                    <AuthTitleCanHide>비품 총괄 관리자</AuthTitleCanHide>
                   )}
+
                   {employee.authority === '공용 비품 책임자' && (
-                    <AuthTitleCanHide canhide="true">
-                      공용 비품 책임자
-                    </AuthTitleCanHide>
+                    <AuthTitleCanHide>공용 비품 책임자</AuthTitleCanHide>
                   )}
                 </td>
                 <td>
@@ -110,12 +131,18 @@ export default function UserShowBody({
                   >
                     {employee.authority === null ? (
                       <>
-                        {employee.empName} 님을 공용 비품 책임자로
+                        {employee.empName}
+                        {userRole === 'MASTER'
+                          ? '님을 비품 총괄 관리자로'
+                          : '님을 공용 비품 책임자로'}
                         <p>선임하시겠습니까?</p>
                       </>
                     ) : (
                       <>
-                        {employee.empName} 님의 공용 비품 책임자 권한을
+                        {employee.empName}
+                        {userRole === 'MASTER'
+                          ? '님의 비품 총괄 관리자 권한을'
+                          : '님의 공용 비품 책임자 권한을'}
                         <p>해임하시겠습니까?</p>
                       </>
                     )}
