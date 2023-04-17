@@ -25,7 +25,9 @@ const Valid = {
 
   inputCheck(strArr, regex) {
     for (let i = 0; i < strArr.length; i++) {
-      if (!isValidInput(strArr[i][0], regex)) {
+      if (
+        !isValidInput(strArr[i][0], Array.isArray(regex) ? regex[i] : regex)
+      ) {
         alertModal(
           false,
           ALERT.CHECK_INPUT_KO_AND_ENG_AND_NUM(strArr[i][1]),

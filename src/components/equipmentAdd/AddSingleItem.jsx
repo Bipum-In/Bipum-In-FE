@@ -205,10 +205,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
 
     if (
       categoryInput &&
-      !Valid.inputCheck(
-        [[categoryInput, '카테고리']],
-        /^(?=.*[A-Za-z0-9가-힣])[A-Za-z0-9가-힣\s]+$/
-      )
+      !Valid.inputCheck([[categoryInput, '카테고리']], /[^ㄱ-ㅎㅏ-ㅣ]{1,30}$/)
     ) {
       return;
     }
@@ -219,7 +216,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
           [nameValue, '제품명'],
           [serialValue, '시리얼 넘버'],
         ],
-        /^(?=.*[A-Za-z0-9가-힣])[A-Za-z0-9가-힣\s]+$/
+        [/[^ㄱ-ㅎㅏ-ㅣ]{1,30}$/, /[^ㄱ-ㅎㅏ-ㅣ]{1,50}$/]
       )
     ) {
       return;
