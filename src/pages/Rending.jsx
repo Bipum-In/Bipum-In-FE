@@ -25,6 +25,7 @@ export default function Rending() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const isLoggedIn = useIsLoggedIn();
+  const { isAdmin, userRole } = getEncryptionStorage();
 
   const [searchParams] = useSearchParams();
   const initialPageIndex = Number(searchParams.get('pageIndex')) || 0;
@@ -55,8 +56,6 @@ export default function Rending() {
   };
 
   const handleReturnDashboard = () => {
-    const { isAdmin } = getEncryptionStorage();
-
     const targetPath = isAdmin
       ? ROUTER.PATH.ADMIN.DASHBOARD
       : ROUTER.PATH.USER.DASHBOARD;
@@ -87,6 +86,8 @@ export default function Rending() {
         logoClick={handleBackToFirstPage}
         moveDashboard={handleReturnDashboard}
         logoutClick={handleLogoutBtn}
+        isMaster={userRole}
+        navigate={navigate}
       />
       <RendingScrollPage
         pageIndex={pageIndex}

@@ -9,6 +9,7 @@ import Login from 'pages/Login';
 import EmptyPage from 'pages/EmptyPage';
 import MyPage from '../pages/MyPage';
 
+import MasterPage from 'pages/admin/MasterPage';
 import AdminDashBoard from 'pages/admin/AdminDashBoard';
 import Management from 'pages/admin/Management';
 import EquipmentAdd from 'pages/admin/EquipmentAdd';
@@ -37,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: ROUTER.PATH.LOGIN,
         element: <Login />,
+      },
+      {
+        path: ROUTER.PATH.ADMIN.MASTERPAGE,
+        element: <MasterPage />,
       },
       {
         path: ROUTER.PATH.DELETE_USER,

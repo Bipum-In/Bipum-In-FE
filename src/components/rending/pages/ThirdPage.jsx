@@ -1,30 +1,30 @@
 import React from 'react';
 import styled from 'styled-components';
-import { styles } from './RendingPageStyled';
+import { rendingStyles } from './RendingPageStyled';
 import RendingImg from 'styles/rendingIcon/rendingThrImg.png';
 
 export default function ThirdPage() {
   return (
     <>
-      <styles.Fullpage>
+      <rendingStyles.Fullpage>
         <RendingWrapper>
-          <styles.RendingTopContainer center>
+          <rendingStyles.RendingTopContainer center>
             <Descriptiontitle>
               <span>모드 전환 기능</span>
               <span>관리자와 유저모드 전환이 가능해요</span>
             </Descriptiontitle>
-          </styles.RendingTopContainer>
-          <styles.RendingBottomContainer
+          </rendingStyles.RendingTopContainer>
+          <rendingStyles.RendingBottomContainer
             bg={RendingImg}
             small
-          ></styles.RendingBottomContainer>
+          ></rendingStyles.RendingBottomContainer>
         </RendingWrapper>
-      </styles.Fullpage>
+      </rendingStyles.Fullpage>
     </>
   );
 }
 
-const RendingWrapper = styled(styles.RendingWrapper)`
+const RendingWrapper = styled(rendingStyles.RendingWrapper)`
   justify-content: center;
   align-items: center;
 `;

@@ -12,6 +12,7 @@ const PATH = {
     EQUIPMENT_MANAGEMENT: '/equipment-management',
     EQUIPMENT_ADD: '/equipment-add',
     MANAGEMENT: '/management',
+    MASTERPAGE: '/masterPage',
   },
   USER: {
     DASHBOARD: '/dashboard',

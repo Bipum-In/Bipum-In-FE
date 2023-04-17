@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { styles } from './RendingPageStyled';
+import { rendingStyles } from './RendingPageStyled';
 import Rending01 from 'styles/rendingIcon/rendingFirstImg.svg';
 import Button from 'elements/Button';
 import Typing from '../Typing';
@@ -28,7 +28,7 @@ export default function FirstPage({ setPageIndex }) {
   );
 }
 
-const Fullpage = styled(styles.Fullpage)`
+const Fullpage = styled(rendingStyles.Fullpage)`
   height: calc(100vh - 18.25rem);
 `;
 const RendingWrapper = styled.div`
