@@ -1,11 +1,10 @@
-import QUERY from 'constants/query';
-import { getCookie } from 'utils/cookie';
 import { EventSourcePolyfill } from 'event-source-polyfill';
 
 export default class SSE {
   #eventSource;
   constructor(url, timeoutMinute) {
     this.#eventSource = new EventSourcePolyfill(url, {
+      withCredentials: true,
       heartbeatTimeout: timeoutMinute ? timeoutMinute * 60 * 1000 : 60 * 1000,
     });
   }

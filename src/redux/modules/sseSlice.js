@@ -17,45 +17,61 @@ const sseSlice = createSlice({
     setAdminSSE: (state, action) => {
       state.sseAdminData = [action.payload, ...state.sseAdminData];
       state.sseAdminLength = state.sseAdminData.length;
-      localStorage.setItem('sseAdminLength', state.sseAdminLength);
     },
     setUserSSE: (state, action) => {
       state.sseUserData = [action.payload, ...state.sseUserData];
       state.sseUserLength = state.sseUserData.length;
-      localStorage.setItem('sseUserLength', state.sseUserLength);
     },
     deleteAllAdminSseMsg: state => {
       state.sseAdminData = [];
       state.sseAdminLength = '';
-      localStorage.setItem('sseAdminLength', state.sseAdminLength);
     },
     deleteAllUerSseMsg: state => {
       state.sseUserData = [];
       state.sseUserLength = '';
-      localStorage.setItem('sseUserLength', state.sseUserLength);
     },
+    deleteAllAdminSseLength: state => {
+      state.sseAdminLength = '';
+    },
+    deleteAllUerSseLength: state => {
+      state.sseUserLength = '';
+    },
+    setSSECount: (state, action) => {
+      const parseData = action.payload.reduce((acc, cur) => {
+        acc[cur.role.toLowerCase()] = cur.count;
+        return acc;
+      }, {});
 
+      state.sseUserLength = state.sseUserLength + parseData.user;
+      state.sseAdminLength = state.sseAdminLength + parseData.admin;
+    },
     deleteAdminSseData: (state, action) => {
       state.sseAdminData = [...state.sseAdminData].filter(
         item => item.notificationId !== action.payload
       );
+      state.sseAdminLength = state.sseAdminLength - 1;
     },
     deleteUserSseData: (state, action) => {
       state.sseUserData = [...state.sseUserData].filter(
         item => item.notificationId !== action.payload
       );
+      state.sseUserLength = state.sseUserLength - 1;
     },
   },
 });
 
 export const {
   initSSE,
+  initSSECount,
   setAdminSSE,
   setUserSSE,
+  setSSECount,
   deleteAdminSseData,
   deleteUserSseData,
   deleteAllAdminSseMsg,
   deleteAllUerSseMsg,
+  deleteAllAdminSseLength,
+  deleteAllUerSseLength,
 } = sseSlice.actions;
 
 export default sseSlice.reducer;
