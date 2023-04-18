@@ -1,71 +1,99 @@
 import Axios from 'api/axios';
-import Redux from '../redux';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   adminDashboard: {
     getDashboard: null,
-    isDashboardLoading: false,
     isDashboardError: false,
   },
   userDashboard: {
     getDashboard: null,
-    isDashboardLoading: false,
     isDashboardError: false,
   },
   commonSupplyDtos: {
     getCommonSupplyDtos: null,
-    isCommonSupplyDtosLoading: false,
     isCommonSupplyDtosError: false,
   },
 };
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export const adminDashboardStatus = Redux.asyncThunk(
+export const adminDashboardStatus = createAsyncThunk(
   'ADMIN_DASHBOARD',
-  payload => axios.get(`/api/admin/main?largeCategory=${payload.status}`)
-);
-
-export const userDashboardStatus = Redux.asyncThunk('USER_DASHBOARD', payload =>
-  axios.get(`/api/main?largeCategory=${payload}`)
-);
-
-export const commonSupplyDtos = Redux.asyncThunk(
-  'COMMON_SUPPLY_DTOS',
-  payload => axios.get(`/api/main/common?largeCategory=${payload}`)
-);
-
-const dashboardStatusSlice = Redux.slice(
-  'getDashboard',
-  initialState,
-  {},
-  bulider => {
-    Redux.extraReducer(
-      bulider,
-      adminDashboardStatus,
-      'adminDashboard',
-      'isDashboardLoading',
-      'getDashboard',
-      'isDashboardError'
-    );
-    Redux.extraReducer(
-      bulider,
-      userDashboardStatus,
-      'userDashboard',
-      'isDashboardLoading',
-      'getDashboard',
-      'isDashboardError'
-    );
-    Redux.extraReducer(
-      bulider,
-      commonSupplyDtos,
-      'commonSupplyDtos',
-      'isCommonSupplyDtosLoading',
-      'getCommonSupplyDtos',
-      'isCommonSupplyDtosError'
-    );
+  async (payload, thunkAPI) => {
+    return await axios
+      .get(`/api/admin/main?largeCategory=${payload.status}`)
+      .then(response => thunkAPI.fulfillWithValue(response.data))
+      .catch(() => thunkAPI.rejectWithValue());
   }
 );
+
+export const userDashboardStatus = createAsyncThunk(
+  'USER_DASHBOARD',
+  async (payload, thunkAPI) => {
+    return await axios
+      .get(`/api/main?largeCategory=${payload}`)
+      .then(response => thunkAPI.fulfillWithValue(response.data))
+      .catch(() => thunkAPI.rejectWithValue());
+  }
+);
+
+export const commonSupplyDtos = createAsyncThunk(
+  'COMMON_SUPPLY_DTOS',
+  async (payload, thunkAPI) => {
+    return await axios
+      .get(`/api/main/common?largeCategory=${payload}`)
+      .then(response => thunkAPI.fulfillWithValue(response.data))
+      .catch(() => thunkAPI.rejectWithValue());
+  }
+);
+
+const adminDashboardExtraReducer = bulider => {
+  bulider.addCase(adminDashboardStatus.fulfilled, (state, action) => {
+    const { adminDashboard } = state;
+    adminDashboard.isDashboardError = false;
+    adminDashboard.getDashboard = action.payload;
+  });
+  bulider.addCase(adminDashboardStatus.rejected, state => {
+    const { adminDashboard } = state;
+    adminDashboard.isDashboardError = true;
+  });
+};
+
+const userDashboardStatusExtraReducer = bulider => {
+  bulider.addCase(userDashboardStatus.fulfilled, (state, action) => {
+    const { userDashboard } = state;
+    userDashboard.isDashboardError = false;
+    userDashboard.getDashboard = action.payload;
+  });
+  bulider.addCase(userDashboardStatus.rejected, state => {
+    const { userDashboard } = state;
+    userDashboard.isDashboardError = true;
+  });
+};
+
+const commonSupplyDtosExtraReducer = bulider => {
+  bulider.addCase(commonSupplyDtos.fulfilled, (state, action) => {
+    const { commonSupplyDtos } = state;
+    commonSupplyDtos.isCommonSupplyDtosError = false;
+    commonSupplyDtos.getCommonSupplyDtos = action.payload;
+  });
+  bulider.addCase(commonSupplyDtos.rejected, state => {
+    const { commonSupplyDtos } = state;
+    commonSupplyDtos.isCommonSupplyDtosError = true;
+  });
+};
+
+const dashboardStatusSlice = createSlice({
+  name: 'getDashboard',
+  initialState,
+  reducers: {},
+  extraReducers: bulider => {
+    adminDashboardExtraReducer(bulider);
+    userDashboardStatusExtraReducer(bulider);
+    commonSupplyDtosExtraReducer(bulider);
+  },
+});
 
 export const { initDashboard } = dashboardStatusSlice.actions;
 export default dashboardStatusSlice.reducer;
