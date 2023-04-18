@@ -28,18 +28,14 @@ export default function Search({
       {searchValue && (
         <SearchList>
           {searchList?.map((data, index) => (
-            <>
+            <div key={uuidv4()}>
               {data.length !== 0 && (
-                <SearchListTitle key={uuidv4()}>
+                <SearchListTitle>
                   {index ? '요청 검색' : '재고 검색'}
                 </SearchListTitle>
               )}
-              <SearchItem
-                key={uuidv4()}
-                search={data}
-                onSearchDetail={onSearchDetail}
-              />
-            </>
+              <SearchItem search={data} onSearchDetail={onSearchDetail} />
+            </div>
           ))}
         </SearchList>
       )}

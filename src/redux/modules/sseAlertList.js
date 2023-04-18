@@ -1,45 +1,73 @@
 import Axios from 'api/axios';
-import Redux from '../redux';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
   adminSseAlert: {
     getAdminSseAlert: { content: [], lastPage: false },
-    isAdminSseAlertLoading: false,
-    isAdminSseAlertError: false,
   },
   userSseAlert: {
     getUserSseAlert: { content: [], lastPage: false },
-    isUserSseAlertLoading: false,
-    isUserSseAlertError: false,
+  },
+  sseDatas: {
+    sseAdminData: [],
+    sseUserData: [],
+    sseAdminLength: null,
+    sseUserLength: null,
   },
 };
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export const __adminSseAlert = Redux.asyncThunk(
+export const __adminSseAlert = createAsyncThunk(
   'ADMIN_SSE_ALERT',
-  payload =>
-    axios.get(
-      `/api/admin/main/alarm?page=${payload.page}&size=${payload.size}`
-    ),
-  response => {
-    return response.data.data;
+  async (payload, thunkAPI) => {
+    return await axios
+      .get(`/api/admin/main/alarm?page=${payload.page}&size=${payload.size}`)
+      .then(response => thunkAPI.fulfillWithValue(response.data.data))
+      .catch(() => thunkAPI.rejectWithValue());
   }
 );
 
-export const __userSseAlert = Redux.asyncThunk(
+export const __userSseAlert = createAsyncThunk(
   'USER_SSE_ALERT',
-  payload =>
-    axios.get(`/api/main/alarm?page=${payload.page}&size=${payload.size}`),
-  response => {
-    return response.data.data;
+  async (payload, thunkAPI) => {
+    return await axios
+      .get(`/api/main/alarm?page=${payload.page}&size=${payload.size}`)
+      .then(response => thunkAPI.fulfillWithValue(response.data.data))
+      .catch(() => thunkAPI.rejectWithValue());
   }
 );
 
-const sseAlertListSlice = Redux.slice(
-  'getSseAlert',
+const adminSseAlertExtraReducer = bulider => {
+  bulider.addCase(__adminSseAlert.fulfilled, (state, action) => {
+    const { adminSseAlert } = state;
+    adminSseAlert.getAdminSseAlert = {
+      ...adminSseAlert.getAdminSseAlert,
+      content: [...adminSseAlert.getAdminSseAlert.content].concat(
+        action.payload.content
+      ),
+      lastPage: action.payload.last,
+    };
+  });
+};
+
+const userSseAlertExtraReducer = bulider => {
+  bulider.addCase(__userSseAlert.fulfilled, (state, action) => {
+    const { userSseAlert } = state;
+    userSseAlert.getUserSseAlert = {
+      ...userSseAlert.getUserSseAlert,
+      content: [...userSseAlert.getUserSseAlert.content].concat(
+        action.payload.content
+      ),
+      lastPage: action.payload.last,
+    };
+  });
+};
+
+const sseAlertListSlice = createSlice({
+  name: 'getSseAlert',
   initialState,
-  {
+  reducers: {
     deleteAdminAlertData: (state, action) => {
       state.adminSseAlert.getAdminSseAlert = {
         ...state.adminSseAlert.getAdminSseAlert,
@@ -62,49 +90,86 @@ const sseAlertListSlice = Redux.slice(
         content: [],
       };
     },
+
     deleteAllAdminMsg: state => {
       state.adminSseAlert.getAdminSseAlert = {
         ...state.adminSseAlert.getAdminSseAlert,
         content: [],
       };
     },
+    //sse
+    setAdminSSE: (state, action) => {
+      const { sseDatas } = state;
+      sseDatas.sseAdminData = [action.payload, ...sseDatas.sseAdminData];
+      sseDatas.sseAdminLength = sseDatas.sseAdminData.length;
+    },
+    setUserSSE: (state, action) => {
+      const { sseDatas } = state;
+      sseDatas.sseUserData = [action.payload, ...sseDatas.sseUserData];
+      sseDatas.sseUserLength = sseDatas.sseUserData.length;
+    },
+    deleteAllAdminSseMsg: state => {
+      const { sseDatas } = state;
+      sseDatas.sseAdminData = [];
+      sseDatas.sseAdminLength = '';
+    },
+    deleteAllUerSseMsg: state => {
+      const { sseDatas } = state;
+      sseDatas.sseUserData = [];
+      sseDatas.sseUserLength = '';
+    },
+    deleteAllAdminSseLength: state => {
+      const { sseDatas } = state;
+      sseDatas.sseAdminLength = '';
+    },
+    deleteAllUerSseLength: state => {
+      const { sseDatas } = state;
+      sseDatas.sseUserLength = '';
+    },
+    setSSECount: (state, action) => {
+      const { sseDatas } = state;
+      const parseData = action.payload.reduce((acc, cur) => {
+        acc[cur.role.toLowerCase()] = cur.count;
+        return acc;
+      }, {});
+
+      sseDatas.sseUserLength = parseData.user;
+      sseDatas.sseAdminLength = parseData.admin;
+    },
+    deleteAdminSseData: (state, action) => {
+      const { sseDatas } = state;
+      sseDatas.sseAdminData = [...sseDatas.sseAdminData].filter(
+        item => item.notificationId !== action.payload
+      );
+      sseDatas.sseAdminLength = sseDatas.sseAdminLength - 1;
+    },
+    deleteUserSseData: (state, action) => {
+      const { sseDatas } = state;
+      sseDatas.sseUserData = [...sseDatas.sseUserData].filter(
+        item => item.notificationId !== action.payload
+      );
+      sseDatas.sseUserLength = sseDatas.sseUserLength - 1;
+    },
   },
-  bulider => {
-    Redux.extraReducer(
-      bulider,
-      __adminSseAlert,
-      'adminSseAlert',
-      'isSseAlertLoading',
-      'getAdminSseAlert',
-      'isSseAlertError',
-      (state, payload) => {
-        return {
-          content: [...state.content].concat(payload.content),
-          lastPage: payload.last,
-        };
-      }
-    );
-    Redux.extraReducer(
-      bulider,
-      __userSseAlert,
-      'userSseAlert',
-      'isUserSseAlertLoading',
-      'getUserSseAlert',
-      'isUserSseAlertError',
-      (state, payload) => {
-        return {
-          content: [...state.content].concat(payload.content),
-          lastPage: payload.last,
-        };
-      }
-    );
-  }
-);
+  extraReducers: bulider => {
+    adminSseAlertExtraReducer(bulider);
+    userSseAlertExtraReducer(bulider);
+  },
+});
 
 export const {
   deleteAdminAlertData,
   deleteUserAlertData,
   deleteAllUerMsg,
   deleteAllAdminMsg,
+  setAdminSSE,
+  setUserSSE,
+  setSSECount,
+  deleteAdminSseData,
+  deleteUserSseData,
+  deleteAllAdminSseMsg,
+  deleteAllUerSseMsg,
+  deleteAllAdminSseLength,
+  deleteAllUerSseLength,
 } = sseAlertListSlice.actions;
 export default sseAlertListSlice.reducer;

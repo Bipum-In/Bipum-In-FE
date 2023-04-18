@@ -54,7 +54,7 @@ const MultipleBodyContainer = styled.section`
 `;
 
 const MultipleShowList = styled.div`
-  height: calc(100vh - 16.6875rem - 6.2925rem - 2.93rem);
+  height: calc(100vh - 16.6875rem - 6.2925rem - 3.5rem);
   overflow-x: hidden;
   overflow-y: auto;
 `;

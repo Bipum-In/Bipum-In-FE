@@ -8,6 +8,7 @@ import STRING from 'constants/string';
 import ImageAdd from '../equipmentAdd/single/ImageAdd';
 import SelectCategory from '../common/SelectCategory';
 import Valid from 'validation/validation';
+import { getEncryptionStorage } from 'utils/encryptionStorage';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -36,6 +37,8 @@ export default function UserEquipmentRequest({
     supply: '선택',
     useType: '선택',
   });
+
+  const { userRole } = getEncryptionStorage();
 
   const isDisabled = () => {
     let isDisabled = null;
@@ -267,7 +270,11 @@ export default function UserEquipmentRequest({
                   </styles.TypeTitle>
                   <styles.SelectCaregoryConteiner>
                     <SelectCategory
-                      category={Object.keys(STRING.USE_TYPE)}
+                      category={
+                        userRole === 'USER'
+                          ? ['개인']
+                          : Object.keys(STRING.USE_TYPE)
+                      }
                       optionNullName={optionNullList.useType}
                       onChangeCategory={handleChangeUseType}
                       disabled={modelName}

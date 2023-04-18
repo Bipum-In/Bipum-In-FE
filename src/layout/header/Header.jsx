@@ -35,7 +35,7 @@ import {
   setAdminSSE,
   setSSECount,
   setUserSSE,
-} from 'redux/modules/sseSlice';
+} from 'redux/modules/sseAlertList';
 import { getSearch, initSearchHeader } from 'redux/modules/searchHeader';
 import { getCategoryList } from 'redux/modules/equipmentStatus';
 import Alarm from './Alarm';
@@ -73,7 +73,9 @@ export default function Header({ isAdmin, userRole }) {
   }, showAlarm);
 
   const {
-    sseSlice: { sseAdminLength, sseUserLength },
+    sseAlertList: {
+      sseDatas: { sseAdminLength, sseUserLength },
+    },
     searchHeader: {
       searchData: { search },
     },
@@ -155,7 +157,6 @@ export default function Header({ isAdmin, userRole }) {
     setSearchValue(value);
   };
 
-  console.log(userRole);
   let headerData;
   if (userRole !== 'MASTER') {
     headerData = [
@@ -241,6 +242,11 @@ export default function Header({ isAdmin, userRole }) {
     } else {
       dispatch(deleteAllUerSseLength());
     }
+    putSSECount(isAdmin);
+  };
+
+  const putSSECount = isAdmin => {
+    axios.put(`/api/notification/count?role=${STRING.IS_ADMIN(isAdmin)}`);
   };
 
   const getSSECount = () => {
@@ -266,14 +272,16 @@ export default function Header({ isAdmin, userRole }) {
             )}
             {/* 헤더 오른쪽 아이템 */}
             <HeaderRightContainer>
-              <Alarm
-                isAdmin={isAdmin}
-                showAlarm={showAlarm}
-                alarmOutsideRef={alarmOutsideRef}
-                sseAdminLength={sseAdminLength}
-                sseUserLength={sseUserLength}
-                onClickAlaram={handleClickAlaram}
-              />
+              {userRole !== 'MASTER' && (
+                <Alarm
+                  isAdmin={isAdmin}
+                  showAlarm={showAlarm}
+                  alarmOutsideRef={alarmOutsideRef}
+                  sseAdminLength={sseAdminLength}
+                  sseUserLength={sseUserLength}
+                  onClickAlaram={handleClickAlaram}
+                />
+              )}
               {/* 드롭다운 컨테이너 */}
               <LoginUserInfoDropDown
                 onClick={toggleDropdown}
@@ -281,14 +289,16 @@ export default function Header({ isAdmin, userRole }) {
                 ref={dropDownRef}
               >
                 <UserImgContainer userImg={image} userRole={userRole} />
-                <UserInfoDetailContainer>
-                  <InfoCompanyTitle>{deptName}</InfoCompanyTitle>
-                  <InfoUserName>
-                    {userRole !== 'MASTER' &&
-                      (isAdmin ? `${empName} 관리자` : `${empName} 님`)}
-                    {userRole === 'MASTER' && `${empName} 계정`}
-                  </InfoUserName>
-                </UserInfoDetailContainer>
+                {getUserInfo && (
+                  <UserInfoDetailContainer>
+                    <InfoCompanyTitle>{deptName}</InfoCompanyTitle>
+                    <InfoUserName>
+                      {userRole !== 'MASTER' &&
+                        (isAdmin ? `${empName} 관리자` : `${empName} 님`)}
+                      {userRole === 'MASTER' && `${empName} 계정`}
+                    </InfoUserName>
+                  </UserInfoDetailContainer>
+                )}
                 <UserDropDown isRotated={isDropdownVisible}>
                   <ArrowDown />
                 </UserDropDown>

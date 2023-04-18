@@ -1,5 +1,5 @@
 import Axios from 'api/axios';
-import Redux from '../redux';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
   userInfoList: {
@@ -9,33 +9,31 @@ const initialState = {
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export const userInfoSlice = Redux.asyncThunk(
+export const userInfoSlice = createAsyncThunk(
   'USER_INFO',
-  () => axios.get('/api/user/myPage'),
-  response => {
-    return response.data.data;
+  async (_, thunkAPI) => {
+    return await axios
+      .get('/api/user/myPage')
+      .then(response => thunkAPI.fulfillWithValue(response.data.data))
+      .catch(() => thunkAPI.rejectWithValue());
   }
 );
 
-const userInfoReducer = Redux.slice(
-  'getUserInfo',
+const userInfoReducer = createSlice({
+  name: 'getUserInfo',
   initialState,
-  {
+  reducers: {
     setUserInfo: (state, action) => {
       state.userInfoList.getUserInfo = action.payload;
     },
   },
-  bulider => {
-    Redux.extraReducer(
-      bulider,
-      userInfoSlice,
-      'userInfoList',
-      '',
-      'getUserInfo',
-      ''
-    );
-  }
-);
+  extraReducers: bulider => {
+    bulider.addCase(userInfoSlice.fulfilled, (state, action) => {
+      const { userInfoList } = state;
+      userInfoList.getUserInfo = action.payload;
+    });
+  },
+});
 
 export const { setUserInfo } = userInfoReducer.actions;
 export default userInfoReducer.reducer;
