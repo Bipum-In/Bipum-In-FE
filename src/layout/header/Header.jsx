@@ -35,7 +35,7 @@ import {
   setAdminSSE,
   setSSECount,
   setUserSSE,
-} from 'redux/modules/sseSlice';
+} from 'redux/modules/sseAlertList';
 import { getSearch, initSearchHeader } from 'redux/modules/searchHeader';
 import { getCategoryList } from 'redux/modules/equipmentStatus';
 import Alarm from './Alarm';
@@ -73,7 +73,9 @@ export default function Header({ isAdmin, userRole }) {
   }, showAlarm);
 
   const {
-    sseSlice: { sseAdminLength, sseUserLength },
+    sseAlertList: {
+      sseDatas: { sseAdminLength, sseUserLength },
+    },
     searchHeader: {
       searchData: { search },
     },

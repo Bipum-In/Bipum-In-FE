@@ -13,7 +13,6 @@ import RequestModal from 'components/requestStatus/RequestModal';
 import { formatAgo } from 'utils/formatDate';
 import EmptyAlarm from './EmptyAlarm';
 import STRING from 'constants/string';
-import NUMBER from 'constants/number';
 
 import { useInView } from 'react-intersection-observer';
 import { __adminSseAlert } from 'redux/modules/sseAlertList';
@@ -30,7 +29,7 @@ import {
   deleteUserSseData,
   deleteAllUerSseMsg,
   deleteAllAdminSseMsg,
-} from 'redux/modules/sseSlice';
+} from 'redux/modules/sseAlertList';
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
@@ -52,7 +51,9 @@ export default memo(function AlertStatus({ isAdmin }) {
     ? getAdminSseAlert?.lastPage
     : getUserSseAlert?.lastPage;
 
-  const { sseAdminData, sseUserData } = useSelector(state => state.sseSlice);
+  const { sseAdminData, sseUserData } = useSelector(
+    state => state.sseAlertList.sseDatas
+  );
 
   const [ref, inView] = useInView({ threshold: 0 }); //inView
   const [page, setPage] = useState(1);
