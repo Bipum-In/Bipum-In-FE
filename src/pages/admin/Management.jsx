@@ -20,7 +20,7 @@ export default function Management() {
     state => state.equipmentStatus.category
   );
 
-  const { getPartners } = useSelector(state => state.partnersList.partnersList);
+  const { getPartners } = useSelector(state => state.partnersList);
 
   useEffect(() => {
     dispatch(getPartnersList({ page, size: 10 }));

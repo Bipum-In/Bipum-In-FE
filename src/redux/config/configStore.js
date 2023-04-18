@@ -4,7 +4,6 @@ import dashboardStatus from '../modules/dashboardStatus';
 import equipmentStatus from '../modules/equipmentStatus';
 import partnersList from '../modules/partnersList';
 import authReducer from '../modules/authSlice';
-import sseSlice from '../modules/sseSlice';
 import sseAlertList from '../modules/sseAlertList';
 import userInfo from '../modules/userInfoSlice';
 import searchHeader from '../modules/searchHeader';
@@ -16,7 +15,6 @@ const store = configureStore({
     dashboardStatus,
     equipmentStatus,
     authReducer,
-    sseSlice,
     sseAlertList,
     userInfo,
     searchHeader,

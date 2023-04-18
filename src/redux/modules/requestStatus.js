@@ -1,16 +1,13 @@
-import { current } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import Axios from 'api/axios';
-import Redux from '../redux';
 
 const initialState = {
   requestStatus: {
     getRequest: null,
-    isStatusLoading: false,
     isStatusError: false,
   },
   requestDetail: {
     getDetail: null,
-    isDetailLoading: false,
     isDetailError: false,
   },
   requestData: {
@@ -30,25 +27,56 @@ const initialState = {
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export const __requestStatus = Redux.asyncThunk(
+export const __requestStatus = createAsyncThunk(
   'REQUEST',
-  payload =>
-    axios.get(
-      `/api${payload.path}/requests?keyword=${payload.keyword}&type=${payload.type}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
-    ),
-  response => response.data.data
+  async (payload, thunkAPI) => {
+    return await axios
+      .get(
+        `/api${payload.path}/requests?keyword=${payload.keyword}&type=${payload.type}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
+      )
+      .then(response => thunkAPI.fulfillWithValue(response.data.data))
+      .catch(() => thunkAPI.rejectWithValue());
+  }
 );
 
-export const requestDetail = Redux.asyncThunk(
+export const requestDetail = createAsyncThunk(
   'DETAIL',
-  payload => axios.get(`/api${payload.path}/requests/${payload.detailId}`),
-  response => response.data.data
+  async (payload, thunkAPI) => {
+    return await axios
+      .get(`/api${payload.path}/requests/${payload.detailId}`)
+      .then(response => thunkAPI.fulfillWithValue(response.data.data))
+      .catch(() => thunkAPI.rejectWithValue());
+  }
 );
 
-const requestStatusSlice = Redux.slice(
-  'Request',
+const requestStatusExtraReducer = bulider => {
+  bulider.addCase(__requestStatus.fulfilled, (state, action) => {
+    const { requestStatus } = state;
+    requestStatus.isStatusError = false;
+    requestStatus.getRequest = action.payload;
+  });
+  bulider.addCase(__requestStatus.rejected, state => {
+    const { requestStatus } = state;
+    requestStatus.isStatusError = true;
+  });
+};
+
+const requestDetailExtraReducer = bulider => {
+  bulider.addCase(requestDetail.fulfilled, (state, action) => {
+    const { requestDetail } = state;
+    requestDetail.isDetailError = false;
+    requestDetail.getDetail = action.payload;
+  });
+  bulider.addCase(requestDetail.rejected, state => {
+    const { requestDetail } = state;
+    requestDetail.isDetailError = true;
+  });
+};
+
+const requestStatusSlice = createSlice({
+  name: 'Request',
   initialState,
-  {
+  reducers: {
     initRequest: (state, _) => {
       state.requestStatus.getRequest = null;
     },
@@ -88,25 +116,11 @@ const requestStatusSlice = Redux.slice(
         action.payload.modelName || state.requestData.modelName;
     },
   },
-  bulider => {
-    Redux.extraReducer(
-      bulider,
-      __requestStatus,
-      'requestStatus',
-      'isStatusLoading',
-      'getRequest',
-      'isStatusError'
-    );
-    Redux.extraReducer(
-      bulider,
-      requestDetail,
-      'requestDetail',
-      'isDetailLoading',
-      'getDetail',
-      'isDetailError'
-    );
-  }
-);
+  extraReducers: bulider => {
+    requestStatusExtraReducer(bulider);
+    requestDetailExtraReducer(bulider);
+  },
+});
 
 export const { initRequest, initDetail, initRequestData, setRequestData } =
   requestStatusSlice.actions;
