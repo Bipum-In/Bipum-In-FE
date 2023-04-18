@@ -2,12 +2,10 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { v4 as uuidv4 } from 'uuid';
 import Button from 'elements/Button';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import chartData from './chartData';
 import ROUTER from 'constants/routerConst';
 import { useNavigate } from 'react-router-dom';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function OrganizationChart() {
   const navigate = useNavigate();
@@ -26,7 +24,7 @@ export default function OrganizationChart() {
   };
 
   const handlePostChart = () => {
-    axios
+    api
       .post(`/api/master/dept`, { deptList: currentBtnData })
       .then(() => navigate(ROUTER.PATH.MASTER.APPOINTMENT));
   };

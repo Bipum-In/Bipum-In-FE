@@ -5,7 +5,7 @@ import { ReactComponent as ClearIcon } from 'styles/commonIcon/cancelInput.svg';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
 
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from 'redux/modules/userInfoSlice';
 
@@ -17,8 +17,6 @@ import useRegexInput from 'hooks/useRegexInput';
 import ImageAdd from 'components/equipmentAdd/single/ImageAdd';
 import SelectCategory from 'components/common/SelectCategory';
 import { styles } from 'components/common/commonStyled';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function EditMyInfo({ getUserInfo }) {
   const {
@@ -45,7 +43,7 @@ export default function EditMyInfo({ getUserInfo }) {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    axios.get(`/api/dept`).then(res => {
+    api.get(`/api/dept`).then(res => {
       const deptList = res.data.data;
       const deptId = parseMyDeptId(deptList, departmentName);
       setDepartmentId(deptId);
@@ -98,7 +96,7 @@ export default function EditMyInfo({ getUserInfo }) {
       })
     );
 
-    axios
+    api
       .put(`/api/user`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -174,7 +172,7 @@ export default function EditMyInfo({ getUserInfo }) {
     );
 
   const handleSecondPwEdit = () => {
-    axios.put(`/api/user/password`, { password: inputPw }).then(() => {
+    api.put(`/api/user/password`, { password: inputPw }).then(() => {
       alertModal(true, '2차 비밀번호가 성공적으로 수정되었습니다.', 2);
       setEditMode(false);
       toggleEditPasswordModal(false);

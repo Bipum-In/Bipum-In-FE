@@ -1,16 +1,14 @@
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   getPartners: null,
 };
 
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
-
 export const getPartnersList = createAsyncThunk(
   'PARTNERS',
   async (payload, thunkAPI) => {
-    return await axios
+    return await api
       .get(`/api/partners/admin?page=${payload.page}&size=${payload.size}`)
       .then(response => thunkAPI.fulfillWithValue(response.data.data));
   }

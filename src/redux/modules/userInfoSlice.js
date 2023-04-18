@@ -1,4 +1,4 @@
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -7,12 +7,10 @@ const initialState = {
   },
 };
 
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
-
 export const userInfoSlice = createAsyncThunk(
   'USER_INFO',
   async (_, thunkAPI) => {
-    return await axios
+    return await api
       .get('/api/user/myPage')
       .then(response => thunkAPI.fulfillWithValue(response.data.data))
       .catch(() => thunkAPI.rejectWithValue());

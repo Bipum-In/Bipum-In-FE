@@ -17,7 +17,7 @@ import STRING from 'constants/string';
 import { useInView } from 'react-intersection-observer';
 import { __adminSseAlert } from 'redux/modules/sseAlertList';
 import { __userSseAlert } from 'redux/modules/sseAlertList';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import {
   deleteAdminAlertData,
   deleteUserAlertData,
@@ -30,8 +30,6 @@ import {
   deleteAllUerSseMsg,
   deleteAllAdminSseMsg,
 } from 'redux/modules/sseAlertList';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default memo(function AlertStatus({ isAdmin }) {
   const dispatch = useDispatch();
@@ -71,7 +69,7 @@ export default memo(function AlertStatus({ isAdmin }) {
 
   const allDeleteAlarm = () => {
     setDeleteToggle(prev => !prev);
-    axios
+    api
       .delete(`/api/notification?role=${STRING.IS_ADMIN(isAdmin)}`)
       .then(() => {
         if (content.length > 0) {
@@ -89,7 +87,7 @@ export default memo(function AlertStatus({ isAdmin }) {
   };
 
   const putRequest = (notificationId, requestId) => {
-    axios.put(`/api/main/read/${notificationId}`).then(() => {
+    api.put(`/api/main/read/${notificationId}`).then(() => {
       setModal({ show: true, detailId: requestId });
     });
 

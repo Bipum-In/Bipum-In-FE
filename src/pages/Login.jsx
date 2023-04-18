@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { styles } from 'components/common/commonStyled';
 import { rendingStyles } from 'components/rending/pages/RendingPageStyled';
 
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import ROUTER from 'constants/routerConst';
 import QUERY from 'constants/query';
 import Storage from 'utils/localStorage';
@@ -19,8 +19,6 @@ import KakaoUserInfo from 'styles/rendingIcon/kakaoUserInfo.svg';
 import { ReactComponent as Logo } from 'styles/logo.svg';
 import { getEncryptionStorage } from '../utils/encryptionStorage';
 import STRING from 'constants/string';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function Login() {
   const { search } = useLocation();
@@ -63,7 +61,7 @@ export default function Login() {
 
       if (code && !checkCode) {
         try {
-          const response = await axios.post(
+          const response = await api.post(
             `/api/user/login/google?code=${code}&urlType=${currentUrl}`
           );
           const userInfo = response.data.data;
@@ -77,7 +75,7 @@ export default function Login() {
           setWriteUser(checkUser);
           setCheckCode(true);
 
-          const deptResponse = await axios.get(`/api/dept`);
+          const deptResponse = await api.get(`/api/dept`);
           setDepartmentList(deptResponse.data.data);
         } catch (error) {
           console.error(error);
@@ -112,7 +110,7 @@ export default function Login() {
       })
     );
 
-    axios
+    api
       .post(`/api/user/loginadd`, loginadd)
       .then(res => setWriteUser(res.data.data));
   };

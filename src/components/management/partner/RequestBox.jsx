@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import { ReactComponent as BlackCancel } from 'styles/commonIcon/blackCancel.svg';
 import { getPartnersList } from 'redux/modules/partnersList';
 import { useDispatch } from 'react-redux';
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function RequestBox({ handleModalClose }) {
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ export default function RequestBox({ handleModalClose }) {
       address,
     };
     try {
-      const response = await axios.post('/api/partners', data);
+      await api.post('/api/partners', data);
       dispatch(getPartnersList({ page: 1, size: 10 }));
       handleModalClose();
     } catch (error) {}

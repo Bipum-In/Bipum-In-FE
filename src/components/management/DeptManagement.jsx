@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import DeptHeader from './dept/DeptHeader';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import STRING from 'constants/string';
 import DeptSidebar from './dept/DeptSidebar';
 import { useModalState } from 'hooks/useModalState';
 import UserShowBody from './dept/UserShowBody';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function DeptManagement() {
   const [ManagementTitle] = useState(STRING.MANAGEMENT_TITLE.DEPTAUTH);
@@ -23,12 +21,12 @@ export default function DeptManagement() {
   const [userdeleteModal, setUserDeleteModal] = useModalState();
 
   const updateDeptList = () =>
-    axios.get('/api/dept').then(response => {
+    api.get('/api/dept').then(response => {
       setDeptList(response.data.data);
       setSelectedDeptId(response.data.data[0].deptId);
     });
   const handleSubmit = () =>
-    axios.post('/api/dept', { deptName }).then(() => {
+    api.post('/api/dept', { deptName }).then(() => {
       updateDeptList();
       setDeptName('');
     });
@@ -39,14 +37,14 @@ export default function DeptManagement() {
 
   useEffect(() => {
     if (selectedDeptId !== null) {
-      axios.get(`/api/dept/${selectedDeptId}`).then(response => {
+      api.get(`/api/dept/${selectedDeptId}`).then(response => {
         setEmployeeList(response.data.data);
       });
     }
   }, [selectedDeptId]);
 
   const handleDeleteUser = userId => {
-    axios.delete(`/api/user/${userId}`).then(() => {
+    api.delete(`/api/user/${userId}`).then(() => {
       setEmployeeList(prevList =>
         prevList.filter(emp => emp.userId !== userId)
       );
@@ -54,7 +52,7 @@ export default function DeptManagement() {
   };
 
   const handleAssignRole = userId => {
-    axios
+    api
       .put(`/api/user/role/${userId}`)
       .then(response => {
         setEmployeeList(prevList =>
@@ -76,7 +74,7 @@ export default function DeptManagement() {
 
   const updateEmployeeList = () => {
     if (selectedDeptId !== null) {
-      axios.get(`/api/dept/${selectedDeptId}`).then(response => {
+      api.get(`/api/dept/${selectedDeptId}`).then(response => {
         setEmployeeList(response.data.data);
       });
     }

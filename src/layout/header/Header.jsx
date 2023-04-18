@@ -25,7 +25,7 @@ import useDebouncedCallback from 'hooks/useDebounce';
 import { updateEncryptionStorage } from 'utils/encryptionStorage';
 
 import SSE from 'api/sse';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import logout from 'utils/logout';
 
 import { userInfoSlice } from '../../redux/modules/userInfoSlice';
@@ -39,8 +39,6 @@ import {
 import { getSearch, initSearchHeader } from 'redux/modules/searchHeader';
 import { getCategoryList } from 'redux/modules/equipmentStatus';
 import Alarm from './Alarm';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function Header({ isAdmin, userRole }) {
   const [logoutModal, setLogoutModal] = useModalState();
@@ -210,7 +208,7 @@ export default function Header({ isAdmin, userRole }) {
     e.preventDefault();
 
     try {
-      axios.post('/api/user/logout');
+      api.post('/api/user/logout');
       logout(() => {
         navigate(ROUTER.PATH.MAIN);
       });
@@ -246,11 +244,11 @@ export default function Header({ isAdmin, userRole }) {
   };
 
   const putSSECount = isAdmin => {
-    axios.put(`/api/notification/count?role=${STRING.IS_ADMIN(isAdmin)}`);
+    api.put(`/api/notification/count?role=${STRING.IS_ADMIN(isAdmin)}`);
   };
 
   const getSSECount = () => {
-    axios.get(`/api/notification/count`).then(res => {
+    api.get(`/api/notification/count`).then(res => {
       dispatch(setSSECount(res.data.data));
     });
   };

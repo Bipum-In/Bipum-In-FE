@@ -10,7 +10,7 @@ import { setRequestData } from 'redux/modules/requestStatus';
 import { useModalState } from 'hooks/useModalState';
 
 import styled from 'styled-components';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import STRING, { REQUEST_PAGES } from 'constants/string';
 import ROUTER from 'constants/routerConst';
 
@@ -21,8 +21,6 @@ import DetailUseHistory from './DetailUseHistory';
 import DetailInfoProduct from './DetailInfoProduct';
 import DetailRepairHistory from './DetailRepairHistory';
 import DetailInfoRequester from './DetailInfoRequester';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
   const dispatch = useDispatch();
@@ -59,12 +57,12 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
     dispatch(initEquipmentDetail());
     dispatch(getEquipmentDetail({ path, supplyId: detailId }));
 
-    axios
+    api
       .get(`/api/dept`)
       .then(res =>
         setDept([{ deptId: '', deptName: '선택 안함' }, ...res.data.data])
       );
-    axios
+    api
       .get(`/api/partners`)
       .then(res =>
         setPartners([
@@ -103,7 +101,7 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
   const handleSave = supplyId => sendFormData(supplyId);
 
   const handleDispose = supplyId => {
-    axios.delete(`/api/supply/${supplyId}`).then(() => isClose());
+    api.delete(`/api/supply/${supplyId}`).then(() => isClose());
     setDisposeModal(false);
   };
 
@@ -148,7 +146,7 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
   };
 
   const getUserData = deptId =>
-    axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
+    api.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
 
   const sendFormData = supplyId => {
     const formData = new FormData();
@@ -173,7 +171,7 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
   };
 
   const sendEditData = (supplyId, formData) =>
-    axios.put(`/api/supply/${supplyId}`, formData).then(() => isClose());
+    api.put(`/api/supply/${supplyId}`, formData).then(() => isClose());
 
   const handleChangeimge = e => {
     const img = e.target.files[0];

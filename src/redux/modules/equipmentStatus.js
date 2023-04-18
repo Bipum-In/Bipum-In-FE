@@ -1,4 +1,4 @@
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import NUMBER from 'constants/number';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
@@ -28,12 +28,10 @@ const initialState = {
   },
 };
 
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
-
 export const getEquipmentList = createAsyncThunk(
   'EQUIPMENT',
   async (payload, thunkAPI) => {
-    return await axios
+    return await api
       .get(
         `/api${payload.path}/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
       )
@@ -45,7 +43,7 @@ export const getEquipmentList = createAsyncThunk(
 export const getEquipmentDetail = createAsyncThunk(
   'EQUIPMENT_DETAIL',
   async (payload, thunkAPI) => {
-    return await axios
+    return await api
       .get(
         `/api${payload.path}/supply/${payload.supplyId}?size=${NUMBER.INT.SIX}`
       )
@@ -58,7 +56,7 @@ export const getHistory = createAsyncThunk(
   'HISTORY',
   async (payload, thunkAPI) => {
     try {
-      const response = await axios.get(
+      const response = await api.get(
         `/api/supply/history/${payload.history}/${payload.supplyId}?page=${payload.page}&size=${payload.size}`
       );
       if (payload.history === 'user') {
@@ -75,7 +73,7 @@ export const getCategoryList = createAsyncThunk(
   'CATEGORY',
   async (_, thunkAPI) => {
     try {
-      const response = await axios.get(`/api/category`);
+      const response = await api.get(`/api/category`);
       const parseLargeCategory = largeCategory(response);
       const data = {
         largeCategory: parseLargeCategory,

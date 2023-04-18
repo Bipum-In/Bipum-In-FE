@@ -10,9 +10,7 @@ import Button from 'elements/Button';
 import alertModal from 'utils/alertModal';
 import ScreenViewLoading from 'components/common/ScreenViewLoading';
 
-import Axios from 'api/axios';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import { api } from 'api/axios';
 
 export default function CheckPwPage({ setEditPage }) {
   const moveEditMyInfo = () => setEditPage('');
@@ -22,7 +20,7 @@ export default function CheckPwPage({ setEditPage }) {
 
   const handleCheckPw = e => {
     e.preventDefault();
-    axios.post('/api/user/check', { password }).then(res => {
+    api.post('/api/user/check', { password }).then(res => {
       if (res.data.data === true) {
         moveEditMyInfo();
       } else {
@@ -34,7 +32,7 @@ export default function CheckPwPage({ setEditPage }) {
 
   const handleTemporaryPassword = () => {
     setIsLoading(true);
-    axios.post('/api/user/password').then(() => {
+    api.post('/api/user/password').then(() => {
       alertModal(true, '임시 비밀번호가 발송되었습니다.', 2);
       setIsLoading(false);
     });
