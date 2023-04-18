@@ -1,13 +1,30 @@
 import ModalPortal from 'elements/ModalPortal';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-export default function ScreenViewLoading({ isLoading }) {
+export default function ScreenViewLoading({ isLoading, center, lazyTime }) {
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    let timeoutId;
+    if (isLoading) {
+      timeoutId = setTimeout(
+        () => {
+          setLoading(true);
+        },
+        lazyTime ? lazyTime * 1000 : 0
+      );
+    } else {
+      setLoading(false);
+    }
+    return () => clearTimeout(timeoutId);
+  }, [isLoading, lazyTime, setLoading]);
+
   return (
     <>
-      {isLoading && (
+      {loading && (
         <ModalPortal>
-          <LoadingWrapper>
+          <LoadingWrapper center={`${center}`}>
             <Spinner>
               <div></div>
               <div></div>
@@ -31,8 +48,13 @@ const LoadingWrapper = styled.div`
   ${props => props.theme.FlexCol};
   ${props => props.theme.FlexCenter};
   width: calc(100vw + 11.7188rem);
-  height: calc(100vh + 16.6875rem);
+  height: ${props =>
+    props.center === 'true' ? '100%' : 'calc(100vh + 16.6875rem)'};
   background-color: transparent;
+
+  @media (max-width: ${props => props.theme.screen.desktop}) {
+    width: ${props => props.center === 'true' && '100%'};
+  }
 `;
 
 const Spinner = styled.div`
