@@ -124,18 +124,21 @@ export default memo(function AlertStatus({ isAdmin }) {
               <AlertListContainer
                 AlertListContainer
                 key={index}
-                defaultValue={data.request_id}
+                defaultValue={data.requestId}
                 onClick={() =>
                   putRequest(
-                    data.notification_id || data.notificationId,
-                    data.request_id || data.requestId
+                    data.notificationId || data.getNotificationId,
+                    data.requestId || data.getRequestId
                   )
                 }
               >
                 {isAdmin ? (
                   <AlertImgContainer>
-                    {data.image ? (
-                      <AlertImg src={data.image} alt="alertImg" />
+                    {data.image || data.getImage ? (
+                      <AlertImg
+                        src={data.image || data.getImage}
+                        alt="alertImg"
+                      />
                     ) : (
                       <AlertImg src={defaultLogo} alt="defaultImg" />
                     )}
@@ -145,21 +148,23 @@ export default memo(function AlertStatus({ isAdmin }) {
                     <Status
                       status={
                         STRING.REQUEST_STATUS[
-                          data.accept_result || data.acceptResult
+                          data.acceptResult || data.getAcceptresult
                         ]
                       }
                     >
                       {
                         STRING.REQUEST_STATUS[
-                          data.accept_result || data.acceptResult
+                          data.acceptResult || data.getAcceptresult
                         ]
                       }
                     </Status>
                   </AlertStatusContainer>
                 )}
                 <AlertDetailContainer>
-                  <AlertTitle>{data.content}</AlertTitle>
-                  <AlertData>{formatAgo(data.created_At)}</AlertData>
+                  <AlertTitle>{data.content || data.getContent}</AlertTitle>
+                  <AlertData>
+                    {formatAgo(data.createdAt || data.getCreated_At)}
+                  </AlertData>
                 </AlertDetailContainer>
               </AlertListContainer>
             ))}
