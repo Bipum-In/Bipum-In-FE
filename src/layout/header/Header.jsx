@@ -270,14 +270,16 @@ export default function Header({ isAdmin, userRole }) {
             )}
             {/* 헤더 오른쪽 아이템 */}
             <HeaderRightContainer>
-              <Alarm
-                isAdmin={isAdmin}
-                showAlarm={showAlarm}
-                alarmOutsideRef={alarmOutsideRef}
-                sseAdminLength={sseAdminLength}
-                sseUserLength={sseUserLength}
-                onClickAlaram={handleClickAlaram}
-              />
+              {userRole !== 'MASTER' && (
+                <Alarm
+                  isAdmin={isAdmin}
+                  showAlarm={showAlarm}
+                  alarmOutsideRef={alarmOutsideRef}
+                  sseAdminLength={sseAdminLength}
+                  sseUserLength={sseUserLength}
+                  onClickAlaram={handleClickAlaram}
+                />
+              )}
               {/* 드롭다운 컨테이너 */}
               <LoginUserInfoDropDown
                 onClick={toggleDropdown}
