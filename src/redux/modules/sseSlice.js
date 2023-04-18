@@ -42,8 +42,8 @@ const sseSlice = createSlice({
         return acc;
       }, {});
 
-      state.sseUserLength = state.sseUserLength + parseData.user;
-      state.sseAdminLength = state.sseAdminLength + parseData.admin;
+      state.sseUserLength = parseData.user;
+      state.sseAdminLength = parseData.admin;
     },
     deleteAdminSseData: (state, action) => {
       state.sseAdminData = [...state.sseAdminData].filter(

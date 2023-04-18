@@ -240,6 +240,11 @@ export default function Header({ isAdmin, userRole }) {
     } else {
       dispatch(deleteAllUerSseLength());
     }
+    putSSECount(isAdmin);
+  };
+
+  const putSSECount = isAdmin => {
+    axios.put(`/api/notification/count?role=${STRING.IS_ADMIN(isAdmin)}`);
   };
 
   const getSSECount = () => {

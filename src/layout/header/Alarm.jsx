@@ -14,16 +14,16 @@ const Alarm = ({
   const count = isAdmin ? sseAdminLength : sseUserLength;
 
   return (
-    <AlertStatusContainer ref={alarmOutsideRef} show={!!showAlarm}>
+    <AlertStatusContainer ref={alarmOutsideRef} show={showAlarm}>
       <IconContainer onClick={onClickAlaram}>
         <Alaram />
         {count > 0 && (
           <AlaramCount>
-            <span>{count}</span>
+            <span />
           </AlaramCount>
         )}
       </IconContainer>
-      <AlertStatus isAdmin={isAdmin} />
+      {showAlarm && <AlertStatus isAdmin={isAdmin} />}
     </AlertStatusContainer>
   );
 };
@@ -37,12 +37,12 @@ const AlertStatusContainer = styled.div`
     position: absolute;
     visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
     top: 0;
-    left: 0;
-    transform: translate(-0.7rem, 3rem);
+    right: 0;
+    transform: translate(-9.5rem, 3rem);
   }
   //알림 박스
   & > article > div > div {
-    width: 16.1875rem;
+    width: 25rem;
   }
   //알림 타이틀 및 전체 삭제 버튼
   & > article > div > article {
@@ -81,18 +81,19 @@ const AlaramCount = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
   background: ${props => props.theme.color.blue.brandColor7};
-  width: 1.5rem;
-  height: 1.5rem;
-  padding: 0.625rem;
+  width: 1rem;
+  height: 1rem;
+  padding: 0.5rem;
   transform: translate(0.7rem, -0.7rem);
   border-radius: 50%;
+
   span {
     ${props => props.theme.FlexRow};
     ${props => props.theme.FlexCenter};
     font-size: 0.75rem;
-    padding: 0.625rem;
-    width: 0.9375rem;
-    height: 0.9375rem;
+    padding: 0.4rem;
+    width: 0.3rem;
+    height: 0.3rem;
     color: white;
     background-color: red;
     border-radius: 50%;
