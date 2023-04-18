@@ -25,11 +25,16 @@ export default function DeptHeader({
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
-    const filteredList = employeeList.filter(employee =>
-      employee.empName.includes(keyword)
-    );
+    const filteredList = employeeList.filter(employee => {
+      const values = Object.values(employee).map(value =>
+        String(value).toLowerCase()
+      );
+
+      const keywordLowerCase = keyword.toLowerCase();
+      return values.some(value => value.includes(keywordLowerCase));
+    });
     setFilteredEmployeeList(filteredList);
-  }, [employeeList, keyword]);
+  }, [employeeList, keyword, setFilteredEmployeeList]);
 
   return (
     <RequestShowTitle ref={containerHeaderRef}>
