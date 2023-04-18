@@ -32,7 +32,7 @@ export default function CheckPwPage({ setEditPage }) {
 
   const handleTemporaryPassword = () => {
     setIsLoading(true);
-    axios.post('/api/user/password').then(() => {
+    api.post('/api/user/password').then(() => {
       alertModal(true, '임시 비밀번호가 발송되었습니다.', 2);
       setIsLoading(false);
     });
