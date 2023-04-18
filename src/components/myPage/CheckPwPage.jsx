@@ -9,9 +9,7 @@ import Input from 'elements/Input';
 import Button from 'elements/Button';
 import alertModal from 'utils/alertModal';
 
-import Axios from 'api/axios';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import { api } from 'api/axios';
 
 export default function CheckPwPage({ setEditPage }) {
   const moveEditMyInfo = () => setEditPage('');
@@ -20,7 +18,7 @@ export default function CheckPwPage({ setEditPage }) {
 
   const handleCheckPw = e => {
     e.preventDefault();
-    axios.post('/api/user/check', { password }).then(res => {
+    api.post('/api/user/check', { password }).then(res => {
       if (res.data.data === true) {
         moveEditMyInfo();
       } else {

@@ -13,11 +13,9 @@ import { getEncryptionStorage } from 'utils/encryptionStorage';
 
 import ROUTER from 'constants/routerConst';
 import useThrottleCallBack from 'hooks/useThrottleCallback';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import logout from 'utils/logout';
 import styled from 'styled-components';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function Rending() {
   const [pageIndex, setPageIndex] = useState(0);
@@ -66,7 +64,7 @@ export default function Rending() {
     e.preventDefault();
 
     try {
-      await axios.post(`/api/user/logout`);
+      await api.post(`/api/user/logout`);
       dispatch(logoutSuccess());
       logout(() => navigate(ROUTER.PATH.MAIN));
     } catch (error) {

@@ -13,15 +13,13 @@ import { ReactComponent as CancelInput } from 'styles/commonIcon/cancelInput.svg
 
 import { CustomModal } from 'elements/Modal';
 import { useModalState } from 'hooks/useModalState';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import {
   setSmallCategoryData,
   editCategoryData,
   getCategoryList,
 } from 'redux/modules/equipmentStatus';
 import ManageSidebar from './ManageSidebar';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function ManageCategory({
   activeCategory,
@@ -55,7 +53,7 @@ export default function ManageCategory({
   const deleteModalClose = () => setDeleteModal(false);
 
   const handleSubmit = name => {
-    axios
+    api
       .post(`/api/category/`, {
         largeCategory: STRING.CATEGORY[activeCategory],
         categoryName: newCategory,
@@ -68,7 +66,7 @@ export default function ManageCategory({
   };
 
   const handleEditSubmit = async () => {
-    await axios
+    await api
       .put(`/api/category/${editingCategoryId}`, {
         categoryId: editingCategoryId,
         largeCategory: STRING.CATEGORY[activeCategory],

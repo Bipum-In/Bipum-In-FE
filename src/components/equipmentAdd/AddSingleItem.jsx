@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { styles } from '../common/commonStyled';
 import Button from 'elements/Button';
 
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import SelectCategory from '../common/SelectCategory';
 import SelectCategoryList from './single/SelectCategoryList';
 import EquipmentInput from './single/EquipmentInput';
@@ -12,8 +12,6 @@ import STRING from 'constants/string';
 import Input from 'elements/Input';
 import alertModal from 'utils/alertModal';
 import Valid from 'validation/validation';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function AddSingleItem({ categoryList, largeCategoryList }) {
   const [largeCategory, setLargeCategory] = useState('');
@@ -51,7 +49,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
     (!formImage.length && !preview.length);
 
   useEffect(() => {
-    axios
+    api
       .get(`/api/partners`)
       .then(res =>
         setPartners([
@@ -59,7 +57,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
           ...res.data.data,
         ])
       );
-    axios
+    api
       .get(`/api/dept`)
       .then(res =>
         setDept([{ deptId: '', deptName: '선택 안함' }, ...res.data.data])
@@ -243,16 +241,16 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
   };
 
   const getUserData = deptId =>
-    axios.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
+    api.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
 
   const sendFormData = formData =>
-    axios.post(`/api/supply`, formData).then(() => {
+    api.post(`/api/supply`, formData).then(() => {
       initData();
       alertModal(true, '비품 등록이 완료되었습니다.', 2);
     });
 
   const getCrawlingData = () => {
-    axios.get(`/api/supply/search?modelNameList=${nameValue}`).then(res => {
+    api.get(`/api/supply/search?modelNameList=${nameValue}`).then(res => {
       setCrawlingImg(res.data.data[0].image);
       setPreview([res.data.data[0].image]);
       setFormImage([]);

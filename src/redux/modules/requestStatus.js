@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 
 const initialState = {
   requestStatus: {
@@ -25,12 +25,10 @@ const initialState = {
   },
 };
 
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
-
 export const __requestStatus = createAsyncThunk(
   'REQUEST',
   async (payload, thunkAPI) => {
-    return await axios
+    return await api
       .get(
         `/api${payload.path}/requests?keyword=${payload.keyword}&type=${payload.type}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
       )
@@ -42,7 +40,7 @@ export const __requestStatus = createAsyncThunk(
 export const requestDetail = createAsyncThunk(
   'DETAIL',
   async (payload, thunkAPI) => {
-    return await axios
+    return await api
       .get(`/api${payload.path}/requests/${payload.detailId}`)
       .then(response => thunkAPI.fulfillWithValue(response.data.data))
       .catch(() => thunkAPI.rejectWithValue());

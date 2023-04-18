@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 
 import ModalHeader from '../common/ModalHeader';
 import Provide from './detail/Provide';
@@ -11,8 +11,6 @@ import CreatedAtFormatDate from './detail/CreatedAtFormatDate';
 
 import { CustomModal } from 'elements/Modal';
 import { useModalState } from 'hooks/useModalState';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function RequestDetail({ isClose, detail }) {
   const {
@@ -51,7 +49,7 @@ export default function RequestDetail({ isClose, detail }) {
 
   useEffect(() => {
     if (requestType === '비품 요청' && requestStatus === '처리전') {
-      axios
+      api
         .get(`/api/supply/stock/${categoryId}`)
         .then(res => setStockList({ data: res.data.data, check: true }));
     } else {
@@ -97,7 +95,7 @@ export default function RequestDetail({ isClose, detail }) {
   };
 
   const putRequest = data => {
-    axios.put(`/api/admin/requests/${requestId}`, data).then(() => isClose());
+    api.put(`/api/admin/requests/${requestId}`, data).then(() => isClose());
   };
 
   const handleModalShow = () => setDisposeModal();

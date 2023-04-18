@@ -9,10 +9,8 @@ import ARRAY from 'constants/array';
 import Valid from 'validation/validation';
 import alertModal from 'utils/alertModal';
 
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import ScreenViewLoading from 'components/common/ScreenViewLoading';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function AddMultipleItem() {
   const inputRef = useRef(null);
@@ -191,7 +189,7 @@ export default function AddMultipleItem() {
   };
 
   const postMultiData = data => {
-    axios.post('api/supply/excel', data).then(() => {
+    api.post('api/supply/excel', data).then(() => {
       initMultiData();
       alertModal(true, '비품 등록이 완료되었습니다.', 2);
     });
@@ -200,7 +198,7 @@ export default function AddMultipleItem() {
   const getCrawlingImg = async (modelNameToString, sheetLengthArr) => {
     let response = null;
     setIsLoading(true);
-    await axios
+    await api
       .get(`api/supply/search?modelNameList=${modelNameToString}`)
       .then(res => {
         response = sliceData(res.data.data, sheetLengthArr);

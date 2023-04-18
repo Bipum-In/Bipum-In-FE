@@ -7,11 +7,9 @@ import ModalHeader from '../../common/ModalHeader';
 import { ReactComponent as BlackCancel } from 'styles/commonIcon/blackCancel.svg';
 import { useModalState } from 'hooks/useModalState';
 import STRING from 'constants/string';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import { useDispatch } from 'react-redux';
 import { getPartnersList } from 'redux/modules/partnersList';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function DetailPartner({ isClose, result, page }) {
   const dispatch = useDispatch();
@@ -32,7 +30,7 @@ export default function DetailPartner({ isClose, result, page }) {
   const handleDelete = () => deletePartner(result.partnersId);
 
   const deletePartner = partnersId =>
-    axios
+    api
       .delete(`/api/partners/${partnersId}`)
       .then(() => {
         dispatch(getPartnersList({ page, size: 10 }));
@@ -42,7 +40,7 @@ export default function DetailPartner({ isClose, result, page }) {
       .catch();
 
   const handleSaveClick = () => {
-    axios
+    api
       .put(`/api/partners/${editedValue.partnersId}`, editedValue)
       .then(response => {
         isClose();

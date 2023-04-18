@@ -3,14 +3,12 @@ import { styles } from '../common/commonStyled';
 
 import Button from 'elements/Button';
 import SelectCategoryList from '../equipmentAdd/single/SelectCategoryList';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import STRING from 'constants/string';
 import ImageAdd from '../equipmentAdd/single/ImageAdd';
 import SelectCategory from '../common/SelectCategory';
 import Valid from 'validation/validation';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function UserEquipmentRequest({
   type,
@@ -219,7 +217,7 @@ export default function UserEquipmentRequest({
   };
 
   const sendFormData = formData => {
-    axios
+    api
       .post(`/api/requests`, [formData, `${STRING.REQUEST_NAME[type]} 완료`])
       .then(() => initData())
       .catch(() => (sendCheck.current = false));
@@ -228,7 +226,7 @@ export default function UserEquipmentRequest({
   const getMySupply = categoryId => {
     const useTypeKO = STRING.USE_TYPE_ENG[useType];
     const common = useTypeKO === '공용' ? '/common' : '';
-    axios
+    api
       .get(`/api/supply${common}/mysupply/${categoryId}`)
       .then(res => setMysupply(res.data.data));
   };
@@ -236,7 +234,7 @@ export default function UserEquipmentRequest({
   const getNotSupplyLargeCategory = useType => {
     const common = useType === '공용' ? '/common' : '';
 
-    axios.get(`/api/category${common}/myLargeCategory`).then(res => {
+    api.get(`/api/category${common}/myLargeCategory`).then(res => {
       const categoryList = res.data.data;
       const parseList = categoryList.map(category => {
         return { name: STRING.CATEGORY_ENG[category], type: category };
@@ -250,7 +248,7 @@ export default function UserEquipmentRequest({
     const useTypeKO = STRING.USE_TYPE_ENG[useType];
     const common = useTypeKO === '공용' ? '/common' : '';
 
-    axios
+    api
       .get(`/api/category${common}/myCategory?largeCategory=${largeType}`)
       .then(res => {
         setSmallCategory(res.data.data);
