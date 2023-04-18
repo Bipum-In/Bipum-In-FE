@@ -14,7 +14,7 @@ export default function DetailUseHistory({ detail }) {
 
   const { supplyId } = detail.supplyDetail;
   const { content: firstContent } = detail.supplyUserHistory;
-  const { history, isUserLoading, isUserError } = useSelector(
+  const { history, isUserError } = useSelector(
     state => state.equipmentStatus.supplyHistory
   );
 
