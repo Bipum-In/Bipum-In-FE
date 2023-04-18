@@ -14,7 +14,7 @@ const Alarm = ({
   const count = isAdmin ? sseAdminLength : sseUserLength;
 
   return (
-    <AlertStatusContainer ref={alarmOutsideRef} show={!!showAlarm}>
+    <AlertStatusContainer ref={alarmOutsideRef} show={showAlarm}>
       <IconContainer onClick={onClickAlaram}>
         <Alaram />
         {count > 0 && (
@@ -23,7 +23,7 @@ const Alarm = ({
           </AlaramCount>
         )}
       </IconContainer>
-      <AlertStatus isAdmin={isAdmin} />
+      {showAlarm && <AlertStatus isAdmin={isAdmin} />}
     </AlertStatusContainer>
   );
 };
@@ -37,12 +37,12 @@ const AlertStatusContainer = styled.div`
     position: absolute;
     visibility: ${({ show }) => (show ? 'visible' : 'hidden')};
     top: 0;
-    left: 0;
-    transform: translate(-0.7rem, 3rem);
+    right: 0;
+    transform: translate(-9.5rem, 3rem);
   }
   //알림 박스
   & > article > div > div {
-    width: 16.1875rem;
+    width: 25rem;
   }
   //알림 타이틀 및 전체 삭제 버튼
   & > article > div > article {
@@ -86,6 +86,7 @@ const AlaramCount = styled.div`
   padding: 0.625rem;
   transform: translate(0.7rem, -0.7rem);
   border-radius: 50%;
+
   span {
     ${props => props.theme.FlexRow};
     ${props => props.theme.FlexCenter};
