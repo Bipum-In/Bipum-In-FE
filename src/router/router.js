@@ -4,7 +4,6 @@ import App from 'App';
 import ROUTER from 'constants/routerConst';
 import Layout from 'layout/Layout';
 import Rending from 'pages/Rending';
-import Singup from 'pages/Singup';
 import Login from 'pages/Login';
 import EmptyPage from 'pages/EmptyPage';
 import MyPage from '../pages/MyPage';
@@ -32,10 +31,6 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Rending />,
-      },
-      {
-        path: ROUTER.PATH.SIGNUP,
-        element: <Singup />,
       },
       {
         path: ROUTER.PATH.LOGIN,
