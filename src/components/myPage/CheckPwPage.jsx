@@ -8,6 +8,7 @@ import { styles } from 'components/common/commonStyled';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
 import alertModal from 'utils/alertModal';
+import ScreenViewLoading from 'components/common/ScreenViewLoading';
 
 import Axios from 'api/axios';
 
@@ -15,6 +16,7 @@ const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function CheckPwPage({ setEditPage }) {
   const moveEditMyInfo = () => setEditPage('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const [password, setPassword] = useState('');
 
@@ -27,6 +29,14 @@ export default function CheckPwPage({ setEditPage }) {
         alertModal(false, '비밀번호가 일치하지 않습니다.', 2);
         setPassword('');
       }
+    });
+  };
+
+  const handleTemporaryPassword = () => {
+    setIsLoading(true);
+    axios.post('/api/user/password').then(() => {
+      alertModal(true, '임시 비밀번호가 발송되었습니다.', 2);
+      setIsLoading(false);
     });
   };
 
@@ -49,6 +59,7 @@ export default function CheckPwPage({ setEditPage }) {
               />
             </styles.TypeBox>
           </SetUserInputContainer>
+          <div onClick={handleTemporaryPassword}>비밀번호를 잊으셨나요?</div>
           <SetUserSubmitContainer>
             <Button
               submit
@@ -60,6 +71,7 @@ export default function CheckPwPage({ setEditPage }) {
           </SetUserSubmitContainer>
         </SetUserInfo>
       </LoginWrapper>
+      <Loading isLoading={isLoading} />
     </>
   );
 }
@@ -116,3 +128,5 @@ const SetUserSubmitContainer = styled.div`
     font-weight: bold;
   }
 `;
+
+const Loading = styled(ScreenViewLoading)``;
