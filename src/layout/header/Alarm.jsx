@@ -19,7 +19,7 @@ const Alarm = ({
         <Alaram />
         {count > 0 && (
           <AlaramCount>
-            <span>{count}</span>
+            <span />
           </AlaramCount>
         )}
       </IconContainer>
@@ -81,9 +81,9 @@ const AlaramCount = styled.div`
   ${props => props.theme.FlexRow};
   ${props => props.theme.FlexCenter};
   background: ${props => props.theme.color.blue.brandColor7};
-  width: 1.5rem;
-  height: 1.5rem;
-  padding: 0.625rem;
+  width: 1rem;
+  height: 1rem;
+  padding: 0.5rem;
   transform: translate(0.7rem, -0.7rem);
   border-radius: 50%;
 
@@ -91,9 +91,9 @@ const AlaramCount = styled.div`
     ${props => props.theme.FlexRow};
     ${props => props.theme.FlexCenter};
     font-size: 0.75rem;
-    padding: 0.625rem;
-    width: 0.9375rem;
-    height: 0.9375rem;
+    padding: 0.4rem;
+    width: 0.3rem;
+    height: 0.3rem;
     color: white;
     background-color: red;
     border-radius: 50%;

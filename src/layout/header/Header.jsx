@@ -73,7 +73,7 @@ export default function Header({ isAdmin, userRole }) {
   }, showAlarm);
 
   const {
-    sseSlice: { sseAdminData, sseUserData, sseAdminLength, sseUserLength },
+    sseSlice: { sseAdminLength, sseUserLength },
     searchHeader: {
       searchData: { search },
     },
@@ -236,9 +236,9 @@ export default function Header({ isAdmin, userRole }) {
   const handleClickAlaram = () => {
     setShowAlarm(state => !state);
     if (isAdmin) {
-      dispatch(deleteAllAdminSseLength(sseAdminData.length));
+      dispatch(deleteAllAdminSseLength());
     } else {
-      dispatch(deleteAllUerSseLength(sseUserData.length));
+      dispatch(deleteAllUerSseLength());
     }
     putSSECount(isAdmin);
   };

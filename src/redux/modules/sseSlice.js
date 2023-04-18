@@ -5,8 +5,6 @@ const initialState = {
   sseUserData: [],
   sseAdminLength: null,
   sseUserLength: null,
-  adminInitCount: null,
-  userInitCount: null,
 };
 
 const sseSlice = createSlice({
@@ -18,11 +16,11 @@ const sseSlice = createSlice({
     },
     setAdminSSE: (state, action) => {
       state.sseAdminData = [action.payload, ...state.sseAdminData];
-      state.sseAdminLength = state.sseAdminData.length - state.adminInitCount;
+      state.sseAdminLength = state.sseAdminData.length;
     },
     setUserSSE: (state, action) => {
       state.sseUserData = [action.payload, ...state.sseUserData];
-      state.sseUserLength = state.sseUserData.length - state.userInitCount;
+      state.sseUserLength = state.sseUserData.length;
     },
     deleteAllAdminSseMsg: state => {
       state.sseAdminData = [];
@@ -32,13 +30,11 @@ const sseSlice = createSlice({
       state.sseUserData = [];
       state.sseUserLength = '';
     },
-    deleteAllAdminSseLength: (state, action) => {
+    deleteAllAdminSseLength: state => {
       state.sseAdminLength = '';
-      state.adminInitCount = action.payload;
     },
-    deleteAllUerSseLength: (state, action) => {
+    deleteAllUerSseLength: state => {
       state.sseUserLength = '';
-      state.userInitCount = action.payload;
     },
     setSSECount: (state, action) => {
       const parseData = action.payload.reduce((acc, cur) => {
@@ -46,8 +42,8 @@ const sseSlice = createSlice({
         return acc;
       }, {});
 
-      state.sseUserLength = state.sseUserLength + parseData.user;
-      state.sseAdminLength = state.sseAdminLength + parseData.admin;
+      state.sseUserLength = parseData.user;
+      state.sseAdminLength = parseData.admin;
     },
     deleteAdminSseData: (state, action) => {
       state.sseAdminData = [...state.sseAdminData].filter(
