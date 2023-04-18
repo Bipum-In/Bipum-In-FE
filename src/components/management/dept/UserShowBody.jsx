@@ -75,25 +75,24 @@ export default function UserShowBody({
                         : '공용 비품 책임자 해임'}
                     </Button>
                   )}
-                  {userRole === 'MASTER' &&
-                    employee.authority === '비품 총괄 관리자' && (
-                      <Button
-                        mainBtn="border"
-                        type="button"
-                        onClick={() => {
-                          setIdauthModal(employee.userId);
-                          setAuthModal(true);
-                        }}
-                      >
-                        {userRole === 'MASTER'
-                          ? '비품 총괄 관리자 해임'
-                          : '공용 비품 책임자 해임'}
-                      </Button>
-                    )}
-                  {employee.authority === '비품 총괄 관리자' && (
-                    <AuthTitleCanHide>비품 총괄 관리자</AuthTitleCanHide>
-                  )}
-
+                  {employee.authority === '비품 총괄 관리자' &&
+                    (userRole === 'MASTER' ? (
+                      <>
+                        <Button
+                          mainBtn="border"
+                          type="button"
+                          onClick={() => {
+                            setIdauthModal(employee.userId);
+                            setAuthModal(true);
+                          }}
+                        >
+                          비품 총괄 관리자 해임
+                        </Button>
+                        <AuthTitleCanHide>비품 총괄 관리자</AuthTitleCanHide>
+                      </>
+                    ) : (
+                      <AuthTitle>비품 총괄 관리자</AuthTitle>
+                    ))}
                   {employee.authority === '공용 비품 책임자' && (
                     <AuthTitleCanHide>공용 비품 책임자</AuthTitleCanHide>
                   )}
@@ -156,7 +155,6 @@ export default function UserShowBody({
     </>
   );
 }
-
 const AuthTitle = styled.div`
   background-color: ${props => props.theme.color.blue.brandColor6};
   display: flex;
