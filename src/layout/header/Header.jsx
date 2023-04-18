@@ -280,14 +280,16 @@ export default function Header({ isAdmin, userRole }) {
                 ref={dropDownRef}
               >
                 <UserImgContainer userImg={image} userRole={userRole} />
-                <UserInfoDetailContainer>
-                  <InfoCompanyTitle>{deptName}</InfoCompanyTitle>
-                  <InfoUserName>
-                    {userRole !== 'MASTER' &&
-                      (isAdmin ? `${empName} 관리자` : `${empName} 님`)}
-                    {userRole === 'MASTER' && `${empName} 계정`}
-                  </InfoUserName>
-                </UserInfoDetailContainer>
+                {getUserInfo && (
+                  <UserInfoDetailContainer>
+                    <InfoCompanyTitle>{deptName}</InfoCompanyTitle>
+                    <InfoUserName>
+                      {userRole !== 'MASTER' &&
+                        (isAdmin ? `${empName} 관리자` : `${empName} 님`)}
+                      {userRole === 'MASTER' && `${empName} 계정`}
+                    </InfoUserName>
+                  </UserInfoDetailContainer>
+                )}
                 <UserDropDown isRotated={isDropdownVisible}>
                   <ArrowDown />
                 </UserDropDown>
