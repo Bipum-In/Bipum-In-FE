@@ -1,12 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import styled, { css } from 'styled-components';
 import { styleds } from './AdminDashBaordStyled';
 import AnchorBtn from '../AnchorBtn';
 import Modal from 'elements/Modal';
-import RequestModal from 'components/requestStatus/RequestModal';
 import alertModal from 'utils/alertModal';
+
+import defaultLogo from 'styles/commonIcon/defaultLogo.svg';
+import RequestModal from 'components/requestStatus/RequestModal';
 
 import { formatAgo } from 'utils/formatDate';
 import EmptyAlarm from './EmptyAlarm';
@@ -32,7 +34,7 @@ import {
 
 const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
-export default function AlertStatus({ isAdmin }) {
+export default memo(function AlertStatus({ isAdmin }) {
   const dispatch = useDispatch();
   const [isDeleteShow, setDeleteToggle] = useState(false);
   const [modal, setModal] = useState({ show: false, detailId: null });
@@ -61,7 +63,7 @@ export default function AlertStatus({ isAdmin }) {
       isAdmin
         ? dispatch(__adminSseAlert({ page, size: 5 }))
         : dispatch(__userSseAlert({ page, size: 5 }));
-      setPage(state => state + 1);
+      setPage(page + 1);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, inView, isAdmin]);
@@ -71,8 +73,10 @@ export default function AlertStatus({ isAdmin }) {
     axios
       .delete(`/api/notification?role=${STRING.IS_ADMIN(isAdmin)}`)
       .then(() => {
-        content.length > 0 &&
+        if (content.length > 0) {
           alertModal(false, '모든 알림이 삭제되었습니다.', 2);
+        }
+
         if (isAdmin) {
           dispatch(deleteAllAdminMsg());
           dispatch(deleteAllAdminSseMsg());
@@ -129,7 +133,11 @@ export default function AlertStatus({ isAdmin }) {
               >
                 {isAdmin ? (
                   <AlertImgContainer>
-                    <AlertImg src={data.image} alt="" />
+                    {data.image ? (
+                      <AlertImg src={data.image} alt="alertImg" />
+                    ) : (
+                      <AlertImg src={defaultLogo} alt="defaultImg" />
+                    )}
                   </AlertImgContainer>
                 ) : (
                   <AlertStatusContainer>
@@ -176,7 +184,7 @@ export default function AlertStatus({ isAdmin }) {
       </Modal>
     </AlertStatusWrapper>
   );
-}
+});
 
 const AlertStatusWrapper = styled.article`
   width: 100%;
