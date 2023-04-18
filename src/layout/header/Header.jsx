@@ -73,7 +73,7 @@ export default function Header({ isAdmin, userRole }) {
   }, showAlarm);
 
   const {
-    sseSlice: { sseAdminLength, sseUserLength },
+    sseSlice: { sseAdminData, sseUserData, sseAdminLength, sseUserLength },
     searchHeader: {
       searchData: { search },
     },
@@ -236,10 +236,15 @@ export default function Header({ isAdmin, userRole }) {
   const handleClickAlaram = () => {
     setShowAlarm(state => !state);
     if (isAdmin) {
-      dispatch(deleteAllAdminSseLength());
+      dispatch(deleteAllAdminSseLength(sseAdminData.length));
     } else {
-      dispatch(deleteAllUerSseLength());
+      dispatch(deleteAllUerSseLength(sseUserData.length));
     }
+    putSSECount(isAdmin);
+  };
+
+  const putSSECount = isAdmin => {
+    axios.put(`/api/notification/count?role=${STRING.IS_ADMIN(isAdmin)}`);
   };
 
   const getSSECount = () => {

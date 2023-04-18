@@ -5,6 +5,8 @@ const initialState = {
   sseUserData: [],
   sseAdminLength: null,
   sseUserLength: null,
+  adminInitCount: null,
+  userInitCount: null,
 };
 
 const sseSlice = createSlice({
@@ -16,11 +18,11 @@ const sseSlice = createSlice({
     },
     setAdminSSE: (state, action) => {
       state.sseAdminData = [action.payload, ...state.sseAdminData];
-      state.sseAdminLength = state.sseAdminData.length;
+      state.sseAdminLength = state.sseAdminData.length - state.adminInitCount;
     },
     setUserSSE: (state, action) => {
       state.sseUserData = [action.payload, ...state.sseUserData];
-      state.sseUserLength = state.sseUserData.length;
+      state.sseUserLength = state.sseUserData.length - state.userInitCount;
     },
     deleteAllAdminSseMsg: state => {
       state.sseAdminData = [];
@@ -30,11 +32,13 @@ const sseSlice = createSlice({
       state.sseUserData = [];
       state.sseUserLength = '';
     },
-    deleteAllAdminSseLength: state => {
+    deleteAllAdminSseLength: (state, action) => {
       state.sseAdminLength = '';
+      state.adminInitCount = action.payload;
     },
-    deleteAllUerSseLength: state => {
+    deleteAllUerSseLength: (state, action) => {
       state.sseUserLength = '';
+      state.userInitCount = action.payload;
     },
     setSSECount: (state, action) => {
       const parseData = action.payload.reduce((acc, cur) => {
