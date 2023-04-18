@@ -61,24 +61,28 @@ const getAccessToken = mem(
   { maxAge: 1000 }
 );
 
-const createAxiosInstance = () => {
+const createAxiosInstance = timeoutSecond => {
   const instance = axios.create({
     withCredentials: true,
     baseURL: `${process.env.REACT_APP_SERVER_URL}`,
+    timeout: timeoutSecond * 1000 || 10000000,
   });
 
   instance.interceptors.request.use(requestInterceptor);
 
-  instance.interceptors.response.use(responseInterceptor, error => {
-    responseInterceptorError(error, instance);
-  });
+  instance.interceptors.response.use(responseInterceptor, error =>
+    responseInterceptorError(error, instance)
+  );
 
   return instance;
 };
 
 export const api = {
-  get: path => createAxiosInstance().get(path),
-  post: (path, payload) => createAxiosInstance().post(path, payload),
-  delete: path => createAxiosInstance().delete(path),
-  put: (path, payload) => createAxiosInstance().put(path, payload),
+  get: (path, timeoutSecond) => createAxiosInstance(timeoutSecond).get(path),
+  post: (path, payload, timeoutSecond) =>
+    createAxiosInstance(timeoutSecond).post(path, payload),
+  delete: (path, timeoutSecond) =>
+    createAxiosInstance(timeoutSecond).delete(path),
+  put: (path, payload, timeoutSecond) =>
+    createAxiosInstance(timeoutSecond).put(path, payload),
 };
