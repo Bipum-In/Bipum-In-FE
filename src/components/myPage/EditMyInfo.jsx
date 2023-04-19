@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { ReactComponent as ClearIcon } from 'styles/commonIcon/cancelInput.svg';
-
-import Input from 'elements/Input';
-import Button from 'elements/Button';
+import ImageAdd from 'components/equipmentAdd/single/ImageAdd';
 
 import { api } from 'api/axios';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from 'redux/modules/userInfoSlice';
 
+import QUERY from 'constants/query';
 import alertModal from 'utils/alertModal';
 import { CustomModal } from 'elements/Modal';
 import { useModalState } from 'hooks/useModalState';
 import useRegexInput from 'hooks/useRegexInput';
 
-import ImageAdd from 'components/equipmentAdd/single/ImageAdd';
-import SelectCategory from 'components/common/SelectCategory';
 import { styles } from 'components/common/commonStyled';
-import PLACEHOLDER from 'constants/placeholder';
-import QUERY from 'constants/query';
+import MyPageEmpName from './detailComponets/MyPageEmpName';
+import MyPagePhone from './detailComponets/MyPagePhone';
+import MypageDept from './detailComponets/MypageDept';
+import MypageAlarm from './detailComponets/MypageAlarm';
+import ChangePassword from './detailComponets/ChangePassword';
+import ProcessBtn from './detailComponets/ProcessBtn';
 
 export default function EditMyInfo({ getUserInfo }) {
   const {
@@ -33,23 +33,29 @@ export default function EditMyInfo({ getUserInfo }) {
 
   const [deleteAccountModal, toggleDeleteAccountModal] = useModalState();
   const [editPasswordModal, toggleEditPasswordModal] = useModalState();
-  const [departmentList, setDepartmentList] = useState('');
-  const [departmentId, setDepartmentId] = useState('');
-  const [empName, setEmpName] = useState(myName);
-  const [phone, setPhone] = useState(myPhone);
-  const [departmentName, setDepartmentName] = useState(myDeptName);
-  const [formImage, setFormImage] = useState(null);
-  const [userImg, setUserImg] = useState(myImage);
-  const [preview, setPreview] = useState([myImage]);
-  const [checkedAlarm, setCheckedAlarm] = useState(myAlarm);
-  const [editMode, setEditMode] = useState(false);
+
+  const [state, setState] = useState({
+    departmentList: '',
+    departmentId: '',
+    empName: myName,
+    phone: myPhone,
+    departmentName: myDeptName,
+    formImage: null,
+    userImg: myImage,
+    preview: [myImage],
+    checkedAlarm: myAlarm,
+    editMode: false,
+  });
 
   useEffect(() => {
     api.get(QUERY.END_POINT.DEPARTMENT.LIST).then(res => {
       const deptList = res.data.data;
-      const deptId = parseMyDeptId(deptList, departmentName);
-      setDepartmentId(deptId);
-      setDepartmentList(deptList);
+      const deptId = parseMyDeptId(deptList, state.departmentName);
+      setState(state => ({
+        ...state,
+        departmentList: deptList,
+        departmentId: deptId,
+      }));
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -57,14 +63,17 @@ export default function EditMyInfo({ getUserInfo }) {
   const handleChangeDepartmentId = e => {
     const { ko: deptId } = JSON.parse(e.target.value);
     const departmentName = e.target.options[e.target.selectedIndex].innerText;
-    setDepartmentName(departmentName);
-    setDepartmentId(deptId);
+    setState(state => ({
+      ...state,
+      departmentId: deptId,
+      departmentName: departmentName,
+    }));
   };
 
   function handleEmpNameBlur(event) {
     const { value } = event.target;
     const filteredValue = value.replace(/[^a-z|A-Z|ㄱ-ㅎ|가-힣]/g, '');
-    setEmpName(filteredValue);
+    setState(state => ({ ...state, empName: filteredValue }));
   }
 
   function handleChangePhone(event) {
@@ -72,35 +81,34 @@ export default function EditMyInfo({ getUserInfo }) {
     const formattedValue = value
       .replace(/[^0-9]/g, '')
       .replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
-    setPhone(formattedValue);
+    setState(state => ({ ...state, phone: formattedValue }));
   }
 
   const handleLoginInfoAdd = () => {
     const formData = new FormData();
-    const stringToNumPrice = phone.replace(/-/g, '');
+    const stringToNumPrice = state.phone.replace(/-/g, '');
 
-    formData.append('deptId', departmentId);
-    formData.append('empName', empName);
+    formData.append('deptId', state.departmentId);
+    formData.append('empName', state.empName);
     formData.append('phone', stringToNumPrice);
-    formData.append('alarm', checkedAlarm);
-
-    if (formImage) {
-      formData.append('multipartFile', formImage[0]);
+    formData.append('alarm', state.checkedAlarm);
+    if (state.formImage) {
+      formData.append('multipartFile', state.formImage[0]);
     } else {
-      formData.append('image', userImg);
+      formData.append('image', state.userImg);
     }
 
     dispatch(
       setUserInfo({
-        deptName: departmentName,
-        empName: empName,
-        image: preview,
+        deptName: state.departmentName,
+        empName: state.empName,
+        image: state.preview,
       })
     );
 
     api.put(QUERY.END_POINT.USER.EDIT_USER_DATA, formData).then(() => {
       alertModal(true, '정보가 성공적으로 수정되었습니다.', 2);
-      setEditMode(false);
+      setState(state => ({ ...state, editMode: false }));
     });
   };
 
@@ -109,27 +117,28 @@ export default function EditMyInfo({ getUserInfo }) {
   };
 
   const handleDeleteImage = () => {
-    setFormImage([]);
-    setPreview([]);
+    setState(state => ({ ...state, formImage: [], preview: [] }));
   };
 
   const onChangeimge = e => {
     const img = e.target.files[0];
-    setFormImage([img]);
+    console.log(img);
     setPreviewImage(img);
-    setUserImg('');
+    setState(state => ({ ...state, formImage: [img], userImg: '' }));
   };
 
-  const handleChange = event => setCheckedAlarm(event.target.checked);
+  const handleChange = event =>
+    setState(state => ({ ...state, checkedAlarm: event.target.checked }));
 
   const setPreviewImage = img => {
     const reader = new FileReader();
     reader.onloadend = () => {
-      setPreview([reader.result]);
+      setState(state => ({ ...state, preview: [reader.result] }));
     };
     reader.readAsDataURL(img);
   };
 
+  console.log(state.formImage);
   const currentUrl = () => {
     const sliceUrl = document.location.href.split('//')[1].slice(0, 5);
     const href = sliceUrl === 'local';
@@ -144,13 +153,6 @@ export default function EditMyInfo({ getUserInfo }) {
       process.env.REACT_APP_GOOGLE_CLIENT_ID
     }&response_type=code&redirect_uri=${currentUrl()}/delete-user&scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile`;
   };
-
-  const handleEmpNameClear = () => setEmpName('');
-  const handlePhoneClear = () => setPhone('');
-  const showDeleteAccountModal = () => toggleDeleteAccountModal();
-  const showEditPasswordModal = () => toggleEditPasswordModal();
-  const hideDeleteAccountModal = () => toggleDeleteAccountModal(false);
-  const hideEditPasswordModal = () => toggleEditPasswordModal(false);
 
   const pwRegex = /^\d{6}$/;
   const [inputPw, inputPwHandler, alertPw, checkPwRegex, reset] = useRegexInput(
@@ -172,11 +174,21 @@ export default function EditMyInfo({ getUserInfo }) {
       .put(QUERY.END_POINT.USER.CHANGE_PASSWORD, { password: inputPw })
       .then(() => {
         alertModal(true, '2차 비밀번호가 성공적으로 수정되었습니다.', 2);
-        setEditMode(false);
+        setState({ ...state, editMode: false });
         toggleEditPasswordModal(false);
         reset();
       });
   };
+
+  const handleEmpNameClear = () =>
+    setState(state => ({ ...state, empName: '' }));
+  const handlePhoneClear = () => setState(state => ({ ...state, phone: '' }));
+  const showDeleteAccountModal = () => toggleDeleteAccountModal();
+  const showEditPasswordModal = () => toggleEditPasswordModal();
+  const hideEditModal = () =>
+    setState(state => ({ ...state, editMode: !state.editMode }));
+  const hideDeleteAccountModal = () => toggleDeleteAccountModal(false);
+  const hideEditPasswordModal = () => toggleEditPasswordModal(false);
 
   return (
     <>
@@ -185,179 +197,64 @@ export default function EditMyInfo({ getUserInfo }) {
           <styles.AddEquipmentArticle>
             <styles.EquipmentDetailContainer>
               <styles.EquipmentLeftContainer>
-                {/* 이름 */}
-                <styles.TypeBox>
-                  <MyTypeTitle>이름</MyTypeTitle>
-                  {editMode ? (
-                    <MypageInput
-                      type="text"
-                      value={empName}
-                      onChange={handleEmpNameBlur}
-                      placeholder={PLACEHOLDER.ENTER_INPUT('이름을')}
-                      maxLength="15"
-                    />
-                  ) : (
-                    <MyinfoSpan>{empName}</MyinfoSpan>
-                  )}
-                  {editMode && <ClearInputBtn onClick={handleEmpNameClear} />}
-                </styles.TypeBox>
-                {/* 전화번호 */}
-                <styles.TypeBox>
-                  <MyTypeTitle>전화번호</MyTypeTitle>
-                  {editMode ? (
-                    <MypageInput
-                      value={phone}
-                      onChange={handleChangePhone}
-                      placeholder={PLACEHOLDER.ENTER_INPUT('전화번호를')}
-                      maxLength="11"
-                    />
-                  ) : (
-                    <MyinfoSpan>{phone}</MyinfoSpan>
-                  )}
-                  {editMode && <ClearInputBtn onClick={handlePhoneClear} />}
-                </styles.TypeBox>
-                {/* 부서 */}
-                <styles.TypeBox>
-                  <MyTypeTitle>부서</MyTypeTitle>
-                  <styles.PartnerCompany>
-                    {editMode ? (
-                      <styles.SelectBox>
-                        <SelectCategory
-                          category={departmentList}
-                          optionName={'deptName'}
-                          optionNullName={departmentName}
-                          optionKey={'deptName'}
-                          optionValueKey={'deptId'}
-                          onChangeCategory={handleChangeDepartmentId}
-                        />
-                      </styles.SelectBox>
-                    ) : (
-                      <MyinfoSpan>{myDeptName}</MyinfoSpan>
-                    )}
-                  </styles.PartnerCompany>
-                </styles.TypeBox>
-                {/* 알림 */}
-                <styles.TypeBox>
-                  <MyTypeTitle>문자 알림</MyTypeTitle>
-                  {editMode ? (
-                    <CheckBox
-                      role="switch"
-                      checked={checkedAlarm}
-                      onChange={handleChange}
-                      editMode={editMode}
-                    />
-                  ) : (
-                    !editMode && (checkedAlarm ? '활성화' : '비활성화')
-                  )}
-                </styles.TypeBox>
+                <MyPageEmpName
+                  state={state}
+                  handleEmpNameBlur={handleEmpNameBlur}
+                  handleEmpNameClear={handleEmpNameClear}
+                />
+                <MyPagePhone
+                  state={state}
+                  handleChangePhone={handleChangePhone}
+                  handlePhoneClear={handlePhoneClear}
+                />
+                <MypageDept
+                  state={state}
+                  handleChangeDepartmentId={handleChangeDepartmentId}
+                  myDeptName={myDeptName}
+                />
+                <MypageAlarm state={state} handleChange={handleChange} />
               </styles.EquipmentLeftContainer>
               <styles.Hr />
               <ImageAdd
-                preview={preview}
+                preview={state.preview}
                 onChangeimge={onChangeimge}
                 onDeleteImage={handleDeleteImage}
-                editMode={editMode}
+                editMode={state.editMode}
               />
             </styles.EquipmentDetailContainer>
-            <styles.SubminPostContainer>
-              {editMode ? (
-                <>
-                  <Button
-                    type="button"
-                    cancel
-                    onClick={() => setEditMode(false)}
-                  >
-                    취소
-                  </Button>
-                  <Button
-                    type="button"
-                    submit
-                    onClick={handleLoginInfoAdd}
-                    disabled={
-                      !departmentId ||
-                      empName?.length < 2 ||
-                      phone?.length < 11 ||
-                      preview.length < 1
-                    }
-                  >
-                    저장
-                  </Button>
-                </>
-              ) : (
-                <>
-                  <DeleteButton
-                    type="button"
-                    cancel
-                    onClick={showDeleteAccountModal}
-                  >
-                    회원 탈퇴
-                  </DeleteButton>
-
-                  <Button type="button" cancel onClick={showEditPasswordModal}>
-                    2차 비밀번호 변경
-                  </Button>
-                  <CustomModal
-                    width={'26rem'}
-                    isOpen={editPasswordModal}
-                    onClose={hideEditPasswordModal}
-                    text={'완료'}
-                    submit={handleSecondPwEdit}
-                    disabled={
-                      !(departmentId && checkPwRegex && doubleCheckPwRegex) ||
-                      empName.length < 2 ||
-                      phone.replace(/-/g, '').length < 11
-                    }
-                  >
-                    <ChangePwContainer>
-                      <p>2차 비밀번호 변경</p>
-                      <ChangePwBox>
-                        <ChangePw>
-                          <span>새 2차 비밀번호</span>
-                          <Input
-                            value={inputPw}
-                            onChange={inputPwHandler}
-                            singupInput
-                            type="password"
-                            placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}
-                            maxLength={6}
-                          />
-                        </ChangePw>
-                        <LoginAlertSpan isCurrent={checkPwRegex}>
-                          {alertPw}
-                        </LoginAlertSpan>
-                      </ChangePwBox>
-                      <ChangePwBox>
-                        <ChangePw>
-                          <span>새 2차 비밀번호 확인</span>
-
-                          <Input
-                            value={inputCheckPw}
-                            onChange={checkSame}
-                            singupInput
-                            type="password"
-                            placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}
-                            maxLength={6}
-                          />
-                        </ChangePw>
-                        <LoginAlertSpan isCurrent={doubleCheckPwRegex}>
-                          {alertCheckPw}
-                        </LoginAlertSpan>
-                      </ChangePwBox>
-                    </ChangePwContainer>
-                  </CustomModal>
-                  <Button
-                    type="button"
-                    submit
-                    onClick={() => setEditMode(true)}
-                  >
-                    수정
-                  </Button>
-                </>
-              )}
-            </styles.SubminPostContainer>
+            <ProcessBtn
+              state={state}
+              handleLoginInfoAdd={handleLoginInfoAdd}
+              showDeleteAccountModal={showDeleteAccountModal}
+              showEditPasswordModal={showEditPasswordModal}
+              hideEditModal={hideEditModal}
+            />
           </styles.AddEquipmentArticle>
         </styles.AddEquipmentWrapper>
       </AddComponentsContainer>
+      <CustomModal
+        width={'26rem'}
+        isOpen={editPasswordModal}
+        onClose={hideEditPasswordModal}
+        text={'완료'}
+        submit={handleSecondPwEdit}
+        disabled={
+          !(state.departmentId && checkPwRegex && doubleCheckPwRegex) ||
+          state.empName.length < 2 ||
+          state.phone.replace(/-/g, '').length < 11
+        }
+      >
+        <ChangePassword
+          inputPw={inputPw}
+          inputPwHandler={inputPwHandler}
+          checkSame={checkSame}
+          inputCheckPw={inputCheckPw}
+          checkPwRegex={checkPwRegex}
+          doubleCheckPwRegex={doubleCheckPwRegex}
+          alertPw={alertPw}
+          alertCheckPw={alertCheckPw}
+        />
+      </CustomModal>
       <CustomModal
         isOpen={deleteAccountModal}
         onClose={hideDeleteAccountModal}
@@ -387,118 +284,10 @@ const AddComponentsContainer = styled.main`
   }
 `;
 
-const MypageInput = styled(Input)`
-  width: fit-content;
-  height: 2.5rem;
-  background: ${props => props.theme.color.grey.brandColor1};
-  border-radius: 0.5rem;
-`;
-
-const MyTypeTitle = styled(styles.TypeTitle)`
-  width: 4.375rem;
-  margin-right: 2rem;
-  font-weight: 600;
-  color: ${props => props.theme.color.blue.brandColor6};
-`;
-
 const WarningMessageContainer = styled.div`
   ${props => props.theme.FlexCol};
   span:last-child {
     padding-top: 0.5rem;
     color: ${props => props.theme.color.reject};
   }
-`;
-
-const ClearInputBtn = styled(ClearIcon)`
-  position: absolute;
-  right: 1rem;
-  cursor: pointer;
-  transition: opacity 0.1s ease-in;
-  opacity: 0;
-`;
-
-const CheckBox = styled.input.attrs({ type: 'checkbox' })`
-  appearance: none;
-  position: relative;
-  border-radius: 4rem !important;
-  height: 2rem !important;
-  width: 4rem;
-  background: ${props => props.theme.color.grey.brandColor2} !important;
-  cursor: pointer;
-  transition: background 0.15s ease;
-  pointer-events: ${props => (props.editMode ? 'auto' : 'none')};
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0.4rem;
-    width: 1.5em;
-    height: 1.5em;
-    top: 50%;
-    border-radius: 50%;
-    transform: translateY(-50%);
-    background-color: white;
-    transition: left 0.15s linear;
-  }
-
-  &:checked {
-    background: ${props => props.theme.color.blue.brandColor6} !important;
-  }
-
-  &:checked::before {
-    left: 2.6em;
-  }
-`;
-
-const MyinfoSpan = styled.span`
-  width: 11rem;
-`;
-
-const DeleteButton = styled(Button)`
-  border: 0.0625rem solid #e91111;
-  color: #e91111;
-`;
-
-const LoginAlertSpan = styled.div`
-  bottom: -2rem;
-  left: 0.5rem;
-  display: flex;
-  text-align: start;
-  font-size: 0.8rem;
-  padding: 0.2rem;
-  color: ${props => (props.isCurrent ? '#58793e' : 'tomato')};
-`;
-
-const ChangePwContainer = styled.div`
-  ${props => props.theme.FlexCol};
-
-  gap: 0.75rem;
-  p {
-    color: ${props => props.theme.color.blue.brandColor7};
-    font-weight: 600;
-    font-size: 1.125rem;
-    margin: 0 0 2rem;
-  }
-`;
-
-const ChangePwBox = styled.div`
-  justify-content: center;
-  height: 4.6875rem;
-
-  span {
-    color: ${props => props.theme.color.blue.brandColor6};
-    font-weight: 600;
-  }
-  input {
-    margin-left: auto;
-    width: 7.3125rem;
-    height: 2.5625rem;
-    background: ${props => props.theme.color.grey.brandColor1};
-  }
-`;
-
-const ChangePw = styled.div`
-  ${props => props.theme.FlexRow};
-  align-items: center;
-  justify-content: center;
-  height: 3.125rem;
 `;
