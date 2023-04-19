@@ -203,7 +203,7 @@ export default function Login() {
                   setState={checkSame}
                   singupInput
                   type="password"
-                  placeholder={PLACEHOLDER.CHECK_PASSWORD('2')}
+                  placeholder={PLACEHOLDER.CHECK_PASSWORD('2차')}
                   maxLength="6"
                   autoComplete="false"
                 />

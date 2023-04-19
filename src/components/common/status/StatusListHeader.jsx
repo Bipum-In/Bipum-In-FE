@@ -31,7 +31,7 @@ export default function StatusListHeader({
             value={keyword}
             setState={setKeyword}
             placeholder={PLACEHOLDER.ENTER_INPUT(
-              '검색어',
+              '검색어를',
               '(신청자,담당부서 등)'
             )}
           />
