@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 import Input from 'elements/Input';
 import SearchItem from './SearchItem';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function Search({
   search,
@@ -22,8 +23,8 @@ export default function Search({
       </IconContainer>
       <SearchInput
         value={searchValue}
-        setState={onChagneSearch}
-        placeholder="검색어를 입력해 주세요."
+        onChange={onChagneSearch}
+        placeholder={PLACEHOLDER.ENTER_INPUT('검색어를')}
       />
       {searchValue && (
         <SearchList>

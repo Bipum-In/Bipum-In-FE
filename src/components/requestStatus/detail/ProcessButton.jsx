@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Button from 'elements/Button';
 
 export default function ProcessButton({
   requestStatus,
@@ -9,12 +10,18 @@ export default function ProcessButton({
   handleModalShow,
   handleRepairModalShow,
   declineComment,
+  isSelected,
 }) {
   return (
     <ApproveAndRefuse>
       {requestStatus === '처리전' && (
         <>
-          <AcceptBtn onClick={handleAccept}>승인</AcceptBtn>
+          <AcceptBtn
+            onClick={handleAccept}
+            disabled={isSelected.supplyId.length === 0}
+          >
+            승인
+          </AcceptBtn>
           <DeclineBtn
             disabled={declineComment.length < 2}
             onClick={handleDecline}
@@ -52,13 +59,20 @@ const ApproveAndRefuse = styled.div`
   }
 `;
 
-const AcceptBtn = styled.button`
+const AcceptBtn = styled(Button)`
   max-width: 12.625rem;
   width: 100%;
   height: 2.5rem;
   color: white;
-  background-color: ${props => props.theme.color.blue.brandColor6};
-  border: 1px solid ${props => props.theme.color.blue.brandColor6};
+  background: ${props =>
+    props.disabled
+      ? props.theme.color.grey.brandColor3
+      : props.theme.color.blue.brandColor6};
+  border: 1px solid
+    ${props =>
+      props.disabled
+        ? props.theme.color.grey.brandColor3
+        : props.theme.color.blue.brandColor6};
   border-radius: 0.25rem;
   outline: none;
   cursor: pointer;

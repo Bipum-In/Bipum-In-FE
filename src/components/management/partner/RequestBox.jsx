@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import styled, { css } from 'styled-components';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import { ReactComponent as BlackCancel } from 'styles/commonIcon/blackCancel.svg';
 import { getPartnersList } from 'redux/modules/partnersList';
 import { useDispatch } from 'react-redux';
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function RequestBox({ handleModalClose }) {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ export default function RequestBox({ handleModalClose }) {
       address,
     };
     try {
-      const response = await axios.post('/api/partners', data);
+      await api.post('/api/partners', data);
       dispatch(getPartnersList({ page: 1, size: 10 }));
       handleModalClose();
     } catch (error) {}
@@ -44,9 +44,9 @@ export default function RequestBox({ handleModalClose }) {
           </Title>
 
           <Input
-            placeholder="업체명을 입력해 주세요"
+            placeholder={PLACEHOLDER.ENTER_INPUT('업체를')}
             value={companyName}
-            setState={e => setCompanyName(e.target.value)}
+            onChange={e => setCompanyName(e.target.value)}
           />
           {companyName && (
             <CancelInputWrapper onClick={handleNameClear}>
@@ -59,9 +59,9 @@ export default function RequestBox({ handleModalClose }) {
         <Box>
           <Title marginRight="1.3125rem">전화 번호</Title>
           <Input
-            placeholder="전화번호를 입력해 주세요"
+            placeholder={PLACEHOLDER.ENTER_INPUT('전화번호를')}
             value={phoneNumber}
-            setState={e => setPhoneNumber(e.target.value)}
+            onChange={e => setPhoneNumber(e.target.value)}
           />
           {phoneNumber && (
             <CancelInputWrapper onClick={handleNumberClear}>
@@ -74,9 +74,9 @@ export default function RequestBox({ handleModalClose }) {
         <Box>
           <Title marginRight="2.375rem">이메일</Title>
           <Input
-            placeholder="이메일을 입력해 주세요"
+            placeholder={PLACEHOLDER.ENTER_INPUT('이메일을')}
             value={email}
-            setState={e => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
           />
           {email && (
             <CancelInputWrapper onClick={handleEmailClear}>
@@ -89,9 +89,9 @@ export default function RequestBox({ handleModalClose }) {
         <Box>
           <Title marginRight="3.1875rem">주소</Title>
           <Input
-            placeholder="주소를 입력해 주세요"
+            placeholder={PLACEHOLDER.ENTER_INPUT('주소를')}
             value={address}
-            setState={e => setAddress(e.target.value)}
+            onChange={e => setAddress(e.target.value)}
           />
           {address && (
             <CancelInputWrapper onClick={handleAddressClear}>

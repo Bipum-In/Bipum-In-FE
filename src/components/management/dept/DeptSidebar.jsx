@@ -6,9 +6,7 @@ import { useModalState } from 'hooks/useModalState';
 import { ReactComponent as CancelInput } from 'styles/commonIcon/cancelInput.svg';
 import { CustomModal } from 'elements/Modal';
 import Input from 'elements/Input';
-import Axios from 'api/axios';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import { api } from 'api/axios';
 
 const DeptSidebar = ({
   deptList,
@@ -20,12 +18,12 @@ const DeptSidebar = ({
   updateDeptList,
 }) => {
   const handleDeleteDept = deptId =>
-    axios.delete(`/api/dept/${deptId}`).then(response => {
+    api.delete(`/api/dept/${deptId}`).then(response => {
       updateDeptList();
     });
 
   const handleSaveClick = deptId =>
-    axios.put(`/api/dept/${deptId}`, { deptName: editedDeptName }).then(() => {
+    api.put(`/api/dept/${deptId}`, { deptName: editedDeptName }).then(() => {
       updateDeptList();
     });
 
@@ -90,7 +88,7 @@ const DeptSidebar = ({
                 <Input
                   type="text"
                   value={editedDeptName}
-                  setState={e => {
+                  onChange={e => {
                     setEditedDeptName(e.target.value);
                   }}
                 />

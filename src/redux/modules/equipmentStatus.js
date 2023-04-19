@@ -1,22 +1,18 @@
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import NUMBER from 'constants/number';
-import Redux from '../redux';
-import { current } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   equipmentStatus: {
     getEquipment: null,
-    isEquipmentLoading: false,
     isEquipmentError: false,
   },
   equipmentDetail: {
     getDetail: null,
-    isDetailLoading: false,
     isDetailError: false,
   },
   category: {
     getCategory: null,
-    isCategoryLoading: false,
     isCategoryError: false,
   },
   categoryData: {
@@ -28,50 +24,67 @@ const initialState = {
       user: { content: [], lastPage: false },
       repair: { content: [], lastPage: false },
     },
-    isUserLoading: false,
     isUserError: false,
   },
 };
 
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
-
-export const getEquipmentList = Redux.asyncThunk(
+export const getEquipmentList = createAsyncThunk(
   'EQUIPMENT',
-  payload =>
-    axios.get(
-      `/api${payload.path}/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
-    ),
-  response => response.data.data
-);
-
-export const getEquipmentDetail = Redux.asyncThunk(
-  'EQUIPMENT_DETAIL',
-  payload =>
-    axios.get(
-      `/api${payload.path}/supply/${payload.supplyId}?size=${NUMBER.INT.SIX}`
-    ),
-  response => response.data.data
-);
-
-export const getCategoryList = Redux.asyncThunk(
-  'CATEGORY',
-  () => axios.get(`/api/category`),
-  response => {
-    const parseLargeCategory = largeCategory(response);
-    return { largeCategory: parseLargeCategory, category: response.data.data };
+  async (payload, thunkAPI) => {
+    return await api
+      .get(
+        `/api${payload.path}/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
+      )
+      .then(response => thunkAPI.fulfillWithValue(response.data.data))
+      .catch(() => thunkAPI.rejectWithValue());
   }
 );
 
-export const getHistory = Redux.asyncThunk(
+export const getEquipmentDetail = createAsyncThunk(
+  'EQUIPMENT_DETAIL',
+  async (payload, thunkAPI) => {
+    return await api
+      .get(
+        `/api${payload.path}/supply/${payload.supplyId}?size=${NUMBER.INT.SIX}`
+      )
+      .then(response => thunkAPI.fulfillWithValue(response.data.data))
+      .catch(() => thunkAPI.rejectWithValue());
+  }
+);
+
+export const getHistory = createAsyncThunk(
   'HISTORY',
-  payload =>
-    axios.get(
-      `/api/supply/history/${payload.history}/${payload.supplyId}?page=${payload.page}&size=${payload.size}`
-    ),
-  (response, payload) =>
-    payload.history === 'user'
-      ? { user: response.data.data }
-      : { repair: response.data.data }
+  async (payload, thunkAPI) => {
+    try {
+      const response = await api.get(
+        `/api/supply/history/${payload.history}/${payload.supplyId}?page=${payload.page}&size=${payload.size}`
+      );
+      if (payload.history === 'user') {
+        return thunkAPI.fulfillWithValue({ user: response.data.data });
+      }
+      return thunkAPI.fulfillWithValue({ repair: response.data.data });
+    } catch (error) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
+);
+
+export const getCategoryList = createAsyncThunk(
+  'CATEGORY',
+  async (_, thunkAPI) => {
+    try {
+      const response = await api.get(`/api/category`);
+      const parseLargeCategory = largeCategory(response);
+      const data = {
+        largeCategory: parseLargeCategory,
+        category: response.data.data,
+      };
+
+      return thunkAPI.fulfillWithValue(data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue();
+    }
+  }
 );
 
 const largeCategory = response => {
@@ -94,10 +107,69 @@ const largeCategory = response => {
     });
 };
 
-const equipmentStatusSlice = Redux.slice(
-  'Equipment',
+const getEquipmentListExtraReducer = bulider => {
+  bulider.addCase(getEquipmentList.fulfilled, (state, action) => {
+    const { equipmentStatus } = state;
+    equipmentStatus.isEquipmentError = false;
+    equipmentStatus.getEquipment = action.payload;
+  });
+  bulider.addCase(getEquipmentList.rejected, state => {
+    const { equipmentStatus } = state;
+    equipmentStatus.isEquipmentError = true;
+  });
+};
+
+const getEquipmentDetailExtraReducer = bulider => {
+  bulider.addCase(getEquipmentDetail.fulfilled, (state, action) => {
+    const { equipmentDetail } = state;
+    equipmentDetail.isDetailError = false;
+    equipmentDetail.getDetail = action.payload;
+  });
+  bulider.addCase(getEquipmentDetail.rejected, state => {
+    const { equipmentDetail } = state;
+    equipmentDetail.isDetailError = true;
+  });
+};
+
+const getCategoryListExtraReducer = bulider => {
+  bulider.addCase(getCategoryList.fulfilled, (state, action) => {
+    const { category } = state;
+    category.isCategoryError = false;
+    category.getCategory = action.payload;
+  });
+  bulider.addCase(getCategoryList.rejected, state => {
+    const { category } = state;
+    category.isCategoryError = true;
+  });
+};
+
+const getHistoryExtraReducer = bulider => {
+  bulider.addCase(getHistory.fulfilled, (state, action) => {
+    const { supplyHistory } = state;
+    const data = action.payload;
+    const historyKey = Object.keys(data)[0];
+    const parseResponse = {
+      ...supplyHistory.history,
+      [historyKey]: {
+        content: [...supplyHistory.history[historyKey].content].concat(
+          data[historyKey].content
+        ),
+        lastPage: data[historyKey].last,
+      },
+    };
+    supplyHistory.isUserError = false;
+    supplyHistory.history = parseResponse;
+  });
+  bulider.addCase(getHistory.rejected, state => {
+    const { supplyHistory } = state;
+    supplyHistory.isUserError = true;
+  });
+};
+
+const equipmentStatusSlice = createSlice({
+  name: 'Equipment',
   initialState,
-  {
+  reducers: {
     initHistory: (state, _) => {
       state.supplyHistory.history.user = { content: [], lastPage: false };
       state.supplyHistory.history.repair = { content: [], lastPage: false };
@@ -113,7 +185,6 @@ const equipmentStatusSlice = Redux.slice(
     },
     setSmallCategoryData: (state, action) => {
       const { largeCategory, categoryName } = action.payload;
-
       state.category = {
         ...state.category,
         getCategory: {
@@ -130,7 +201,6 @@ const equipmentStatusSlice = Redux.slice(
     },
     editCategoryData: (state, action) => {
       const { largeCategory, categoryName, prevCategory } = action.payload;
-
       state.category = {
         ...state.category,
         getCategory: {
@@ -144,53 +214,13 @@ const equipmentStatusSlice = Redux.slice(
       };
     },
   },
-  bulider => {
-    Redux.extraReducer(
-      bulider,
-      getEquipmentList,
-      'equipmentStatus',
-      'isEquipmentLoading',
-      'getEquipment',
-      'isEquipmentError'
-    );
-    Redux.extraReducer(
-      bulider,
-      getEquipmentDetail,
-      'equipmentDetail',
-      'isDetailLoading',
-      'getDetail',
-      'isDetailError'
-    );
-    Redux.extraReducer(
-      bulider,
-      getCategoryList,
-      'category',
-      'isCategoryLoading',
-      'getCategory',
-      'isCategoryError'
-    );
-    Redux.extraReducer(
-      bulider,
-      getHistory,
-      'supplyHistory',
-      'isUserLoading',
-      'history',
-      'isUserError',
-      (state, payload) => {
-        const historyKey = Object.keys(payload)[0];
-        return {
-          ...state,
-          [historyKey]: {
-            content: [...state[historyKey].content].concat(
-              payload[historyKey].content
-            ),
-            lastPage: payload[historyKey].last,
-          },
-        };
-      }
-    );
-  }
-);
+  extraReducers: bulider => {
+    getEquipmentListExtraReducer(bulider);
+    getEquipmentDetailExtraReducer(bulider);
+    getCategoryListExtraReducer(bulider);
+    getHistoryExtraReducer(bulider);
+  },
+});
 
 export const {
   initHistory,

@@ -3,12 +3,14 @@ import { v4 as uuidv4 } from 'uuid';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 import ModalImgCarousel from './ModalImgCarousel';
 import { styles } from 'components/common/commonStyled';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function Provide({
   image,
   comment,
   stockList,
   requestType,
+  acceptResult,
   requestStatus,
   declineComment,
   setDeclineComment,
@@ -16,12 +18,12 @@ export default function Provide({
 }) {
   return (
     <ProvideContainer>
-      {stockList && requestType === '비품 요청' ? (
+      {!acceptResult && requestType === '비품 요청' ? (
         <ProvideEquipment>
           <span>제공할 비품</span>
           <SelectWrapper>
             <Select onChange={handleChangeSelect}>
-              {stockList.lenght !== 0 ? (
+              {stockList.length ? (
                 <option value="">선택</option>
               ) : (
                 <option value="">재고가 없습니다</option>
@@ -51,7 +53,7 @@ export default function Provide({
           <TextArea
             value={declineComment}
             onChange={e => setDeclineComment(e.target.value)}
-            placeholder="100글자 이내로 메시지를 남겨주세요."
+            placeholder={PLACEHOLDER.lEAVE_TO_MESSAGE_LENGTH(100)}
             maxLength={100}
           />
           <styles.TextLength>{declineComment.length}/100</styles.TextLength>

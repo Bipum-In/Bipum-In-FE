@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
-export default function Input({ inputRef, value, setState, ...props }) {
+export default function Input({ inputRef, value, onChange, ...props }) {
   return (
-    <InputStyle {...props} ref={inputRef} value={value} onChange={setState} />
+    <InputStyle {...props} ref={inputRef} value={value} onChange={onChange} />
   );
 }
 

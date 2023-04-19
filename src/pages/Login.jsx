@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { styles } from 'components/common/commonStyled';
 import { rendingStyles } from 'components/rending/pages/RendingPageStyled';
 
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import ROUTER from 'constants/routerConst';
 import QUERY from 'constants/query';
 import Storage from 'utils/localStorage';
@@ -19,8 +19,7 @@ import KakaoUserInfo from 'styles/rendingIcon/kakaoUserInfo.svg';
 import { ReactComponent as Logo } from 'styles/logo.svg';
 import { getEncryptionStorage } from '../utils/encryptionStorage';
 import STRING from 'constants/string';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function Login() {
   const { search } = useLocation();
@@ -63,7 +62,7 @@ export default function Login() {
 
       if (code && !checkCode) {
         try {
-          const response = await axios.post(
+          const response = await api.post(
             `/api/user/login/google?code=${code}&urlType=${currentUrl}`
           );
           const userInfo = response.data.data;
@@ -77,7 +76,7 @@ export default function Login() {
           setWriteUser(checkUser);
           setCheckCode(true);
 
-          const deptResponse = await axios.get(`/api/dept`);
+          const deptResponse = await api.get(`/api/dept`);
           setDepartmentList(deptResponse.data.data);
         } catch (error) {
           console.error(error);
@@ -112,7 +111,7 @@ export default function Login() {
       })
     );
 
-    axios
+    api
       .post(`/api/user/loginadd`, loginadd)
       .then(res => setWriteUser(res.data.data));
   };
@@ -166,8 +165,8 @@ export default function Login() {
                 <Input
                   type="text"
                   value={empName}
-                  setState={handleEmpNameBlur}
-                  placeholder="이름을 입력해주세요"
+                  onChange={handleEmpNameBlur}
+                  placeholder={PLACEHOLDER.ENTER_INPUT('이름을')}
                 />
               </styles.TypeBox>
 
@@ -175,8 +174,8 @@ export default function Login() {
                 <TypeTitles requiredinput="true">핸드폰 번호</TypeTitles>
                 <Input
                   value={phone}
-                  setState={handleChangePhone}
-                  placeholder="번호를 입력해 주세요"
+                  onChange={handleChangePhone}
+                  placeholder={PLACEHOLDER.ENTER_INPUT('번호를')}
                   maxLength="11"
                   autoComplete="false"
                 />
@@ -185,10 +184,10 @@ export default function Login() {
                 <TypeTitles requiredinput="true">비밀번호</TypeTitles>
                 <Input
                   value={inputPw}
-                  setState={inputPwHandler}
+                  onChange={inputPwHandler}
                   singupInput
                   type="password"
-                  placeholder="2차 비밀번호를 입력해주세요"
+                  placeholder={PLACEHOLDER.ENTER_INPUT('2차 비밀번호를')}
                   maxLength="6"
                   autoComplete="false"
                 />
@@ -201,10 +200,10 @@ export default function Login() {
                 <TypeTitles requiredinput="true">비밀번호 확인</TypeTitles>
                 <Input
                   value={inputCheckPw}
-                  setState={checkSame}
+                  onChange={checkSame}
                   singupInput
                   type="password"
-                  placeholder="2차 비밀번호 확인"
+                  placeholder={PLACEHOLDER.CHECK_PASSWORD('2차')}
                   maxLength="6"
                   autoComplete="false"
                 />

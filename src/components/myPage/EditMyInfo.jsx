@@ -5,7 +5,7 @@ import { ReactComponent as ClearIcon } from 'styles/commonIcon/cancelInput.svg';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
 
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from 'redux/modules/userInfoSlice';
 
@@ -17,8 +17,7 @@ import useRegexInput from 'hooks/useRegexInput';
 import ImageAdd from 'components/equipmentAdd/single/ImageAdd';
 import SelectCategory from 'components/common/SelectCategory';
 import { styles } from 'components/common/commonStyled';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function EditMyInfo({ getUserInfo }) {
   const {
@@ -45,7 +44,7 @@ export default function EditMyInfo({ getUserInfo }) {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    axios.get(`/api/dept`).then(res => {
+    api.get(`/api/dept`).then(res => {
       const deptList = res.data.data;
       const deptId = parseMyDeptId(deptList, departmentName);
       setDepartmentId(deptId);
@@ -98,7 +97,7 @@ export default function EditMyInfo({ getUserInfo }) {
       })
     );
 
-    axios
+    api
       .put(`/api/user`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -174,7 +173,7 @@ export default function EditMyInfo({ getUserInfo }) {
     );
 
   const handleSecondPwEdit = () => {
-    axios.put(`/api/user/password`, { password: inputPw }).then(() => {
+    api.put(`/api/user/password`, { password: inputPw }).then(() => {
       alertModal(true, '2차 비밀번호가 성공적으로 수정되었습니다.', 2);
       setEditMode(false);
       toggleEditPasswordModal(false);
@@ -196,8 +195,8 @@ export default function EditMyInfo({ getUserInfo }) {
                     <MypageInput
                       type="text"
                       value={empName}
-                      setState={handleEmpNameBlur}
-                      placeholder="이름을 입력해주세요"
+                      onChange={handleEmpNameBlur}
+                      placeholder={PLACEHOLDER.ENTER_INPUT('이름을')}
                       maxLength="15"
                     />
                   ) : (
@@ -211,8 +210,8 @@ export default function EditMyInfo({ getUserInfo }) {
                   {editMode ? (
                     <MypageInput
                       value={phone}
-                      setState={handleChangePhone}
-                      placeholder="번호를 입력해 주세요"
+                      onChange={handleChangePhone}
+                      placeholder={PLACEHOLDER.ENTER_INPUT('전화번호를')}
                       maxLength="11"
                     />
                   ) : (
@@ -319,10 +318,10 @@ export default function EditMyInfo({ getUserInfo }) {
                           <span>새 2차 비밀번호</span>
                           <Input
                             value={inputPw}
-                            setState={inputPwHandler}
+                            onChange={inputPwHandler}
                             singupInput
                             type="password"
-                            placeholder="6자리 비밀번호"
+                            placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}
                             maxLength={6}
                           />
                         </ChangePw>
@@ -336,10 +335,10 @@ export default function EditMyInfo({ getUserInfo }) {
 
                           <Input
                             value={inputCheckPw}
-                            setState={checkSame}
+                            onChange={checkSame}
                             singupInput
                             type="password"
-                            placeholder="6자리 비밀번호"
+                            placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}
                             maxLength={6}
                           />
                         </ChangePw>

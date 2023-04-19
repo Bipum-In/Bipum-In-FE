@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 
 import ModalHeader from '../common/ModalHeader';
 import Provide from './detail/Provide';
@@ -11,8 +11,6 @@ import CreatedAtFormatDate from './detail/CreatedAtFormatDate';
 
 import { CustomModal } from 'elements/Modal';
 import { useModalState } from 'hooks/useModalState';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function RequestDetail({ isClose, detail }) {
   const {
@@ -36,43 +34,43 @@ export default function RequestDetail({ isClose, detail }) {
     modifiedAt,
     useType,
   } = detail;
-
-  const [stockList, setStockList] = useState({ data: null, check: false });
   const [declineComment, setDeclineComment] = useState('');
-
-  const [disposeModal, setDisposeModal] = useModalState();
-  const [repairModal, setRepairModal] = useModalState();
-
-  const data = useRef({
+  const [stockList, setStockList] = useState({ data: [], check: false });
+  const [requestData, setRequestData] = useState({
     acceptResult: '',
     supplyId: '',
     comment: '',
-  }).current;
+  });
+  const [disposeModal, setDisposeModal] = useModalState();
+  const [repairModal, setRepairModal] = useModalState();
 
   useEffect(() => {
     if (requestType === '비품 요청' && requestStatus === '처리전') {
-      axios
+      api
         .get(`/api/supply/stock/${categoryId}`)
         .then(res => setStockList({ data: res.data.data, check: true }));
     } else {
-      setStockList({ data: null, check: true });
+      setStockList({ data: [], check: true });
     }
   }, [categoryId, requestStatus, requestType]);
 
   const handleChangeSelect = e => {
     const { value } = e.target;
-    data.supplyId = value;
+    setRequestData(state => ({ ...state, supplyId: value }));
   };
 
   const handleAccept = () => {
-    if (data.supplyId === 0 && requestType === '비품 요청') {
+    if (requestData.supplyId === 0 && requestType === '비품 요청') {
       alert('비품을 선택해주세요.');
       return;
     }
 
-    data.acceptResult = 'ACCEPT';
-    data.comment = declineComment;
-    putRequest(data);
+    setRequestData(state => ({
+      ...state,
+      acceptResult: 'ACCEPT',
+      comment: declineComment,
+    }));
+    putRequest(requestData);
   };
 
   const handleDecline = () => {
@@ -81,23 +79,26 @@ export default function RequestDetail({ isClose, detail }) {
       return;
     }
 
-    data.acceptResult = 'DECLINE';
-    data.comment = declineComment;
-    putRequest(data);
+    setRequestData(state => ({
+      ...state,
+      acceptResult: 'DECLINE',
+      comment: declineComment,
+    }));
+    putRequest(requestData);
   };
 
   const handleDispose = () => {
-    data.acceptResult = 'DISPOSE';
-    putRequest(data);
+    setRequestData(state => ({ ...state, acceptResult: 'DISPOSE' }));
+    putRequest(requestData);
   };
 
   const handleRepairComplete = () => {
-    data.acceptResult = 'ACCEPT';
-    putRequest(data);
+    setRequestData(state => ({ ...state, acceptResult: 'ACCEPT' }));
+    putRequest(requestData);
   };
 
   const putRequest = data => {
-    axios.put(`/api/admin/requests/${requestId}`, data).then(() => isClose());
+    api.put(`/api/admin/requests/${requestId}`, data).then(() => isClose());
   };
 
   const handleModalShow = () => setDisposeModal();
@@ -128,15 +129,16 @@ export default function RequestDetail({ isClose, detail }) {
                 serialNum={serialNum}
                 modelName={modelName}
                 requestType={requestType}
+                acceptResult={acceptResult}
                 categoryName={categoryName}
                 requestStatus={requestStatus}
               />
-
               <Provide
                 image={imageList}
                 comment={comment}
                 stockList={stockList.data}
                 requestType={requestType}
+                acceptResult={acceptResult}
                 requestStatus={requestStatus}
                 declineComment={declineComment}
                 setDeclineComment={setDeclineComment}
@@ -166,6 +168,7 @@ export default function RequestDetail({ isClose, detail }) {
             수리가 완료된 비품입니까?
           </CustomModal>
           <ProcessButton
+            isSelected={requestData}
             declineComment={declineComment}
             requestType={requestType}
             requestStatus={requestStatus}

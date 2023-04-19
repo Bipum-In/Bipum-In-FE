@@ -1,11 +1,9 @@
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 import ROUTER from 'constants/routerConst';
 import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import alertModal, { alertModalButton } from 'utils/alertModal';
 import logout from 'utils/logout';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function DeleteUserPage() {
   const { search } = useLocation();
@@ -19,7 +17,7 @@ export default function DeleteUserPage() {
 
   const fetchDeleteUser = async (code, urlType) => {
     try {
-      await axios.post(`/api/user/delete?code=${code}&urlType=${urlType}`);
+      await api.post(`/api/user/delete?code=${code}&urlType=${urlType}`);
       logout();
 
       alertModalButton(true, '회원 탈퇴 완료', () => {

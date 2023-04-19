@@ -4,9 +4,7 @@ import styled from 'styled-components';
 import STRING from 'constants/string';
 import useSelectMenu from 'hooks/useSelectMenu';
 import ManageCategory from './category/ManageCategory';
-import Axios from 'api/axios';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import { api } from 'api/axios';
 
 export default function CategoryManagement({
   category: { category, largeCategory },
@@ -44,7 +42,7 @@ export default function CategoryManagement({
   };
 
   const handleDeleteCategory = categoryId => {
-    axios.delete(`/api/category/${categoryId}`).then(response => {
+    api.delete(`/api/category/${categoryId}`).then(response => {
       const filteredList = categoryList.list.filter(
         item => item.categoryId !== categoryId
       );

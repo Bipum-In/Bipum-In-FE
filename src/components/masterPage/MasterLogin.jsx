@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Button from 'elements/Button';
 
 import Input from 'elements/Input';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function MasterLogin({ state, onchange, onclick }) {
   return (
@@ -13,21 +14,21 @@ export default function MasterLogin({ state, onchange, onclick }) {
           <LoginInputBox>
             <LoginTitle>아이디</LoginTitle>
             <LoginInput
-              placeholder="아이디를 입력해주세요"
+              placeholder={PLACEHOLDER.ENTER_INPUT('아이디를')}
               maxLength="15"
               name="username"
               value={state.username}
-              setState={onchange}
+              onChange={onchange}
             />
           </LoginInputBox>
           <LoginInputBox>
             <LoginTitle>비밀번호</LoginTitle>
             <LoginInput
-              placeholder="비밀번호를 입력해주세요"
+              placeholder={PLACEHOLDER.ENTER_INPUT('비밀번호를')}
               type="password"
               name="password"
               value={state.password}
-              setState={onchange}
+              onChange={onchange}
               autocomplete="off"
               maxLength="15"
             />

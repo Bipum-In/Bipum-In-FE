@@ -1,37 +1,28 @@
-import Axios from 'api/axios';
-import Redux from '../redux';
+import { api } from 'api/axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  partnersList: {
-    getPartners: null,
-    isPartnersLoading: false,
-    isPartnersError: false,
-  },
+  getPartners: null,
 };
 
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
-
-export const getPartnersList = Redux.asyncThunk(
+export const getPartnersList = createAsyncThunk(
   'PARTNERS',
-  payload =>
-    axios.get(`/api/partners/admin?page=${payload.page}&size=${payload.size}`),
-  response => response.data.data
-);
-
-const partnersListSlice = Redux.slice(
-  'getPartners',
-  initialState,
-  {},
-  bulider => {
-    Redux.extraReducer(
-      bulider,
-      getPartnersList,
-      'partnersList',
-      'isPartnersLoading',
-      'getPartners',
-      'isPartnersError'
-    );
+  async (payload, thunkAPI) => {
+    return await api
+      .get(`/api/partners/admin?page=${payload.page}&size=${payload.size}`)
+      .then(response => thunkAPI.fulfillWithValue(response.data.data));
   }
 );
+
+const partnersListSlice = createSlice({
+  name: 'getPartners',
+  initialState,
+  reducers: {},
+  extraReducers: bulider => {
+    bulider.addCase(getPartnersList.fulfilled, (state, action) => {
+      state.getPartners = action.payload;
+    });
+  },
+});
 
 export default partnersListSlice.reducer;

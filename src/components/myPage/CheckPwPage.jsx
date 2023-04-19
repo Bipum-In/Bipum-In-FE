@@ -8,19 +8,22 @@ import { styles } from 'components/common/commonStyled';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
 import alertModal from 'utils/alertModal';
+import ScreenViewLoading from 'components/common/ScreenViewLoading';
+import { CustomModal } from 'elements/Modal';
+import { useModalState } from 'hooks/useModalState';
 
-import Axios from 'api/axios';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
+import { api } from 'api/axios';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function CheckPwPage({ setEditPage }) {
-  const moveEditMyInfo = () => setEditPage('');
-
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [forgotPwModal, setForgotPwModal] = useModalState(false);
 
+  const moveEditMyInfo = () => setEditPage('');
   const handleCheckPw = e => {
     e.preventDefault();
-    axios.post('/api/user/check', { password }).then(res => {
+    api.post('/api/user/check', { password }).then(res => {
       if (res.data.data === true) {
         moveEditMyInfo();
       } else {
@@ -28,6 +31,20 @@ export default function CheckPwPage({ setEditPage }) {
         setPassword('');
       }
     });
+  };
+
+  const handleTemporaryPassword = () => {
+    setForgotPwModal(false);
+    setIsLoading(true);
+    api
+      .post('/api/user/password', '', 5)
+      .then(() => {
+        alertModal(true, '임시 비밀번호가 발송되었습니다.', 2);
+      })
+      .catch(() => {
+        alertModal(false, '임시 비밀번호 발송에 실패했습니다.', 2);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   return (
@@ -40,15 +57,34 @@ export default function CheckPwPage({ setEditPage }) {
               <TypeTitles requiredinput="true">2차 비밀번호</TypeTitles>
               <Input
                 value={password}
-                setState={e => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 singupInput
                 type="password"
-                placeholder="6자리 비밀번호"
+                placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}
                 maxLength={6}
                 autoComplete="off"
               />
             </styles.TypeBox>
           </SetUserInputContainer>
+          <ForgotPassword>
+            <span>비밀번호를 잊으셨나요?</span>
+            <Button type="button" onClick={() => setForgotPwModal(true)}>
+              비밀번호 찾기
+            </Button>
+          </ForgotPassword>
+          <CustomModal
+            isOpen={forgotPwModal}
+            onClose={() => setForgotPwModal(false)}
+            submit={handleTemporaryPassword}
+            text={'발송'}
+          >
+            <PwModalDetail>
+              <Logo />
+              비밀번호 재설정을 위해 비품인에 가입된 이메일로
+              <br />
+              비밀번호가 전송됩니다.
+            </PwModalDetail>
+          </CustomModal>
           <SetUserSubmitContainer>
             <Button
               submit
@@ -60,6 +96,7 @@ export default function CheckPwPage({ setEditPage }) {
           </SetUserSubmitContainer>
         </SetUserInfo>
       </LoginWrapper>
+      <ScreenViewLoading isLoading={isLoading} lazyTime={1} center="true" />
     </>
   );
 }
@@ -115,4 +152,22 @@ const SetUserSubmitContainer = styled.div`
     width: 5.25rem;
     font-weight: bold;
   }
+`;
+
+const ForgotPassword = styled.div`
+  ${props => props.theme.FlexRow};
+  ${props => props.theme.FlexCenter};
+  gap: 1rem;
+  button {
+    font-size: 1rem;
+    color: ${props => props.theme.color.blue.brandColor6};
+    font-weight: 600;
+  }
+`;
+
+const PwModalDetail = styled.div`
+  ${props => props.theme.FlexCol};
+  ${props => props.theme.FlexCenter};
+  gap: 2rem;
+  line-height: 2;
 `;

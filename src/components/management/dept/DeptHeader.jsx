@@ -8,6 +8,7 @@ import { ReactComponent as CancelInput } from 'styles/commonIcon/cancelInput.svg
 import { getEncryptionStorage } from 'utils/encryptionStorage';
 import { useModalState } from 'hooks/useModalState';
 import { CustomModal } from 'elements/Modal';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function DeptHeader({
   setSelectName,
@@ -25,11 +26,16 @@ export default function DeptHeader({
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
-    const filteredList = employeeList.filter(employee =>
-      employee.empName.includes(keyword)
-    );
+    const filteredList = employeeList.filter(employee => {
+      const values = Object.values(employee).map(value =>
+        String(value).toLowerCase()
+      );
+
+      const keywordLowerCase = keyword.toLowerCase();
+      return values.some(value => value.includes(keywordLowerCase));
+    });
     setFilteredEmployeeList(filteredList);
-  }, [employeeList, keyword]);
+  }, [employeeList, keyword, setFilteredEmployeeList]);
 
   return (
     <RequestShowTitle ref={containerHeaderRef}>
@@ -47,8 +53,11 @@ export default function DeptHeader({
           </SearchIconContainer>
           <Input
             value={keyword}
-            setState={handleChangeKeyword}
-            placeholder="검색어를 입력해주세요 (이름, 전화번호 등)"
+            onChange={handleChangeKeyword}
+            placeholder={PLACEHOLDER.ENTER_INPUT(
+              '검색어를',
+              '(이름, 전화번호 등)'
+            )}
           />
         </SearchContainer>
 
@@ -73,8 +82,8 @@ export default function DeptHeader({
               <Input
                 type="text"
                 value={deptName}
-                setState={e => setDeptName(e.target.value)}
-                placeholder="부서명을 입력해 주세요"
+                onChange={e => setDeptName(e.target.value)}
+                placeholder={PLACEHOLDER.ENTER_INPUT('부서를')}
               />
               {deptName && (
                 <CancelInputWrapper onClick={handleDeptClear}>

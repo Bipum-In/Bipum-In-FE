@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Axios from 'api/axios';
+import { api } from 'api/axios';
 
 import ModalHeader from '../common/ModalHeader';
 import Button from 'elements/Button';
@@ -13,8 +13,6 @@ import UserPutButton from './ userDetail/UserPutButton';
 import RequestImgDetail from './detail/RequestImgDetail';
 import UserRequestItem from './ userDetail/UserRequestItem';
 import { ImgDetailModal } from 'elements/ImgModal';
-
-const axios = new Axios(process.env.REACT_APP_SERVER_URL);
 
 export default function UserRequestDetail({ detail, isClose, isAdmin }) {
   const {
@@ -55,7 +53,7 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
     setEditMode(prev => !prev);
   };
   const deletRequest = () =>
-    axios.delete(`/api/requests/${requestId}`).then(() => isClose());
+    api.delete(`/api/requests/${requestId}`).then(() => isClose());
 
   const handleChangeimg = e => {
     const img = [...e.target.files];
@@ -99,7 +97,7 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
       }
     }
 
-    axios
+    api
       .put(`/api/requests/${requestId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
