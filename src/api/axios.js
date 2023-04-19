@@ -34,7 +34,7 @@ const responseInterceptorError = async (error, instance) => {
   }
 
   const errorMessage = error.response?.data?.errorMessage;
-  errorMessage && alertModal(false, errorMessage, 2);
+  errorMessage && alertModal(false, errorMessage, 3);
   config.message = null;
   return Promise.reject(error);
 };
