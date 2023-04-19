@@ -21,7 +21,7 @@ export default function Provide({
           <span>제공할 비품</span>
           <SelectWrapper>
             <Select onChange={handleChangeSelect}>
-              {stockList.lenght !== 0 ? (
+              {stockList.length ? (
                 <option value="">선택</option>
               ) : (
                 <option value="">재고가 없습니다</option>
