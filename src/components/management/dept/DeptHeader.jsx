@@ -8,6 +8,7 @@ import { ReactComponent as CancelInput } from 'styles/commonIcon/cancelInput.svg
 import { getEncryptionStorage } from 'utils/encryptionStorage';
 import { useModalState } from 'hooks/useModalState';
 import { CustomModal } from 'elements/Modal';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function DeptHeader({
   setSelectName,
@@ -53,7 +54,10 @@ export default function DeptHeader({
           <Input
             value={keyword}
             setState={handleChangeKeyword}
-            placeholder="검색어를 입력해주세요 (이름, 전화번호 등)"
+            placeholder={PLACEHOLDER.ENTER_INPUT(
+              '검색어를',
+              '(이름, 전화번호 등)'
+            )}
           />
         </SearchContainer>
 
@@ -79,7 +83,7 @@ export default function DeptHeader({
                 type="text"
                 value={deptName}
                 setState={e => setDeptName(e.target.value)}
-                placeholder="부서명을 입력해 주세요"
+                placeholder={PLACEHOLDER.ENTER_INPUT('부서를')}
               />
               {deptName && (
                 <CancelInputWrapper onClick={handleDeptClear}>

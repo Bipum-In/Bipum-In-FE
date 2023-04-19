@@ -6,6 +6,7 @@ import { api } from 'api/axios';
 import { ReactComponent as BlackCancel } from 'styles/commonIcon/blackCancel.svg';
 import { getPartnersList } from 'redux/modules/partnersList';
 import { useDispatch } from 'react-redux';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function RequestBox({ handleModalClose }) {
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ export default function RequestBox({ handleModalClose }) {
           </Title>
 
           <Input
-            placeholder="업체명을 입력해 주세요"
+            placeholder={PLACEHOLDER.ENTER_INPUT('업체를')}
             value={companyName}
             setState={e => setCompanyName(e.target.value)}
           />
@@ -58,7 +59,7 @@ export default function RequestBox({ handleModalClose }) {
         <Box>
           <Title marginRight="1.3125rem">전화 번호</Title>
           <Input
-            placeholder="전화번호를 입력해 주세요"
+            placeholder={PLACEHOLDER.ENTER_INPUT('전화번호를')}
             value={phoneNumber}
             setState={e => setPhoneNumber(e.target.value)}
           />
@@ -73,7 +74,7 @@ export default function RequestBox({ handleModalClose }) {
         <Box>
           <Title marginRight="2.375rem">이메일</Title>
           <Input
-            placeholder="이메일을 입력해 주세요"
+            placeholder={PLACEHOLDER.ENTER_INPUT('이메일을')}
             value={email}
             setState={e => setEmail(e.target.value)}
           />
@@ -88,7 +89,7 @@ export default function RequestBox({ handleModalClose }) {
         <Box>
           <Title marginRight="3.1875rem">주소</Title>
           <Input
-            placeholder="주소를 입력해 주세요"
+            placeholder={PLACEHOLDER.ENTER_INPUT('주소를')}
             value={address}
             setState={e => setAddress(e.target.value)}
           />

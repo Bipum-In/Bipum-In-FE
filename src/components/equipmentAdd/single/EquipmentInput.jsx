@@ -5,6 +5,7 @@ import Input from 'elements/Input';
 import Button from 'elements/Button';
 
 import { ReactComponent as AddImgIcon } from 'styles/commonIcon/addImg.svg';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function EquipmentInput({ value, setValue, onCrawling }) {
   return (
@@ -16,7 +17,7 @@ export default function EquipmentInput({ value, setValue, onCrawling }) {
           value={value[0]}
           setState={setValue[0]}
           maxLength="30"
-          placeholder="제품명을 기입해주세요"
+          placeholder={PLACEHOLDER.ENTER_INPUT('제품명을')}
         />
         <Button
           submit
@@ -33,7 +34,8 @@ export default function EquipmentInput({ value, setValue, onCrawling }) {
         <Input
           value={value[1]}
           setState={setValue[1]}
-          placeholder="시리얼넘버를 기입해주세요"
+          placeholder={PLACEHOLDER.ENTER_INPUT('시리얼 넘버를')}
+          maxLength="30"
         />
       </TypeBox>
     </>

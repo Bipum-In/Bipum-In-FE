@@ -7,6 +7,7 @@ import Button from 'elements/Button';
 import { ReactComponent as WhiteAdd } from 'styles/commonIcon/whiteAdd.svg';
 import { PatnerModal } from 'components/management/partner/AddPartnerModal';
 import { useModalState } from 'hooks/useModalState';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function PartnerHeader({
   setSelectName,
@@ -30,7 +31,7 @@ export default function PartnerHeader({
           <Input
             value={keyword}
             setState={setKeyword}
-            placeholder="검색어를 입력해주세요 (업체 등)"
+            placeholder={PLACEHOLDER.ENTER_INPUT('검색어를', '(업체 등)')}
           />
         </SearchContainer>
 

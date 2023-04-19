@@ -20,6 +20,7 @@ import {
   getCategoryList,
 } from 'redux/modules/equipmentStatus';
 import ManageSidebar from './ManageSidebar';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function ManageCategory({
   activeCategory,
@@ -185,7 +186,7 @@ export default function ManageCategory({
                     <Input
                       value={newCategory}
                       setState={e => setNewCategory(e.target.value)}
-                      placeholder="소분류명을 입력해 주세요"
+                      placeholder={PLACEHOLDER.ENTER_INPUT('소분류를')}
                       type="text"
                     />
                     {newCategory && (

@@ -34,7 +34,6 @@ export default function RequestDetail({ isClose, detail }) {
     modifiedAt,
     useType,
   } = detail;
-
   const [declineComment, setDeclineComment] = useState('');
   const [stockList, setStockList] = useState({ data: [], check: false });
   const [requestData, setRequestData] = useState({
@@ -130,15 +129,16 @@ export default function RequestDetail({ isClose, detail }) {
                 serialNum={serialNum}
                 modelName={modelName}
                 requestType={requestType}
+                acceptResult={acceptResult}
                 categoryName={categoryName}
                 requestStatus={requestStatus}
               />
-
               <Provide
                 image={imageList}
                 comment={comment}
                 stockList={stockList.data}
                 requestType={requestType}
+                acceptResult={acceptResult}
                 requestStatus={requestStatus}
                 declineComment={declineComment}
                 setDeclineComment={setDeclineComment}

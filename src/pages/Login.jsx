@@ -19,6 +19,7 @@ import KakaoUserInfo from 'styles/rendingIcon/kakaoUserInfo.svg';
 import { ReactComponent as Logo } from 'styles/logo.svg';
 import { getEncryptionStorage } from '../utils/encryptionStorage';
 import STRING from 'constants/string';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function Login() {
   const { search } = useLocation();
@@ -165,7 +166,7 @@ export default function Login() {
                   type="text"
                   value={empName}
                   setState={handleEmpNameBlur}
-                  placeholder="이름을 입력해주세요"
+                  placeholder={PLACEHOLDER.ENTER_INPUT('이름을')}
                 />
               </styles.TypeBox>
 
@@ -174,7 +175,7 @@ export default function Login() {
                 <Input
                   value={phone}
                   setState={handleChangePhone}
-                  placeholder="번호를 입력해 주세요"
+                  placeholder={PLACEHOLDER.ENTER_INPUT('번호를')}
                   maxLength="11"
                   autoComplete="false"
                 />
@@ -186,7 +187,7 @@ export default function Login() {
                   setState={inputPwHandler}
                   singupInput
                   type="password"
-                  placeholder="2차 비밀번호를 입력해주세요"
+                  placeholder={PLACEHOLDER.ENTER_INPUT('2차 비밀번호를')}
                   maxLength="6"
                   autoComplete="false"
                 />
@@ -202,7 +203,7 @@ export default function Login() {
                   setState={checkSame}
                   singupInput
                   type="password"
-                  placeholder="2차 비밀번호 확인"
+                  placeholder={PLACEHOLDER.CHECK_PASSWORD('2차')}
                   maxLength="6"
                   autoComplete="false"
                 />

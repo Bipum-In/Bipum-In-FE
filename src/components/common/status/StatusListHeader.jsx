@@ -4,6 +4,7 @@ import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function StatusListHeader({
   setSelectName,
@@ -29,7 +30,10 @@ export default function StatusListHeader({
           <Input
             value={keyword}
             setState={setKeyword}
-            placeholder="검색어를 입력해주세요 (신청자,담당부서 등)"
+            placeholder={PLACEHOLDER.ENTER_INPUT(
+              '검색어를',
+              '(신청자,담당부서 등)'
+            )}
           />
         </SearchContainer>
         {setStatus && (
