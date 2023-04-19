@@ -106,7 +106,7 @@ export default function ManageCategory({
                       <InputWrapper>
                         <Input
                           value={editingCategoryName}
-                          setState={handleEditInputChange}
+                          onChange={handleEditInputChange}
                           type="text"
                         />
                         {editingCategoryName && (
@@ -185,7 +185,7 @@ export default function ManageCategory({
                   <InputWrapper>
                     <Input
                       value={newCategory}
-                      setState={e => setNewCategory(e.target.value)}
+                      onChange={e => setNewCategory(e.target.value)}
                       placeholder={PLACEHOLDER.ENTER_INPUT('소분류를')}
                       type="text"
                     />

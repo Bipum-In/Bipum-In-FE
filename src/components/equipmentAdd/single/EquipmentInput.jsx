@@ -15,7 +15,7 @@ export default function EquipmentInput({ value, setValue, onCrawling }) {
         <Input
           type="text"
           value={value[0]}
-          setState={setValue[0]}
+          onChange={setValue[0]}
           maxLength="30"
           placeholder={PLACEHOLDER.ENTER_INPUT('제품명을')}
         />
@@ -33,7 +33,7 @@ export default function EquipmentInput({ value, setValue, onCrawling }) {
         <TypeTitle requiredinput="true">시리얼 넘버</TypeTitle>
         <Input
           value={value[1]}
-          setState={setValue[1]}
+          onChange={setValue[1]}
           placeholder={PLACEHOLDER.ENTER_INPUT('시리얼 넘버를')}
           maxLength="30"
         />

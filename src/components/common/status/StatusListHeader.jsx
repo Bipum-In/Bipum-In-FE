@@ -29,7 +29,7 @@ export default function StatusListHeader({
           </SearchIconContainer>
           <Input
             value={keyword}
-            setState={setKeyword}
+            onChange={setKeyword}
             placeholder={PLACEHOLDER.ENTER_INPUT(
               '검색어를',
               '(신청자,담당부서 등)'

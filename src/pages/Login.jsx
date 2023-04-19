@@ -165,7 +165,7 @@ export default function Login() {
                 <Input
                   type="text"
                   value={empName}
-                  setState={handleEmpNameBlur}
+                  onChange={handleEmpNameBlur}
                   placeholder={PLACEHOLDER.ENTER_INPUT('이름을')}
                 />
               </styles.TypeBox>
@@ -174,7 +174,7 @@ export default function Login() {
                 <TypeTitles requiredinput="true">핸드폰 번호</TypeTitles>
                 <Input
                   value={phone}
-                  setState={handleChangePhone}
+                  onChange={handleChangePhone}
                   placeholder={PLACEHOLDER.ENTER_INPUT('번호를')}
                   maxLength="11"
                   autoComplete="false"
@@ -184,7 +184,7 @@ export default function Login() {
                 <TypeTitles requiredinput="true">비밀번호</TypeTitles>
                 <Input
                   value={inputPw}
-                  setState={inputPwHandler}
+                  onChange={inputPwHandler}
                   singupInput
                   type="password"
                   placeholder={PLACEHOLDER.ENTER_INPUT('2차 비밀번호를')}
@@ -200,7 +200,7 @@ export default function Login() {
                 <TypeTitles requiredinput="true">비밀번호 확인</TypeTitles>
                 <Input
                   value={inputCheckPw}
-                  setState={checkSame}
+                  onChange={checkSame}
                   singupInput
                   type="password"
                   placeholder={PLACEHOLDER.CHECK_PASSWORD('2차')}
