@@ -16,10 +16,7 @@ export default function ProcessButton({
     <ApproveAndRefuse>
       {requestStatus === '처리전' && (
         <>
-          <AcceptBtn
-            onClick={handleAccept}
-            disabled={isSelected.supplyId.length === 0}
-          >
+          <AcceptBtn onClick={handleAccept} disabled={isSelected}>
             승인
           </AcceptBtn>
           <DeclineBtn
