@@ -1,26 +1,30 @@
 import { createBrowserRouter } from 'react-router-dom';
-
+import { lazy } from 'react';
 import App from 'App';
 import ROUTER from 'constants/routerConst';
 import Layout from 'layout/Layout';
 import Rending from 'pages/Rending';
 import Login from 'pages/Login';
-import EmptyPage from 'pages/EmptyPage';
-import MyPage from '../pages/MyPage';
 
-import MasterPage from 'pages/master/MasterPage';
-import AppointmentManager from 'pages/master/AppointmentManager';
+const EmptyPage = lazy(() => import('pages/EmptyPage'));
+const MyPage = lazy(() => import('../pages/MyPage'));
+const MasterPage = lazy(() => import('pages/master/MasterPage'));
+const AppointmentManager = lazy(() =>
+  import('pages/master/AppointmentManager')
+);
 
-import AdminDashBoard from 'pages/admin/AdminDashBoard';
-import Management from 'pages/admin/Management';
-import EquipmentAdd from 'pages/admin/EquipmentAdd';
-import EquipmentManagement from 'pages/admin/EquipmentManagement';
-import RequestStatus from 'pages/admin/RequestStatus';
+const Management = lazy(() => import('pages/admin/Management'));
+const AdminDashBoard = lazy(() => import('pages/admin/AdminDashBoard'));
+const EquipmentAdd = lazy(() => import('pages/admin/EquipmentAdd'));
+const RequestStatus = lazy(() => import('pages/admin/RequestStatus'));
+const EquipmentManagement = lazy(() =>
+  import('pages/admin/EquipmentManagement')
+);
 
-import UserDashBoard from 'pages/user/UserDashBoard';
-import UserRequest from 'pages/user/UserRequest';
-import UserStockView from 'pages/user/UserStockView';
-import DeleteUserPage from 'pages/DeleteUserPage';
+const UserDashBoard = lazy(() => import('pages/user/UserDashBoard'));
+const UserRequest = lazy(() => import('pages/user/UserRequest'));
+const UserStockView = lazy(() => import('pages/user/UserStockView'));
+const DeleteUserPage = lazy(() => import('pages/DeleteUserPage'));
 
 const router = createBrowserRouter([
   {
