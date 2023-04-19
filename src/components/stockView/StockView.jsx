@@ -49,7 +49,7 @@ export default function StockView({ category: { category, largeCategory } }) {
         categoryId,
         status: '',
         page,
-        size: 12,
+        size: 16,
       })
     );
 
