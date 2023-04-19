@@ -1,9 +1,11 @@
+import { Suspense, lazy } from 'react';
 import styled from 'styled-components';
 import Modal from 'elements/Modal';
 import ModalHeader from '../common/ModalHeader';
-import EquipmentDetail from './detail/EquipmentDetail';
-import AddMultipleItem from '../equipmentAdd/AddMultipleItem';
-import AddSingleItem from '../equipmentAdd/AddSingleItem';
+
+const EquipmentDetail = lazy(() => import('./detail/EquipmentDetail'));
+const AddMultipleItem = lazy(() => import('../equipmentAdd/AddMultipleItem'));
+const AddSingleItem = lazy(() => import('../equipmentAdd/AddSingleItem'));
 
 export default function EquipmentModal({
   isAdmin,
@@ -17,7 +19,7 @@ export default function EquipmentModal({
   return (
     <>
       {showModal && (
-        <>
+        <Suspense fallback={null}>
           <Modal isOpen={showModal.detailShow} onClose={handleDetailModal}>
             <EquipmentDetailWrapper>
               <ModalHeader
@@ -55,7 +57,7 @@ export default function EquipmentModal({
               <AddMultipleItem />
             </EquipmentAddWrapper>
           </Modal>
-        </>
+        </Suspense>
       )}
     </>
   );
