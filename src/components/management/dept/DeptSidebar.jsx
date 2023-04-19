@@ -88,7 +88,7 @@ const DeptSidebar = ({
                 <Input
                   type="text"
                   value={editedDeptName}
-                  setState={e => {
+                  onChange={e => {
                     setEditedDeptName(e.target.value);
                   }}
                 />

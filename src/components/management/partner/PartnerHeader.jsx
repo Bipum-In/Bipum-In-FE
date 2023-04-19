@@ -30,7 +30,7 @@ export default function PartnerHeader({
           </SearchIconContainer>
           <Input
             value={keyword}
-            setState={setKeyword}
+            onChange={setKeyword}
             placeholder={PLACEHOLDER.ENTER_INPUT('검색어를', '(업체 등)')}
           />
         </SearchContainer>

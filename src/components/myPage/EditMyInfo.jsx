@@ -195,7 +195,7 @@ export default function EditMyInfo({ getUserInfo }) {
                     <MypageInput
                       type="text"
                       value={empName}
-                      setState={handleEmpNameBlur}
+                      onChange={handleEmpNameBlur}
                       placeholder={PLACEHOLDER.ENTER_INPUT('이름을')}
                       maxLength="15"
                     />
@@ -210,7 +210,7 @@ export default function EditMyInfo({ getUserInfo }) {
                   {editMode ? (
                     <MypageInput
                       value={phone}
-                      setState={handleChangePhone}
+                      onChange={handleChangePhone}
                       placeholder={PLACEHOLDER.ENTER_INPUT('전화번호를')}
                       maxLength="11"
                     />
@@ -318,7 +318,7 @@ export default function EditMyInfo({ getUserInfo }) {
                           <span>새 2차 비밀번호</span>
                           <Input
                             value={inputPw}
-                            setState={inputPwHandler}
+                            onChange={inputPwHandler}
                             singupInput
                             type="password"
                             placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}
@@ -335,7 +335,7 @@ export default function EditMyInfo({ getUserInfo }) {
 
                           <Input
                             value={inputCheckPw}
-                            setState={checkSame}
+                            onChange={checkSame}
                             singupInput
                             type="password"
                             placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}

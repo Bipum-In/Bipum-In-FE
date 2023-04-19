@@ -114,7 +114,6 @@ export default memo(function AlertStatus({ isAdmin }) {
         <styleds.AlertAndAddContainer>
           {concatAlertData().length === 0 && isLastPage && <EmptyAlarm />}
           {concatAlertData().map((data, index) => {
-            console.log(data);
             return (
               <AlertListContainer
                 AlertListContainer

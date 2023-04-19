@@ -23,7 +23,7 @@ export default function Search({
       </IconContainer>
       <SearchInput
         value={searchValue}
-        setState={onChagneSearch}
+        onChange={onChagneSearch}
         placeholder={PLACEHOLDER.ENTER_INPUT('검색어를')}
       />
       {searchValue && (
