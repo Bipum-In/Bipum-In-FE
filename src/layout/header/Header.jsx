@@ -1,14 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 
 import { ReactComponent as Rotate } from 'styles/headerIcon/rotate.svg';
 import { ReactComponent as Useinfo } from 'styles/headerIcon/useinfo.svg';
 import { ReactComponent as Logout } from 'styles/sidebarIcon/logout.svg';
-import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
+
 import { ReactComponent as Setting } from 'styles/headerIcon/setting.svg';
 
 import STRING from 'constants/string';
@@ -16,8 +15,6 @@ import ROUTER from 'constants/routerConst';
 
 import SearchDetailModal from './SearchDetailModal';
 import Search from 'layout/header/Search';
-import { CustomModal } from 'elements/Modal';
-import { useModalState } from 'hooks/useModalState';
 import useOutsideClick from 'hooks/useOutsideClick';
 import useThrottleCallback from 'hooks/useThrottleCallback';
 import useDebouncedCallback from 'hooks/useDebounce';
@@ -40,12 +37,14 @@ import { getSearch, initSearchHeader } from 'redux/modules/searchHeader';
 import { getCategoryList } from 'redux/modules/equipmentStatus';
 import Alarm from './Alarm';
 import QUERY from 'constants/query';
+import UserInfo from './UserInfo';
+import { useModalState } from 'hooks/useModalState';
 
 export default function Header({ isAdmin, userRole }) {
-  const [logoutModal, setLogoutModal] = useModalState();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [logoutModal, setLogoutModal] = useModalState();
   const [showAlarm, setShowAlarm] = useState(false);
   const [searchValue, setSearchValue] = useState('');
   const [showModal, setShowModal] = useState({
@@ -53,14 +52,6 @@ export default function Header({ isAdmin, userRole }) {
     requestShow: false,
     id: null,
   });
-
-  const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-  const toggleDropdown = () => setIsDropdownVisible(!isDropdownVisible);
-
-  const dropDownRef = useOutsideClick(
-    () => setIsDropdownVisible(false),
-    isDropdownVisible
-  );
 
   const searchOutsideRef = useOutsideClick(() => {
     initSearchData();
@@ -82,9 +73,6 @@ export default function Header({ isAdmin, userRole }) {
       category: { getCategory },
     },
   } = useSelector(state => state);
-
-  const { getUserInfo } = useSelector(state => state.userInfo.userInfoList);
-  const { empName, deptName, image } = getUserInfo || {};
 
   const singleAddLargeCategory = Object.values(STRING.CATEGORY_ENG).map(
     value => {
@@ -244,7 +232,11 @@ export default function Header({ isAdmin, userRole }) {
   };
 
   const putSSECount = isAdmin => {
-    QUERY.END_POINT.NOTIFICATION.SSE_COUNT(`?role=${STRING.IS_ADMIN(isAdmin)}`);
+    api.put(
+      QUERY.END_POINT.NOTIFICATION.SSE_COUNT(
+        `?role=${STRING.IS_ADMIN(isAdmin)}`
+      )
+    );
   };
 
   const getSSECount = () => {
@@ -281,48 +273,14 @@ export default function Header({ isAdmin, userRole }) {
                 />
               )}
               {/* 드롭다운 컨테이너 */}
-              <LoginUserInfoDropDown
-                onClick={toggleDropdown}
-                className={isDropdownVisible ? 'visible' : ''}
-                ref={dropDownRef}
-              >
-                <UserImgContainer userImg={image} userRole={userRole} />
-                {getUserInfo && (
-                  <UserInfoDetailContainer>
-                    <InfoCompanyTitle>{deptName}</InfoCompanyTitle>
-                    <InfoUserName>
-                      {userRole !== 'MASTER' &&
-                        (isAdmin ? `${empName} 관리자` : `${empName} 님`)}
-                      {userRole === 'MASTER' && `${empName} 계정`}
-                    </InfoUserName>
-                  </UserInfoDetailContainer>
-                )}
-                <UserDropDown isRotated={isDropdownVisible}>
-                  <ArrowDown />
-                </UserDropDown>
-                {/* 드롭다운 디테일 */}
-                <DropdownContainer>
-                  <DropdownBox>
-                    {headerData.map(item => (
-                      <DropdownList
-                        key={uuidv4()}
-                        onClick={item.onclick || (() => navigate(item.path))}
-                      >
-                        {item.icon}
-                        {item.text}
-                      </DropdownList>
-                    ))}
-                    <CustomModal
-                      isOpen={logoutModal}
-                      onClose={handleModalClose}
-                      submit={handleLogoutBtn}
-                      text={'로그아웃'}
-                    >
-                      정말 로그아웃 하시겠습니까?
-                    </CustomModal>
-                  </DropdownBox>
-                </DropdownContainer>
-              </LoginUserInfoDropDown>
+              <UserInfo
+                isAdmin={isAdmin}
+                userRole={userRole}
+                logoutModal={logoutModal}
+                headerData={headerData}
+                handleLogoutBtn={handleLogoutBtn}
+                handleModalClose={handleModalClose}
+              />
             </HeaderRightContainer>
           </ItemContainer>
         </HeaderContainer>
@@ -345,28 +303,6 @@ const HeaderWrapper = styled.header`
   height: 6.25rem;
   z-index: 999;
   background-color: ${props => props.theme.color.blue.brandColor7};
-`;
-
-const DropdownBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  * svg {
-    cursor: pointer;
-    width: 1.25rem;
-    height: 1.125rem;
-  }
-`;
-
-const DropdownList = styled.div`
-  position: relative;
-  display: flex;
-  height: 100%;
-  padding: 0.5rem 1rem;
-  gap: 1rem;
-  &:hover {
-    background-color: ${props => props.theme.color.grey.brandColor1};
-  }
 `;
 
 const HeaderContainer = styled.div`
@@ -394,92 +330,4 @@ const HeaderRightContainer = styled.div`
   ${props => props.theme.FlexCenter};
   margin-left: auto;
   gap: 1.875rem;
-`;
-
-const LoginUserInfoDropDown = styled.div`
-  position: relative;
-  ${props => props.theme.FlexRow};
-  align-items: center;
-  padding: 0 0.375rem;
-  width: 100%;
-  min-width: 11.25rem;
-  height: 3.75rem;
-  gap: 0.375rem;
-  background-color: white;
-  border: 0.0625rem solid ${props => props.theme.color.grey.brandColor2};
-  border-radius: 0.5rem;
-  cursor: pointer;
-`;
-
-const UserImgContainer = styled.div`
-  width: 3rem;
-  height: 3rem;
-  border-radius: 0.375rem;
-  ${props =>
-    props.userRole !== 'MASTER'
-      ? css`
-          background: url(${props => props.userImg}) no-repeat center center /
-              cover,
-            ${props => props.theme.color.grey.brandColor2};
-        `
-      : css`
-          background: url(${props => props.userImg}) no-repeat
-            ${props => props.theme.color.blue.brandColor2};
-          background-size: 70%;
-          background-position: center;
-        `}
-`;
-
-const UserInfoDetailContainer = styled.div`
-  ${props => props.theme.FlexCol};
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0.25rem;
-  min-width: 5.625rem;
-  white-space: nowrap;
-`;
-const InfoCompanyTitle = styled.span`
-  font-size: 0.875rem;
-  padding-top: 0.1875rem;
-  color: ${props => props.theme.color.grey.brandColor6};
-`;
-
-const InfoUserName = styled.span`
-  font-weight: 600;
-  font-size: 1rem;
-  line-height: 1.3125rem;
-`;
-
-const UserDropDown = styled.div`
-  ${props => props.theme.FlexRow};
-  ${props => props.theme.FlexCenter};
-  margin-left: auto;
-  width: 1.5rem;
-  height: 1.5rem;
-  transform: ${({ isRotated }) =>
-    isRotated ? 'rotate(180deg)' : 'rotate(0deg)'};
-  transition: transform 0.3s ease;
-  backface-visibility: hidden;
-  will-change: transform;
-`;
-
-const DropdownContainer = styled.div`
-  position: absolute;
-  top: 110%;
-  right: 0;
-  width: 100%;
-  padding: 0.5rem 0;
-  background-color: white;
-  box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.15);
-  border-radius: 0.25rem;
-  z-index: 10;
-  opacity: 0;
-  transform: translateY(-1.25rem);
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  pointer-events: none;
-  ${LoginUserInfoDropDown}.visible & {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
 `;
