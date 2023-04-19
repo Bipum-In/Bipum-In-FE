@@ -18,6 +18,7 @@ import ImageAdd from 'components/equipmentAdd/single/ImageAdd';
 import SelectCategory from 'components/common/SelectCategory';
 import { styles } from 'components/common/commonStyled';
 import PLACEHOLDER from 'constants/placeholder';
+import QUERY from 'constants/query';
 
 export default function EditMyInfo({ getUserInfo }) {
   const {
@@ -44,7 +45,7 @@ export default function EditMyInfo({ getUserInfo }) {
   const [editMode, setEditMode] = useState(false);
 
   useEffect(() => {
-    api.get(`/api/dept`).then(res => {
+    api.get(QUERY.END_POINT.DEPARTMENT.LIST).then(res => {
       const deptList = res.data.data;
       const deptId = parseMyDeptId(deptList, departmentName);
       setDepartmentId(deptId);
@@ -97,16 +98,10 @@ export default function EditMyInfo({ getUserInfo }) {
       })
     );
 
-    api
-      .put(`/api/user`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(() => {
-        alertModal(true, '정보가 성공적으로 수정되었습니다.', 2);
-        setEditMode(false);
-      });
+    api.put(QUERY.END_POINT.USER.EDIT_USER_DATA, formData).then(() => {
+      alertModal(true, '정보가 성공적으로 수정되었습니다.', 2);
+      setEditMode(false);
+    });
   };
 
   const parseMyDeptId = (deptList, deptName) => {
@@ -173,12 +168,14 @@ export default function EditMyInfo({ getUserInfo }) {
     );
 
   const handleSecondPwEdit = () => {
-    api.put(`/api/user/password`, { password: inputPw }).then(() => {
-      alertModal(true, '2차 비밀번호가 성공적으로 수정되었습니다.', 2);
-      setEditMode(false);
-      toggleEditPasswordModal(false);
-      reset();
-    });
+    api
+      .put(QUERY.END_POINT.USER.CHANGE_PASSWORD, { password: inputPw })
+      .then(() => {
+        alertModal(true, '2차 비밀번호가 성공적으로 수정되었습니다.', 2);
+        setEditMode(false);
+        toggleEditPasswordModal(false);
+        reset();
+      });
   };
 
   return (

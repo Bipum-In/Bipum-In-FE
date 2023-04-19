@@ -1,5 +1,6 @@
 import { api } from 'api/axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import QUERY from 'constants/query';
 
 const initialState = {
   searchData: {
@@ -12,7 +13,7 @@ export const getSearch = createAsyncThunk(
   'SEARCH_HEADER',
   async (payload, thunkAPI) => {
     return await api
-      .get(`/api${payload.isAdmin}/main/search?keyword=${payload.keyword}`)
+      .get(QUERY.END_POINT.DASHBOARD.SEARCH(payload.isAdmin, payload.keyword))
       .then(response => thunkAPI.fulfillWithValue(response.data.data))
       .catch(() => thunkAPI.rejectWithValue());
   }

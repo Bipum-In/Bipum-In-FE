@@ -21,6 +21,7 @@ import DetailUseHistory from './DetailUseHistory';
 import DetailInfoProduct from './DetailInfoProduct';
 import DetailRepairHistory from './DetailRepairHistory';
 import DetailInfoRequester from './DetailInfoRequester';
+import QUERY from 'constants/query';
 
 export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
   const dispatch = useDispatch();
@@ -58,12 +59,12 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
     dispatch(getEquipmentDetail({ path, supplyId: detailId }));
 
     api
-      .get(`/api/dept`)
+      .get(QUERY.END_POINT.DEPARTMENT.LIST)
       .then(res =>
         setDept([{ deptId: '', deptName: '선택 안함' }, ...res.data.data])
       );
     api
-      .get(`/api/partners`)
+      .get(QUERY.END_POINT.PARTNERS.LIST)
       .then(res =>
         setPartners([
           { partnersId: '', partnersName: '선택 안함' },
@@ -101,7 +102,7 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
   const handleSave = supplyId => sendFormData(supplyId);
 
   const handleDispose = supplyId => {
-    api.delete(`/api/supply/${supplyId}`).then(() => isClose());
+    api.delete(QUERY.END_POINT.SUPPLY.CHANGE(supplyId)).then(() => isClose());
     setDisposeModal(false);
   };
 
@@ -146,7 +147,9 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
   };
 
   const getUserData = deptId =>
-    api.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
+    api
+      .get(QUERY.END_POINT.USER.SEARCH_USER(deptId))
+      .then(res => setUser(res.data.data));
 
   const sendFormData = supplyId => {
     const formData = new FormData();
@@ -171,7 +174,9 @@ export default function EquipmentDetail({ isAdmin, detailId, isClose }) {
   };
 
   const sendEditData = (supplyId, formData) =>
-    api.put(`/api/supply/${supplyId}`, formData).then(() => isClose());
+    api
+      .put(QUERY.END_POINT.SUPPLY.CHANGE(supplyId), formData)
+      .then(() => isClose());
 
   const handleChangeimge = e => {
     const img = e.target.files[0];

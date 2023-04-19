@@ -21,6 +21,7 @@ import {
 } from 'redux/modules/equipmentStatus';
 import ManageSidebar from './ManageSidebar';
 import PLACEHOLDER from 'constants/placeholder';
+import QUERY from 'constants/query';
 
 export default function ManageCategory({
   activeCategory,
@@ -55,7 +56,7 @@ export default function ManageCategory({
 
   const handleSubmit = name => {
     api
-      .post(`/api/category/`, {
+      .post(QUERY.END_POINT.CATEGORY.LIST, {
         largeCategory: STRING.CATEGORY[activeCategory],
         categoryName: newCategory,
       })
@@ -68,7 +69,7 @@ export default function ManageCategory({
 
   const handleEditSubmit = async () => {
     await api
-      .put(`/api/category/${editingCategoryId}`, {
+      .put(QUERY.END_POINT.CATEGORY.CHANGE(editingCategoryId), {
         categoryId: editingCategoryId,
         largeCategory: STRING.CATEGORY[activeCategory],
         categoryName: editingCategoryName,

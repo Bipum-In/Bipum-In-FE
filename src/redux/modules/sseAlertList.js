@@ -1,5 +1,6 @@
 import { api } from 'api/axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import QUERY from 'constants/query';
 
 const initialState = {
   adminSseAlert: {
@@ -20,7 +21,7 @@ export const __adminSseAlert = createAsyncThunk(
   'ADMIN_SSE_ALERT',
   async (payload, thunkAPI) => {
     return await api
-      .get(`/api/admin/main/alarm?page=${payload.page}&size=${payload.size}`)
+      .get(QUERY.END_POINT.DASHBOARD.ADMIN_ALARM(payload.page, payload.size))
       .then(response => thunkAPI.fulfillWithValue(response.data.data))
       .catch(() => thunkAPI.rejectWithValue());
   }
@@ -30,7 +31,7 @@ export const __userSseAlert = createAsyncThunk(
   'USER_SSE_ALERT',
   async (payload, thunkAPI) => {
     return await api
-      .get(`/api/main/alarm?page=${payload.page}&size=${payload.size}`)
+      .get(QUERY.END_POINT.DASHBOARD.USER_ALARM(payload.page, payload.size))
       .then(response => thunkAPI.fulfillWithValue(response.data.data))
       .catch(() => thunkAPI.rejectWithValue());
   }
@@ -80,7 +81,6 @@ const sseAlertListSlice = createSlice({
       userSseAlert.getUserSseAlert = {
         ...userSseAlert.getUserSseAlert,
         content: [...userSseAlert.getUserSseAlert.content].filter(item => {
-          console.log('item --->', item);
           return item.getNotificationId !== action.payload;
         }),
       };

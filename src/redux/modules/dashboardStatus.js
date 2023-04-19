@@ -1,5 +1,6 @@
 import { api } from 'api/axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import QUERY from 'constants/query';
 
 const initialState = {
   adminDashboard: {
@@ -20,7 +21,7 @@ export const adminDashboardStatus = createAsyncThunk(
   'ADMIN_DASHBOARD',
   async (payload, thunkAPI) => {
     return await api
-      .get(`/api/admin/main?largeCategory=${payload.status}`)
+      .get(QUERY.END_POINT.DASHBOARD.ADMIN_MAIN(payload.status))
       .then(response => thunkAPI.fulfillWithValue(response.data))
       .catch(() => thunkAPI.rejectWithValue());
   }
@@ -30,7 +31,7 @@ export const userDashboardStatus = createAsyncThunk(
   'USER_DASHBOARD',
   async (payload, thunkAPI) => {
     return await api
-      .get(`/api/main?largeCategory=${payload}`)
+      .get(QUERY.END_POINT.DASHBOARD.USER_MAIN(payload.status))
       .then(response => thunkAPI.fulfillWithValue(response.data))
       .catch(() => thunkAPI.rejectWithValue());
   }
@@ -40,7 +41,7 @@ export const commonSupplyDtos = createAsyncThunk(
   'COMMON_SUPPLY_DTOS',
   async (payload, thunkAPI) => {
     return await api
-      .get(`/api/main/common?largeCategory=${payload}`)
+      .get(QUERY.END_POINT.DASHBOARD.COMMON_MAIN(payload.status))
       .then(response => thunkAPI.fulfillWithValue(response.data))
       .catch(() => thunkAPI.rejectWithValue());
   }

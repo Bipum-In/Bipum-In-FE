@@ -39,6 +39,7 @@ import {
 import { getSearch, initSearchHeader } from 'redux/modules/searchHeader';
 import { getCategoryList } from 'redux/modules/equipmentStatus';
 import Alarm from './Alarm';
+import QUERY from 'constants/query';
 
 export default function Header({ isAdmin, userRole }) {
   const [logoutModal, setLogoutModal] = useModalState();
@@ -123,7 +124,7 @@ export default function Header({ isAdmin, userRole }) {
   }, [dispatch, searchValue, isAdmin, debouncedSearch, throttledDispatch]);
 
   useEffect(() => {
-    const url = `${process.env.REACT_APP_SERVER_URL}/api/subscribe`;
+    const url = QUERY.END_POINT.SSE(process.env.REACT_APP_SERVER_URL);
     const sse = new SSE(url, 20);
 
     sse.onMessage(event => {
@@ -208,7 +209,6 @@ export default function Header({ isAdmin, userRole }) {
     e.preventDefault();
 
     try {
-      api.post('/api/user/logout');
       logout(() => {
         navigate(ROUTER.PATH.MAIN);
       });
@@ -244,11 +244,11 @@ export default function Header({ isAdmin, userRole }) {
   };
 
   const putSSECount = isAdmin => {
-    api.put(`/api/notification/count?role=${STRING.IS_ADMIN(isAdmin)}`);
+    QUERY.END_POINT.NOTIFICATION.SSE_COUNT(`?role=${STRING.IS_ADMIN(isAdmin)}`);
   };
 
   const getSSECount = () => {
-    api.get(`/api/notification/count`).then(res => {
+    api.get(QUERY.END_POINT.NOTIFICATION.SSE_COUNT()).then(res => {
       dispatch(setSSECount(res.data.data));
     });
   };

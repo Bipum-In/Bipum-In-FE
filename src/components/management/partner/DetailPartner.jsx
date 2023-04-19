@@ -10,6 +10,7 @@ import STRING from 'constants/string';
 import { api } from 'api/axios';
 import { useDispatch } from 'react-redux';
 import { getPartnersList } from 'redux/modules/partnersList';
+import QUERY from 'constants/query';
 
 export default function DetailPartner({ isClose, result, page }) {
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ export default function DetailPartner({ isClose, result, page }) {
 
   const deletePartner = partnersId =>
     api
-      .delete(`/api/partners/${partnersId}`)
+      .delete(QUERY.END_POINT.PARTNERS.CHANGE(partnersId))
       .then(() => {
         dispatch(getPartnersList({ page, size: 10 }));
         handleModalClose();
@@ -41,7 +42,7 @@ export default function DetailPartner({ isClose, result, page }) {
 
   const handleSaveClick = () => {
     api
-      .put(`/api/partners/${editedValue.partnersId}`, editedValue)
+      .put(QUERY.END_POINT.PARTNERS.CHANGE(editedValue.partnersId), editedValue)
       .then(response => {
         isClose();
         dispatch(getPartnersList({ page, size: 10 }));

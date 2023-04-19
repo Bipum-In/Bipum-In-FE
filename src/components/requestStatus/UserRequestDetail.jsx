@@ -13,6 +13,7 @@ import UserPutButton from './ userDetail/UserPutButton';
 import RequestImgDetail from './detail/RequestImgDetail';
 import UserRequestItem from './ userDetail/UserRequestItem';
 import { ImgDetailModal } from 'elements/ImgModal';
+import QUERY from 'constants/query';
 
 export default function UserRequestDetail({ detail, isClose, isAdmin }) {
   const {
@@ -52,8 +53,10 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
     if (editMode) putRequest();
     setEditMode(prev => !prev);
   };
-  const deletRequest = () =>
-    api.delete(`/api/requests/${requestId}`).then(() => isClose());
+  const deleteRequest = () =>
+    api
+      .delete(QUERY.END_POINT.REQUEST.USER_REQUESTS(requestId))
+      .then(() => isClose());
 
   const handleChangeimg = e => {
     const img = [...e.target.files];
@@ -98,11 +101,7 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
     }
 
     api
-      .put(`/api/requests/${requestId}`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
+      .put(QUERY.END_POINT.REQUEST.USER_REQUESTS(requestId), formData)
       .then(() => isClose());
   };
 
@@ -137,7 +136,7 @@ export default function UserRequestDetail({ detail, isClose, isAdmin }) {
               {acceptResult === null && (
                 <DeleteAndPutContainer>
                   {!editMode && (
-                    <Button mainBtn={'border'} onClick={deletRequest}>
+                    <Button mainBtn={'border'} onClick={deleteRequest}>
                       삭제
                     </Button>
                   )}

@@ -11,6 +11,7 @@ import alertModal from 'utils/alertModal';
 
 import { api } from 'api/axios';
 import ScreenViewLoading from 'components/common/ScreenViewLoading';
+import QUERY from 'constants/query';
 
 export default function AddMultipleItem() {
   const inputRef = useRef(null);
@@ -189,7 +190,7 @@ export default function AddMultipleItem() {
   };
 
   const postMultiData = data => {
-    api.post('api/supply/excel', data).then(() => {
+    api.post(QUERY.END_POINT.SUPPLY.ADD_EXCEL, data).then(() => {
       initMultiData();
       alertModal(true, '비품 등록이 완료되었습니다.', 2);
     });
@@ -199,7 +200,7 @@ export default function AddMultipleItem() {
     let response = null;
     setIsLoading(true);
     await api
-      .get(`api/supply/search?modelNameList=${modelNameToString}`)
+      .get(QUERY.END_POINT.SUPPLY.CRAWLING_IMG(modelNameToString))
       .then(res => {
         response = sliceData(res.data.data, sheetLengthArr);
         setIsLoading(false);

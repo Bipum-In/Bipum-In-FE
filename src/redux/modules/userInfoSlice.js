@@ -1,5 +1,6 @@
 import { api } from 'api/axios';
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import QUERY from 'constants/query';
 
 const initialState = {
   userInfoList: {
@@ -11,7 +12,7 @@ export const userInfoSlice = createAsyncThunk(
   'USER_INFO',
   async (_, thunkAPI) => {
     return await api
-      .get('/api/user/myPage')
+      .get(QUERY.END_POINT.USER.MY_PAGE)
       .then(response => thunkAPI.fulfillWithValue(response.data.data))
       .catch(() => thunkAPI.rejectWithValue());
   }
