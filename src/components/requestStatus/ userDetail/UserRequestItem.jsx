@@ -47,7 +47,7 @@ export default function UserRequestItem({
           <TypeDetailMessage>
             {editMode ? (
               <ContentInput>
-                <Input defaultValue={content} setState={handleContentChange} />
+                <Input defaultValue={content} onChange={handleContentChange} />
               </ContentInput>
             ) : (
               content

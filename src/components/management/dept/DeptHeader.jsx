@@ -53,7 +53,7 @@ export default function DeptHeader({
           </SearchIconContainer>
           <Input
             value={keyword}
-            setState={handleChangeKeyword}
+            onChange={handleChangeKeyword}
             placeholder={PLACEHOLDER.ENTER_INPUT(
               '검색어를',
               '(이름, 전화번호 등)'
@@ -82,7 +82,7 @@ export default function DeptHeader({
               <Input
                 type="text"
                 value={deptName}
-                setState={e => setDeptName(e.target.value)}
+                onChange={e => setDeptName(e.target.value)}
                 placeholder={PLACEHOLDER.ENTER_INPUT('부서를')}
               />
               {deptName && (

@@ -61,7 +61,7 @@ export default function DetailPartner({ isClose, result, page }) {
               type="text"
               name={name}
               value={value}
-              setState={handleInputChange}
+              onChange={handleInputChange}
             />
             {value && (
               <CancelInputWrapper onClick={() => handleClear(name)}>

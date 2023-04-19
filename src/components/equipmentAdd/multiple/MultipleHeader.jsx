@@ -23,7 +23,7 @@ export default function MultipleHeader({
             inputRef={inputRef}
             key={uuidv4()}
             type="file"
-            setState={onReadExcel}
+            onChange={onReadExcel}
             accept=".xlsx"
           />
         </InputFile>

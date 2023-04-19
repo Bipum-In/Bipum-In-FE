@@ -291,7 +291,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
                     <styles.CategoryInputContainer>
                       <Input
                         value={categoryInput}
-                        setState={handleChangeCategoryInput}
+                        onChange={handleChangeCategoryInput}
                         placeholder={PLACEHOLDER.ENTER_YOUR_SELF}
                         maxLength={10}
                       />

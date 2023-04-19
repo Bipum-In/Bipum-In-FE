@@ -18,7 +18,7 @@ export default function MasterLogin({ state, onchange, onclick }) {
               maxLength="15"
               name="username"
               value={state.username}
-              setState={onchange}
+              onChange={onchange}
             />
           </LoginInputBox>
           <LoginInputBox>
@@ -28,7 +28,7 @@ export default function MasterLogin({ state, onchange, onclick }) {
               type="password"
               name="password"
               value={state.password}
-              setState={onchange}
+              onChange={onchange}
               autocomplete="off"
               maxLength="15"
             />

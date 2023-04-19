@@ -46,7 +46,7 @@ export default function RequestBox({ handleModalClose }) {
           <Input
             placeholder={PLACEHOLDER.ENTER_INPUT('업체를')}
             value={companyName}
-            setState={e => setCompanyName(e.target.value)}
+            onChange={e => setCompanyName(e.target.value)}
           />
           {companyName && (
             <CancelInputWrapper onClick={handleNameClear}>
@@ -61,7 +61,7 @@ export default function RequestBox({ handleModalClose }) {
           <Input
             placeholder={PLACEHOLDER.ENTER_INPUT('전화번호를')}
             value={phoneNumber}
-            setState={e => setPhoneNumber(e.target.value)}
+            onChange={e => setPhoneNumber(e.target.value)}
           />
           {phoneNumber && (
             <CancelInputWrapper onClick={handleNumberClear}>
@@ -76,7 +76,7 @@ export default function RequestBox({ handleModalClose }) {
           <Input
             placeholder={PLACEHOLDER.ENTER_INPUT('이메일을')}
             value={email}
-            setState={e => setEmail(e.target.value)}
+            onChange={e => setEmail(e.target.value)}
           />
           {email && (
             <CancelInputWrapper onClick={handleEmailClear}>
@@ -91,7 +91,7 @@ export default function RequestBox({ handleModalClose }) {
           <Input
             placeholder={PLACEHOLDER.ENTER_INPUT('주소를')}
             value={address}
-            setState={e => setAddress(e.target.value)}
+            onChange={e => setAddress(e.target.value)}
           />
           {address && (
             <CancelInputWrapper onClick={handleAddressClear}>

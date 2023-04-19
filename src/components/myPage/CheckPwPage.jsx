@@ -57,7 +57,7 @@ export default function CheckPwPage({ setEditPage }) {
               <TypeTitles requiredinput="true">2차 비밀번호</TypeTitles>
               <Input
                 value={password}
-                setState={e => setPassword(e.target.value)}
+                onChange={e => setPassword(e.target.value)}
                 singupInput
                 type="password"
                 placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}
