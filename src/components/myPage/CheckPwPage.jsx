@@ -14,6 +14,7 @@ import { useModalState } from 'hooks/useModalState';
 
 import { api } from 'api/axios';
 import PLACEHOLDER from 'constants/placeholder';
+import QUERY from 'constants/query';
 
 export default function CheckPwPage({ setEditPage }) {
   const [password, setPassword] = useState('');
@@ -23,7 +24,7 @@ export default function CheckPwPage({ setEditPage }) {
   const moveEditMyInfo = () => setEditPage('');
   const handleCheckPw = e => {
     e.preventDefault();
-    api.post('/api/user/check', { password }).then(res => {
+    api.post(QUERY.END_POINT.USER.CHECK_PASSWORD, { password }).then(res => {
       if (res.data.data === true) {
         moveEditMyInfo();
       } else {
@@ -37,7 +38,7 @@ export default function CheckPwPage({ setEditPage }) {
     setForgotPwModal(false);
     setIsLoading(true);
     api
-      .post('/api/user/password', '', 5)
+      .post(QUERY.END_POINT.USER.CHANGE_PASSWORD, '', 5)
       .then(() => {
         alertModal(true, '임시 비밀번호가 발송되었습니다.', 2);
       })

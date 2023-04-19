@@ -7,6 +7,7 @@ import { ReactComponent as CancelInput } from 'styles/commonIcon/cancelInput.svg
 import { CustomModal } from 'elements/Modal';
 import Input from 'elements/Input';
 import { api } from 'api/axios';
+import QUERY from 'constants/query';
 
 const DeptSidebar = ({
   deptList,
@@ -18,14 +19,18 @@ const DeptSidebar = ({
   updateDeptList,
 }) => {
   const handleDeleteDept = deptId =>
-    api.delete(`/api/dept/${deptId}`).then(response => {
+    api.delete(QUERY.END_POINT.DEPARTMENT.CHANGE(deptId)).then(response => {
       updateDeptList();
     });
 
   const handleSaveClick = deptId =>
-    api.put(`/api/dept/${deptId}`, { deptName: editedDeptName }).then(() => {
-      updateDeptList();
-    });
+    api
+      .put(QUERY.END_POINT.DEPARTMENT.CHANGE(deptId), {
+        deptName: editedDeptName,
+      })
+      .then(() => {
+        updateDeptList();
+      });
 
   const [idModalDept, setIdModalDept] = useState(null);
   const [idModalEdit, setIdModalEdit] = useState(null);

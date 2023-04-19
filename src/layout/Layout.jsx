@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Suspense } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 
 import styled, { useTheme } from 'styled-components';
@@ -103,7 +103,9 @@ export default function DashBoardLayout() {
             handleSidebarToggle={handleSidebarToggle}
           />
           <OutletContainer>
-            <Outlet />
+            <Suspense fallback={null}>
+              <Outlet />
+            </Suspense>
           </OutletContainer>
         </LayoutWrapper>
       )}

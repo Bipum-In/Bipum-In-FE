@@ -1,6 +1,7 @@
 import { api } from 'api/axios';
 import NUMBER from 'constants/number';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import QUERY from 'constants/query';
 
 const initialState = {
   equipmentStatus: {
@@ -31,9 +32,17 @@ const initialState = {
 export const getEquipmentList = createAsyncThunk(
   'EQUIPMENT',
   async (payload, thunkAPI) => {
+    const { path, keyword, categoryId, status, page, size } = payload;
     return await api
       .get(
-        `/api${payload.path}/supply?keyword=${payload.keyword}&categoryId=${payload.categoryId}&status=${payload.status}&page=${payload.page}&size=${payload.size}`
+        QUERY.END_POINT.SUPPLY.PAGE(
+          path,
+          keyword,
+          categoryId,
+          status,
+          page,
+          size
+        )
       )
       .then(response => thunkAPI.fulfillWithValue(response.data.data))
       .catch(() => thunkAPI.rejectWithValue());
@@ -43,10 +52,9 @@ export const getEquipmentList = createAsyncThunk(
 export const getEquipmentDetail = createAsyncThunk(
   'EQUIPMENT_DETAIL',
   async (payload, thunkAPI) => {
+    const { path, supplyId } = payload;
     return await api
-      .get(
-        `/api${payload.path}/supply/${payload.supplyId}?size=${NUMBER.INT.SIX}`
-      )
+      .get(QUERY.END_POINT.SUPPLY.DETAIL(path, supplyId, NUMBER.INT.SIX))
       .then(response => thunkAPI.fulfillWithValue(response.data.data))
       .catch(() => thunkAPI.rejectWithValue());
   }
@@ -56,10 +64,11 @@ export const getHistory = createAsyncThunk(
   'HISTORY',
   async (payload, thunkAPI) => {
     try {
+      const { history, supplyId, page, size } = payload;
       const response = await api.get(
-        `/api/supply/history/${payload.history}/${payload.supplyId}?page=${payload.page}&size=${payload.size}`
+        QUERY.END_POINT.SUPPLY.HISTORY(history, supplyId, page, size)
       );
-      if (payload.history === 'user') {
+      if (history === 'user') {
         return thunkAPI.fulfillWithValue({ user: response.data.data });
       }
       return thunkAPI.fulfillWithValue({ repair: response.data.data });
@@ -73,7 +82,7 @@ export const getCategoryList = createAsyncThunk(
   'CATEGORY',
   async (_, thunkAPI) => {
     try {
-      const response = await api.get(`/api/category`);
+      const response = await api.get(QUERY.END_POINT.CATEGORY.LIST);
       const parseLargeCategory = largeCategory(response);
       const data = {
         largeCategory: parseLargeCategory,
@@ -174,6 +183,10 @@ const equipmentStatusSlice = createSlice({
       state.supplyHistory.history.user = { content: [], lastPage: false };
       state.supplyHistory.history.repair = { content: [], lastPage: false };
     },
+    initEquipment: (state, _) => {
+      state.equipmentStatus.getEquipment = null;
+      state.equipmentStatus.isEquipmentError = false;
+    },
     initEquipmentDetail: (state, _) => {
       state.equipmentDetail.getDetail = null;
       state.equipmentDetail.isDetailLoading = false;
@@ -224,6 +237,7 @@ const equipmentStatusSlice = createSlice({
 
 export const {
   initHistory,
+  initEquipment,
   initEquipmentDetail,
   setCategoryData,
   setSmallCategoryData,

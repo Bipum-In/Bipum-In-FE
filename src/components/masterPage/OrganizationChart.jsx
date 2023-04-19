@@ -6,6 +6,7 @@ import { api } from 'api/axios';
 import chartData from './chartData';
 import ROUTER from 'constants/routerConst';
 import { useNavigate } from 'react-router-dom';
+import QUERY from 'constants/query';
 
 export default function OrganizationChart() {
   const navigate = useNavigate();
@@ -25,7 +26,9 @@ export default function OrganizationChart() {
 
   const handlePostChart = () => {
     api
-      .post(`/api/master/dept`, { deptList: currentBtnData })
+      .post(QUERY.END_POINT.DEPARTMENT.MASTER_LIST, {
+        deptList: currentBtnData,
+      })
       .then(() => navigate(ROUTER.PATH.MASTER.APPOINTMENT));
   };
 

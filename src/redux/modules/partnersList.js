@@ -1,5 +1,6 @@
 import { api } from 'api/axios';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import QUERY from 'constants/query';
 
 const initialState = {
   getPartners: null,
@@ -9,7 +10,7 @@ export const getPartnersList = createAsyncThunk(
   'PARTNERS',
   async (payload, thunkAPI) => {
     return await api
-      .get(`/api/partners/admin?page=${payload.page}&size=${payload.size}`)
+      .get(QUERY.END_POINT.PARTNERS.PAGE(payload.page, payload.size))
       .then(response => thunkAPI.fulfillWithValue(response.data.data));
   }
 );

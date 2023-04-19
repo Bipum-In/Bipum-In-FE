@@ -9,7 +9,7 @@ import useSelectMenu from 'hooks/useSelectMenu';
 import useResizeGetPageSize from 'hooks/useResizeGetPageSize';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { getEquipmentList } from 'redux/modules/equipmentStatus';
+import { getEquipmentList, initEquipment } from 'redux/modules/equipmentStatus';
 import useOutsideClick from 'hooks/useOutsideClick';
 
 export default function EquipmentListContainer({
@@ -57,6 +57,9 @@ export default function EquipmentListContainer({
         size,
       })
     );
+    return () => {
+      dispatch(initEquipment());
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,

@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, lazy, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { initDetail, requestDetail } from 'redux/modules/requestStatus';
-import AdminRequestDetail from './AdminRequestDetail';
-import UserRequestDetail from './UserRequestDetail';
+
+const AdminRequestDetail = lazy(() => import('./AdminRequestDetail'));
+const UserRequestDetail = lazy(() => import('./UserRequestDetail'));
 
 export default function RequestModal({ isClose, detailId, path, isAdmin }) {
   const dispatch = useDispatch();
@@ -24,13 +25,15 @@ export default function RequestModal({ isClose, detailId, path, isAdmin }) {
 
   return (
     <RequestModalWrapper>
-      {/* {isDetailError && <div>에러</div>} */}
-      {getDetail && isAdmin && !isDetailError && (
-        <AdminRequestDetail isClose={isClose} detail={getDetail} />
-      )}
-      {getDetail && !isAdmin && !isDetailError && (
-        <UserRequestDetail isClose={isClose} detail={getDetail} />
-      )}
+      <Suspense fallback={null}>
+        {/* {isDetailError && <div>에러</div>} */}
+        {getDetail && isAdmin && !isDetailError && (
+          <AdminRequestDetail isClose={isClose} detail={getDetail} />
+        )}
+        {getDetail && !isAdmin && !isDetailError && (
+          <UserRequestDetail isClose={isClose} detail={getDetail} />
+        )}
+      </Suspense>
     </RequestModalWrapper>
   );
 }

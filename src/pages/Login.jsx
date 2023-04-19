@@ -63,7 +63,7 @@ export default function Login() {
       if (code && !checkCode) {
         try {
           const response = await api.post(
-            `/api/user/login/google?code=${code}&urlType=${currentUrl}`
+            QUERY.END_POINT.USER.LOGIN_GOOGLE(code, currentUrl)
           );
           const userInfo = response.data.data;
           const { checkUser } = userInfo;
@@ -76,7 +76,7 @@ export default function Login() {
           setWriteUser(checkUser);
           setCheckCode(true);
 
-          const deptResponse = await api.get(`/api/dept`);
+          const deptResponse = await api.get(QUERY.END_POINT.DEPARTMENT.LIST);
           setDepartmentList(deptResponse.data.data);
         } catch (error) {
           console.error(error);
@@ -112,7 +112,7 @@ export default function Login() {
     );
 
     api
-      .post(`/api/user/loginadd`, loginadd)
+      .post(QUERY.END_POINT.USER.ADD_INFO, loginadd)
       .then(res => setWriteUser(res.data.data));
   };
 

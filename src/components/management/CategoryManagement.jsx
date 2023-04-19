@@ -5,6 +5,7 @@ import STRING from 'constants/string';
 import useSelectMenu from 'hooks/useSelectMenu';
 import ManageCategory from './category/ManageCategory';
 import { api } from 'api/axios';
+import QUERY from 'constants/query';
 
 export default function CategoryManagement({
   category: { category, largeCategory },
@@ -42,7 +43,7 @@ export default function CategoryManagement({
   };
 
   const handleDeleteCategory = categoryId => {
-    api.delete(`/api/category/${categoryId}`).then(response => {
+    api.delete(QUERY.END_POINT.CATEGORY.CHANGE(categoryId)).then(response => {
       const filteredList = categoryList.list.filter(
         item => item.categoryId !== categoryId
       );

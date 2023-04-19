@@ -71,7 +71,6 @@ const DragAndDropContainer = styled.label`
   width: 100%;
   height: 23.75rem;
   border-radius: 0.5rem;
-  margin: 1.375rem 0;
   background-color: ${props =>
     props.data === 'true' ? 'transperant' : props.theme.color.grey.brandColor1};
 `;

@@ -12,16 +12,18 @@ export default function StockViewList({ pageRef, requestData, onClickDetail }) {
         <EmptyContainer>현재 비품의 재고가 존재하지 않습니다.</EmptyContainer>
       )}
       <CardContainer ref={pageRef} contentLenght={content.length}>
-        {content.map(item => (
+        {content.map((item, index) => (
           <Card
-            key={item.supplyId}
+            key={index}
             onClick={() => {
               onClickDetail(item.supplyId);
             }}
           >
             <img src={item.image} alt="" />
             <Content>
-              <StokeItemTitle>{item.modelName}</StokeItemTitle>
+              <StokeItemTitle>
+                <TextOverflow>{item.modelName} </TextOverflow>
+              </StokeItemTitle>
               <StokeCreateAt>
                 등록일: {FormatDateToKoShort(item.createdAt)}
               </StokeCreateAt>
@@ -34,11 +36,11 @@ export default function StockViewList({ pageRef, requestData, onClickDetail }) {
 }
 
 const StockWrapper = styled.section`
-  height: 33rem;
-  padding: 0.8rem 5.3125rem;
-  @media (max-width: 92.5rem) {
-    overflow: hidden auto;
-  }
+  display: flex;
+  justify-content: center;
+  height: calc(100vh - 16.6875rem - 11rem);
+  padding: 1rem 5.3125rem;
+  overflow: hidden auto;
 `;
 
 const EmptyContainer = styled.div`
@@ -67,7 +69,7 @@ const Card = styled.div`
   align-items: center;
   justify-content: space-evenly;
   max-width: 21.125rem;
-  height: 10rem;
+  height: 9.5rem;
   padding: 1.5rem 1.875rem;
   ${props => props.theme.Boxshadow}
   gap: 1rem;
@@ -102,4 +104,15 @@ const StokeItemTitle = styled.span`
 const StokeCreateAt = styled.span`
   font-size: 0.75rem;
   color: ${props => props.theme.color.grey.brandColor5};
+`;
+
+const TextOverflow = styled.div`
+  display: -webkit-box;
+  line-height: 1.2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-all;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
 `;

@@ -1,9 +1,12 @@
-import EquipmentDetail from 'components/EquipmentManage/detail/EquipmentDetail';
+import React, { Suspense, lazy } from 'react';
+import styled from 'styled-components';
 import ModalHeader from 'components/common/ModalHeader';
 import RequestModal from 'components/requestStatus/RequestModal';
 import Modal from 'elements/Modal';
-import React from 'react';
-import styled from 'styled-components';
+
+const EquipmentDetail = lazy(() =>
+  import('components/EquipmentManage/detail/EquipmentDetail')
+);
 
 export default function SearchDetailModal({
   isAdmin,
@@ -20,13 +23,15 @@ export default function SearchDetailModal({
           <Modal isOpen={showModal.supplyShow} onClose={onDetailModal}>
             <EquipmentDetailWrapper>
               <ModalHeader isClose={onDetailModal} requestType={'비품 상세'} />
-              <EquipmentDetail
-                isAdmin={isAdmin}
-                category={category}
-                largeCategory={largeCategory}
-                detailId={showModal.id}
-                isClose={onDetailModal}
-              />
+              <Suspense fallback={null}>
+                <EquipmentDetail
+                  isAdmin={isAdmin}
+                  category={category}
+                  largeCategory={largeCategory}
+                  detailId={showModal.id}
+                  isClose={onDetailModal}
+                />
+              </Suspense>
             </EquipmentDetailWrapper>
           </Modal>
           <Modal isOpen={showModal.requestShow} onClose={onDetailModal}>

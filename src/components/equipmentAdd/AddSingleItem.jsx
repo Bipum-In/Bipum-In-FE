@@ -13,6 +13,7 @@ import Input from 'elements/Input';
 import alertModal from 'utils/alertModal';
 import Valid from 'validation/validation';
 import PLACEHOLDER from 'constants/placeholder';
+import QUERY from 'constants/query';
 
 export default function AddSingleItem({ categoryList, largeCategoryList }) {
   const [largeCategory, setLargeCategory] = useState('');
@@ -51,7 +52,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
 
   useEffect(() => {
     api
-      .get(`/api/partners`)
+      .get(QUERY.END_POINT.PARTNERS.LIST)
       .then(res =>
         setPartners([
           { partnersId: '', partnersName: '선택 안함' },
@@ -59,7 +60,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
         ])
       );
     api
-      .get(`/api/dept`)
+      .get(QUERY.END_POINT.DEPARTMENT.LIST)
       .then(res =>
         setDept([{ deptId: '', deptName: '선택 안함' }, ...res.data.data])
       );
@@ -239,16 +240,18 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
   };
 
   const getUserData = deptId =>
-    api.get(`/api/user/${deptId}`).then(res => setUser(res.data.data));
+    api
+      .get(QUERY.END_POINT.USER.SEARCH_USER(deptId))
+      .then(res => setUser(res.data.data));
 
   const sendFormData = formData =>
-    api.post(`/api/supply`, formData).then(() => {
+    api.post(QUERY.END_POINT.SUPPLY.ADD, formData).then(() => {
       initData();
       alertModal(true, '비품 등록이 완료되었습니다.', 2);
     });
 
   const getCrawlingData = () => {
-    api.get(`/api/supply/search?modelNameList=${nameValue}`).then(res => {
+    api.get(QUERY.END_POINT.SUPPLY.CRAWLING_IMG(nameValue)).then(res => {
       setCrawlingImg(res.data.data[0].image);
       setPreview([res.data.data[0].image]);
       setFormImage([]);

@@ -46,7 +46,7 @@ export default function MasterPage() {
 
   const handleLogoutBtn = e => {
     e.preventDefault();
-    logout(
+    logout(() =>
       setState({ ...state, settingPg: 'login', userRole: '', checkDept: '' })
     );
   };
@@ -55,7 +55,7 @@ export default function MasterPage() {
     e.preventDefault();
     const { username, password } = state;
     api
-      .post(`/api/user/login/master`, { username, password })
+      .post(QUERY.END_POINT.USER.LOGIN_MASTER, { username, password })
       .then(res => {
         const masterData = res.data.data;
         setState({

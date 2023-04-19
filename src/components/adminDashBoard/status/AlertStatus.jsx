@@ -30,6 +30,7 @@ import {
   deleteAllUerSseMsg,
   deleteAllAdminSseMsg,
 } from 'redux/modules/sseAlertList';
+import QUERY from 'constants/query';
 
 export default memo(function AlertStatus({ isAdmin }) {
   const dispatch = useDispatch();
@@ -69,7 +70,7 @@ export default memo(function AlertStatus({ isAdmin }) {
   const allDeleteAlarm = () => {
     setDeleteToggle(prev => !prev);
     api
-      .delete(`/api/notification?role=${STRING.IS_ADMIN(isAdmin)}`)
+      .delete(QUERY.END_POINT.NOTIFICATION.ALL_DELETE(STRING.IS_ADMIN(isAdmin)))
       .then(() => {
         if (concatAlertData().lenght) {
           alertModal(false, '모든 알림이 삭제되었습니다.', 2);
@@ -85,7 +86,7 @@ export default memo(function AlertStatus({ isAdmin }) {
   };
 
   const putRequest = (notificationId, requestId) => {
-    api.put(`/api/main/read/${notificationId}`).then(() => {
+    api.put(QUERY.END_POINT.DASHBOARD.READ_ALARM(notificationId)).then(() => {
       setModal({ show: true, detailId: requestId });
     });
 
@@ -157,7 +158,7 @@ export default memo(function AlertStatus({ isAdmin }) {
                 <AlertDetailContainer>
                   <AlertTitle>{data.content || data.getContent}</AlertTitle>
                   <AlertData>
-                    {formatAgo(data.createdAt || data.getCreated_At)}
+                    {formatAgo(data.createdAt || data.getCreatedAt)}
                   </AlertData>
                 </AlertDetailContainer>
               </AlertListContainer>

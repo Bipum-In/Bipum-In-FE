@@ -28,7 +28,7 @@ export default function StockViewShow({
       {requestData.content.length !== 0 && (
         <PaginationList
           page={page}
-          pageSize={12}
+          pageSize={16}
           requestData={requestData}
           onPage={onPage}
         />

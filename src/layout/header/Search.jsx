@@ -1,11 +1,11 @@
+import { Suspense, lazy } from 'react';
 import styled, { css } from 'styled-components';
 
 import { ReactComponent as SearchIcon } from 'styles/commonIcon/search.svg';
-import { v4 as uuidv4 } from 'uuid';
 
 import Input from 'elements/Input';
-import SearchItem from './SearchItem';
 import PLACEHOLDER from 'constants/placeholder';
+const SearchList = lazy(() => import('./SearchList'));
 
 export default function Search({
   search,
@@ -15,7 +15,7 @@ export default function Search({
   onSearchDetail,
 }) {
   const searchData = search?.supplySearchDtoList;
-  const searchList = searchData && Object.values(searchData);
+  const searchArrayValue = searchData && Object.values(searchData);
   return (
     <SearchContainer ref={searchOutsideRef}>
       <IconContainer search="true">
@@ -27,18 +27,12 @@ export default function Search({
         placeholder={PLACEHOLDER.ENTER_INPUT('검색어를')}
       />
       {searchValue && (
-        <SearchList>
-          {searchList?.map((data, index) => (
-            <div key={uuidv4()}>
-              {data.length !== 0 && (
-                <SearchListTitle>
-                  {index ? '요청 검색' : '재고 검색'}
-                </SearchListTitle>
-              )}
-              <SearchItem search={data} onSearchDetail={onSearchDetail} />
-            </div>
-          ))}
-        </SearchList>
+        <Suspense fallback={null}>
+          <SearchList
+            searchList={searchArrayValue}
+            onSearchDetail={onSearchDetail}
+          />
+        </Suspense>
       )}
     </SearchContainer>
   );
@@ -62,26 +56,6 @@ const SearchContainer = styled.div`
   @media (max-width: ${props => props.theme.screen.desktop}) {
     margin-left: 2rem;
   }
-`;
-
-const SearchListTitle = styled.header`
-  width: 100%;
-  color: white;
-  background-color: ${props => props.theme.color.blue.brandColor6};
-  padding: 1rem;
-  font-size: 1rem;
-  font-weight: 600;
-`;
-
-const SearchList = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  border-radius: 1rem;
-  background-color: white;
-  ${props => props.theme.Boxshadow}
-  transform: translate(0, 4rem);
-  z-index: 100;
 `;
 
 const SearchInput = styled(Input)`

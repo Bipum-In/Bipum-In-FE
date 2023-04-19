@@ -11,6 +11,7 @@ import CreatedAtFormatDate from './detail/CreatedAtFormatDate';
 
 import { CustomModal } from 'elements/Modal';
 import { useModalState } from 'hooks/useModalState';
+import QUERY from 'constants/query';
 
 export default function RequestDetail({ isClose, detail }) {
   const {
@@ -36,41 +37,43 @@ export default function RequestDetail({ isClose, detail }) {
   } = detail;
   const [declineComment, setDeclineComment] = useState('');
   const [stockList, setStockList] = useState({ data: [], check: false });
-  const [requestData, setRequestData] = useState({
+  const [requestCheck, setRequestCheck] = useState(true);
+  const [disposeModal, setDisposeModal] = useModalState();
+  const [repairModal, setRepairModal] = useModalState();
+
+  const data = useRef({
     acceptResult: '',
     supplyId: '',
     comment: '',
-  });
-  const [disposeModal, setDisposeModal] = useModalState();
-  const [repairModal, setRepairModal] = useModalState();
+  }).current;
 
   useEffect(() => {
     if (requestType === '비품 요청' && requestStatus === '처리전') {
       api
-        .get(`/api/supply/stock/${categoryId}`)
+        .get(QUERY.END_POINT.SUPPLY.STOCK(categoryId))
         .then(res => setStockList({ data: res.data.data, check: true }));
     } else {
       setStockList({ data: [], check: true });
+      setRequestCheck(false);
     }
   }, [categoryId, requestStatus, requestType]);
 
   const handleChangeSelect = e => {
     const { value } = e.target;
-    setRequestData(state => ({ ...state, supplyId: value }));
+
+    value && setRequestCheck(false);
+    data.supplyId = value;
   };
 
   const handleAccept = () => {
-    if (requestData.supplyId === 0 && requestType === '비품 요청') {
+    if (data.supplyId === 0 && requestType === '비품 요청') {
       alert('비품을 선택해주세요.');
       return;
     }
 
-    setRequestData(state => ({
-      ...state,
-      acceptResult: 'ACCEPT',
-      comment: declineComment,
-    }));
-    putRequest(requestData);
+    data.acceptResult = 'ACCEPT';
+    data.comment = declineComment;
+    putRequest(data);
   };
 
   const handleDecline = () => {
@@ -79,26 +82,25 @@ export default function RequestDetail({ isClose, detail }) {
       return;
     }
 
-    setRequestData(state => ({
-      ...state,
-      acceptResult: 'DECLINE',
-      comment: declineComment,
-    }));
-    putRequest(requestData);
+    data.acceptResult = 'DECLINE';
+    data.comment = declineComment;
+    putRequest(data);
   };
 
   const handleDispose = () => {
-    setRequestData(state => ({ ...state, acceptResult: 'DISPOSE' }));
-    putRequest(requestData);
+    data.acceptResult = 'DECLINE';
+    putRequest(data);
   };
 
   const handleRepairComplete = () => {
-    setRequestData(state => ({ ...state, acceptResult: 'ACCEPT' }));
-    putRequest(requestData);
+    data.acceptResult = 'ACCEPT';
+    putRequest(data);
   };
 
   const putRequest = data => {
-    api.put(`/api/admin/requests/${requestId}`, data).then(() => isClose());
+    api
+      .put(QUERY.END_POINT.REQUEST.ADMIN_RQUESTS(requestId), data)
+      .then(() => isClose());
   };
 
   const handleModalShow = () => setDisposeModal();
@@ -168,7 +170,7 @@ export default function RequestDetail({ isClose, detail }) {
             수리가 완료된 비품입니까?
           </CustomModal>
           <ProcessButton
-            isSelected={requestData}
+            isSelected={requestCheck}
             declineComment={declineComment}
             requestType={requestType}
             requestStatus={requestStatus}

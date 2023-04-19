@@ -10,6 +10,7 @@ import SelectCategory from '../common/SelectCategory';
 import Valid from 'validation/validation';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
 import PLACEHOLDER from 'constants/placeholder';
+import QUERY from 'constants/query';
 
 export default function UserEquipmentRequest({
   type,
@@ -219,7 +220,10 @@ export default function UserEquipmentRequest({
 
   const sendFormData = formData => {
     api
-      .post(`/api/requests`, [formData, `${STRING.REQUEST_NAME[type]} 완료`])
+      .post(QUERY.END_POINT.REQUEST.SEND_PAGE, [
+        formData,
+        `${STRING.REQUEST_NAME[type]} 완료`,
+      ])
       .then(() => initData())
       .catch(() => (sendCheck.current = false));
   };
@@ -228,14 +232,14 @@ export default function UserEquipmentRequest({
     const useTypeKO = STRING.USE_TYPE_ENG[useType];
     const common = useTypeKO === '공용' ? '/common' : '';
     api
-      .get(`/api/supply${common}/mysupply/${categoryId}`)
+      .get(QUERY.END_POINT.SUPPLY.MY(common, categoryId))
       .then(res => setMysupply(res.data.data));
   };
 
   const getNotSupplyLargeCategory = useType => {
     const common = useType === '공용' ? '/common' : '';
 
-    api.get(`/api/category${common}/myLargeCategory`).then(res => {
+    api.get(QUERY.END_POINT.CATEGORY.MY_LARGE(common)).then(res => {
       const categoryList = res.data.data;
       const parseList = categoryList.map(category => {
         return { name: STRING.CATEGORY_ENG[category], type: category };
@@ -249,11 +253,9 @@ export default function UserEquipmentRequest({
     const useTypeKO = STRING.USE_TYPE_ENG[useType];
     const common = useTypeKO === '공용' ? '/common' : '';
 
-    api
-      .get(`/api/category${common}/myCategory?largeCategory=${largeType}`)
-      .then(res => {
-        setSmallCategory(res.data.data);
-      });
+    api.get(QUERY.END_POINT.CATEGORY.MY_SMALL(common, largeType)).then(res => {
+      setSmallCategory(res.data.data);
+    });
   };
 
   return (

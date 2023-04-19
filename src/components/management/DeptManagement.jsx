@@ -7,6 +7,7 @@ import DeptSidebar from './dept/DeptSidebar';
 import { useModalState } from 'hooks/useModalState';
 import UserShowBody from './dept/UserShowBody';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
+import QUERY from 'constants/query';
 
 export default function DeptManagement() {
   const [ManagementTitle] = useState(STRING.MANAGEMENT_TITLE.DEPTAUTH);
@@ -21,12 +22,12 @@ export default function DeptManagement() {
   const [userdeleteModal, setUserDeleteModal] = useModalState();
 
   const updateDeptList = () =>
-    api.get('/api/dept').then(response => {
+    api.get(QUERY.END_POINT.DEPARTMENT.LIST).then(response => {
       setDeptList(response.data.data);
       setSelectedDeptId(response.data.data[0].deptId);
     });
   const handleSubmit = () =>
-    api.post('/api/dept', { deptName }).then(() => {
+    api.post(QUERY.END_POINT.DEPARTMENT.LIST, { deptName }).then(() => {
       updateDeptList();
       setDeptName('');
     });
@@ -37,14 +38,16 @@ export default function DeptManagement() {
 
   useEffect(() => {
     if (selectedDeptId !== null) {
-      api.get(`/api/dept/${selectedDeptId}`).then(response => {
-        setEmployeeList(response.data.data);
-      });
+      api
+        .get(QUERY.END_POINT.DEPARTMENT.CHANGE(selectedDeptId))
+        .then(response => {
+          setEmployeeList(response.data.data);
+        });
     }
   }, [selectedDeptId]);
 
   const handleDeleteUser = userId => {
-    api.delete(`/api/user/${userId}`).then(() => {
+    api.delete(QUERY.END_POINT.USER.SEARCH_USER(userId)).then(() => {
       setEmployeeList(prevList =>
         prevList.filter(emp => emp.userId !== userId)
       );
@@ -53,7 +56,7 @@ export default function DeptManagement() {
 
   const handleAssignRole = userId => {
     api
-      .put(`/api/user/role/${userId}`)
+      .put(QUERY.END_POINT.USER.GIVE_ROLE(userId))
       .then(response => {
         setEmployeeList(prevList =>
           prevList.map(employee => {
@@ -74,9 +77,11 @@ export default function DeptManagement() {
 
   const updateEmployeeList = () => {
     if (selectedDeptId !== null) {
-      api.get(`/api/dept/${selectedDeptId}`).then(response => {
-        setEmployeeList(response.data.data);
-      });
+      api
+        .get(QUERY.END_POINT.DEPARTMENT.SEARCH(selectedDeptId))
+        .then(response => {
+          setEmployeeList(response.data.data);
+        });
     }
   };
 

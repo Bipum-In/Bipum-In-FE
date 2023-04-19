@@ -6,6 +6,7 @@ import { api } from 'api/axios';
 import { useDispatch } from 'react-redux';
 import { setUserInfo } from 'redux/modules/userInfoSlice';
 
+import QUERY from 'constants/query';
 import alertModal from 'utils/alertModal';
 import { CustomModal } from 'elements/Modal';
 import { useModalState } from 'hooks/useModalState';
@@ -47,7 +48,7 @@ export default function EditMyInfo({ getUserInfo }) {
   });
 
   useEffect(() => {
-    api.get(`/api/dept`).then(res => {
+    api.get(QUERY.END_POINT.DEPARTMENT.LIST).then(res => {
       const deptList = res.data.data;
       const deptId = parseMyDeptId(deptList, state.departmentName);
       setState(state => ({
@@ -105,16 +106,10 @@ export default function EditMyInfo({ getUserInfo }) {
       })
     );
 
-    api
-      .put(`/api/user`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-      .then(() => {
-        alertModal(true, '정보가 성공적으로 수정되었습니다.', 2);
-        setState(state => ({ ...state, editMode: false }));
-      });
+    api.put(QUERY.END_POINT.USER.EDIT_USER_DATA, formData).then(() => {
+      alertModal(true, '정보가 성공적으로 수정되었습니다.', 2);
+      setState(state => ({ ...state, editMode: false }));
+    });
   };
 
   const parseMyDeptId = (deptList, deptName) => {
@@ -175,12 +170,14 @@ export default function EditMyInfo({ getUserInfo }) {
     );
 
   const handleSecondPwEdit = () => {
-    api.put(`/api/user/password`, { password: inputPw }).then(() => {
-      alertModal(true, '2차 비밀번호가 성공적으로 수정되었습니다.', 2);
-      setState({ ...state, editMode: false });
-      toggleEditPasswordModal(false);
-      reset();
-    });
+    api
+      .put(QUERY.END_POINT.USER.CHANGE_PASSWORD, { password: inputPw })
+      .then(() => {
+        alertModal(true, '2차 비밀번호가 성공적으로 수정되었습니다.', 2);
+        setState({ ...state, editMode: false });
+        toggleEditPasswordModal(false);
+        reset();
+      });
   };
 
   const handleEmpNameClear = () =>

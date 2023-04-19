@@ -64,9 +64,11 @@ export default function Rending() {
     e.preventDefault();
 
     try {
-      await api.post(`/api/user/logout`);
       dispatch(logoutSuccess());
-      logout(() => navigate(ROUTER.PATH.MAIN));
+      logout(() => {
+        navigate(ROUTER.PATH.MAIN);
+        window.location.reload();
+      });
     } catch (error) {
       logout(() => {
         window.location.reload();

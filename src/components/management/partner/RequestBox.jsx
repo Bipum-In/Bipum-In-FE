@@ -7,6 +7,7 @@ import { ReactComponent as BlackCancel } from 'styles/commonIcon/blackCancel.svg
 import { getPartnersList } from 'redux/modules/partnersList';
 import { useDispatch } from 'react-redux';
 import PLACEHOLDER from 'constants/placeholder';
+import QUERY from 'constants/query';
 
 export default function RequestBox({ handleModalClose }) {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ export default function RequestBox({ handleModalClose }) {
       address,
     };
     try {
-      await api.post('/api/partners', data);
+      await api.post(QUERY.END_POINT.PARTNERS.LIST, data);
       dispatch(getPartnersList({ page: 1, size: 10 }));
       handleModalClose();
     } catch (error) {}
