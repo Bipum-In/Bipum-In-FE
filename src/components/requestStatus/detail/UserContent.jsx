@@ -6,6 +6,7 @@ export default function UserContent({
   serialNum,
   modelName,
   requestType,
+  acceptResult,
   categoryName,
   requestStatus,
 }) {
@@ -21,8 +22,12 @@ export default function UserContent({
           <ContentType>{useType}</ContentType>
         </UserContentContainer>
         <UserContentContainer>
-          <ContentName>제품명</ContentName>
-          <ContentType>{modelName}</ContentType>
+          {acceptResult === '승인' && (
+            <>
+              <ContentName>제품명</ContentName>
+              <ContentType>{modelName}</ContentType>
+            </>
+          )}
         </UserContentContainer>
         {requestType !== '비품 요청' && requestStatus === '처리전' && (
           <UserContentContainer>
