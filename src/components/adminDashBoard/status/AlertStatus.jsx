@@ -40,22 +40,21 @@ export default memo(function AlertStatus({ isAdmin }) {
   const {
     adminSseAlert: { getAdminSseAlert },
     userSseAlert: { getUserSseAlert },
+    sseDatas: { sseAdminData, sseUserData },
   } = useSelector(state => state.sseAlertList);
 
-  const content = isAdmin
-    ? getAdminSseAlert?.content
-    : getUserSseAlert?.content;
+  const concatAlertData = () => {
+    if (isAdmin) {
+      return [...sseAdminData, ...getAdminSseAlert?.content];
+    }
+    return [...sseUserData, ...getUserSseAlert?.content];
+  };
+
   const isLastPage = isAdmin
     ? getAdminSseAlert?.lastPage
     : getUserSseAlert?.lastPage;
-
-  const { sseAdminData, sseUserData } = useSelector(
-    state => state.sseAlertList.sseDatas
-  );
-
   const [ref, inView] = useInView({ threshold: 0 }); //inView
   const [page, setPage] = useState(1);
-  const sseData = isAdmin ? sseAdminData : sseUserData;
 
   useEffect(() => {
     if (!isLastPage && inView) {
@@ -72,10 +71,9 @@ export default memo(function AlertStatus({ isAdmin }) {
     api
       .delete(`/api/notification?role=${STRING.IS_ADMIN(isAdmin)}`)
       .then(() => {
-        if (content.length > 0) {
+        if (concatAlertData().lenght) {
           alertModal(false, '모든 알림이 삭제되었습니다.', 2);
         }
-
         if (isAdmin) {
           dispatch(deleteAllAdminMsg());
           dispatch(deleteAllAdminSseMsg());
@@ -102,23 +100,22 @@ export default memo(function AlertStatus({ isAdmin }) {
 
   return (
     <AlertStatusWrapper>
-      {content && (
-        <styleds.EquipmentTopContainer col="true">
-          <AnchorContainer>
-            <AnchorBtn
-              isAlert={true}
-              allDeleteAlarm={allDeleteAlarm}
-              isDeleteShow={isDeleteShow}
-              setDeleteToggle={setDeleteToggle}
-            >
-              알림
-            </AnchorBtn>
-          </AnchorContainer>
-          <styleds.AlertAndAddContainer>
-            {sseData.length === 0 && content.length === 0 && isLastPage && (
-              <EmptyAlarm />
-            )}
-            {[...sseData, ...content].map((data, index) => (
+      <styleds.EquipmentTopContainer col="true">
+        <AnchorContainer>
+          <AnchorBtn
+            isAlert={true}
+            allDeleteAlarm={allDeleteAlarm}
+            isDeleteShow={isDeleteShow}
+            setDeleteToggle={setDeleteToggle}
+          >
+            알림
+          </AnchorBtn>
+        </AnchorContainer>
+        <styleds.AlertAndAddContainer>
+          {concatAlertData().length === 0 && isLastPage && <EmptyAlarm />}
+          {concatAlertData().map((data, index) => {
+            console.log(data);
+            return (
               <AlertListContainer
                 AlertListContainer
                 key={index}
@@ -165,15 +162,15 @@ export default memo(function AlertStatus({ isAdmin }) {
                   </AlertData>
                 </AlertDetailContainer>
               </AlertListContainer>
-            ))}
-            <InfinityContainer ref={ref}>
-              {isLastPage && content.length > 4 && (
-                <span>마지막 페이지 입니다.</span>
-              )}
-            </InfinityContainer>
-          </styleds.AlertAndAddContainer>
-        </styleds.EquipmentTopContainer>
-      )}
+            );
+          })}
+          <InfinityContainer ref={ref}>
+            {isLastPage && concatAlertData().length > 4 && (
+              <span>마지막 페이지 입니다.</span>
+            )}
+          </InfinityContainer>
+        </styleds.AlertAndAddContainer>
+      </styleds.EquipmentTopContainer>
       {/* 알림 요청현황 모달 */}
       <Modal
         isOpen={modal.show}
