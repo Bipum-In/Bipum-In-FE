@@ -13,6 +13,7 @@ import { CustomModal } from 'elements/Modal';
 import { useModalState } from 'hooks/useModalState';
 
 import { api } from 'api/axios';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function CheckPwPage({ setEditPage }) {
   const [password, setPassword] = useState('');
@@ -59,7 +60,7 @@ export default function CheckPwPage({ setEditPage }) {
                 setState={e => setPassword(e.target.value)}
                 singupInput
                 type="password"
-                placeholder="6자리 비밀번호"
+                placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}
                 maxLength={6}
                 autoComplete="off"
               />

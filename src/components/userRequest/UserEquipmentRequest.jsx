@@ -9,6 +9,7 @@ import ImageAdd from '../equipmentAdd/single/ImageAdd';
 import SelectCategory from '../common/SelectCategory';
 import Valid from 'validation/validation';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function UserEquipmentRequest({
   type,
@@ -334,7 +335,7 @@ export default function UserEquipmentRequest({
                     <styles.TextArea
                       value={messageValue}
                       onChange={handleChagneMessage}
-                      placeholder="100자 이내로 작성해주세요."
+                      placeholder={PLACEHOLDER.lEAVE_TO_MESSAGE_LENGTH(100)}
                       maxLength={100}
                     />
                     <styles.TextLength>

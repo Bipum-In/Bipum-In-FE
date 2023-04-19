@@ -17,6 +17,7 @@ import useRegexInput from 'hooks/useRegexInput';
 import ImageAdd from 'components/equipmentAdd/single/ImageAdd';
 import SelectCategory from 'components/common/SelectCategory';
 import { styles } from 'components/common/commonStyled';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function EditMyInfo({ getUserInfo }) {
   const {
@@ -195,7 +196,7 @@ export default function EditMyInfo({ getUserInfo }) {
                       type="text"
                       value={empName}
                       setState={handleEmpNameBlur}
-                      placeholder="이름을 입력해주세요"
+                      placeholder={PLACEHOLDER.ENTER_INPUT('이름을')}
                       maxLength="15"
                     />
                   ) : (
@@ -210,7 +211,7 @@ export default function EditMyInfo({ getUserInfo }) {
                     <MypageInput
                       value={phone}
                       setState={handleChangePhone}
-                      placeholder="번호를 입력해 주세요"
+                      placeholder={PLACEHOLDER.ENTER_INPUT('전화번호를')}
                       maxLength="11"
                     />
                   ) : (
@@ -320,7 +321,7 @@ export default function EditMyInfo({ getUserInfo }) {
                             setState={inputPwHandler}
                             singupInput
                             type="password"
-                            placeholder="6자리 비밀번호"
+                            placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}
                             maxLength={6}
                           />
                         </ChangePw>
@@ -337,7 +338,7 @@ export default function EditMyInfo({ getUserInfo }) {
                             setState={checkSame}
                             singupInput
                             type="password"
-                            placeholder="6자리 비밀번호"
+                            placeholder={PLACEHOLDER.PASSWORD_INPUT_LENGTH(6)}
                             maxLength={6}
                           />
                         </ChangePw>

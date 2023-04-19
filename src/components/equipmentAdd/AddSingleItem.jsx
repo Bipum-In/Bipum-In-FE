@@ -12,6 +12,7 @@ import STRING from 'constants/string';
 import Input from 'elements/Input';
 import alertModal from 'utils/alertModal';
 import Valid from 'validation/validation';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function AddSingleItem({ categoryList, largeCategoryList }) {
   const [largeCategory, setLargeCategory] = useState('');
@@ -97,9 +98,6 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
 
   const handleChangeSerialValue = e => {
     const serialNumber = e.target.value;
-    const maxLength = 30;
-
-    if (!Valid.inputByteCheck(serialNumber, maxLength)) return;
     setSerialValue(serialNumber);
   };
 
@@ -214,7 +212,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
           [nameValue, '제품명'],
           [serialValue, '시리얼 넘버'],
         ],
-        [/[^ㄱ-ㅎㅏ-ㅣ]{1,30}$/, /[^ㄱ-ㅎㅏ-ㅣ]{1,50}$/]
+        [/[^ㄱ-ㅎㅏ-ㅣ]{1,30}$/, /[^ㄱ-ㅎㅏ-ㅣ]{1,30}$/]
       )
     ) {
       return;
@@ -294,7 +292,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
                       <Input
                         value={categoryInput}
                         setState={handleChangeCategoryInput}
-                        placeholder="직접 입력하세요."
+                        placeholder={PLACEHOLDER.ENTER_YOUR_SELF}
                         maxLength={10}
                       />
                     </styles.CategoryInputContainer>
