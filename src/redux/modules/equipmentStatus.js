@@ -183,6 +183,10 @@ const equipmentStatusSlice = createSlice({
       state.supplyHistory.history.user = { content: [], lastPage: false };
       state.supplyHistory.history.repair = { content: [], lastPage: false };
     },
+    initEquipment: (state, _) => {
+      state.equipmentStatus.getEquipment = null;
+      state.equipmentStatus.isEquipmentError = false;
+    },
     initEquipmentDetail: (state, _) => {
       state.equipmentDetail.getDetail = null;
       state.equipmentDetail.isDetailLoading = false;
@@ -233,6 +237,7 @@ const equipmentStatusSlice = createSlice({
 
 export const {
   initHistory,
+  initEquipment,
   initEquipmentDetail,
   setCategoryData,
   setSmallCategoryData,
