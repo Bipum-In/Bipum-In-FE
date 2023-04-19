@@ -98,7 +98,6 @@ export default function AddMultipleItem() {
       const excels = setSheetListImage(setExcels(workBook));
       const sheetList = setSheetList(workBook.SheetNames);
       const jsonToExcelArray = jsonToExcel(workBook);
-
       if (!Valid.excelSheetCheck(sheetName, jsonToExcelArray)) return;
 
       setExcel({ data: excels, sheetList, sheetName, sheetItem: 0 });
@@ -203,6 +202,8 @@ export default function AddMultipleItem() {
       .get(QUERY.END_POINT.SUPPLY.CRAWLING_IMG(modelNameToString))
       .then(res => {
         response = sliceData(res.data.data, sheetLengthArr);
+      })
+      .finally(() => {
         setIsLoading(false);
       });
 
@@ -320,7 +321,7 @@ export default function AddMultipleItem() {
   const setExcels = workBook => {
     return workBook.SheetNames.map(sheetName =>
       XLSX.utils.sheet_to_json(workBook.Sheets[sheetName], {
-        range: 10,
+        range: 21,
         blankrows: false,
       })
     );
@@ -329,7 +330,7 @@ export default function AddMultipleItem() {
   const jsonToExcel = workBook => {
     return Object.values(workBook.Sheets).map(sheet =>
       XLSX.utils.sheet_to_json(sheet, {
-        range: 10,
+        range: 21,
         header: 1,
         defval: '',
       })
