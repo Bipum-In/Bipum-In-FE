@@ -4,7 +4,6 @@ import SearchItem from './SearchItem';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function SearchList({ searchList, onSearchDetail }) {
-  console.log(searchList);
   return (
     <SearchListContainer>
       {searchList?.map((data, index) => (
