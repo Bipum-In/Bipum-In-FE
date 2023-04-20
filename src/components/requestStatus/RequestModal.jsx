@@ -1,10 +1,11 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { initDetail, requestDetail } from 'redux/modules/requestStatus';
+import { retryLazy } from 'utils/retryLazy';
 
-const AdminRequestDetail = lazy(() => import('./AdminRequestDetail'));
-const UserRequestDetail = lazy(() => import('./UserRequestDetail'));
+const AdminRequestDetail = retryLazy(() => import('./AdminRequestDetail'));
+const UserRequestDetail = retryLazy(() => import('./UserRequestDetail'));
 
 export default function RequestModal({ isClose, detailId, path, isAdmin }) {
   const dispatch = useDispatch();
