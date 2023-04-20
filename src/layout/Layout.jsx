@@ -127,6 +127,9 @@ const OutletContainer = styled.div`
   margin-left: auto;
   padding: 9.375rem 3.75rem 3.4375rem 3.75rem;
   background-color: ${props => props.theme.color.blue.brandColor1};
+  @media (max-width: 840px) {
+    min-width: 840px;
+  }
   @media (max-width: ${props => props.theme.screen.desktop}) {
     width: calc(100vw);
   }
