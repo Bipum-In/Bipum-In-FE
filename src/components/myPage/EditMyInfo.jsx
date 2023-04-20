@@ -122,7 +122,6 @@ export default function EditMyInfo({ getUserInfo }) {
 
   const onChangeimge = e => {
     const img = e.target.files[0];
-    console.log(img);
     setPreviewImage(img);
     setState(state => ({ ...state, formImage: [img], userImg: '' }));
   };
@@ -138,7 +137,6 @@ export default function EditMyInfo({ getUserInfo }) {
     reader.readAsDataURL(img);
   };
 
-  console.log(state.formImage);
   const currentUrl = () => {
     const sliceUrl = document.location.href.split('//')[1].slice(0, 5);
     const href = sliceUrl === 'local';
