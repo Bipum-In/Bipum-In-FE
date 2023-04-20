@@ -97,13 +97,7 @@ export default function MasterPage() {
           />
         )}
 
-        {state.settingPg === 'chart' && (
-          <OrganizationChart
-            setSettingPg={newSettingPg =>
-              setState({ ...state, settingPg: newSettingPg })
-            }
-          />
-        )}
+        {state.settingPg === 'chart' && <OrganizationChart />}
       </rendingStyles.LoginWrapper>
     </>
   );
