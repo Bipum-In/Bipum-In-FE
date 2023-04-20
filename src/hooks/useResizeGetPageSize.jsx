@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import useDebouncedCallback from './useDebouncedCallback';
 
 export default function useResizeGetPageSize() {
   const containerRef = useRef(null);
@@ -6,7 +7,6 @@ export default function useResizeGetPageSize() {
   const listHeaderRef = useRef(null);
   const listRef = useRef(null);
 
-  const [timeoutId, setTimeoutId] = useState(null);
   const [listSize, setListSize] = useState(null);
 
   const listSizeRef = useRef(0);
@@ -52,17 +52,7 @@ export default function useResizeGetPageSize() {
       : Math.floor(calculateSize) - 1;
   };
 
-  const throttledHandleResize = useCallback(() => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    setTimeoutId(setTimeout(handleResize, 100));
-  }, [handleResize, timeoutId]);
-
-  useEffect(() => {
-    window.addEventListener('resize', throttledHandleResize);
-    return () => window.removeEventListener('resize', throttledHandleResize);
-  }, [throttledHandleResize]);
+  useDebouncedCallback(handleResize, 100, 'resize');
 
   return [
     {
