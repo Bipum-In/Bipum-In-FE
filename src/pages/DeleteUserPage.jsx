@@ -19,7 +19,6 @@ export default function DeleteUserPage() {
   const fetchDeleteUser = async (code, urlType) => {
     try {
       await api.post(QUERY.END_POINT.USER.DELETE_USER(code, urlType));
-      logout();
 
       alertModalButton(true, '회원 탈퇴 완료', () => {
         navigate(ROUTER.PATH.MAIN);

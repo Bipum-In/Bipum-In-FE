@@ -22,7 +22,7 @@ const END_POINT = {
     SEARCH_USER: userId => `/api/user/${userId}`,
     LOGIN_GOOGLE: (code, currentUrl) =>
       `/api/user/login/google?code=${code}&urlType=${currentUrl}`,
-    USER_DELETE: (code, urlType) =>
+    DELETE_USER: (code, urlType) =>
       `/api/user/delete?code=${code}&urlType=${urlType}`,
   },
 
