@@ -8,7 +8,7 @@ import StockViewShow from './StockViewShow';
 import useSelectMenu from 'hooks/useSelectMenu';
 import EquipmentModal from '../EquipmentManage/EquipmentModal';
 
-import { getEquipmentList, initEquipment } from 'redux/modules/equipmentStatus';
+import { getEquipmentList } from 'redux/modules/equipmentStatus';
 import { getEncryptionStorage } from '../../utils/encryptionStorage';
 import useOutsideClick from 'hooks/useOutsideClick';
 
@@ -52,9 +52,6 @@ export default function StockView({ category: { category, largeCategory } }) {
         size: 16,
       })
     );
-    return () => {
-      dispatch(initEquipment());
-    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, keyword, categoryId, page]);
 

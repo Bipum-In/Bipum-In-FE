@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import StockView from 'components/stockView/StockView';
-import { getCategoryList } from 'redux/modules/equipmentStatus';
+import { getCategoryList, initEquipment } from 'redux/modules/equipmentStatus';
 
 export default function UserStockView() {
   const dispatch = useDispatch();
@@ -11,6 +11,9 @@ export default function UserStockView() {
 
   useEffect(() => {
     dispatch(getCategoryList());
+    return () => {
+      dispatch(initEquipment());
+    };
   }, [dispatch]);
 
   if (isCategoryError) return <div>에러 발생</div>;
