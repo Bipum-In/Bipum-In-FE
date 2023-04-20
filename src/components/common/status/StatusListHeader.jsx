@@ -4,7 +4,6 @@ import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
-import PLACEHOLDER from 'constants/placeholder';
 
 export default function StatusListHeader({
   setSelectName,
