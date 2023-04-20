@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import StatusListHeader from '../common/status/StatusListHeader';
 import PaginationList from '../common/PaginationList';
 import StockViewList from './StockViewList';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function StockViewShow({
   pageRef,
@@ -19,6 +20,10 @@ export default function StockViewShow({
         setSelectName={setSelectName}
         keyword={keyword}
         setKeyword={setKeyword}
+        placeholder={PLACEHOLDER.ENTER_INPUT(
+          '검색어를',
+          '(신청자,담당부서 등)'
+        )}
       />
       <StockViewList
         pageRef={pageRef}

@@ -4,14 +4,10 @@ import Input from 'elements/Input';
 import Button from 'elements/Button';
 import { api } from 'api/axios';
 import { ReactComponent as BlackCancel } from 'styles/commonIcon/blackCancel.svg';
-import { getPartnersList } from 'redux/modules/partnersList';
-import { useDispatch } from 'react-redux';
 import PLACEHOLDER from 'constants/placeholder';
 import QUERY from 'constants/query';
 
 export default function RequestBox({ handleModalClose }) {
-  const dispatch = useDispatch();
-
   const [companyName, setCompanyName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
@@ -22,20 +18,19 @@ export default function RequestBox({ handleModalClose }) {
   const handleEmailClear = () => setEmail('');
   const handleAddressClear = () => setAddress('');
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     const data = {
       partnersName: companyName,
       phone: phoneNumber,
       email,
       address,
     };
-    try {
-      await api.post(QUERY.END_POINT.PARTNERS.LIST, data);
-      dispatch(getPartnersList({ page: 1, size: 10 }));
-      handleModalClose();
-    } catch (error) {}
-  };
 
+    api.post(QUERY.END_POINT.PARTNERS.LIST, data).then(() => {
+      handleModalClose();
+    });
+  };
+  //선중이형 validataion 추가해주세요 ㅋㅎㅋㅎㅋㅎㅋㅎ
   return (
     <RequestWrapper>
       <RequestContainer>
@@ -45,9 +40,12 @@ export default function RequestBox({ handleModalClose }) {
           </Title>
 
           <Input
+            type="text"
             placeholder={PLACEHOLDER.ENTER_INPUT('업체를')}
             value={companyName}
             onChange={e => setCompanyName(e.target.value)}
+            minLength="1"
+            maxLength="15"
           />
           {companyName && (
             <CancelInputWrapper onClick={handleNameClear}>
@@ -75,6 +73,7 @@ export default function RequestBox({ handleModalClose }) {
         <Box>
           <Title marginRight="2.375rem">이메일</Title>
           <Input
+            type="email"
             placeholder={PLACEHOLDER.ENTER_INPUT('이메일을')}
             value={email}
             onChange={e => setEmail(e.target.value)}
@@ -169,7 +168,6 @@ const RequestContainer = styled.div`
   padding-bottom: 2.25rem;
 
   input {
-    text-align: center;
     width: 12rem;
     height: 2.125rem;
     background: #f5f5f5;

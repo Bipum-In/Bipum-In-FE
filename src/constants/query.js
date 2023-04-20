@@ -51,7 +51,8 @@ const END_POINT = {
   PARTNERS: {
     LIST: '/api/partners',
 
-    PAGE: (page, size) => `/api/partners/admin?page=${page}&size=${size}`,
+    PAGE: (page, size, keyword) =>
+      `/api/partners/admin?page=${page}&size=${size}&keyword=${keyword}`,
     CHANGE: partnersId => `/api/partners/${partnersId || ''}`,
   },
 

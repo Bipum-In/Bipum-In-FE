@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import StatusListHeader from '../common/status/StatusListHeader';
 import StatusList from '../common/status/StatusList';
 import PaginationList from '../common/PaginationList';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function RequestShow({
   requestData,
@@ -74,6 +75,10 @@ export default function RequestShow({
         setStatus={setStatus}
         keyword={keyword}
         setKeyword={setKeyword}
+        placeholder={PLACEHOLDER.ENTER_INPUT(
+          '검색어를',
+          '(신청자,담당부서 등)'
+        )}
       />
       <StatusList
         isAdmin={isAdmin}

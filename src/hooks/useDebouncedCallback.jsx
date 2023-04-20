@@ -1,6 +1,6 @@
 import { useRef, useCallback, useEffect } from 'react';
 
-export default function useDebouncedCallback(callback, delay) {
+export default function useDebouncedCallback(callback, delay, eventType) {
   const callbackRef = useRef(callback);
   const timeoutRef = useRef(null);
 
@@ -21,10 +21,18 @@ export default function useDebouncedCallback(callback, delay) {
   );
 
   useEffect(() => {
-    return () => {
-      clearTimeout(timeoutRef.current);
-    };
-  }, []);
+    if (eventType) {
+      window.addEventListener(eventType, debouncedCallback, { passive: false });
+      return () => {
+        window.removeEventListener(eventType, debouncedCallback);
+        clearTimeout(timeoutRef.current);
+      };
+    } else {
+      return () => {
+        clearTimeout(timeoutRef.current);
+      };
+    }
+  }, [eventType, debouncedCallback]);
 
   return debouncedCallback;
 }

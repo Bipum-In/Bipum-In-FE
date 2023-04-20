@@ -12,25 +12,13 @@ import STRING from 'constants/string';
 import { useDispatch, useSelector } from 'react-redux';
 import {} from 'redux/modules/requestStatus';
 import { getCategoryList } from 'redux/modules/equipmentStatus';
+
 export default function Management() {
   const dispatch = useDispatch();
-  const [page, setPage] = useState(1);
 
   const { getCategory, isCategoryError } = useSelector(
     state => state.equipmentStatus.category
   );
-
-  const { getPartners } = useSelector(state => state.partnersList);
-
-  useEffect(() => {
-    dispatch(getPartnersList({ page, size: 10 }));
-  }, [page, dispatch]);
-
-  useEffect(() => {
-    if (getPartners && getPartners.content.length === 0) {
-      setPage(state => (state > 1 ? state - 1 : 1));
-    }
-  }, [getPartners]);
 
   useEffect(() => {
     dispatch(getCategoryList());
@@ -43,12 +31,7 @@ export default function Management() {
   ]);
 
   const handleClickMenu = (e, innerText) => {
-    setPage(1);
     clickMenu(e, innerText);
-  };
-
-  const handlePage = e => {
-    setPage(e);
   };
 
   if (isCategoryError) return <div>에러 발생</div>;
@@ -64,13 +47,7 @@ export default function Management() {
               <CategoryManagement category={getCategory} />
             )}
             {menuStyle[1].status && <DeptManagement />}
-            {menuStyle[2].status && getPartners && (
-              <PartnerManagement
-                partners={getPartners}
-                page={page}
-                onPage={handlePage}
-              />
-            )}
+            {menuStyle[2].status && <PartnerManagement />}
           </ManagementComponentsContainer>
         </ManagementWrapper>
       )}

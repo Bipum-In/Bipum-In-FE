@@ -10,7 +10,13 @@ export const getPartnersList = createAsyncThunk(
   'PARTNERS',
   async (payload, thunkAPI) => {
     return await api
-      .get(QUERY.END_POINT.PARTNERS.PAGE(payload.page, payload.size))
+      .get(
+        QUERY.END_POINT.PARTNERS.PAGE(
+          payload.page,
+          payload.size,
+          payload.keyword
+        )
+      )
       .then(response => thunkAPI.fulfillWithValue(response.data.data));
   }
 );

@@ -29,10 +29,13 @@ export default function EquipmentManagement() {
   );
 
   useEffect(() => {
-    dispatch(getCategoryList());
     return () => {
       dispatch(initEquipment());
     };
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(getCategoryList());
   }, [dispatch, showModal]);
 
   const handleDetailModal = id => {

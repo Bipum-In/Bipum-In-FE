@@ -1,31 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import PartnerHeader from './partner/PartnerHeader';
 import StatusList from '../common/status/StatusList';
 import PaginationList from '../common/PaginationList';
 import Modal from 'elements/Modal';
 import DetailPartner from './partner/DetailPartner';
 import STRING from 'constants/string';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPartnersList } from 'redux/modules/partnersList';
+import StatusListHeader from 'components/common/status/StatusListHeader';
 
-export default function PartnerManagement({ partners, page, onPage }) {
+import { useModalState } from 'hooks/useModalState';
+import PartnerAddBtn from './partner/PartnerAddBtn';
+import PLACEHOLDER from 'constants/placeholder';
+import useResizeGetPageSize from 'hooks/useResizeGetPageSize';
+
+export default function PartnerManagement() {
+  const dispatch = useDispatch();
+  const [page, setPage] = useState(1);
+  const [keyword, setKeyword] = useState('');
+  const [result, setResult] = useState();
+  const [modal, setModal] = useState({ show: false, detailId: null });
+  const [addPatnerModal, setAddPatnerModal] = useModalState();
+  const { getPartners } = useSelector(state => state.partnersList);
+
   const headerList = [
-    { name: '업체명', width: '5rem' },
-    { name: '전화번호', width: '6.375rem' },
-    { name: '이메일', width: '12rem' },
-    { name: '주소', width: '19.375rem' },
+    { name: '업체명', width: '6rem' },
+    { name: '전화번호', width: '6rem' },
+    { name: '이메일', width: '10rem' },
+    { name: '주소', width: '18rem' },
   ];
 
-  const [modal, setModal] = useState({ show: false, detailId: null });
-  const [ManagementTitle] = useState(STRING.MANAGEMENT_TITLE.PARTNER);
-  const [keyword, setKeyword] = useState('');
+  const [resizeRef, pageSize, firstPageSize, handleResize] =
+    useResizeGetPageSize();
 
-  const [result, setResult] = useState();
+  useEffect(() => {
+    const size = pageSize || firstPageSize || handleResize();
+    dispatch(getPartnersList({ page, size, keyword }));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dispatch,
+    page,
+    pageSize,
+    handleResize,
+    keyword,
+    addPatnerModal,
+    modal.show,
+  ]);
+
+  useEffect(() => {
+    if (getPartners && getPartners.content.length === 0) {
+      setPage(state => (state > 1 ? state - 1 : 1));
+    }
+  }, [getPartners]);
 
   const contentKeyArr = ['partnersName', 'phone', 'email', 'address'];
 
+  const handlePage = e => {
+    setPage(e);
+  };
+
   const handleChangeDetail = id => {
     setModal(state => ({ show: !state.show, detailId: id }));
-    const result = partners.content.find(item => item.partnersId === id);
+    const result = getPartners.content.find(item => item.partnersId === id);
     setResult(result);
   };
 
@@ -33,46 +69,48 @@ export default function PartnerManagement({ partners, page, onPage }) {
     setKeyword(e.target.value);
   };
 
-  const searchResult = {
-    content: partners.content.filter(
-      item =>
-        item.partnersName.includes(keyword) ||
-        item.phone.includes(keyword) ||
-        item.email.includes(keyword) ||
-        item.address.includes(keyword)
-    ),
-    totalPages: partners.totalPages,
-  };
+  const handleModalClose = () => setAddPatnerModal(false);
 
   return (
     <>
-      <PartnerWarpper>
+      <PartnerWarpper ref={resizeRef.containerRef}>
         <ManagementType>
-          <PartnerHeader
-            setSelectName={ManagementTitle}
+          <StatusListHeader
+            setSelectName={STRING.MANAGEMENT_TITLE.PARTNER}
+            containerHeaderRef={resizeRef.containerHeaderRef}
             keyword={keyword}
             setKeyword={handleChangeKeyword}
+            placeholder={PLACEHOLDER.ENTER_INPUT('검색어를', '(업체 등)')}
+            childTwo={
+              <PartnerAddBtn
+                isOpen={addPatnerModal}
+                onClose={handleModalClose}
+                addPatnerModal={addPatnerModal}
+                setAddPatnerModal={setAddPatnerModal}
+                handleModalClose={handleModalClose}
+              />
+            }
           />
           <StatusList
+            listHeaderRef={resizeRef.listHeaderRef}
+            listRef={resizeRef.listRef}
             headerList={headerList}
-            content={keyword ? searchResult : partners}
+            content={getPartners}
             contentKeyArr={contentKeyArr}
             onDetail={handleChangeDetail}
           />
-          <PaginationList
-            page={page}
-            pageSize={10}
-            requestData={partners}
-            onPage={onPage}
-          />
+          {getPartners?.content.length !== 0 && (
+            <PaginationList
+              page={page}
+              pageSize={pageSize || firstPageSize}
+              requestData={getPartners || { totalElements: 0 }}
+              onPage={handlePage}
+            />
+          )}
         </ManagementType>
       </PartnerWarpper>
       <Modal isOpen={modal.show} onClose={handleChangeDetail}>
-        <DetailPartner
-          isClose={handleChangeDetail}
-          result={result}
-          page={page}
-        />
+        <DetailPartner isClose={handleChangeDetail} result={result} />
       </Modal>
     </>
   );

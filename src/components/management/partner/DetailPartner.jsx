@@ -8,12 +8,9 @@ import { ReactComponent as BlackCancel } from 'styles/commonIcon/blackCancel.svg
 import { useModalState } from 'hooks/useModalState';
 import STRING from 'constants/string';
 import { api } from 'api/axios';
-import { useDispatch } from 'react-redux';
-import { getPartnersList } from 'redux/modules/partnersList';
 import QUERY from 'constants/query';
 
-export default function DetailPartner({ isClose, result, page }) {
-  const dispatch = useDispatch();
+export default function DetailPartner({ isClose, result }) {
   const [isEdit, setIsEdit] = useState(false);
   const [editedValue, setEditedValue] = useState(result);
   const [addSmallModal, setAddSmallModal] = useModalState();
@@ -31,23 +28,17 @@ export default function DetailPartner({ isClose, result, page }) {
   const handleDelete = () => deletePartner(result.partnersId);
 
   const deletePartner = partnersId =>
-    api
-      .delete(QUERY.END_POINT.PARTNERS.CHANGE(partnersId))
-      .then(() => {
-        dispatch(getPartnersList({ page, size: 10 }));
-        handleModalClose();
-        isClose();
-      })
-      .catch();
+    api.delete(QUERY.END_POINT.PARTNERS.CHANGE(partnersId)).then(() => {
+      handleModalClose();
+      isClose();
+    });
 
   const handleSaveClick = () => {
     api
       .put(QUERY.END_POINT.PARTNERS.CHANGE(editedValue.partnersId), editedValue)
-      .then(response => {
+      .then(() => {
         isClose();
-        dispatch(getPartnersList({ page, size: 10 }));
-      })
-      .catch(error => {});
+      });
   };
 
   const renderInputField = (title, name, value) => {

@@ -4,7 +4,6 @@ import { ReactComponent as Search } from 'styles/commonIcon/search.svg';
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 import Input from 'elements/Input';
 import Button from 'elements/Button';
-import PLACEHOLDER from 'constants/placeholder';
 
 export default function StatusListHeader({
   setSelectName,
@@ -14,13 +13,15 @@ export default function StatusListHeader({
   setStatus,
   keyword,
   setKeyword,
-  children,
+  placeholder,
+  childOne,
+  childTwo,
 }) {
   return (
     <RequestShowTitle ref={containerHeaderRef}>
       <Title>{setSelectName}</Title>
       <SearchSelect>
-        {children}
+        {childOne}
         <SearchContainer>
           <SearchIconContainer>
             <Button>
@@ -30,12 +31,10 @@ export default function StatusListHeader({
           <Input
             value={keyword}
             onChange={setKeyword}
-            placeholder={PLACEHOLDER.ENTER_INPUT(
-              '검색어를',
-              '(신청자,담당부서 등)'
-            )}
+            placeholder={placeholder}
           />
         </SearchContainer>
+        {childTwo}
         {setStatus && (
           <SelectWrapper>
             <Select value={status} onChange={setStatus}>

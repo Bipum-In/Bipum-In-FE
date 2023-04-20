@@ -21,6 +21,11 @@ export default function useThrottleCallback(callback, delay, eventType) {
       window.addEventListener(eventType, throttledCallback, { passive: false });
       return () => {
         window.removeEventListener(eventType, throttledCallback);
+        clearTimeout(throttleRef.current);
+      };
+    } else {
+      return () => {
+        clearTimeout(throttleRef.current);
       };
     }
   }, [eventType, throttledCallback]);
