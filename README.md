@@ -23,13 +23,14 @@
 | FE  | 권구민 | https://github.com/9mean2   |
 
 
-## [](https://www.bipumin.shop/)비품인 배포 사이트
+## 비품인 배포 사이트
 
 [비품인](https://www.bipumin.shop/)
 
-## [](https://www.youtube.com/watch?v=_1JAHVzat2Q)비품인 시연 영상 사이트
+## 비품인 시연 영상 사이트
 
-[비품인.youtube](https://www.youtube.com/watch?v=_1JAHVzat2Q)
+[비품인 시연영상, 아키텍처, 트러블슈팅](https://www.youtube.com/watch?v=k1QiN9Er5AE&t=12s)
+[비품인 간단 시연영상](https://www.youtube.com/watch?v=4NVqHG47y7o&t=38s)
 
 ## 깃허브 레포
 
