@@ -14,13 +14,15 @@ export default function StatusListHeader({
   setStatus,
   keyword,
   setKeyword,
-  children,
+  placeholder,
+  childOne,
+  childTwo,
 }) {
   return (
     <RequestShowTitle ref={containerHeaderRef}>
       <Title>{setSelectName}</Title>
       <SearchSelect>
-        {children}
+        {childOne}
         <SearchContainer>
           <SearchIconContainer>
             <Button>
@@ -30,12 +32,10 @@ export default function StatusListHeader({
           <Input
             value={keyword}
             onChange={setKeyword}
-            placeholder={PLACEHOLDER.ENTER_INPUT(
-              '검색어를',
-              '(신청자,담당부서 등)'
-            )}
+            placeholder={placeholder}
           />
         </SearchContainer>
+        {childTwo}
         {setStatus && (
           <SelectWrapper>
             <Select value={status} onChange={setStatus}>
