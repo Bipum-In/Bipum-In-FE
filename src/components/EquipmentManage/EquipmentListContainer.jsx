@@ -134,8 +134,8 @@ export default function EquipmentListContainer({
   return (
     <>
       {isEquipmentError && <div>에러 발생</div>}
-      <EquipmentListWrapper ref={resizeRef.containerRef}>
-        <CategoryContainer ref={resizeRef.headerRef}>
+      <EquipmentListWrapper>
+        <CategoryContainer>
           <CategoryItems
             getCategory={menuStyle}
             getSmallCategory={categoryList}
