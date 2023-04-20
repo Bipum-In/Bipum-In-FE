@@ -17,7 +17,7 @@ import SearchDetailModal from './SearchDetailModal';
 import Search from 'layout/header/Search';
 import useOutsideClick from 'hooks/useOutsideClick';
 import useThrottleCallback from 'hooks/useThrottleCallback';
-import useDebouncedCallback from 'hooks/useDebounce';
+import useDebouncedCallback from 'hooks/useDebouncedCallback';
 
 import { updateEncryptionStorage } from 'utils/encryptionStorage';
 
