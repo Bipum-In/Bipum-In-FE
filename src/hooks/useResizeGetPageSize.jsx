@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 export default function useResizeGetPageSize() {
   const containerRef = useRef(null);
-  const headerRef = useRef(null);
   const containerHeaderRef = useRef(null);
   const listHeaderRef = useRef(null);
   const listRef = useRef(null);
@@ -15,15 +14,12 @@ export default function useResizeGetPageSize() {
 
   const handleResize = useCallback(() => {
     const containerH = containerRef.current.clientHeight;
-    const headerH = headerRef.current.clientHeight;
     const containerHeaderH = containerHeaderRef.current.clientHeight;
     const listHeaderH = listHeaderRef.current.clientHeight;
     const itemH = listRef.current.firstChild.clientHeight;
     const pageBar = 80;
-
     const size = calculateSize(
       containerH,
-      headerH,
       containerHeaderH,
       listHeaderH,
       pageBar,
@@ -44,14 +40,13 @@ export default function useResizeGetPageSize() {
 
   const calculateSize = (
     containerH,
-    headerH,
     containerHeaderH,
     listHeaderH,
     pageBar,
     itemH
   ) => {
     let calculateSize =
-      (containerH - headerH - containerHeaderH - listHeaderH - pageBar) / itemH;
+      (containerH - containerHeaderH - listHeaderH - pageBar) / itemH;
     return calculateSize.toFixed(2) % 1 > 0.5
       ? Math.floor(calculateSize)
       : Math.floor(calculateSize) - 1;
@@ -72,7 +67,6 @@ export default function useResizeGetPageSize() {
   return [
     {
       containerRef,
-      headerRef,
       containerHeaderRef,
       listHeaderRef,
       listRef,

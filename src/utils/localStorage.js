@@ -8,8 +8,8 @@ const Storage = {
     this.removeLocalStorage('userName');
   },
 
-  getUserName() {
-    return window.localStorage.getItem('userName');
+  getLocalStorage(name) {
+    return window.localStorage.getItem(name);
   },
 
   getLocalStorageJSON(key) {

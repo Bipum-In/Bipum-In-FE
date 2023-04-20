@@ -94,12 +94,8 @@ export default function RequestStatus() {
   return (
     <>
       {isStatusError && <div>에러 발생</div>}
-      <RequestStatusWrapper ref={resizeRef.containerRef}>
-        <StatusMenu
-          headerRef={resizeRef.headerRef}
-          menuStyle={menuStyle}
-          onClickMenu={handleClickMenu}
-        />
+      <RequestStatusWrapper>
+        <StatusMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
         <RequestShow
           isAdmin={isAdmin}
           requestData={getRequest}

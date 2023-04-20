@@ -1,11 +1,14 @@
-import { Suspense, lazy } from 'react';
+import { Suspense } from 'react';
 import styled from 'styled-components';
 import Modal from 'elements/Modal';
 import ModalHeader from '../common/ModalHeader';
+import { retryLazy } from 'utils/retryLazy';
 
-const EquipmentDetail = lazy(() => import('./detail/EquipmentDetail'));
-const AddMultipleItem = lazy(() => import('../equipmentAdd/AddMultipleItem'));
-const AddSingleItem = lazy(() => import('../equipmentAdd/AddSingleItem'));
+const EquipmentDetail = retryLazy(() => import('./detail/EquipmentDetail'));
+const AddMultipleItem = retryLazy(() =>
+  import('../equipmentAdd/AddMultipleItem')
+);
+const AddSingleItem = retryLazy(() => import('../equipmentAdd/AddSingleItem'));
 
 export default function EquipmentModal({
   isAdmin,

@@ -2,14 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import Button from 'elements/Button';
 
-export default function StatusMenu({
-  headerRef,
-  menuStyle,
-  onClickMenu,
-  children,
-}) {
+export default function StatusMenu({ menuStyle, onClickMenu, children }) {
   return (
-    <StatusMenuContainer ref={headerRef}>
+    <StatusMenuContainer>
       {menuStyle.map(menu => (
         <Button
           key={menu.name}

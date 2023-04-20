@@ -1,11 +1,12 @@
-import { Suspense, lazy } from 'react';
+import { Suspense } from 'react';
 import styled, { css } from 'styled-components';
 
 import { ReactComponent as SearchIcon } from 'styles/commonIcon/search.svg';
 
 import Input from 'elements/Input';
 import PLACEHOLDER from 'constants/placeholder';
-const SearchList = lazy(() => import('./SearchList'));
+import { retryLazy } from 'utils/retryLazy';
+const SearchList = retryLazy(() => import('./SearchList'));
 
 export default function Search({
   search,

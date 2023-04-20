@@ -1,10 +1,11 @@
-import React, { Suspense, lazy, useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import styled, { css } from 'styled-components';
 
 import { ReactComponent as ArrowDown } from 'styles/commonIcon/arrowDown.svg';
 import useOutsideClick from 'hooks/useOutsideClick';
 import { useSelector } from 'react-redux';
-const UserInfoDetail = lazy(() => import('./UserInfoDetail'));
+import { retryLazy } from 'utils/retryLazy';
+const UserInfoDetail = retryLazy(() => import('./UserInfoDetail'));
 
 export default function UserInfo({
   isAdmin,

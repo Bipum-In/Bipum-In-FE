@@ -1,10 +1,11 @@
-import React, { Suspense, lazy } from 'react';
+import React, { Suspense } from 'react';
 import styled from 'styled-components';
 import ModalHeader from 'components/common/ModalHeader';
 import RequestModal from 'components/requestStatus/RequestModal';
 import Modal from 'elements/Modal';
+import { retryLazy } from 'utils/retryLazy';
 
-const EquipmentDetail = lazy(() =>
+const EquipmentDetail = retryLazy(() =>
   import('components/EquipmentManage/detail/EquipmentDetail')
 );
 

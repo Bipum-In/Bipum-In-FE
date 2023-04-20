@@ -1,30 +1,32 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { Suspense, lazy } from 'react';
+import { Suspense } from 'react';
+import { retryLazy } from 'utils/retryLazy';
+
 import App from 'App';
 import ROUTER from 'constants/routerConst';
 import Layout from 'layout/Layout';
 import Rending from 'pages/Rending';
 import Login from 'pages/Login';
 
-const EmptyPage = lazy(() => import('pages/EmptyPage'));
-const MyPage = lazy(() => import('../pages/MyPage'));
-const MasterPage = lazy(() => import('pages/master/MasterPage'));
-const AppointmentManager = lazy(() =>
+const EmptyPage = retryLazy(() => import('pages/EmptyPage'));
+const MyPage = retryLazy(() => import('../pages/MyPage'));
+const MasterPage = retryLazy(() => import('pages/master/MasterPage'));
+const AppointmentManager = retryLazy(() =>
   import('pages/master/AppointmentManager')
 );
 
-const Management = lazy(() => import('pages/admin/Management'));
-const AdminDashBoard = lazy(() => import('pages/admin/AdminDashBoard'));
-const EquipmentAdd = lazy(() => import('pages/admin/EquipmentAdd'));
-const RequestStatus = lazy(() => import('pages/admin/RequestStatus'));
-const EquipmentManagement = lazy(() =>
+const Management = retryLazy(() => import('pages/admin/Management'));
+const AdminDashBoard = retryLazy(() => import('pages/admin/AdminDashBoard'));
+const EquipmentAdd = retryLazy(() => import('pages/admin/EquipmentAdd'));
+const RequestStatus = retryLazy(() => import('pages/admin/RequestStatus'));
+const EquipmentManagement = retryLazy(() =>
   import('pages/admin/EquipmentManagement')
 );
 
-const UserDashBoard = lazy(() => import('pages/user/UserDashBoard'));
-const UserRequest = lazy(() => import('pages/user/UserRequest'));
-const UserStockView = lazy(() => import('pages/user/UserStockView'));
-const DeleteUserPage = lazy(() => import('pages/DeleteUserPage'));
+const UserDashBoard = retryLazy(() => import('pages/user/UserDashBoard'));
+const UserRequest = retryLazy(() => import('pages/user/UserRequest'));
+const UserStockView = retryLazy(() => import('pages/user/UserStockView'));
+const DeleteUserPage = retryLazy(() => import('pages/DeleteUserPage'));
 
 const router = createBrowserRouter([
   {

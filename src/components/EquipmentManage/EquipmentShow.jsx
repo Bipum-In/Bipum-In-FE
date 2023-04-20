@@ -48,7 +48,7 @@ export default function EquipmentShow({
   ];
 
   return (
-    <RequestShowContainer>
+    <RequestShowContainer ref={resizeRef.containerRef}>
       <StatusListHeader
         setSelectName={setSelectName}
         selectBoxList={selectBoxList}
