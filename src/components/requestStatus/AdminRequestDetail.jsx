@@ -88,7 +88,7 @@ export default function RequestDetail({ isClose, detail }) {
   };
 
   const handleDispose = () => {
-    data.acceptResult = 'DECLINE';
+    data.acceptResult = 'DISPOSE';
     putRequest(data);
   };
 
