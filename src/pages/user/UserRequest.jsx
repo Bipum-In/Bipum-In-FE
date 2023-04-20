@@ -48,9 +48,7 @@ export default function UserRequest() {
     <>
       {getCategory && (
         <RequestWrapper>
-          <RequestBtnContainer>
-            <StatusMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
-          </RequestBtnContainer>
+          <StatusMenu menuStyle={menuStyle} onClickMenu={handleClickMenu} />
           <RequestComponentsContainer>
             <UserEquipmentRequest
               type={type}
@@ -71,11 +69,6 @@ const RequestWrapper = styled.div`
   ${props => props.theme.wh100};
 `;
 
-const RequestBtnContainer = styled.div`
-  ${props => props.theme.FlexRow};
-  justify-content: flex-start;
-  gap: 0.5375rem;
-`;
 const RequestComponentsContainer = styled.main`
   ${props => props.theme.FlexRow};
   ${props => props.theme.wh100};

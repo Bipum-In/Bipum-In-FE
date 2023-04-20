@@ -85,17 +85,21 @@ export default memo(function AlertStatus({ isAdmin }) {
       });
   };
 
-  const putRequest = (notificationId, requestId) => {
-    api.put(QUERY.END_POINT.DASHBOARD.READ_ALARM(notificationId)).then(() => {
-      setModal({ show: true, detailId: requestId });
-    });
+  const putRequest = async (notificationId, requestId) => {
+    try {
+      await api.put(QUERY.END_POINT.DASHBOARD.READ_ALARM(notificationId));
 
-    if (isAdmin) {
-      dispatch(deleteAdminAlertData(notificationId));
-      dispatch(deleteAdminSseData(notificationId));
-    } else {
-      dispatch(deleteUserAlertData(notificationId));
-      dispatch(deleteUserSseData(notificationId));
+      if (isAdmin) {
+        dispatch(deleteAdminAlertData(notificationId));
+        dispatch(deleteAdminSseData(notificationId));
+      } else {
+        dispatch(deleteUserAlertData(notificationId));
+        dispatch(deleteUserSseData(notificationId));
+      }
+
+      setModal({ show: true, detailId: requestId });
+    } catch (error) {
+      alertModal(false, '알림을 읽는데 실패했습니다.', 2);
     }
   };
 

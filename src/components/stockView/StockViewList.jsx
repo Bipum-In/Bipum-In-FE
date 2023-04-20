@@ -38,6 +38,7 @@ export default function StockViewList({ pageRef, requestData, onClickDetail }) {
 const StockWrapper = styled.section`
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   height: calc(100vh - 16.6875rem - 11rem);
   padding: 1rem 5.3125rem;
   overflow: hidden auto;
@@ -51,24 +52,19 @@ const EmptyContainer = styled.div`
 `;
 
 const CardContainer = styled.div`
-  display: ${props => (props.contentLenght ? 'grid' : 'flex')};
-  grid-template-columns: repeat(4, 1fr);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  max-width: 100%;
   gap: 1.5rem;
-
-  @media (max-width: 92.5rem) {
-    grid-template-columns: repeat(3, 1fr);
-  }
-
-  @media (max-width: 66.875rem) {
-    grid-template-columns: repeat(2, 1fr);
-  }
 `;
 
 const Card = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  max-width: 21.125rem;
+  flex-basis: calc(25% - 1.2rem);
+  width: 100%;
   height: 9.5rem;
   padding: 1.5rem 1.875rem;
   ${props => props.theme.Boxshadow}
@@ -81,6 +77,14 @@ const Card = styled.div`
     min-height: 7rem;
     height: 7rem;
     border-radius: 0.25rem;
+  }
+
+  @media (max-width: 100rem) {
+    flex-basis: calc(33% - 0.8rem);
+  }
+
+  @media (max-width: 87.5rem) {
+    flex-basis: calc(50% - 0.8rem);
   }
 `;
 

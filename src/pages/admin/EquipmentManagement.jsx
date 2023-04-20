@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {} from 'redux/modules/requestStatus';
 import EquipmentListContainer from 'components/EquipmentManage/EquipmentListContainer';
-import { getCategoryList } from 'redux/modules/equipmentStatus';
+import { getCategoryList, initEquipment } from 'redux/modules/equipmentStatus';
 import STRING from 'constants/string';
 import EquipmentModal from 'components/EquipmentManage/EquipmentModal';
 import { getEncryptionStorage } from 'utils/encryptionStorage';
@@ -30,6 +30,9 @@ export default function EquipmentManagement() {
 
   useEffect(() => {
     dispatch(getCategoryList());
+    return () => {
+      dispatch(initEquipment());
+    };
   }, [dispatch, showModal]);
 
   const handleDetailModal = id => {
