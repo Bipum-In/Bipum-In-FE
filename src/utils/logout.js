@@ -8,5 +8,8 @@ export default async function logout(callback) {
     await api.post(QUERY.END_POINT.USER.DELETE_ALL_COOKIES);
     Storage.clearLocalStorage();
     callback && callback();
-  } catch (e) {}
+  } catch (e) {
+    Storage.clearLocalStorage();
+    window.location.href = '/';
+  }
 }
