@@ -24,10 +24,10 @@ export default function PartnerManagement() {
   const { getPartners } = useSelector(state => state.partnersList);
 
   const headerList = [
-    { name: '업체명', width: '5rem' },
-    { name: '전화번호', width: '6.375rem' },
-    { name: '이메일', width: '12rem' },
-    { name: '주소', width: '19.375rem' },
+    { name: '업체명', width: '6rem' },
+    { name: '전화번호', width: '6rem' },
+    { name: '이메일', width: '10rem' },
+    { name: '주소', width: '18rem' },
   ];
 
   const [resizeRef, pageSize, firstPageSize, handleResize] =
@@ -37,7 +37,15 @@ export default function PartnerManagement() {
     const size = pageSize || firstPageSize || handleResize();
     dispatch(getPartnersList({ page, size, keyword }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, page, pageSize, handleResize, keyword]);
+  }, [
+    dispatch,
+    page,
+    pageSize,
+    handleResize,
+    keyword,
+    addPatnerModal,
+    modal.show,
+  ]);
 
   useEffect(() => {
     if (getPartners && getPartners.content.length === 0) {
@@ -75,6 +83,8 @@ export default function PartnerManagement() {
             placeholder={PLACEHOLDER.ENTER_INPUT('검색어를', '(업체 등)')}
             childTwo={
               <PartnerAddBtn
+                isOpen={addPatnerModal}
+                onClose={handleModalClose}
                 addPatnerModal={addPatnerModal}
                 setAddPatnerModal={setAddPatnerModal}
                 handleModalClose={handleModalClose}
@@ -100,11 +110,7 @@ export default function PartnerManagement() {
         </ManagementType>
       </PartnerWarpper>
       <Modal isOpen={modal.show} onClose={handleChangeDetail}>
-        <DetailPartner
-          isClose={handleChangeDetail}
-          result={result}
-          page={page}
-        />
+        <DetailPartner isClose={handleChangeDetail} result={result} />
       </Modal>
     </>
   );
