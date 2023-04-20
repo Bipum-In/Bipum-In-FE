@@ -1,5 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
-import { lazy } from 'react';
+import { Suspense, lazy } from 'react';
 import App from 'App';
 import ROUTER from 'constants/routerConst';
 import Layout from 'layout/Layout';
@@ -30,7 +30,11 @@ const router = createBrowserRouter([
   {
     path: ROUTER.PATH.MAIN,
     element: <App />,
-    errorElement: <EmptyPage />,
+    errorElement: (
+      <Suspense fallback={null}>
+        <EmptyPage />
+      </Suspense>
+    ),
     children: [
       {
         index: true,
@@ -42,12 +46,19 @@ const router = createBrowserRouter([
       },
       {
         path: ROUTER.PATH.MASTER.MASTERPAGE,
-        element: <MasterPage />,
+        element: (
+          <Suspense fallback={null}>
+            <MasterPage />,
+          </Suspense>
+        ),
       },
-
       {
         path: ROUTER.PATH.DELETE_USER,
-        element: <DeleteUserPage />,
+        element: (
+          <Suspense fallback={null}>
+            <DeleteUserPage />,
+          </Suspense>
+        ),
       },
       {
         element: <Layout />,
