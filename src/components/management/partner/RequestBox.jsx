@@ -6,11 +6,13 @@ import { api } from 'api/axios';
 import { ReactComponent as BlackCancel } from 'styles/commonIcon/blackCancel.svg';
 import PLACEHOLDER from 'constants/placeholder';
 import QUERY from 'constants/query';
+import useRegexInput from 'hooks/useRegexInput';
 
 export default function RequestBox({ handleModalClose }) {
   const [companyName, setCompanyName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
+  const [emailValid, setEmailValid] = useState(null);
   const [address, setAddress] = useState('');
 
   const handleNameClear = () => setCompanyName('');
@@ -18,10 +20,32 @@ export default function RequestBox({ handleModalClose }) {
   const handleEmailClear = () => setEmail('');
   const handleAddressClear = () => setAddress('');
 
+  function handleChangePhone(event) {
+    const { value } = event.target;
+    const formattedValue = value
+      .replace(/[^0-9]/g, '')
+      .replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3');
+    setPhoneNumber(formattedValue);
+  }
+
+  const handleChangeEmail = e => {
+    const { value } = e.target;
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    if (value) {
+      setEmailValid(emailRegex.test(value));
+    } else {
+      setEmailValid(null);
+    }
+
+    setEmail(value);
+  };
   const handleSubmit = () => {
+    const stringToNumPrice = phoneNumber.replace(/-/g, '');
+
     const data = {
       partnersName: companyName,
-      phone: phoneNumber,
+      phone: stringToNumPrice,
       email,
       address,
     };
@@ -30,15 +54,12 @@ export default function RequestBox({ handleModalClose }) {
       handleModalClose();
     });
   };
-  //선중이형 validataion 추가해주세요 ㅋㅎㅋㅎㅋㅎㅋㅎ
+  console.log(`${!!email}`);
   return (
     <RequestWrapper>
       <RequestContainer>
         <Box>
-          <Title requiredinput="true" marginRight="1.6125rem">
-            업체명
-          </Title>
-
+          <Title requiredinput="true">업체명</Title>
           <Input
             type="text"
             placeholder={PLACEHOLDER.ENTER_INPUT('업체를')}
@@ -56,11 +77,11 @@ export default function RequestBox({ handleModalClose }) {
       </RequestContainer>
       <RequestContainer>
         <Box>
-          <Title marginRight="1.3125rem">전화 번호</Title>
+          <Title>전화 번호</Title>
           <Input
             placeholder={PLACEHOLDER.ENTER_INPUT('전화번호를')}
             value={phoneNumber}
-            onChange={e => setPhoneNumber(e.target.value)}
+            onChange={handleChangePhone}
           />
           {phoneNumber && (
             <CancelInputWrapper onClick={handleNumberClear}>
@@ -71,12 +92,14 @@ export default function RequestBox({ handleModalClose }) {
       </RequestContainer>
       <RequestContainer>
         <Box>
-          <Title marginRight="2.375rem">이메일</Title>
-          <Input
+          <Title>이메일</Title>
+
+          <EmailInput
             type="email"
             placeholder={PLACEHOLDER.ENTER_INPUT('이메일을')}
             value={email}
-            onChange={e => setEmail(e.target.value)}
+            onChange={handleChangeEmail}
+            regex={`${emailValid}`}
           />
           {email && (
             <CancelInputWrapper onClick={handleEmailClear}>
@@ -87,7 +110,7 @@ export default function RequestBox({ handleModalClose }) {
       </RequestContainer>
       <RequestContainer>
         <Box>
-          <Title marginRight="3.1875rem">주소</Title>
+          <Title>주소</Title>
           <Input
             placeholder={PLACEHOLDER.ENTER_INPUT('주소를')}
             value={address}
@@ -136,6 +159,7 @@ const Box = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
+  width: 100%;
 `;
 
 const Title = styled.p`
@@ -143,12 +167,8 @@ const Title = styled.p`
   font-size: 0.9375rem;
   line-height: 1.125rem;
   color: ${props => props.theme.color.blue.brandColor6};
-
-  ${({ marginRight }) =>
-    marginRight &&
-    css`
-      margin-right: ${marginRight};
-    `}
+  min-width: 6.25rem;
+  text-align: left;
 
   ${props =>
     props.requiredinput === 'true' &&
@@ -168,7 +188,7 @@ const RequestContainer = styled.div`
   padding-bottom: 2.25rem;
 
   input {
-    width: 12rem;
+    width: 100%;
     height: 2.125rem;
     background: #f5f5f5;
     border-radius: 0.5rem;
@@ -179,4 +199,9 @@ const RequestContainer = styled.div`
 const RequestWrapper = styled.div`
   ${props => props.theme.FlexCol};
   gap: 2.25rem;
+`;
+
+const EmailInput = styled(Input)`
+  border: ${props => (props.regex === 'false' ? '1px solid #ff8e8e' : 'none')};
+  background: ${props => props.regex === 'false' && '#ffe6e6'} !important;
 `;
