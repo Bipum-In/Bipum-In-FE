@@ -68,7 +68,7 @@ const AddEquipmentArticle = styled.form`
 
   @media (max-width: 103.75rem) {
     display: block;
-    overflow-y: scroll;
+    overflow-y: auto;
   }
 `;
 
