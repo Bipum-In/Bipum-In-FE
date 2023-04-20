@@ -19,7 +19,7 @@ export default function StockViewShow({
         setSelectName={setSelectName}
         keyword={keyword}
         setKeyword={setKeyword}
-      ></StatusListHeader>
+      />
       <StockViewList
         pageRef={pageRef}
         requestData={requestData}
