@@ -4,6 +4,7 @@ import SearchItem from './SearchItem';
 import { v4 as uuidv4 } from 'uuid';
 
 export default function SearchList({ searchList, onSearchDetail }) {
+  console.log(searchList);
   return (
     <SearchListContainer>
       {searchList?.map((data, index) => (
@@ -34,7 +35,7 @@ const SearchListContainer = styled.div`
 const SearchListTitle = styled.header`
   width: 100%;
   color: white;
-  background-color: ${props => props.theme.color.blue.brandColor6};
+  background-color: ${props => props.theme.color.blue.brandColor5};
   padding: 1rem;
   font-size: 1rem;
   font-weight: 600;
