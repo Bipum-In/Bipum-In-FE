@@ -2,8 +2,8 @@ import styled from 'styled-components';
 import StatusListHeader from '../common/status/StatusListHeader';
 import StatusList from '../common/status/StatusList';
 import PaginationList from '../common/PaginationList';
-import { ReactComponent as Plus } from 'styles/commonIcon/plus.svg';
-import Button from 'elements/Button';
+import EquipmentAddBtn from './EquipmentAddBtn';
+import PLACEHOLDER from 'constants/placeholder';
 
 export default function EquipmentShow({
   isAdmin,
@@ -57,18 +57,17 @@ export default function EquipmentShow({
         setStatus={setStatus}
         keyword={keyword}
         setKeyword={setKeyword}
-      >
-        <EquipmentAddConatiner>
-          <Button onClick={onClickSingleModal}>
-            <Plus />
-            단일 등록
-          </Button>
-          <Button onClick={onClickMultiModal}>
-            <Plus />
-            복수 등록
-          </Button>
-        </EquipmentAddConatiner>
-      </StatusListHeader>
+        placeholder={PLACEHOLDER.ENTER_INPUT(
+          '검색어를',
+          '(신청자,담당부서 등)'
+        )}
+        childOne={
+          <EquipmentAddBtn
+            onClickSingleModal={onClickSingleModal}
+            onClickMultiModal={onClickMultiModal}
+          />
+        }
+      />
       <StatusList
         isAdmin={isAdmin}
         headerList={headerList}
@@ -98,25 +97,4 @@ const RequestShowContainer = styled.div`
   border: 0.0579rem solid ${props => props.theme.color.grey.brandColor2};
   box-shadow: 0.2314rem 0.2314rem 1.1571rem rgba(0, 0, 0, 0.1);
   border-radius: 0.4628rem;
-`;
-
-const EquipmentAddConatiner = styled.div`
-  display: flex;
-  margin-right: 1rem;
-
-  button:first-child {
-    height: 2.125rem;
-    color: white;
-    background-color: ${props => props.theme.color.blue.brandColor5};
-  }
-
-  button:last-child {
-    height: 2.125rem;
-    color: white;
-    background-color: #3aa471;
-  }
-
-  svg {
-    width: 1.5rem;
-  }
 `;
