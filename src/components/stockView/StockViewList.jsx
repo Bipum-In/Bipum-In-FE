@@ -12,9 +12,9 @@ export default function StockViewList({ pageRef, requestData, onClickDetail }) {
         <EmptyContainer>현재 비품의 재고가 존재하지 않습니다.</EmptyContainer>
       )}
       <CardContainer ref={pageRef} contentLenght={content.length}>
-        {content.map((item, index) => (
+        {content.map(item => (
           <Card
-            key={index}
+            key={uuidv4()}
             onClick={() => {
               onClickDetail(item.supplyId);
             }}
@@ -40,7 +40,7 @@ const StockWrapper = styled.section`
   justify-content: center;
   align-items: flex-start;
   height: calc(100vh - 16.6875rem - 11rem);
-  padding: 1rem 5.3125rem;
+  padding: 0 5.3125rem;
   overflow: hidden auto;
 `;
 
