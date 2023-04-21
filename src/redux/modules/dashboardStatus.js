@@ -31,7 +31,7 @@ export const userDashboardStatus = createAsyncThunk(
   'USER_DASHBOARD',
   async (payload, thunkAPI) => {
     return await api
-      .get(QUERY.END_POINT.DASHBOARD.USER_MAIN(payload.status))
+      .get(QUERY.END_POINT.DASHBOARD.USER_MAIN(payload))
       .then(response => thunkAPI.fulfillWithValue(response.data))
       .catch(() => thunkAPI.rejectWithValue());
   }
@@ -41,7 +41,7 @@ export const commonSupplyDtos = createAsyncThunk(
   'COMMON_SUPPLY_DTOS',
   async (payload, thunkAPI) => {
     return await api
-      .get(QUERY.END_POINT.DASHBOARD.COMMON_MAIN(payload.status))
+      .get(QUERY.END_POINT.DASHBOARD.COMMON_MAIN(payload))
       .then(response => thunkAPI.fulfillWithValue(response.data))
       .catch(() => thunkAPI.rejectWithValue());
   }
