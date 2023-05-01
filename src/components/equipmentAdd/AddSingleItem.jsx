@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { styles } from '../common/commonStyled';
 import Button from 'elements/Button';
 
+import imageCompression from 'browser-image-compression';
+
 import { api } from 'api/axios';
 import SelectCategory from '../common/SelectCategory';
 import SelectCategoryList from './single/SelectCategoryList';
@@ -182,13 +184,21 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
     setPreview([]);
   };
 
-  const onChangeimge = e => {
+  const onChangeimg = async e => {
     const img = e.target.files[0];
-    setFormImage([img]);
-    setPreviewImage(img);
-    setCrawlingImg('');
+    const options = {
+      maxSizeMB: 1,
+      maxWidthOrHeight: 1920,
+    };
+    try {
+      const compressedImg = await imageCompression(img, options);
+      setFormImage([compressedImg]);
+      setPreviewImage(compressedImg);
+      setCrawlingImg('');
+    } catch (error) {
+      console.log(error);
+    }
   };
-
   const setPreviewImage = img => {
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -345,7 +355,7 @@ export default function AddSingleItem({ categoryList, largeCategoryList }) {
                 <ImageAdd
                   editMode={'true'}
                   preview={preview}
-                  onChangeimge={onChangeimge}
+                  onChangeimge={onChangeimg}
                   onDeleteImage={handleDeleteImage}
                 />
               </div>
