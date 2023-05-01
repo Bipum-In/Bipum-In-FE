@@ -312,6 +312,10 @@
 
 ## FE 트러블 슈팅
 
+### 더 자세한 내용은 [WIKI](https://github.com/Seogun95/Bipum-In-FE/wiki) 를 통해 확인 가능합니다.
+
+#
+
 <details>
   <summary>민감한 정보의 암호화 및 복호화</summary>
 
